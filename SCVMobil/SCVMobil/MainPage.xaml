@@ -9,7 +9,8 @@
     <ToolbarItem
         Text="Configuración"
         Order="Secondary"
-        Clicked="ToolbarItem_Clicked"/>
+        Clicked="ToolbarItem_Clicked"
+        Icon="icons8_settings_32.png"/>
 
   </ContentPage.ToolbarItems>
   <ScrollView
@@ -172,22 +173,22 @@
         <Frame
             x:Name="fmPassConf"
             Padding="3"
-            BorderColor="Black"
-            BackgroundColor="Black"
+            BorderColor="Accent"
+            BackgroundColor="Accent"
             VerticalOptions="CenterAndExpand"
             CornerRadius="20">
           <Frame
               VerticalOptions="CenterAndExpand"
-             BorderColor="Black"
+             BorderColor="Accent"
              HorizontalOptions="Center"
              HeightRequest="200"
              WidthRequest="340"
-             BackgroundColor="#2196F3"
+             BackgroundColor="Accent"
              Padding="10"
              CornerRadius="20">
             <StackLayout>
               <Label
-                 Text="--- Contraseña ---"
+                 Text="Contraseña"
                  TextColor="White"
                  HorizontalTextAlignment="Center"
                  HorizontalOptions="Center"

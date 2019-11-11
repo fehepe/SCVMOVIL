@@ -18,9 +18,7 @@
                 TextColor="Black"
                 HorizontalOptions="Start"
                 Text="Cedula"
-                FontSize="20"
-                >
-
+                FontSize="20">
             </Label>
             <Frame 
                 CornerRadius="15" 
