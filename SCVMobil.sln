@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.156
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCVMobil.Android", "SCVMobil\SCVMobil.Android\SCVMobil.Android.csproj", "{7DE76A95-3908-4EE5-8E35-A53FA4907402}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCVMobil", "SCVMobil\SCVMobil\SCVMobil.csproj", "{74AEE681-4BFA-4B68-B89D-E8558101ACAE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7DE76A95-3908-4EE5-8E35-A53FA4907402}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DE76A95-3908-4EE5-8E35-A53FA4907402}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DE76A95-3908-4EE5-8E35-A53FA4907402}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{7DE76A95-3908-4EE5-8E35-A53FA4907402}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DE76A95-3908-4EE5-8E35-A53FA4907402}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DE76A95-3908-4EE5-8E35-A53FA4907402}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{74AEE681-4BFA-4B68-B89D-E8558101ACAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74AEE681-4BFA-4B68-B89D-E8558101ACAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74AEE681-4BFA-4B68-B89D-E8558101ACAE}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{74AEE681-4BFA-4B68-B89D-E8558101ACAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74AEE681-4BFA-4B68-B89D-E8558101ACAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74AEE681-4BFA-4B68-B89D-E8558101ACAE}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A226F4E8-2735-4915-858D-86E2E4AC17D1}
+	EndGlobalSection
+EndGlobal
