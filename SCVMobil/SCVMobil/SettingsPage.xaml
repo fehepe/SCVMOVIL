@@ -15,8 +15,7 @@
                   BackgroundColor="White"
                 
                 >
-                <Label
-                    
+                <Label                    
                     Text="Servidor Padron"
                     FontSize="20"
                     HorizontalOptions="Center"
@@ -310,32 +309,27 @@
                         TextColor="Black" 
                         Text="Ver: 0.0.0.0.0" 
                         FontAttributes="Bold"/>
-                <StackLayout
+                    <StackLayout
                 VerticalOptions="EndAndExpand"
                     Margin="0,0,0,0">
-                    <BoxView
-                    HorizontalOptions="FillAndExpand"
-                    HeightRequest="3"
-                    Color="Black"
-                    Margin="-20,0,-20,0"></BoxView>
-                    <StackLayout
+                        <StackLayout
                     HorizontalOptions="CenterAndExpand"
                         Margin="0,0,0,0"
                         Orientation="Horizontal">
                         <Button 
-                            BorderColor="White"                    
+                            BorderColor="Accent"                    
                        
                             CornerRadius="27"
-                            BackgroundColor="Blue"
+                            BackgroundColor="Accent"
                             TextColor="White"
                             WidthRequest="140"
                             Text="Sync"
                             x:Name="btSync"
                             Clicked="BtSync_Clicked"/>
                         <Button 
-                            BorderColor="White"  
+                            BorderColor="Accent"  
                             CornerRadius="27"
-                            BackgroundColor="Blue"
+                            BackgroundColor="Accent"
                             TextColor="White"
                             WidthRequest="140"
                             Text="Inicializar"

@@ -151,13 +151,14 @@
             </Grid>
             <Button
                 x:Name="btnCorrecto"
-                CornerRadius="23"
-                BackgroundColor="Blue"
+                CornerRadius="20"
+                BackgroundColor="Accent"
                 TextColor="White"
-                HeightRequest="75"
+                HeightRequest="40"
+                WidthRequest="190"
                 Clicked="btnCorrecto_Clicked"
                 Text="Correcto"
-                FontSize="20"
+                FontSize="17"
                 FontAttributes="Bold"
                 Margin="0,20,0,0"/>
         </StackLayout>

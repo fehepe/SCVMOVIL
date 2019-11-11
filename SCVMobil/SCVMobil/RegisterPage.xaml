@@ -4,9 +4,10 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             Title="REGISTRAR"
+             Title="REGISTRO"
               xmlns:local="clr-namespace:SCVMobil"
              x:Class="SCVMobil.RegisterPage">
+    
     <ContentPage.Content>
         <StackLayout
             VerticalOptions="Center"
@@ -15,16 +16,15 @@
             <Label
                 FontAttributes="Bold"
                 TextColor="Black"
-                HorizontalOptions="Center"
-                Text="Cedula:"
-                FontSize="30"
+                HorizontalOptions="Start"
+                Text="Cedula"
+                FontSize="20"
                 >
 
             </Label>
             <Frame 
-                CornerRadius="10" 
+                CornerRadius="15" 
                 BorderColor="#2196F3" 
-                BackgroundColor="#2196F3"
                 Padding="5">
                 <Frame 
                     CornerRadius="10" 
@@ -42,10 +42,9 @@
                 Margin="0,20,0,0"
                 FontAttributes="Bold"
                 TextColor="Black"
-                HorizontalOptions="Center"
-                Text="Nombre:" 
-                FontSize="30">
-
+                HorizontalOptions="Start"
+                Text="Nombre" 
+               FontSize="20">
             </Label>
             <Entry 
                 HorizontalTextAlignment="Center"
@@ -57,30 +56,29 @@
                  Margin="0,20,0,0"
                 FontAttributes="Bold"
                 TextColor="Black"
-                HorizontalOptions="Center"
-                Text="Apellido:" 
-                FontSize="30">
+                HorizontalOptions="Start"
+                Text="Apellido" 
+                FontSize="20">
             </Label>
             <Entry 
                 HorizontalTextAlignment="Center"
                 x:Name="entApellidos"
-                Placeholder="Alfonso">
+                Placeholder="Alfonso"
+                >
+               
             </Entry>
-
-
 
             <Button  
                 Clicked="BtAgregar_Clicked"
                 x:Name="btnAgregar"
                 Text="Agregar"
-                BackgroundColor="#2196F3" 
+                BackgroundColor="Accent" 
                 VerticalOptions="CenterAndExpand"
-                HeightRequest="80"
+                HeightRequest="70"
                 Margin="30,40,30,0"
-                CornerRadius="20"
-                FontSize="30"
+                CornerRadius="30"
+                FontSize="20"
                 TextColor="White">
-
             </Button>
         </StackLayout>
     </ContentPage.Content>

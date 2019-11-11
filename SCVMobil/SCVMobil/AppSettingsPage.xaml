@@ -89,11 +89,8 @@
             </StackLayout>
             <StackLayout
                 VerticalOptions="EndAndExpand">
-                <BoxView
-                    HorizontalOptions="FillAndExpand"
-                    HeightRequest="3"
-                    Color="Black"
-                    Margin="-40,0,-40,0"></BoxView>
+                
+               
                 <StackLayout
                     HorizontalOptions="CenterAndExpand"
                         Margin="0,0,0,-20"
@@ -105,7 +102,7 @@
                         Text="Config. Avanzada" 
                         Clicked="BtConfigAvan_Clicked"
                         
-                        BackgroundColor="Blue"
+                        BackgroundColor="Accent"
                         TextColor="White"                
                         CornerRadius="27"                       
                         WidthRequest="140"
@@ -116,7 +113,7 @@
                         Text="Limpiar DB" 
                         Clicked="BtnClearDB_Clicked"
                         CornerRadius="27"
-                        BackgroundColor="Blue"
+                        BackgroundColor="Accent"
                         TextColor="White"
                         WidthRequest="140"/>
                 </StackLayout>

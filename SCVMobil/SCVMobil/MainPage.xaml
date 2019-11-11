@@ -21,7 +21,7 @@
         VerticalOptions="FillAndExpand">
       <StackLayout
           Padding="10"
-          Spacing="0"
+          Spacing="50"
           AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
           AbsoluteLayout.LayoutFlags="All">
                 <Image
@@ -39,6 +39,7 @@
          Source="id.png"
          Aspect="AspectFit"
           WidthRequest="200"
+           
             />
 
         <BoxView
@@ -46,21 +47,18 @@
 
         <!-- Espacio en blanco-->
         <Label
-            Text="Cedula"
-            FontSize="20"
-            
+            Text="Escanear Cedula"
+            FontSize="20"            
             TextColor="Black"
             FontAttributes="Bold"
             HorizontalTextAlignment="Center"
             Margin="0,0,0,0"/>
         <Frame
-            CornerRadius="10"
-            BorderColor="#2196F3"
-            BackgroundColor="#2196F3"
+            CornerRadius="15"
+            BorderColor="#2196F3"            
             Padding="5">
           <Frame
-              CornerRadius="10"
-              BackgroundColor="White"
+              CornerRadius="15"             
               Padding="1">
             <Entry
                 x:Name="entCedula"
@@ -75,7 +73,8 @@
             FontAttributes="Bold"
              x:Name="lblNombres"
             HorizontalTextAlignment="Center"
-            Margin="0,20,0,0"/>
+            Margin="0,20,0,0"
+            IsVisible="False"/>
         <Label
              FontSize="20"
             TextColor="Blue"
@@ -85,6 +84,7 @@
             Margin="0,20,0,0"
             
             x:Name="entNombres"
+            IsVisible="False"
             />
         <Label
             Text="Apellido:"
@@ -93,7 +93,8 @@
             FontAttributes="Bold"
             x:Name="lblApellidos"
             HorizontalTextAlignment="Center"
-            Margin="0,20,0,0"></Label>
+            Margin="0,20,0,0"
+            IsVisible="False"></Label>
         <Label
             FontSize="20"
             TextColor="Blue"
@@ -102,14 +103,16 @@
             HorizontalTextAlignment="Center"
             Margin="0,20,0,20"
             
-            x:Name="entApellidos"/>
+            x:Name="entApellidos"
+            IsVisible="False"/>
                 <Label 
                     
                     Text="Version:"
                     FontSize="Small"
                     HorizontalOptions="Center"
                     
-                    VerticalOptions="End">
+                    VerticalOptions="End"
+                    IsVisible="False">
                     
                 </Label>
                 <Label 
@@ -117,8 +120,9 @@
                     Text="0.0.0.0"
                     HorizontalOptions="Center"
                     FontSize="Small"                    
-                    VerticalOptions="End">
-
+                    VerticalOptions="End"
+                    IsVisible="False">
+                    
                 </Label>
 
             </StackLayout>
@@ -133,12 +137,12 @@
         <Frame
             x:Name="fmCedula"
             VerticalOptions="CenterAndExpand"
-            BorderColor="Black"
+            BorderColor="Accent"
             HorizontalOptions="Center"
             HeightRequest="230" WidthRequest="345"
-            BackgroundColor="Red" Padding="10">
+            BackgroundColor="Accent" Padding="10">
           <StackLayout>
-            <Label Text="-- Documento No Existe --" TextColor="White"
+            <Label Text="Documento inexistente" TextColor="White"
                    HorizontalTextAlignment="Center"
                    HorizontalOptions="Center"
                    VerticalOptions="CenterAndExpand"
@@ -151,7 +155,8 @@
               <Button
                   x:Name="btOKCedulaNoExiste"
                   Text="OK" Grid.Column="0"
-                  Clicked="BtOKCedulaNoExiste_Clicked"></Button>
+                  Clicked="BtOKCedulaNoExiste_Clicked"
+                  CornerRadius="15"></Button>
             </Grid>
           </StackLayout>
         </Frame>

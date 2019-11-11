@@ -12,8 +12,7 @@
             x:Name="grupo"
             Text="Es un Grupo" 
             Order="Primary" 
-            Clicked="Grupo_Clicked"
-     
+            Clicked="Grupo_Clicked"     
            ></ToolbarItem>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
@@ -82,8 +81,7 @@
                 <Picker
                     x:Name="pickerVisitaA"
                     Grid.Row="4"
-                    Grid.Column="1" 
-                    
+                    Grid.Column="1"                     
                     Title="Seleccione..."
                     SelectedIndexChanged="PickerVisitaA_SelectedIndexChanged">
                 </Picker>
@@ -105,14 +103,14 @@
             </Grid>
             <Button  
                 Text="Imprimir"
-                BackgroundColor="#2196F3" 
-                VerticalOptions="Center"
+                BackgroundColor="Accent" 
+                HorizontalOptions="Center"
                 Clicked="BtnImprimir_Clicked"
                 x:Name="btnImprimir"
-                HeightRequest="70"
+                HeightRequest="40"
                 CornerRadius="20"
-                WidthRequest="20"
-                FontSize="13"
+                WidthRequest="190"
+                FontSize="15"
                 TextColor="White"/>
         </StackLayout>
     </ContentPage.Content>
