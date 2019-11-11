@@ -10,7 +10,7 @@
         <StackLayout
             VerticalOptions="Center"
             Padding="40">
-            <Label Text="Datos de Invitado"
+            <Label Text="Datos del Invitado"
                  FontSize="35"
                    FontAttributes="Bold"
                    TextColor="Black"
