@@ -52,6 +52,7 @@
                         Text="Puerta"
                         VerticalOptions="Center"/>
                     <Picker
+                        
                         x:Name="entPuerta"
                         Grid.Row="2"
                         Grid.Column="1"

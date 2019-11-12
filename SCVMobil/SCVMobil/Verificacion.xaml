@@ -28,7 +28,7 @@
                     <ColumnDefinition
                         Width="*"/>
                 </Grid.ColumnDefinitions>
-
+               
                 <Label
                     Grid.Row="0"
                     Grid.Column="0"
@@ -40,6 +40,7 @@
                     HorizontalTextAlignment="Center"
                     HorizontalOptions="Center"
                     ></Label>
+               
                 <Label
                     x:Name="lblCedula"
                     VerticalTextAlignment="Center"

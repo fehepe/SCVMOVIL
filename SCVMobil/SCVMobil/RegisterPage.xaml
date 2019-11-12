@@ -4,7 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             Title="REGISTRO"
+             Title="Registro"
               xmlns:local="clr-namespace:SCVMobil"
              x:Class="SCVMobil.RegisterPage">
     
@@ -44,12 +44,21 @@
                 Text="Nombre" 
                FontSize="20">
             </Label>
-            <Entry 
+            <Frame CornerRadius="15" 
+                BorderColor="#2196F3"
+                Padding="5">                
+                <Frame
+                    CornerRadius="10" 
+                    BackgroundColor="White" 
+                    Padding="1">
+                    <Entry 
                 HorizontalTextAlignment="Center"
                 x:Name="entNombres"
                 Placeholder="Rodrigo">
-
-            </Entry>
+                    </Entry>
+                </Frame>
+            </Frame>
+            
             <Label 
                  Margin="0,20,0,0"
                 FontAttributes="Bold"
@@ -58,13 +67,21 @@
                 Text="Apellido" 
                 FontSize="20">
             </Label>
-            <Entry 
+            <Frame CornerRadius="15" 
+                BorderColor="#2196F3"
+                Padding="5">
+                <Frame CornerRadius="10" 
+                    BackgroundColor="White" 
+                    Padding="1" >
+                    <Entry 
                 HorizontalTextAlignment="Center"
                 x:Name="entApellidos"
-                Placeholder="Alfonso"
-                >
-               
-            </Entry>
+                Placeholder="Alfonso">
+
+                    </Entry>
+                </Frame>
+            </Frame>
+            
 
             <Button  
                 Clicked="BtAgregar_Clicked"
