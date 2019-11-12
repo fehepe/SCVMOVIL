@@ -340,7 +340,7 @@ namespace SCVMobil
                                 Crashes.TrackError(ey, properties);
                                 ppCedulaNoExiste.IsVisible = true;
                                 Analytics.TrackEvent("Documento No-Existe: " + inString + " en el escaner " + Preferences.Get("LECTOR", "N/A"));
-                                await TextToSpeech.SpeakAsync("Documento No Existe");
+                                await TextToSpeech.SpeakAsync("Documento Inexistente");
                                 try
                                 {
                                     var duration = TimeSpan.FromSeconds(1);

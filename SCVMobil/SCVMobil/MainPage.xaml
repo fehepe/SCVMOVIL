@@ -3,14 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:SCVMobil"
              x:Class="SCVMobil.MainPage"
-             Title="Inicio">
+             Title="INICIO"
+             >
 
   <ContentPage.ToolbarItems>
     <ToolbarItem
         Text="Configuración"
         Order="Secondary"
         Clicked="ToolbarItem_Clicked"
-        Icon="icons8_settings_32.png"/>
+       />
 
   </ContentPage.ToolbarItems>
   <ScrollView
@@ -25,6 +26,7 @@
           Spacing="50"
           AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
           AbsoluteLayout.LayoutFlags="All">
+          
                 <Image
                     x:Name="imgSync"
                     Source="wifi"
@@ -40,6 +42,7 @@
          Source="id.png"
          Aspect="AspectFit"
           WidthRequest="200"
+           
            
             />
 
