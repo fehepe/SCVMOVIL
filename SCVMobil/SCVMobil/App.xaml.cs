@@ -55,11 +55,14 @@ namespace SCVMobil
 
         public string NOMBRE { get; set; }
 
+        public int? PUNTO_VSU { get; set; }
 
-        public COMPANIAS(int COMPANIA_ID, string NOMBRE)
+
+        public COMPANIAS(int COMPANIA_ID, string NOMBRE, int PUNTO_VSU)
         {
             this.COMPANIA_ID = COMPANIA_ID;
             this.NOMBRE = NOMBRE;
+            this.PUNTO_VSU = PUNTO_VSU;
 
         }
 
@@ -435,6 +438,8 @@ namespace SCVMobil
                         }
                         db.UpdateAll(verificarASubir);
 
+                        
+
                         //Vamos a subir las salidas.
                         var salidasASubir = db.Query<Invitados>("SELECT * FROM Invitados where SALIDASUBIDA is null and FECHA_SALIDA is not null and SUBIDA is not null");
                         foreach (Invitados registro in salidasASubir)
@@ -545,7 +550,7 @@ namespace SCVMobil
                         //Vamos a descargar las companias
                         string querryCompanias = " SELECT FIRST " 
                                                + Preferences.Get("CHUNK_SIZE", "10000") 
-                                               + " COMPANIA_ID, NOMBRE  FROM COMPANIAS where COMPANIA_ID > " 
+                                               + " COMPANIA_ID, NOMBRE, PUNTO_VSU FROM COMPANIAS where COMPANIA_ID > " 
                                                + Preferences.Get("MAX_COMPANIA_ID", "0")
                                                + " ORDER BY COMPANIA_ID desc";
                         var contentCompanias = _client.GetStringAsync(url + querryCompanias);
@@ -720,6 +725,12 @@ namespace SCVMobil
                             }
                         }
 
+                        //MOSTRAR PUNTOS_VSU//
+                        
+
+
+
+                        
                         var maxInvidatoIdLocal = db.Query<counterObj>("SELECT MAX(INVIDATO_ID) as anycount FROM Invitados");
 
                         //Vamos a descargar las salidas.

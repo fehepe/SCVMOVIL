@@ -53,6 +53,9 @@ namespace SCVMobil
                 lblTiempo.IsVisible = true;
                 entTiempo.IsVisible = true;
             }
+            var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+            var dots = db.Query<COMPANIAS>("SELECT * FROM COMPANIAS WHERE PUNTO_VSU = 1");
+            //entPuerta.ItemsSource = dots;
         }
 
 
@@ -128,7 +131,7 @@ namespace SCVMobil
 
         private void entPuerta_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+                        
         }
 
         private void entTiempo_TextChanged(object sender, TextChangedEventArgs e)
