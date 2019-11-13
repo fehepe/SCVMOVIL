@@ -108,7 +108,7 @@ namespace SCVMobil
         private void BtOKCedulaNoExiste_Clicked(object sender, EventArgs e)
         {
 
-            Navigation.PushAsync(new RegisterPage(cedula.Text));
+            Navigation.PushAsync(new MainPage());
         }
         protected override void OnAppearing() //Cuando aparesca la pagina, refrescamos.
         {

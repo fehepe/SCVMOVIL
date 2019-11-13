@@ -12,21 +12,12 @@
             x:Name="grupo"
             Text="Es un Grupo" 
             Order="Primary" 
-            Clicked="Grupo_Clicked"
-     
+            Clicked="Grupo_Clicked"     
            ></ToolbarItem>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout Padding="20">
-            
-            <Image Source="empresa" Margin="1,20,1,1" HeightRequest="100"/>
-
-            <Grid Padding="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="2*"/>
-                </Grid.ColumnDefinitions>
-                <Label
+            <Label
                     Grid.Row="1"
                     Grid.Column="0"
                     FontSize="15"
@@ -34,14 +25,23 @@
                     Text="Nombre(s)"
                     VerticalOptions="Center">
                 </Label>
-                <Entry
+            <Frame 
+                CornerRadius="15" 
+                BorderColor="#2196F3" 
+                Padding="5">
+                <Frame 
+                    CornerRadius="10" 
+                    BackgroundColor="White" 
+                    Padding="1">
+                    <Entry
                     x:Name="entNombre"
                     Grid.Row="1"
                     Grid.Column="1" 
                     Keyboard="Email"
                     IsReadOnly="True"/>
-
-                <Label
+                </Frame>
+            </Frame>
+            <Label
                     Grid.Row="2"
                     Grid.Column="0" 
                     FontSize="15"
@@ -49,14 +49,24 @@
                     Text="Identificacion"
                     VerticalOptions="Center">
                 </Label>
-                <Entry
+            <Frame 
+                CornerRadius="15" 
+                BorderColor="#2196F3" 
+                Padding="5">
+                <Frame 
+                    CornerRadius="10" 
+                    BackgroundColor="White" 
+                    Padding="1">
+                    <Entry
                     x:Name="entCedula"
                     Grid.Row="2"
                     Grid.Column="1" 
                     IsReadOnly="True"
                     Completed="EntCedula_Completed">
                 </Entry>
-                <Label
+                </Frame>
+            </Frame>
+            <Label
                     Grid.Row="3"
                     Grid.Column="0" 
                     FontSize="15"
@@ -64,13 +74,23 @@
                     Text="Destino"
                     VerticalOptions="Center">
                 </Label>
-                <Picker
+            <Frame 
+                CornerRadius="15" 
+                BorderColor="#2196F3" 
+                Padding="5">
+                <Frame 
+                    CornerRadius="10" 
+                    BackgroundColor="White" 
+                    Padding="1">
+                    <Picker
                     x:Name="pickerDestino"
                     Grid.Row="3"
                     Grid.Column="1" 
                     Title="Seleccione..."
                     SelectedIndexChanged="PickerDestino_SelectedIndexChanged"/>
-                <Label
+                </Frame>
+            </Frame>
+            <Label
                     Grid.Row="4"
                     Grid.Column="0" 
                     FontSize="15"
@@ -79,15 +99,24 @@
                     Text="Visita a"
                     VerticalOptions="Center">
                 </Label>
-                <Picker
+            <Frame 
+                CornerRadius="15" 
+                BorderColor="#2196F3" 
+                Padding="5">
+                <Frame 
+                    CornerRadius="10" 
+                    BackgroundColor="White" 
+                    Padding="1">
+                    <Picker
                     x:Name="pickerVisitaA"
                     Grid.Row="4"
-                    Grid.Column="1" 
-                    
+                    Grid.Column="1"                     
                     Title="Seleccione..."
                     SelectedIndexChanged="PickerVisitaA_SelectedIndexChanged">
-                </Picker>
-                <Label
+                    </Picker>
+                </Frame>
+            </Frame>
+            <Label
                     x:Name="lbPlaca"
                     Grid.Row="5"
                     Grid.Column="0" 
@@ -96,23 +125,32 @@
                     Text="Placa"
                     VerticalOptions="Center">
                 </Label>
-                <Entry
+            <Frame 
+                CornerRadius="15" 
+                BorderColor="#2196F3" 
+                Padding="5">
+                <Frame 
+                    CornerRadius="10" 
+                    BackgroundColor="White" 
+                    Padding="1">
+                    <Entry
                     x:Name="entPlaca"
                     Grid.Row="5"
                     Grid.Column="1"
                     Completed="EntPlaca_Completed">
-                </Entry>
-            </Grid>
+                    </Entry>
+                </Frame>
+            </Frame>
             <Button  
                 Text="Imprimir"
-                BackgroundColor="#2196F3" 
-                VerticalOptions="Center"
+                BackgroundColor="Accent" 
+                HorizontalOptions="Center"
                 Clicked="BtnImprimir_Clicked"
                 x:Name="btnImprimir"
-                HeightRequest="70"
+                HeightRequest="40"
                 CornerRadius="20"
-                WidthRequest="20"
-                FontSize="13"
+                WidthRequest="190"
+                FontSize="15"
                 TextColor="White"/>
         </StackLayout>
     </ContentPage.Content>
