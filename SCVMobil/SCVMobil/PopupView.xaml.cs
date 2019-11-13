@@ -24,13 +24,13 @@ namespace SCVMobil
 
             if (entPassword.Text == "1")
             {
-                ppPasswordConfig.IsVisible = false;
+               
                 entPassword.Text = string.Empty;
                 Navigation.PushAsync(new AppSettingsPage());
             }
             else
             {
-                lbWrongPass.IsVisible = true;
+               
                 try
                 {
                     var duration = TimeSpan.FromSeconds(0.5);
