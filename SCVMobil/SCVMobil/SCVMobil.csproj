@@ -83,8 +83,4 @@
       <Generator>MSBuild:Compile</Generator>
     </None>
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Connections\" />
-  </ItemGroup>
 </Project>

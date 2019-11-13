@@ -20,6 +20,7 @@ using Microsoft.AppCenter.Distribute;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using SCVMobil.Models;
+using SCVMobil.Connections;
 
 namespace SCVMobil
 {
@@ -57,6 +58,7 @@ namespace SCVMobil
                 {
                     if (Connectivity.NetworkAccess == NetworkAccess.Internet)
                     {
+                        //implementar el metodo tryConnection();
                         string url = $"http://{Preferences.Get("REGISTROS_IP", "192.168.1.158") }:{Preferences.Get("REGISTROS_PORT", "4441")}/?sql=";
                         string querrySYNC = "SELECT FIRST 2 * FROM COMPANIAS";
                         var contentSync = _client.GetStringAsync(url + querrySYNC);
@@ -66,10 +68,7 @@ namespace SCVMobil
                         
                       
                         //Servicios Periodicos
-                        CultureInfo culture = (CultureInfo)CultureInfo.CurrentCulture.Clone();
-                        culture.DateTimeFormat.ShortDatePattern = "yyyy-MM-dd";
-                        culture.DateTimeFormat.LongTimePattern = "HH:mm:ss";
-                        Thread.CurrentThread.CurrentCulture = culture;
+                        
 
                         var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
