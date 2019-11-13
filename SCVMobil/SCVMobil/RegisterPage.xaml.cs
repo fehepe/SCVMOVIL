@@ -15,17 +15,9 @@ namespace SCVMobil
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class RegisterPage : ContentPage
     {
-        public RegisterPage(String data)
+        public RegisterPage()
         {
-            InitializeComponent();
-            if (string.IsNullOrEmpty(data))
-            {
-                DisplayAlert("Error", "No puede enviar vacio", "OK");
-            }
-            else
-            {
-                entCedula.Text = data;
-            }
+            InitializeComponent();            
 
 
         }
