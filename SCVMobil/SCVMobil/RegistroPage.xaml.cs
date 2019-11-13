@@ -13,17 +13,16 @@ using Xamarin.Forms.Xaml;
 namespace SCVMobil
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class RegisterPage : ContentPage
+    public partial class RegistroPage : ContentPage
     {
-        public RegisterPage()
+        public RegistroPage()
         {
-            InitializeComponent();            
-
-
+            InitializeComponent();
         }
-        private void BtAgregar_Clicked(object sender, EventArgs e)
+
+        private void Agregar_Clicked(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(entCedula.Text) || string.IsNullOrEmpty(entNombres.Text) || string.IsNullOrEmpty(entApellidos.Text) || entCedula.Text.Length != 11)
+            if (string.IsNullOrEmpty(EntryCedula.Text) || string.IsNullOrEmpty(EntryNombre.Text) || string.IsNullOrEmpty(EntryApellido.Text) || EntryCedula.Text.Length != 11)
             {
                 Application.Current.MainPage.DisplayAlert(
                     "Registro",
@@ -36,9 +35,9 @@ namespace SCVMobil
             {
 
                 var padronRegistro = new PADRON();
-                padronRegistro.CEDULA = entCedula.Text;
-                padronRegistro.NOMBRES = entNombres.Text.ToUpper();
-                padronRegistro.APELLIDO1 = entApellidos.Text.ToUpper();
+                padronRegistro.CEDULA = EntryCedula.Text;
+                padronRegistro.NOMBRES = EntryNombre.Text.ToUpper();
+                padronRegistro.APELLIDO1 = EntryApellido.Text.ToUpper();
                 padronRegistro.APELLIDO2 = "";
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                 try
@@ -48,10 +47,10 @@ namespace SCVMobil
                    "Confirmado",
                    "Datos Ingresados Correctamente",
                    "accept");
-                    Navigation.PushAsync(new CompanyPage(entCedula.Text, entNombres.Text, entApellidos.Text));
-                    entApellidos.Text = "";
-                    entCedula.Text = "";
-                    entNombres.Text = "";
+                    Navigation.PushAsync(new CompanyPage(EntryCedula.Text, EntryNombre.Text, EntryApellido.Text));
+                    EntryApellido.Text = "";
+                    EntryCedula.Text = "";
+                    EntryNombre.Text = "";
                     return;
 
 

@@ -8,13 +8,11 @@
         <AbsoluteLayout 
             Padding="0" 
             HorizontalOptions="FillAndExpand" 
-            VerticalOptions="FillAndExpand">
-            
+            VerticalOptions="FillAndExpand">            
             <StackLayout 
                 Padding="20"
-                  BackgroundColor="White"
-                
-                >
+                  BackgroundColor="White"               
+                >                    
                 <Label                    
                     Text="Servidor Padron"
                     FontSize="20"

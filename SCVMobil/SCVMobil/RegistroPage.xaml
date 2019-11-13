@@ -4,10 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             Title="Registro"
-              xmlns:local="clr-namespace:SCVMobil"
-             x:Class="SCVMobil.RegisterPage">
-    
+             x:Class="SCVMobil.RegistroPage">
     <ContentPage.Content>
         <StackLayout
             VerticalOptions="Center"
@@ -30,8 +27,7 @@
                     Padding="1">
                     <Entry  
                         HorizontalTextAlignment="Center"
-                        x:Name="entCedula"
-                     IsReadOnly="True"
+                        x:Name="EntryCedula"
                      Placeholder="000-000000-0"
                      Keyboard="Keyboard.Numeric" ></Entry>
                 </Frame>
@@ -46,19 +42,18 @@
             </Label>
             <Frame CornerRadius="15" 
                 BorderColor="#2196F3"
-                Padding="5">                
+                Padding="5">
                 <Frame
                     CornerRadius="10" 
                     BackgroundColor="White" 
                     Padding="1">
                     <Entry 
                 HorizontalTextAlignment="Center"
-                x:Name="entNombres"
+                x:Name="EntryNombre"
                 Placeholder="Rodrigo">
                     </Entry>
                 </Frame>
             </Frame>
-            
             <Label 
                  Margin="0,20,0,0"
                 FontAttributes="Bold"
@@ -75,17 +70,15 @@
                     Padding="1" >
                     <Entry 
                 HorizontalTextAlignment="Center"
-                x:Name="entApellidos"
+                x:Name="EntryApellido"
                 Placeholder="Alfonso">
 
                     </Entry>
                 </Frame>
             </Frame>
-            
-
             <Button  
-                Clicked="BtAgregar_Clicked"
-                x:Name="btnAgregar"
+                x:Name="Agregar"
+                Clicked="Agregar_Clicked"
                 Text="Agregar"
                 BackgroundColor="Accent" 
                 VerticalOptions="CenterAndExpand"
@@ -97,5 +90,6 @@
                 TextColor="White">
             </Button>
         </StackLayout>
-    </ContentPage.Content>
+
+</ContentPage.Content>
 </ContentPage>

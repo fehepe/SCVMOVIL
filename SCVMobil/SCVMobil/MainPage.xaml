@@ -1,58 +1,50 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:SCVMobil"
+             xmlns:local="clr-namespace:SCVMobil"             
              x:Class="SCVMobil.MainPage"
              Title="Inicio"
              >
-
-  <ContentPage.ToolbarItems>
-    <ToolbarItem
-        Text="Configuración"
-        Order="Secondary"
-        Clicked="ToolbarItem_Clicked"
-       />
-
-  </ContentPage.ToolbarItems>
-  <ScrollView
+  
+    
+        <ContentPage.ToolbarItems>
+            <ToolbarItem Text="Configuración"
+                         Order="Secondary"
+                         Clicked="ToolbarItem_Clicked"/>
+        </ContentPage.ToolbarItems>
+        <ScrollView
       VerticalOptions="CenterAndExpand">
-      
-    <AbsoluteLayout
+
+            <AbsoluteLayout
         Padding="0"
         HorizontalOptions="FillAndExpand"
         VerticalOptions="FillAndExpand">
-      <StackLayout
+                <StackLayout
           Padding="10"
           Spacing="50"
           AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
-          AbsoluteLayout.LayoutFlags="All">             
-
-                
-
-        
-
-        <!-- Espacio en blanco-->
-        <Label
+          AbsoluteLayout.LayoutFlags="All">
+                    <Label
             Text="Escanear Cedula"
             FontSize="20"            
             TextColor="Black"
             FontAttributes="Bold"
             HorizontalTextAlignment="Center"
             Margin="0,0,0,0"/>
-        <Frame
+                    <Frame
             CornerRadius="15"
             BorderColor="#2196F3"            
             Padding="5">
-          <Frame
+                        <Frame
               CornerRadius="15"             
               Padding="1">
-            <Entry
+                            <Entry
                 x:Name="entCedula"
                 Completed="EntCedula_Completed"
                 Keyboard="Keyboard.Numeric" MaxLength="11"/>
-          </Frame>
-        </Frame>
-        <Label
+                        </Frame>
+                    </Frame>
+                    <Label
             Text="Nombre:"
             FontSize="20"
             TextColor="Black"
@@ -61,7 +53,7 @@
             HorizontalTextAlignment="Center"
             Margin="0,20,0,0"
             IsVisible="False"/>
-        <Label
+                    <Label
              FontSize="20"
             TextColor="Blue"
             FontAttributes="Bold"
@@ -72,7 +64,7 @@
             x:Name="entNombres"
             IsVisible="False"
             />
-        <Label
+                    <Label
             Text="Apellido:"
             FontSize="20"
             TextColor="Black"
@@ -81,7 +73,7 @@
             HorizontalTextAlignment="Center"
             Margin="0,20,0,0"
             IsVisible="False"></Label>
-        <Label
+                    <Label
             FontSize="20"
             TextColor="Blue"
             FontAttributes="Bold"
@@ -91,7 +83,7 @@
             
             x:Name="entApellidos"
             IsVisible="False"/>
-                <Label 
+                    <Label 
                     
                     Text="Version:"
                     FontSize="Small"
@@ -99,23 +91,10 @@
                     
                     VerticalOptions="End"
                     IsVisible="False">
-                    
-                </Label>
-                <Label 
-                    x:Name="lblVersion"
-                    Text="0.0.0.0"
-                    HorizontalOptions="Center"
-                    FontSize="Small"                    
-                    VerticalOptions="End"
-                    IsVisible="False">
-                    
-                </Label>
 
-            </StackLayout>
+                    </Label>
+                </StackLayout>
+            </AbsoluteLayout>
+        </ScrollView>
+    </ContentPage>   
 
-      <!-- POP UP AREA-->
-      
-
-    </AbsoluteLayout>
-  </ScrollView>
-</ContentPage>

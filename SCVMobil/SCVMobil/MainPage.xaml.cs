@@ -12,6 +12,7 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using Rg.Plugins.Popup.Services;
 
+
 namespace SCVMobil
 {
     public partial class MainPage : ContentPage
@@ -69,7 +70,8 @@ namespace SCVMobil
             entCedula.Text = string.Empty;
             entApellidos.Text = string.Empty;
             entNombres.Text = string.Empty;
-            lblVersion.Text = Preferences.Get("VERSION", "0.0.0.0.0");
+            
+            
 
         }
 
@@ -79,7 +81,7 @@ namespace SCVMobil
         protected override void OnDisappearing()//Cuando la pagina desaparezca
         {
             scanner.GetScanner(false);// Se desactiva el Scaner
-
+            
            
             Preferences.Set("PAGE_ACTIVE", "MainPage");
            
@@ -218,7 +220,7 @@ namespace SCVMobil
                         var registroRes = db.Query<VW_RESERVA_VISITA>(querry);
                         if (registroRes.Count > 0)
                         {
-                            await Navigation.PushAsync(new ReservasPage(registroRes));
+                            //await Navigation.PushAsync(new ReservasPage(registroRes));
                         }
                         else
                         {
@@ -248,9 +250,11 @@ namespace SCVMobil
                                     { "Lector", Preferences.Get("LECTOR", "0")}
                                 };
                                 Crashes.TrackError(ey, properties);
-                                await PopupNavigation.PushAsync(new PopUpCedulaNoexiste());
-                                Analytics.TrackEvent("Documento No-Existe: " + inString + " en el escaner " + Preferences.Get("LECTOR", "N/A"));
-                                await TextToSpeech.SpeakAsync("Documento Inexistente");
+                                await PopupNavigation.PushAsync(new PopUpCedulaNoexiste());                                   
+                                entCedula.Text = entCedula.Text; 
+                                
+
+                                
                                 try
                                 {
                                     var duration = TimeSpan.FromSeconds(1);
@@ -273,7 +277,11 @@ namespace SCVMobil
                 }
             }
         }
+
+      
+    
     }
+    
 }
 
 

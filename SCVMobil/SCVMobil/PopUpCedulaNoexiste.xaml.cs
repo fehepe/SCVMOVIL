@@ -22,7 +22,8 @@ namespace SCVMobil
         private void cedulainexistente_Clicked(object sender, EventArgs e)
         {
             this.IsVisible = false;
-            Navigation.PushAsync(new RegisterPage());
+            Navigation.PushAsync(new RegistroPage());
+            
         }
     }
 }

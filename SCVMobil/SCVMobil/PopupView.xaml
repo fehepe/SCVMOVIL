@@ -8,10 +8,9 @@
              x:Class="SCVMobil.PopupView">
 
     <StackLayout Margin="14" Padding="20" Spacing="10" BackgroundColor="White"  VerticalOptions="Center">
-        <Frame/>
         <StackLayout>
             <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Padding="0,0,0,10">
-                <Label Text="Contraseña" FontSize="30"/>
+                <Label Text="Contraseña"  FontAttributes="Bold" FontSize="30"/>
             </StackLayout>           
             <Entry x:Name="entPassword"
                  BackgroundColor="white"                
@@ -22,19 +21,20 @@
         </StackLayout>
         <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
             <Button BackgroundColor="DodgerBlue"
-                FontSize="30"
+                FontSize="20"
                 x:Name="btnCancelar"
-                CornerRadius="30"
+                CornerRadius="20"
+                FontAttributes="Bold"
                 TextColor="White"
                 Text="Cerrar"
                 Clicked="btnCancelar_Clicked"/>
             <Button BackgroundColor="DodgerBlue"
-                FontSize="30"
-                CornerRadius="30"
+                FontSize="20"
+                FontAttributes="Bold"
+                CornerRadius="20"
                 Text="Entrar"  
                 TextColor="White"
                 Clicked="Button_Clicked"/>
-        </StackLayout> 
-        
+        </StackLayout>         
     </StackLayout>
 </popup:PopupPage>

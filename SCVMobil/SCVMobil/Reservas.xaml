@@ -9,11 +9,7 @@
         <ScrollView>
         <StackLayout
             BackgroundColor="White"
-            >
-            <Image
-                Margin="1,20,1,1"
-                Source="calendar"
-                ></Image>
+            >       
             <Label 
                 Text="ATENCION"
                 HorizontalOptions="Center"

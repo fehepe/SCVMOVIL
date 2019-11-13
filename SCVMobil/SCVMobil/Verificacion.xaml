@@ -9,25 +9,14 @@
     <ContentPage.Content>
         <StackLayout
             VerticalOptions="Center"
-            Padding="40">
+            Padding="40"
+            >
             <Label Text="Datos del Invitado"
                  FontSize="35"
                    FontAttributes="Bold"
-                   TextColor="Black"
-                   
+                   TextColor="Black"                   
                    HorizontalOptions="CenterAndExpand"
-                   Margin="0,0,0,40"/>
-            <Grid
-                
-                RowSpacing="15">
-                <Grid.RowDefinitions>
-                    <RowDefinition
-                        Height="*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition
-                        Width="*"/>
-                </Grid.ColumnDefinitions>
+                   Margin="0,0,0,40"/>          
                
                 <Label
                     Grid.Row="0"
@@ -149,7 +138,7 @@
                     HorizontalTextAlignment="Center"
                     HorizontalOptions="Center"
                     ></Label>
-            </Grid>
+            
             <Button
                 x:Name="btnCorrecto"
                 CornerRadius="20"
