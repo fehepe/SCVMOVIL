@@ -10,6 +10,7 @@ using Microsoft.AppCenter.Crashes;
 using Microsoft.AppCenter.Analytics;
 using System.Net.Http;
 using Newtonsoft.Json;
+using SCVMobil.Models;
 
 namespace SCVMobil
 {
