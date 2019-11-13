@@ -27,6 +27,7 @@ namespace SCVMobil
         {
             base.OnAppearing();
             setdefaults();
+            Localidad_VSU();
             visitaA.IsToggled = Preferences.Get("VISITA_A_SELECTED", true);
             placa.IsToggled= Preferences.Get("PLACA_SELECTED", true);
         }
@@ -36,10 +37,7 @@ namespace SCVMobil
             {
                 Preferences.Set("TIEMPO_VER", "1");
             }
-            if (Preferences.Get("PUERTA", "N/A") == "N/A")
-            {
-                Preferences.Set("PUERTA", "1495");
-            }
+            
             if (!Preferences.Get("VERIFICA", false))
             {
                 Preferences.Set("VERIFICA", false);
@@ -53,8 +51,39 @@ namespace SCVMobil
                 lblTiempo.IsVisible = true;
                 entTiempo.IsVisible = true;
             }
+            
+            
         }
+        private void Localidad_VSU()
+        {
 
+
+            var scompania_id = Preferences.Get("LOCALIDAD_VSU","1");
+            var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+            var puertas = db.Query<COMPANIAS>("SELECT * FROM COMPANIAS where PUNTO_VSU = 1");
+            List<string> listpuertas = new List<string>();
+            if (puertas.Any())
+            {
+                entPuerta.IsVisible = true;
+                foreach (var item in puertas)
+                {
+                    listpuertas.Add(item.NOMBRE);
+                }
+                entPuerta.ItemsSource = listpuertas;
+                if (scompania_id != "1")
+                {
+                    entPuerta.SelectedItem = (puertas.Where(x => x.COMPANIA_ID == Convert.ToInt32(scompania_id)).First().NOMBRE);
+                }
+               
+
+            }
+            else
+            {
+                entPuerta.IsVisible = false;
+            }
+
+           
+        }
 
 
         private void VisitaA_Toggled(object sender, ToggledEventArgs e)
@@ -105,7 +134,6 @@ namespace SCVMobil
                 Preferences.Set("MAX_COMPANIA_ID", "0");
                 Preferences.Set("MAX_PERSONA_ID", "0");
                 Preferences.Set("MAX_INVIDATO_ID", "0");
-
                 Preferences.Set("PERSONAS_LIST", "");
                 Preferences.Set("COMPANIAS_LIST", "");
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
@@ -126,11 +154,7 @@ namespace SCVMobil
 
         }
 
-        private void entPuerta_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
+      
         private void entTiempo_TextChanged(object sender, TextChangedEventArgs e)
         {
 
@@ -152,6 +176,26 @@ namespace SCVMobil
                 lblTiempo.IsVisible = true;
                 entTiempo.IsVisible = true;
             }
+        }
+
+        private void entPuerta_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                var nombreLocalidad = entPuerta.SelectedItem.ToString();
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                var puertas = db.Query<COMPANIAS>($"SELECT * FROM COMPANIAS where NOMBRE = '{nombreLocalidad}'");
+                if (puertas.Any())
+                {
+                    Preferences.Set("LOCALIDAD_VSU", puertas.First().COMPANIA_ID.ToString());
+                }
+            }
+            catch (Exception)
+            {
+                
+            }
+            
+           
         }
     }
 }

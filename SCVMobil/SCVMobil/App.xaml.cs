@@ -54,12 +54,15 @@ namespace SCVMobil
         public int COMPANIA_ID { get; set; }
 
         public string NOMBRE { get; set; }
+        public int? PUNTO_VSU { get; set; }
+        
 
 
-        public COMPANIAS(int COMPANIA_ID, string NOMBRE)
+        public COMPANIAS(int COMPANIA_ID, string NOMBRE,int? PUNTO_VSU)
         {
             this.COMPANIA_ID = COMPANIA_ID;
             this.NOMBRE = NOMBRE;
+            this.PUNTO_VSU = PUNTO_VSU;
 
         }
 
@@ -177,9 +180,7 @@ namespace SCVMobil
                         var contentSync = _client.GetStringAsync(url + querrySYNC);
                         contentSync.Wait();
                         Preferences.Set("SYNC_VSU", contentSync.IsCompleted);
-                        
-                        
-                      
+
                         //Servicios Periodicos
                         CultureInfo culture = (CultureInfo)CultureInfo.CurrentCulture.Clone();
                         culture.DateTimeFormat.ShortDatePattern = "yyyy-MM-dd";
@@ -240,7 +241,7 @@ namespace SCVMobil
                                 $"'{registro.Tipo_Visitante}'," +
                                 "0," +
                                 "0," +
-                                $" {Util.CoalesceStr(registro.Puerta_Entrada, "1495")}," +
+                                $" {Preferences.Get("LOCALIDAD_VSU", "1")}," +
                                 "0," +
                                 "12," +
                                 "1," +
@@ -292,7 +293,7 @@ namespace SCVMobil
                                 }
                             }
 
-
+                            
                         }
                         db.UpdateAll(visitasASubir);
                         //
@@ -347,7 +348,7 @@ namespace SCVMobil
                                 $"'{registro2.Tipo_Visitante}'," +
                                 "0, " +
                                 "0, " +
-                                $"{registro2.Puerta_Entrada}," +
+                                $"{Preferences.Get("LOCALIDAD_VSU", "1")}," +
                                 "0, " +
                                 "12, " +
                                 "1, " +
@@ -545,7 +546,7 @@ namespace SCVMobil
                         //Vamos a descargar las companias
                         string querryCompanias = " SELECT FIRST " 
                                                + Preferences.Get("CHUNK_SIZE", "10000") 
-                                               + " COMPANIA_ID, NOMBRE  FROM COMPANIAS where COMPANIA_ID > " 
+                                               + " COMPANIA_ID, NOMBRE,PUNTO_VSU  FROM COMPANIAS where COMPANIA_ID > " 
                                                + Preferences.Get("MAX_COMPANIA_ID", "0")
                                                + " ORDER BY COMPANIA_ID desc";
                         var contentCompanias = _client.GetStringAsync(url + querryCompanias);
