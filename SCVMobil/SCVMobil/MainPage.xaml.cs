@@ -10,6 +10,7 @@ using Microsoft.AppCenter.Crashes;
 using Microsoft.AppCenter.Analytics;
 using System.Net.Http;
 using Newtonsoft.Json;
+using Rg.Plugins.Popup.Services;
 
 namespace SCVMobil
 {
@@ -46,11 +47,9 @@ namespace SCVMobil
 
 
         //--------------------------------------------------------------------------------------
-        private void ToolbarItem_Clicked(object sender, EventArgs e)
+        private async void ToolbarItem_Clicked(object sender, EventArgs e)
         {
-            fmPassConf.VerticalOptions = LayoutOptions.CenterAndExpand;
-            ppPasswordConfig.IsVisible = true;
-            lbWrongPass.IsVisible = false;
+            await PopupNavigation.PushAsync(new PopupView());
         }
 
 
@@ -58,16 +57,7 @@ namespace SCVMobil
         //---------------------------------------------------------------------------------------
         public void refreshPage()
         {
-            if (Preferences.Get("SYNC_VSU", false))
-            {
-                imgNoSync.IsVisible = false;
-                imgSync.IsVisible = true;
-            }
-            else
-            {
-                imgNoSync.IsVisible = true;
-                imgSync.IsVisible = false;
-            }
+           
         }
         //-----------------------------------------------------------------------------------------
         protected override void OnAppearing() //Cuando aparezca la pagina, refrescamos.

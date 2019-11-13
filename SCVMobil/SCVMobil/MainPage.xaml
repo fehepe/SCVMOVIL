@@ -25,29 +25,11 @@
           Padding="10"
           Spacing="50"
           AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
-          AbsoluteLayout.LayoutFlags="All">
-          
-                <Image
-                    x:Name="imgSync"
-                    Source="wifi"
-                    WidthRequest="30"
-                    HorizontalOptions="End"></Image>
-                <Image
-                    x:Name="imgNoSync"
-                    Source="nowifi"
-                    WidthRequest="30"
-                    HorizontalOptions="End"></Image>
+          AbsoluteLayout.LayoutFlags="All">             
 
-                <Image
-         Source="id.png"
-         Aspect="AspectFit"
-          WidthRequest="200"
-           
-           
-            />
+                
 
-        <BoxView
-           HeightRequest="20"/>
+        
 
         <!-- Espacio en blanco-->
         <Label
