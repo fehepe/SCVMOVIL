@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http;
@@ -10,6 +11,7 @@ namespace SCVMobil.Connections
 {
     public class FireBirdData
     {
+        
         public FireBirdData()
         {
 
@@ -36,7 +38,7 @@ namespace SCVMobil.Connections
 
 
 
-        //Proveer informacion relativo
+        //Proveer informacion relativo a la region
         public void PublicServices()
         {
             CultureInfo culture = (CultureInfo)CultureInfo.CurrentCulture.Clone();
@@ -45,6 +47,15 @@ namespace SCVMobil.Connections
             Thread.CurrentThread.CurrentCulture = culture;
         }
 
+
+        //Cargar visitas que NO se han subido
+        public void UploadVisits()
+        {
+            var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+            var visitasASubir = db.Query<Invitados>("SELECT * FROM Invitados where SUBIDA is null");
+
+
+        }
 
         
     }

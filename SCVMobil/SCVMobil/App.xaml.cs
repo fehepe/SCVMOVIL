@@ -32,6 +32,8 @@ namespace SCVMobil
 
     public partial class App : Application
     {
+        FireBirdData fireBird;
+
         public static System.Timers.Timer syncTimer;
 
         private static void SetTimer()
@@ -59,31 +61,40 @@ namespace SCVMobil
                     if (Connectivity.NetworkAccess == NetworkAccess.Internet)
                     {
                         //implementar el metodo tryConnection();
+                        #region ModificarAFireBase
                         string url = $"http://{Preferences.Get("REGISTROS_IP", "192.168.1.158") }:{Preferences.Get("REGISTROS_PORT", "4441")}/?sql=";
                         string querrySYNC = "SELECT FIRST 2 * FROM COMPANIAS";
                         var contentSync = _client.GetStringAsync(url + querrySYNC);
                         contentSync.Wait();
                         Preferences.Set("SYNC_VSU", contentSync.IsCompleted);
-                        
-                        
-                      
-                        //Servicios Periodicos
-                        
+                        #endregion
 
+                        // Implementar servicios Periodicos
+
+                        #region ModificarAfireBase
+                        CultureInfo culture = (CultureInfo)CultureInfo.CurrentCulture.Clone();
+                        culture.DateTimeFormat.ShortDatePattern = "yyyy-MM-dd";
+                        culture.DateTimeFormat.LongTimePattern = "HH:mm:ss";
+                        Thread.CurrentThread.CurrentCulture = culture;
+                        #endregion
+
+
+                        #region YaEn_fireBaseData
                         var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
-                        //Vamos a subir las visitas que se agregaron.
+                        //Implementar UploadVisits() para subir las visitas que NO se han agregado.
                         var visitasASubir = db.Query<Invitados>("SELECT * FROM Invitados where SUBIDA is null");
-
-                        //string url = $"http://{Preferences.Get("REGISTROS_IP", "192.168.1.158") }:{Preferences.Get("REGISTROS_PORT", "4441")}/?sql=";
+                        #endregion
 
                         Debug.WriteLine("There are: " + visitasASubir.Count.ToString() + " To upload");
+                        
                         foreach (Invitados registro in visitasASubir)
                         {
-                            string querryInv;
                             string visitado;
                             string fechaSalida;
                             string placa;
+                            string querryInv;
+                            
 
                             if (registro.Visitado is null)
                             {
@@ -147,6 +158,7 @@ namespace SCVMobil
                             var content = _client.GetStringAsync(url + querryInv);
                             Debug.WriteLine("Waiting for: " + url + querryInv);
                             content.Wait();
+
                             if (content.IsCompleted & content.Result.Contains("ANYCOUNT"))
                             {
                                 var respuesta = JsonConvert.DeserializeObject<List<counterObj>>(content.Result);
