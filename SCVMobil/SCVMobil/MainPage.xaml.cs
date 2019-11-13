@@ -10,11 +10,10 @@ using Microsoft.AppCenter.Crashes;
 using Microsoft.AppCenter.Analytics;
 using System.Net.Http;
 using Newtonsoft.Json;
-using Rg.Plugins.Popup.Services;
 
 namespace SCVMobil
 {
-    public partial class MainPage : TabbedPage
+    public partial class MainPage : ContentPage
     {
         //Variables
         //--------------------------------------------------------------------------
@@ -47,12 +46,11 @@ namespace SCVMobil
 
 
         //--------------------------------------------------------------------------------------
-        private async void ToolbarItem_Clicked(object sender, EventArgs e)
+        private void ToolbarItem_Clicked(object sender, EventArgs e)
         {
-           await PopupNavigation.Instance.PushAsync(new PopupView());
-            //fmPassConf.VerticalOptions = LayoutOptions.CenterAndExpand;
-            //ppPasswordConfig.IsVisible = true;
-            //lbWrongPass.IsVisible = false;
+            fmPassConf.VerticalOptions = LayoutOptions.CenterAndExpand;
+            ppPasswordConfig.IsVisible = true;
+            lbWrongPass.IsVisible = false;
         }
 
 

@@ -1,49 +1,85 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:SCVMobil"
              x:Class="SCVMobil.MainPage"
-             Title="Inicio">  
+             Title="Inicio"
+             >
 
-    <ContentPage Title="Scanner">
-        <StackLayout
+  <ContentPage.ToolbarItems>
+    <ToolbarItem
+        Text="Configuración"
+        Order="Secondary"
+        Clicked="ToolbarItem_Clicked"
+       />
+
+  </ContentPage.ToolbarItems>
+  <ScrollView
+      VerticalOptions="CenterAndExpand">
+      
+    <AbsoluteLayout
+        Padding="0"
+        HorizontalOptions="FillAndExpand"
+        VerticalOptions="FillAndExpand">
+      <StackLayout
           Padding="10"
-          Spacing="0"
+          Spacing="50"
           AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
           AbsoluteLayout.LayoutFlags="All">
+          
+                <Image
+                    x:Name="imgSync"
+                    Source="wifi"
+                    WidthRequest="30"
+                    HorizontalOptions="End"></Image>
+                <Image
+                    x:Name="imgNoSync"
+                    Source="nowifi"
+                    WidthRequest="30"
+                    HorizontalOptions="End"></Image>
 
-            <Label
-            Text="Cedula"
-            FontSize="20"
-            
+                <Image
+         Source="id.png"
+         Aspect="AspectFit"
+          WidthRequest="200"
+           
+           
+            />
+
+        <BoxView
+           HeightRequest="20"/>
+
+        <!-- Espacio en blanco-->
+        <Label
+            Text="Escanear Cedula"
+            FontSize="20"            
             TextColor="Black"
             FontAttributes="Bold"
             HorizontalTextAlignment="Center"
             Margin="0,0,0,0"/>
-            <Frame
-            CornerRadius="10"
-            BorderColor="#2196F3"
-            BackgroundColor="#2196F3"
+        <Frame
+            CornerRadius="15"
+            BorderColor="#2196F3"            
             Padding="5">
-                <Frame
-              CornerRadius="10"
-              BackgroundColor="White"
+          <Frame
+              CornerRadius="15"             
               Padding="1">
-                    <Entry
+            <Entry
                 x:Name="entCedula"
                 Completed="EntCedula_Completed"
                 Keyboard="Keyboard.Numeric" MaxLength="11"/>
-                </Frame>
-            </Frame>
-            <Label
+          </Frame>
+        </Frame>
+        <Label
             Text="Nombre:"
             FontSize="20"
             TextColor="Black"
             FontAttributes="Bold"
              x:Name="lblNombres"
             HorizontalTextAlignment="Center"
-            Margin="0,20,0,0"/>
-            <Label
+            Margin="0,20,0,0"
+            IsVisible="False"/>
+        <Label
              FontSize="20"
             TextColor="Blue"
             FontAttributes="Bold"
@@ -52,16 +88,18 @@
             Margin="0,20,0,0"
             
             x:Name="entNombres"
+            IsVisible="False"
             />
-            <Label
+        <Label
             Text="Apellido:"
             FontSize="20"
             TextColor="Black"
             FontAttributes="Bold"
             x:Name="lblApellidos"
             HorizontalTextAlignment="Center"
-            Margin="0,20,0,0"></Label>
-            <Label
+            Margin="0,20,0,0"
+            IsVisible="False"></Label>
+        <Label
             FontSize="20"
             TextColor="Blue"
             FontAttributes="Bold"
@@ -69,41 +107,64 @@
             HorizontalTextAlignment="Center"
             Margin="0,20,0,20"
             
-            x:Name="entApellidos"/>
-            <Label 
+            x:Name="entApellidos"
+            IsVisible="False"/>
+                <Label 
                     
                     Text="Version:"
                     FontSize="Small"
                     HorizontalOptions="Center"
                     
-                    VerticalOptions="End">
-
-            </Label>
-            <Label 
+                    VerticalOptions="End"
+                    IsVisible="False">
+                    
+                </Label>
+                <Label 
                     x:Name="lblVersion"
                     Text="0.0.0.0"
                     HorizontalOptions="Center"
                     FontSize="Small"                    
-                    VerticalOptions="End">
+                    VerticalOptions="End"
+                    IsVisible="False">
+                    
+                </Label>
 
-            </Label>
+            </StackLayout>
 
-        </StackLayout>
-    </ContentPage>
-    
-    <ContentPage Title="Registro">
-        
-    </ContentPage>
-    <!--<ScrollView
-      VerticalOptions="CenterAndExpand">
-      
-    <AbsoluteLayout
-        Padding="0"
-        HorizontalOptions="FillAndExpand"
-        VerticalOptions="FillAndExpand">
-     
-
-      
+      <!-- POP UP AREA-->
+      <ContentView
+          x:Name="ppCedulaNoExiste"
+          BackgroundColor="#C0808080"
+          Padding="10, 0" IsVisible="False"
+          AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+          AbsoluteLayout.LayoutFlags="All">
+        <Frame
+            x:Name="fmCedula"
+            VerticalOptions="CenterAndExpand"
+            BorderColor="Accent"
+            HorizontalOptions="Center"
+            HeightRequest="230" WidthRequest="345"
+            BackgroundColor="Accent" Padding="10">
+          <StackLayout>
+            <Label Text="Documento inexistente" TextColor="White"
+                   HorizontalTextAlignment="Center"
+                   HorizontalOptions="Center"
+                   VerticalOptions="CenterAndExpand"
+                   FontSize="35"></Label>
+            <Label Text="Ingrese los Datos y presione Agregar"
+                   HorizontalTextAlignment="Center"
+                   TextColor="White"
+                   FontSize="25"></Label>
+            <Grid>
+              <Button
+                  x:Name="btOKCedulaNoExiste"
+                  Text="OK" Grid.Column="0"
+                  Clicked="BtOKCedulaNoExiste_Clicked"
+                  CornerRadius="15"></Button>
+            </Grid>
+          </StackLayout>
+        </Frame>
+      </ContentView>
 
       <ContentView
           x:Name="ppPasswordConfig"
@@ -115,22 +176,22 @@
         <Frame
             x:Name="fmPassConf"
             Padding="3"
-            BorderColor="Black"
-            BackgroundColor="Black"
+            BorderColor="Accent"
+            BackgroundColor="Accent"
             VerticalOptions="CenterAndExpand"
             CornerRadius="20">
           <Frame
               VerticalOptions="CenterAndExpand"
-             BorderColor="Black"
+             BorderColor="Accent"
              HorizontalOptions="Center"
              HeightRequest="200"
              WidthRequest="340"
-             BackgroundColor="#2196F3"
+             BackgroundColor="Accent"
              Padding="10"
              CornerRadius="20">
             <StackLayout>
               <Label
-                
+                 Text="Contraseña"
                  TextColor="White"
                  HorizontalTextAlignment="Center"
                  HorizontalOptions="Center"
@@ -173,5 +234,5 @@
       </ContentView>
 
     </AbsoluteLayout>
-  </ScrollView>-->
-</TabbedPage>
+  </ScrollView>
+</ContentPage>
