@@ -20,7 +20,13 @@
                 
             Padding="20"
             
-            >               
+            >
+
+                <Image
+                Source="grupo"
+                HeightRequest="100"
+                />
+
                 <StackLayout
                 Orientation="Horizontal"
                 >
@@ -99,13 +105,20 @@
                     </Frame>
                 </ContentView>
 
+
+
+
                 <StackLayout>
-                    <Frame CornerRadius="15" 
-                BorderColor="#2196F3"
+                    <Frame 
+                CornerRadius="10" 
+                BorderColor="#2196F3" 
+                BackgroundColor="#2196F3"
+                Margin="1,20"
                 Padding="5">
-                        <Frame CornerRadius="10" 
-                    BackgroundColor="White" 
-                    Padding="1" >
+                        <Frame 
+                   CornerRadius="10" 
+                   BackgroundColor="White" 
+                   Padding="1">
                             <Entry
                     x:Name="cedula"
                     Completed="Cedula_Completed"
@@ -114,12 +127,16 @@
                     />
                         </Frame>
                     </Frame>
-                    <Frame CornerRadius="15" 
-                BorderColor="#2196F3"
+                    <Frame 
+                CornerRadius="10" 
+                BorderColor="#2196F3" 
+                BackgroundColor="#2196F3"
+           
                 Padding="5">
-                        <Frame CornerRadius="10" 
-                    BackgroundColor="White" 
-                    Padding="1" >
+                        <Frame 
+                   CornerRadius="10" 
+                   BackgroundColor="White" 
+                   Padding="1">
                             <Entry
                     x:Name="Nombres"
                    HorizontalTextAlignment="Center"

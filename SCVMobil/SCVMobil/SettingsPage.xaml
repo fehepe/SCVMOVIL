@@ -8,12 +8,15 @@
         <AbsoluteLayout 
             Padding="0" 
             HorizontalOptions="FillAndExpand" 
-            VerticalOptions="FillAndExpand">            
+            VerticalOptions="FillAndExpand">
+            
             <StackLayout 
                 Padding="20"
-                  BackgroundColor="White"               
-                >                    
-                <Label                    
+                  BackgroundColor="White"
+                
+                >
+                <Label
+                    
                     Text="Servidor Padron"
                     FontSize="20"
                     HorizontalOptions="Center"
@@ -307,27 +310,32 @@
                         TextColor="Black" 
                         Text="Ver: 0.0.0.0.0" 
                         FontAttributes="Bold"/>
-                    <StackLayout
+                <StackLayout
                 VerticalOptions="EndAndExpand"
                     Margin="0,0,0,0">
-                        <StackLayout
+                    <BoxView
+                    HorizontalOptions="FillAndExpand"
+                    HeightRequest="3"
+                    Color="Black"
+                    Margin="-20,0,-20,0"></BoxView>
+                    <StackLayout
                     HorizontalOptions="CenterAndExpand"
                         Margin="0,0,0,0"
                         Orientation="Horizontal">
                         <Button 
-                            BorderColor="Accent"                    
+                            BorderColor="White"                    
                        
                             CornerRadius="27"
-                            BackgroundColor="Accent"
+                            BackgroundColor="Blue"
                             TextColor="White"
                             WidthRequest="140"
                             Text="Sync"
                             x:Name="btSync"
                             Clicked="BtSync_Clicked"/>
                         <Button 
-                            BorderColor="Accent"  
+                            BorderColor="White"  
                             CornerRadius="27"
-                            BackgroundColor="Accent"
+                            BackgroundColor="Blue"
                             TextColor="White"
                             WidthRequest="140"
                             Text="Inicializar"

@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCVMobil.Android", "SCVMobil\SCVMobil.Android\SCVMobil.Android.csproj", "{7DE76A95-3908-4EE5-8E35-A53FA4907402}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCVMobil", "SCVMobil\SCVMobil\SCVMobil.csproj", "{74AEE681-4BFA-4B68-B89D-E8558101ACAE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCVMobil", "SCVMobil\SCVMobil\SCVMobil.csproj", "{74AEE681-4BFA-4B68-B89D-E8558101ACAE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

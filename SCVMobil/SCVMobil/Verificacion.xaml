@@ -9,15 +9,26 @@
     <ContentPage.Content>
         <StackLayout
             VerticalOptions="Center"
-            Padding="40"
-            >
-            <Label Text="Datos del Invitado"
+            Padding="40">
+            <Label Text="Datos de Invitado"
                  FontSize="35"
                    FontAttributes="Bold"
-                   TextColor="Black"                   
+                   TextColor="Black"
+                   
                    HorizontalOptions="CenterAndExpand"
-                   Margin="0,0,0,40"/>          
-               
+                   Margin="0,0,0,40"/>
+            <Grid
+                
+                RowSpacing="15">
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="*"/>
+                </Grid.ColumnDefinitions>
+
                 <Label
                     Grid.Row="0"
                     Grid.Column="0"
@@ -29,7 +40,6 @@
                     HorizontalTextAlignment="Center"
                     HorizontalOptions="Center"
                     ></Label>
-               
                 <Label
                     x:Name="lblCedula"
                     VerticalTextAlignment="Center"
@@ -138,17 +148,16 @@
                     HorizontalTextAlignment="Center"
                     HorizontalOptions="Center"
                     ></Label>
-            
+            </Grid>
             <Button
                 x:Name="btnCorrecto"
-                CornerRadius="20"
-                BackgroundColor="Accent"
+                CornerRadius="23"
+                BackgroundColor="Blue"
                 TextColor="White"
-                HeightRequest="40"
-                WidthRequest="190"
+                HeightRequest="75"
                 Clicked="btnCorrecto_Clicked"
                 Text="Correcto"
-                FontSize="17"
+                FontSize="20"
                 FontAttributes="Bold"
                 Margin="0,20,0,0"/>
         </StackLayout>

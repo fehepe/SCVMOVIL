@@ -8,13 +8,17 @@
     <ContentPage.Content>
         <ScrollView>
         <StackLayout
-            BackgroundColor="White"
-            >       
+            BackgroundColor="Aqua"
+            >
+            <Image
+                Margin="1,20,1,1"
+                Source="calendar"
+                ></Image>
             <Label 
                 Text="ATENCION"
                 HorizontalOptions="Center"
                 Margin="1,20,1,1"
-                FontSize="40"
+                FontSize="50"
                 TextColor="Black"
                 />
                 <Label
@@ -83,17 +87,21 @@
                 x:Name="hasta"
                 
                 />
+
+
+
+
         
             <Button 
                 x:Name="btnImprimir" 
                 Text="IMPRIMIR" 
                 Clicked="BtnImprimir_Clicked"
-                BackgroundColor="Accent" 
+                BackgroundColor="#fff" 
                 WidthRequest="190"
                 HeightRequest="40"
                 HorizontalOptions="Center"
                 CornerRadius="20" 
-                TextColor="White"
+                TextColor="Aqua"
                 ></Button>
 
         </StackLayout>
