@@ -11,19 +11,19 @@ using Xamarin.Forms.Xaml;
 namespace SCVMobil
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class PopUpCedulaNoexiste : PopupPage
+    public partial class PopUpDatosIncorrectos : PopupPage
     {
-        public PopUpCedulaNoexiste()
+        public PopUpDatosIncorrectos()
         {
-            InitializeComponent();          
+            InitializeComponent();
             
         }
 
-        private void cedulainexistente_Clicked(object sender, EventArgs e)
-        {            
+        private void datosincorrectos_Clicked(object sender, EventArgs e)
+        {
             this.IsVisible = false;
-            
-            
+           
+
         }
     }
 }

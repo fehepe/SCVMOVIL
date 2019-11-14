@@ -20,7 +20,7 @@
                 ></Entry>
         </StackLayout>
         <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-            <Button BackgroundColor="DodgerBlue"
+            <Button BackgroundColor="DeepPink"
                 FontSize="20"
                 x:Name="btnCancelar"
                 CornerRadius="20"

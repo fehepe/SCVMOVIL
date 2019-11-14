@@ -1,4 +1,5 @@
 ﻿using Microsoft.AppCenter.Crashes;
+using Rg.Plugins.Popup.Services;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -21,16 +22,11 @@ namespace SCVMobil
             EntryCedula.Text = data; 
         }
 
-        private void Agregar_Clicked(object sender, EventArgs e)
+        private async void Agregar_Clicked(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(EntryCedula.Text) || string.IsNullOrEmpty(EntryNombre.Text) || string.IsNullOrEmpty(EntryApellido.Text) || EntryCedula.Text.Length != 11)
             {
-                Application.Current.MainPage.DisplayAlert(
-                    "Registro",
-                    "Introduzca los datos correctamente",
-                    "Ok");
-
-
+                await PopupNavigation.PushAsync(new PopUpDatosIncorrectos());
             }
             else
             {
@@ -44,10 +40,7 @@ namespace SCVMobil
                 try
                 {
                     db.Insert(padronRegistro);
-                    Application.Current.MainPage.DisplayAlert(
-                   "Confirmado",
-                   "Datos Ingresados Correctamente",
-                   "accept");
+                    await PopupNavigation.PushAsync(new PopUpDatosCorrectos());
                     Navigation.PushAsync(new CompanyPage(EntryCedula.Text, EntryNombre.Text, EntryApellido.Text));
                     EntryApellido.Text = "";
                     EntryCedula.Text = "";
