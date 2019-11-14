@@ -59,8 +59,7 @@
                         Grid.Row="1"
                         Grid.Column="1"
                         Text="9000" 
-                        WidthRequest="90"
-                        HorizontalOptions="Center"
+                        WidthRequest="90"                       
                         HorizontalTextAlignment="Center"
                         TextColor="Black" 
                         TextChanged="Server_port_TextChanged"
@@ -153,7 +152,7 @@
                         Grid.Column="1"
                         Text="30" 
                         WidthRequest="50"
-                        HorizontalOptions="Center"
+                       
                         TextColor="Black"
                         HorizontalTextAlignment="Center"
                         TextChanged="Lector_TextChanged"
@@ -210,8 +209,7 @@
                         Grid.Row="1"
                         Grid.Column="1"
                         Text="9000" 
-                        WidthRequest="90"
-                        HorizontalOptions="Center"
+                        WidthRequest="90" 
                         HorizontalTextAlignment="Center"
                         TextColor="Black"                         
                         Keyboard="Keyboard.Numeric"
@@ -220,44 +218,7 @@
 
                 </Grid>
 
-                <!--<StackLayout 
-                    VerticalOptions="StartAndExpand" 
-                    Padding="10">
-                    <Grid 
-                        Padding="10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition 
-                                Height="50" />
-                            <RowDefinition 
-                                Height="*" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition 
-                                Width="50" />
-                            <ColumnDefinition 
-                                Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Label 
-                            Text="Auto Sync" 
-                            TextColor="Black" 
-                            Grid.Row="0" 
-                            Grid.Column="0"
-                            VerticalOptions="Center"
-                            FontAttributes="Bold"
-                            FontSize="20"/>
-                        <Switch 
-                            x:Name="swAutoSync" 
-                            HorizontalOptions="CenterAndExpand" 
-                            Grid.Row="0" Grid.Column="1"
-                            Scale=".8"
-                            Toggled="SwAutoSync_Toggled">
-
-                        </Switch>
-
-                    </Grid>
-                    
-
-                </StackLayout>-->
+               
                 <StackLayout 
                     VerticalOptions="StartAndExpand" 
                     >
