@@ -12,14 +12,13 @@
             <Label Text="Esta persona aun no salido."
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand"
-                   FontSize="20"
-                   />
+                FontSize="20"/>
 
             <Button 
                 x:Name="btnSalida" 
                 Text="Dar Salida" 
           
-                BackgroundColor="#2196F3" 
+                BackgroundColor="DeepPink" 
                 VerticalOptions="Center"
                 CornerRadius="20" 
                 HeightRequest="50"

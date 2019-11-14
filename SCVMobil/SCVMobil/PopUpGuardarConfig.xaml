@@ -5,23 +5,23 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
              mc:Ignorable="d"
-             x:Class="SCVMobil.PopUpClaveIncorrecta">
+             x:Class="SCVMobil.PopUpGuardarConfig">
     <StackLayout Margin="14" Padding="20" Spacing="10" BackgroundColor="White"  VerticalOptions="Center">
         <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Padding="0,0,0,10">
-            <Label FontAttributes="Bold" FontSize="30" TextColor="Black" Text="Contraseña incorrecta"/>
+            <Label FontAttributes="Bold" TextColor="Black" FontSize="30" Text="Datos guardados"/>
         </StackLayout>
         <StackLayout HorizontalOptions="Center">
-            <Label FontSize="20" FontAttributes="Bold" TextColor="Black" HorizontalTextAlignment="Center" Text="Contraseña incorrecta, por favor ingrese la contraseña correcta"/>
+            <Label FontSize="20" TextColor="Black" FontAttributes="Bold" HorizontalTextAlignment="Center" Text="Configuracion guardada con exito"/>
         </StackLayout>
         <StackLayout Margin="12" Padding="20" Spacing="20"  >
             <Button BackgroundColor="DodgerBlue"
-                x:Name="claveincorrecta"
+                x:Name="configsave"
                 FontSize="20"
                 FontAttributes="Bold"
                 CornerRadius="20"
                 TextColor="White"
                 Text="Ok"
-                Clicked="claveincorrecta_Clicked"/>
+                Clicked="configsave_Clicked"/>
         </StackLayout>
     </StackLayout>
 </popup:PopupPage>

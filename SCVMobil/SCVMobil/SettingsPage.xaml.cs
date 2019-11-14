@@ -15,6 +15,9 @@ using Plugin.Toasts;
 using System.Globalization;
 using System.Threading;
 using System.Timers;
+using System.Net.NetworkInformation;
+using Rg.Plugins.Popup.Services;
+using FirebirdSql.Data.FirebirdClient;
 
 namespace SCVMobil
 {
@@ -79,10 +82,7 @@ namespace SCVMobil
 
         }
 
-        private void Server_port_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            Preferences.Set("SERVER_PORT", e.NewTextValue);
-        }
+       
 
         private void Lector_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -342,42 +342,118 @@ namespace SCVMobil
             {
                 //TODO: Handle exeption
             }
-        }
+        }     
 
-        private void EregistrosIP_Unfocused(object sender, FocusEventArgs e)
-        {
+        private async void Guardar_Clicked(object sender, EventArgs e)
+        { 
+            Preferences.Set("SERVER_PORT", eServerPort.Text);
             Preferences.Set("SERVER_IP", eServerIP.Text);
-        }
-
-
-        private void EntChunkSize_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            Preferences.Set("CHUNK_SIZE", e.NewTextValue);
-        }
-
-        private void SwAutoSync_Toggled(object sender, ToggledEventArgs e)
-        {
-            Preferences.Set("AUTO_SYNC", e.Value.ToString());
-        }
-
-        private void ECommitSize_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            Preferences.Set("COMMIT_SIZE", e.NewTextValue);
-            var x = Preferences.Get("COMMIT_SIZE", "1000000");
-        }
-
-        private void registrosIP_Unfocused(object sender, FocusEventArgs e)
-        {
+            Preferences.Set("REGISTROS_PORT", port.Text);
             Preferences.Set("REGISTROS_IP", registrosIP.Text);
+            Preferences.Set("COMMIT_SIZE", eCommitSize.Text);
+            var x = Preferences.Get("COMMIT_SIZE", "1000000");
+            Preferences.Set("AUTO_SYNC", swAutoSync.ToString());
+            Preferences.Set("LECTOR", eLector.Text);
+            if (eLector.Text == "338")
+            {
+                Preferences.Set("DEV", "True");
+            }
+            else
+            {
+                Preferences.Set("DEV", "False");
+            }
+
+            await PopupNavigation.PushAsync(new PopUpGuardarConfig());
+
         }
 
-        private void port_TextChanged(object sender, TextChangedEventArgs e)
+        private async void pinbtn_Clicked(object sender, EventArgs e)  //PING INFERIOR//
         {
-            Preferences.Set("REGISTROS_PORT", e.NewTextValue);
+            try
+            {
+                Ping Pings = new Ping();
+                int timeout = 1;
+                if (Pings.Send(registrosIP.Text, timeout).Status == IPStatus.Success)
+                {
+
+                    try
+                    {
+
+                        string connectionString = "User ID=sysdba;Password=masterkey;" +
+                               "Database=C:\\APP\\GAD\\datos_214.fdb;" +
+                               $"DataSource={registrosIP.Text};Port=3050;Charset=NONE;Server Type=0;";
+
+                        FbConnection fb = new FbConnection(connectionString);
+                   
+                        fb.Open();
+
+
+                        fb.Close();
+                        await PopupNavigation.PushAsync(new PopUpPing()); //popup conexion con exito//
+                    }
+                    catch (Exception)
+                    {
+
+                        await PopupNavigation.PushAsync(new PopUpPingIncorrecto());//popup conexion erronea//
+                    }
+                    
+                }
+                else
+                {
+                    await PopupNavigation.PushAsync(new PopUpPingIncorrecto());//popup conexion erronea//
+                }
+                
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
+
         }
 
-        
+        private async void pinbutton_Clicked(object sender, EventArgs e)
+        {
+            try
+            {              
+                Ping Pings = new Ping();
+                int timeout = 1;
 
-        
+                if (Pings.Send(eServerIP.Text, timeout).Status == IPStatus.Success)
+                {
+
+                    try
+                    {
+                        string connectionString = "User ID=sysdba;Password=masterkey;" +
+                                           "Database=C:\\APP\\GAD\\registros.fdb;" +
+                                           $"DataSource={eServerIP.Text};Port=3050;Charset=NONE;Server Type=0;";
+
+                        FbConnection fb = new FbConnection(connectionString);
+                        fb.Open();
+
+
+                        fb.Close();
+                        await PopupNavigation.PushAsync(new PopUpPing()); //popup conexion con exito//
+                    }
+                    catch (Exception)
+                    {
+
+                        await PopupNavigation.PushAsync(new PopUpPingIncorrecto()); //popup conexion erronea//
+                    }
+                }
+                else
+                {
+                    await PopupNavigation.PushAsync(new PopUpPingIncorrecto());//popup conexion erronea//
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
     }
 }
