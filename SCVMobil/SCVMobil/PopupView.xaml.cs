@@ -21,32 +21,25 @@ namespace SCVMobil
 
         }
 
-        private void Button_Clicked(object sender, EventArgs e) //Acceder al appSettings//
-        {
-            if (entPassword.Text == "1")
-            {                
-                entPassword.Text = string.Empty;
-                Navigation.PushAsync(new AppSettingsPage());
-                this.IsVisible = false;
-            }
-            else
-            {
-                try
-                {
-                    var duration = TimeSpan.FromSeconds(0.5);
-                }
-                catch
-                {
-                    //TODO: HANDLE NO VIBRATE
-                }
-            }
-        }
+    
 
         private void btnCancelar_Clicked(object sender, EventArgs e) //Cerrar PopUp//
         {
             this.IsVisible = false;
         }
 
-
+        private async void entrar_Clicked(object sender, EventArgs e)//Acceder al appSettings//
+        {
+            if (entPassword.Text == "1")
+            {
+                entPassword.Text = string.Empty;
+                Navigation.PushAsync(new AppSettingsPage());
+                this.IsVisible = false;
+            }
+            else
+            {
+                await PopupNavigation.PushAsync(new PopUpClaveIncorrecta()); //Popup para el mensaje de error para clave incorrecta//
+            }
+        }
     }
 }

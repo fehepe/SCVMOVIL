@@ -15,9 +15,10 @@ namespace SCVMobil
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class RegistroPage : ContentPage
     {
-        public RegistroPage()
+        public RegistroPage(string data)
         {
             InitializeComponent();
+            EntryCedula.Text = data; 
         }
 
         private void Agregar_Clicked(object sender, EventArgs e)

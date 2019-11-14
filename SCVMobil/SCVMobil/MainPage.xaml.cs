@@ -50,7 +50,7 @@ namespace SCVMobil
         //--------------------------------------------------------------------------------------
         private async void ToolbarItem_Clicked(object sender, EventArgs e)
         {
-            await PopupNavigation.PushAsync(new PopupView());
+            await PopupNavigation.PushAsync(new PopupView());  //Popup para entrar la contraseña e ir a la configuracion//
         }
 
 
@@ -250,8 +250,10 @@ namespace SCVMobil
                                     { "Lector", Preferences.Get("LECTOR", "0")}
                                 };
                                 Crashes.TrackError(ey, properties);
-                                await PopupNavigation.PushAsync(new PopUpCedulaNoexiste());                                   
+                                await PopupNavigation.PushAsync(new PopUpCedulaNoexiste());                    //Invocacion del PopUp para mostrar mesaje de error// 
+                                await Navigation.PushAsync(new RegistroPage(entCedula.Text));
                                 entCedula.Text = entCedula.Text; 
+                                   
                                 
 
                                 

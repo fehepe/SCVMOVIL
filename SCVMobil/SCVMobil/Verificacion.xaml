@@ -11,7 +11,7 @@
             VerticalOptions="Center"
             Padding="40"
             >
-            <Label Text="Datos del Invitado"
+            <Label Text="Datos del invitado"
                  FontSize="35"
                    FontAttributes="Bold"
                    TextColor="Black"                   
@@ -21,7 +21,7 @@
                 <Label
                     Grid.Row="0"
                     Grid.Column="0"
-                    Text="Identificacion:"
+                    Text="Identificación:"
                     TextColor="Black"
                     FontSize="20"
                     VerticalTextAlignment="Center"

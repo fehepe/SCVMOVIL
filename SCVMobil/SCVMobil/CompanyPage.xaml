@@ -46,7 +46,7 @@
                     Grid.Column="0" 
                     FontSize="15"
                     FontAttributes="Bold"
-                    Text="Identificacion"
+                    Text="Identificación"
                     VerticalOptions="Center">
                 </Label>
             <Frame 

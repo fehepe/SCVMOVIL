@@ -25,7 +25,7 @@
           AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
           AbsoluteLayout.LayoutFlags="All">
                     <Label
-            Text="Escanear Cedula"
+            Text="Escanear Cédula"
             FontSize="20"            
             TextColor="Black"
             FontAttributes="Bold"

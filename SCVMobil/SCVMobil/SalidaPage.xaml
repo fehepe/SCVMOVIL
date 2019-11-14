@@ -9,7 +9,7 @@
         <StackLayout
             Padding="50"
             >
-            <Label Text="Esta Persona aun no salido."
+            <Label Text="Esta persona aun no salido."
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand"
                    FontSize="20"
@@ -22,7 +22,7 @@
                 BackgroundColor="#2196F3" 
                 VerticalOptions="Center"
                 CornerRadius="20" 
-                HeightRequest="70"
+                HeightRequest="50"
                 Clicked="BtnSalida_Clicked"
                 TextColor="White">
             </Button>

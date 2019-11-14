@@ -4,7 +4,8 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="SCVMobil.RegistroPage">
+             x:Class="SCVMobil.RegistroPage"
+             Title="Registro">
     <ContentPage.Content>
         <StackLayout
             VerticalOptions="Center"
@@ -14,7 +15,7 @@
                 FontAttributes="Bold"
                 TextColor="Black"
                 HorizontalOptions="Start"
-                Text="Cedula"
+                Text="Cédula"
                 FontSize="20">
             </Label>
             <Frame 

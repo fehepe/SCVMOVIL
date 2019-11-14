@@ -29,12 +29,13 @@
                 Text="Cerrar"
                 Clicked="btnCancelar_Clicked"/>
             <Button BackgroundColor="DodgerBlue"
+                x:Name="entrar"
                 FontSize="20"
                 FontAttributes="Bold"
                 CornerRadius="20"
                 Text="Entrar"  
                 TextColor="White"
-                Clicked="Button_Clicked"/>
+                Clicked="entrar_Clicked"/>
         </StackLayout>         
     </StackLayout>
 </popup:PopupPage>
