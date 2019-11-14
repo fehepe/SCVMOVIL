@@ -25,8 +25,8 @@ namespace SCVMobil
         //----------------------------------------------------------------------------------------------
         //Variables
         private HttpClient _client = new HttpClient();
-        private string Url = "";
-        private Dictionary<string, BarcodeReader> mBarcodeReaders;
+        //private string Url = "";
+        //private Dictionary<string, BarcodeReader> mBarcodeReaders;
         Escaner scan;
         private string stNombre, stApellidos;
 

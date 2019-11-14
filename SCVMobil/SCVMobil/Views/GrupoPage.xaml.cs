@@ -17,8 +17,8 @@ namespace SCVMobil
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class GrupoPage : ContentPage
     {
-        //Variables
-        Escaner scan;
+        ////Variables
+        //Escaner scan;
         Escaner scanner;
         public GrupoPage(string empresa, string visita, string cedula, string nombres)//Constructor
         {

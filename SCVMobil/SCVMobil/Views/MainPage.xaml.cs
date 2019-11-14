@@ -16,10 +16,10 @@ namespace SCVMobil
 {
     public partial class MainPage : ContentPage
     {
-        //Variables
+        ////Variables
         //--------------------------------------------------------------------------
         private HttpClient _client = new HttpClient();
-        private string Url = "";
+        //private string Url = "";
         Escaner scanner;
 
 

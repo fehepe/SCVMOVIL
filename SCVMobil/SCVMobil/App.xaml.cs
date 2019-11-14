@@ -33,7 +33,7 @@ namespace SCVMobil
     public partial class App : Application
     {
         public static System.Timers.Timer syncTimer;
-        private static object preferences;
+        //private static object preferences;
 
         private static void SetTimer()
         {
@@ -62,18 +62,16 @@ namespace SCVMobil
                         var fireBird = new FireBirdData();
 
                         //implementar el metodo tryConnection();
-                        string url = $"http://{Preferences.Get("REGISTROS_IP", "192.168.1.158") }:{Preferences.Get("REGISTROS_PORT", "4441")}/?sql=";
-                        var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-
-                        fireBird.tryConnection(url);
+                       
+                       // fireBird.tryConnection();
    
-                        // Implementar servicios Periodicos
+                        // Implementar servicios Periodicos.
                         fireBird.PublicServices();
 
-                        // Subir visitantes
+                        // Subir visitantes.
                         fireBird.UploadVisits();
 
-                        // Cargar Visitantes con reservas
+                        // Cargar Visitantes con reservas.
                         fireBird.UploadVisitsReservation();
 
                         // Subir las Verificacion.
@@ -88,13 +86,13 @@ namespace SCVMobil
                         // Descargar las reservas.
                         fireBird.DownloadReservations();
 
-                        // Descargar las companies
+                        // Descargar las companies.
                         fireBird.DownloadCompanies();
 
-                        // Descargar las personas(destinos)
+                        // Descargar las personas(destinos).
                         fireBird.DownloadPeople_Destination();
 
-                        // Descargar los Invitados
+                        // Descargar los Invitados.
 
                         /**string querryDownInv = "SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " INVIDATO_ID, 1 as SUBIDA, IIF(FECHA_SALIDA is null, 0,1) " +
                         //"as SALIDASUBIDA, COMPANIA_ID, NOMBRES, APELLIDOS, FECHA_REGISTRO, FECHA_SALIDA, TIPO, CARGO, TIENE_ACTIVO, ESTATUS_ID, MODULO, EMPRESA_ID, " +
@@ -105,52 +103,7 @@ namespace SCVMobil
                         fireBird.DownloadGuests();
 
                         // Descargar las salidas.
-                        var maxInvidatoIdLocal = db.Query<counterObj>("SELECT MAX(INVIDATO_ID) as anycount FROM Invitados");
-                        var querryDownSal = "SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " INVIDATO_ID, 1 as SUBIDA, 1 as SALIDASUBIDA, COMPANIA_ID, NOMBRES, APELLIDOS, " +
-                        "FECHA_REGISTRO, FECHA_SALIDA, TIPO, CARGO, TIENE_ACTIVO, ESTATUS_ID, MODULO, EMPRESA_ID, PLACA, TIPO_VISITANTE, ES_GRUPO, GRUPO_ID, " +
-                        "PUERTA_ENTRADA, ACTUALIZADA_LA_SALIDA, HORAS_CADUCIDAD, PERSONAS, IN_OUT, ORIGEN_ENTRADA, ORIGEN_SALIDA, COMENTARIO, ORIGEN_IO, " +
-                        "ACTUALIZADO, CPOST, TEXTO1_ENTRADA, TEXTO2_ENTRADA, TEXTO3_ENTRADA, SECUENCIA_DIA, NO_APLICA_INDUCCION, VISITADO, COALESCE(LECTOR, 0) AS LECTOR, SALIDA_ID " +
-                        "FROM INVITADOS WHERE SALIDA_ID > " + Preferences.Get("MAX_SALIDA_ID", "0") + " AND INVIDATO_ID <= " + maxInvidatoIdLocal.First().anyCount.ToString() +
-                        " AND SALIDA_ID IS NOT NULL AND COALESCE(LECTOR_SALIDA,0) <> " + Preferences.Get("LECTOR", "1") +
-                        " ORDER BY SALIDA_ID DESC";
-                        var contentDownSal = _client.GetStringAsync(url + querryDownSal);
-                        contentDownSal.Wait();
-
-                        if (contentDownSal.IsCompleted)
-                        {
-                            var listSalidas = JsonConvert.DeserializeObject<List<Invitados>>(contentDownSal.Result);
-
-                            try
-                            {
-                                if (listSalidas.Any())
-                                {
-                                    foreach (Invitados registro in listSalidas)
-                                    {
-                                        var invitadoId = db.Query<counterObj>("SELECT INVITADO_ID as anycount FROM Invitados WHERE INVIDATO_ID = " + registro.INVIDATO_ID.ToString());
-                                        if (invitadoId.Any())
-                                        {
-                                            registro.INVITADO_ID = invitadoId.First().anyCount;
-                                        }
-                                    }
-                                    Debug.WriteLine("Se va a descargar: " + listSalidas.Count().ToString() + " Salidas");
-                                    db.UpdateAll(listSalidas);
-                                    Debug.WriteLine("MAX_SALIDA_ID: " + listSalidas.First().SALIDA_ID.ToString());
-                                    Preferences.Set("MAX_SALIDA_ID", listSalidas.First().SALIDA_ID.ToString());
-                                    Debug.WriteLine("Salidas Descargadas: " + DateTime.Now);
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                var properties = new Dictionary<string, string> {
-                                            { "Category", "Error descargando Salidas" },
-                                            { "Code", "App.xaml.cs Line: 683" },
-                                            { "Lector", Preferences.Get("LECTOR", "N/A")}
-                                        };
-                                Debug.WriteLine("Excepcion descargando Salidas: " + ex.ToString());
-                                Crashes.TrackError(ex, properties);
-                            }
-
-                        }
+                        fireBird.DownloadOuts();
                     }
                 }
                 catch (Exception ey)

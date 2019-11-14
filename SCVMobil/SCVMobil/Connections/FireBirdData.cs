@@ -1,4 +1,5 @@
-﻿using Microsoft.AppCenter.Analytics;
+﻿using FirebirdSql.Data.FirebirdClient;
+using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Newtonsoft.Json;
 using SCVMobil.Models;
@@ -24,23 +25,78 @@ namespace SCVMobil.Connections
 
         }
 
-        //// Retornar el Connection String
-        public string connectionString()
+        // Ejecutar query luego de abrir una conexion con la base de datos
+        public FbDataReader Execute(string query)
         {
-            string url = "";
-            return url;
+            try
+            {
+                FbConnection fb = new FbConnection(connectionString(true));
+
+                fb.Open();
+                FbCommand command = new FbCommand(
+                    query,
+                    fb);
+
+
+                FbDataReader reader = command.ExecuteReader();
+
+                reader.Close();
+
+                fb.Close();
+                Preferences.Set("SYNC_VSU", true);
+
+                return reader;
+            }
+            catch (Exception)
+            {
+                Preferences.Set("SYNC_VSU", false);
+                return null;
+            }
+
         }
 
-        //// Probar que hay conexion trayendo datos
-        public void tryConnection(string url)
-        {
-            HttpClient _client = new HttpClient();
-            _client.Timeout = new TimeSpan(0, 0, 100);
 
-            string querrySYNC = "SELECT FIRST 2 * FROM COMPANIAS";
-            var contentSync = _client.GetStringAsync(url + querrySYNC);
-            contentSync.Wait();
-            Preferences.Set("SYNC_VSU", contentSync.IsCompleted);
+        //// Retornar el Connection String
+        public string connectionString(bool db)
+        {
+            if (db)
+            {
+                string connectionString = "User ID=sysdba;Password=masterkey;" +
+                          "Database=C:\\APP\\GAD\\registros.fdb;" +
+                          $"DataSource={Preferences.Get("SERVER_IP", "localhost")};Port=3050;Charset=NONE;Server Type=0;";
+                return connectionString;
+            }
+            else
+            {
+                string connectionString = "User ID=sysdba;Password=masterkey;" +
+                          "Database=C:\\APP\\GAD\\datos_214.fdb;" +
+                          $"DataSource={Preferences.Get("SERVER_IP", "localhost")};Port=3050;Charset=NONE;Server Type=0;";
+                return connectionString;
+            }
+        }
+
+
+        //// Probar que hay conexion trayendo datos
+        public void tryConnection()
+        {         
+           
+            string querySync = "SELECT FIRST 1 * FROM COMPANIAS";
+
+            FbDataReader dt = Execute(querySync);
+
+            try
+            {
+                if (dt.HasRows)
+                {
+                    Preferences.Set("SYNC_VSU", true);
+                }
+            }
+            catch (Exception)
+            {
+
+                Preferences.Set("SYNC_VSU", false);
+            }
+            
         }
 
 
@@ -57,18 +113,30 @@ namespace SCVMobil.Connections
         //// Subir Visitantes que NO se han subido
         public void UploadVisits()
         {
-            var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
             // Cargar los invitados con un valor null en la propiedad SUBIDA
-            var visitasASubir = db.Query<Invitados>("SELECT * FROM Invitados where SUBIDA is null");
+            var reader = Execute("SELECT * FROM Invitados where SUBIDA is null");
+            List<Invitados> visitasASubi = new List<Invitados>();
 
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    Invitados invitado = new Invitados();
+                    invitado.INVITADO_ID = Convert.ToInt32(reader[0]);
+                    invitado.INVIDATO_ID = Convert.ToInt32(reader[1]);
+                    invitado.Subida = Convert.ToBoolean(reader[2]);
+                    invitado.salidaSubida = Convert.ToBoolean(reader[3]);
+                    invitado.verificacionSubida = Convert.ToBoolean(reader[4]);
+                    invitado.SALIDA_ID = Convert.ToInt32(reader[5]);
+                    invitado.Compania_ID = Convert.ToInt32(reader[6]);
+                }
 
-            Debug.WriteLine("There are: " + visitasASubir.Count.ToString() + " To upload");
-
+            }
             // Iterar en el arreglo de visitas
             foreach (Invitados registro in visitasASubir)
             {
-                string url = $"http://{Preferences.Get("REGISTROS_IP", "192.168.1.158") }:{Preferences.Get("REGISTROS_PORT", "4441")}/?sql=";
+                
 
                 string visitado;
                 string fechaSalida;
@@ -135,44 +203,44 @@ namespace SCVMobil.Connections
                     $", {registro.Lector.ToString()}" +
                     $", {Util.CoalesceStr(fechaSalida, "null")})";
 
+                    Execute(querryInv);
 
-                //Insertar visitantes
-                var content = _client.GetStringAsync(url + querryInv);
-                Debug.WriteLine("Waiting for: " + url + querryInv);
-                content.Wait();
 
-                if (content.IsCompleted & content.Result.Contains("ANYCOUNT"))
-                {
-                    var respuesta = JsonConvert.DeserializeObject<List<counterObj>>(content.Result);
-                    registro.INVIDATO_ID = respuesta.First().anyCount;
-                    registro.Subida = true;
-                    if (!(registro.Fecha_Salida is null))
-                    {
-                        registro.salidaSubida = true;
-                    }
-                    Debug.WriteLine("Invitado subido: " + registro.INVIDATO_ID.ToString());
-                }
-                else
-                {
-                    registro.Subida = null;
-                    if (!(registro.Fecha_Salida is null))
-                    {
-                        registro.salidaSubida = null;
-                    }
-                    try
-                    {
-                        Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: " + content.Result);
-                        Debug.WriteLine("Error de SQL: " + content.Result);
-                    }
-                    catch
-                    {
-                        //No Hacer Nada
-                    }
-                }
+                ///Insertar visitantes
+               
+
+                //if (content.IsCompleted & content.Result.Contains("ANYCOUNT"))
+                //{
+                //    var respuesta = JsonConvert.DeserializeObject<List<counterObj>>(content.Result);
+                //    registro.INVIDATO_ID = respuesta.First().anyCount;
+                //    registro.Subida = true;
+                //    if (!(registro.Fecha_Salida is null))
+                //    {
+                //        registro.salidaSubida = true;
+                //    }
+                //    Debug.WriteLine("Invitado subido: " + registro.INVIDATO_ID.ToString());
+                //}
+                //else
+                //{
+                //    registro.Subida = null;
+                //    if (!(registro.Fecha_Salida is null))
+                //    {
+                //        registro.salidaSubida = null;
+                //    }
+                //    try
+                //    {
+                //        Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: " + content.Result);
+                //        Debug.WriteLine("Error de SQL: " + content.Result);
+                //    }
+                //    catch
+                //    {
+                //        //No Hacer Nada
+                //    }
+                //}
 
 
             }
-            db.UpdateAll(visitasASubir);
+            //db.UpdateAll(visitasASubir);
         }
 
 
@@ -665,11 +733,57 @@ namespace SCVMobil.Connections
         }
 
 
-        //// Descargar Outs
+        //// Descargar Salidas
         public void DownloadOuts()
         {
+            var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+            string url = $"http://{Preferences.Get("REGISTROS_IP", "192.168.1.103")}:{Preferences.Get("REGISTROS_PORT", "4440")}/?sql=";
+            var maxInvidatoIdLocal = db.Query<counterObj>("SELECT MAX(INVIDATO_ID) as anycount FROM Invitados");
+            var querryDownSal = "SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " INVIDATO_ID, 1 as SUBIDA, 1 as SALIDASUBIDA, COMPANIA_ID, NOMBRES, APELLIDOS, " +
+            "FECHA_REGISTRO, FECHA_SALIDA, TIPO, CARGO, TIENE_ACTIVO, ESTATUS_ID, MODULO, EMPRESA_ID, PLACA, TIPO_VISITANTE, ES_GRUPO, GRUPO_ID, " +
+            "PUERTA_ENTRADA, ACTUALIZADA_LA_SALIDA, HORAS_CADUCIDAD, PERSONAS, IN_OUT, ORIGEN_ENTRADA, ORIGEN_SALIDA, COMENTARIO, ORIGEN_IO, " +
+            "ACTUALIZADO, CPOST, TEXTO1_ENTRADA, TEXTO2_ENTRADA, TEXTO3_ENTRADA, SECUENCIA_DIA, NO_APLICA_INDUCCION, VISITADO, COALESCE(LECTOR, 0) AS LECTOR, SALIDA_ID " +
+            "FROM INVITADOS WHERE SALIDA_ID > " + Preferences.Get("MAX_SALIDA_ID", "0") + " AND INVIDATO_ID <= " + maxInvidatoIdLocal.First().anyCount.ToString() +
+            " AND SALIDA_ID IS NOT NULL AND COALESCE(LECTOR_SALIDA,0) <> " + Preferences.Get("LECTOR", "1") +
+            " ORDER BY SALIDA_ID DESC";
+            var contentDownSal = _client.GetStringAsync(url + querryDownSal);
+            contentDownSal.Wait();
 
+            if (contentDownSal.IsCompleted)
+            {
+                var listSalidas = JsonConvert.DeserializeObject<List<Invitados>>(contentDownSal.Result);
+
+                try
+                {
+                    if (listSalidas.Any())
+                    {
+                        foreach (Invitados registro in listSalidas)
+                        {
+                            var invitadoId = db.Query<counterObj>("SELECT INVITADO_ID as anycount FROM Invitados WHERE INVIDATO_ID = " + registro.INVIDATO_ID.ToString());
+                            if (invitadoId.Any())
+                            {
+                                registro.INVITADO_ID = invitadoId.First().anyCount;
+                            }
+                        }
+                        Debug.WriteLine("Se va a descargar: " + listSalidas.Count().ToString() + " Salidas");
+                        db.UpdateAll(listSalidas);
+                        Debug.WriteLine("MAX_SALIDA_ID: " + listSalidas.First().SALIDA_ID.ToString());
+                        Preferences.Set("MAX_SALIDA_ID", listSalidas.First().SALIDA_ID.ToString());
+                        Debug.WriteLine("Salidas Descargadas: " + DateTime.Now);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var properties = new Dictionary<string, string> {
+                                            { "Category", "Error descargando Salidas" },
+                                            { "Code", "App.xaml.cs Line: 683" },
+                                            { "Lector", Preferences.Get("LECTOR", "N/A")}
+                                        };
+                    Debug.WriteLine("Excepcion descargando Salidas: " + ex.ToString());
+                    Crashes.TrackError(ex, properties);
+                }
+
+            }
         }
-
     }
 }
