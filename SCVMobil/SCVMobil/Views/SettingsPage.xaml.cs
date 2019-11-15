@@ -47,9 +47,7 @@ namespace SCVMobil
             base.OnAppearing();
             setDefaults();
             eServerIP.Text = Preferences.Get("SERVER_IP", "192.168.1.103");
-            registrosIP.Text = Preferences.Get("REGISTROS_IP", "192.168.1.103");
-            eServerPort.Text = Preferences.Get("SERVER_PORT", "4441");
-            port.Text = Preferences.Get("REGISTROS_PORT", "4440");
+            
             eLector.Text = Preferences.Get("LECTOR", "1");
             entChunkSize.Text = Preferences.Get("CHUNK_SIZE", "50000");
             lbVersion.Text = "Ver: " + Preferences.Get("VERSION", "0.0.0.0.0");
@@ -68,18 +66,7 @@ namespace SCVMobil
             {
                 Preferences.Set("SERVER_IP", "192.168.1.103");
             }
-            if (Preferences.Get("REGISTROS_IP", "N/A") == "N/A")
-            {
-                Preferences.Set("REGISTROS_IP", "192.168.1.103");
-            }
-            if (Preferences.Get("SERVER_PORT", "N/A") == "N/A")
-            {
-                Preferences.Set("SERVER_PORT", "4441");
-            }
-            if (Preferences.Get("REGISTROS_PORT", "N/A") == "N/A")
-            {
-                Preferences.Set("REGISTROS_PORT", "4440");
-            }
+            
 
         }
 
@@ -402,10 +389,9 @@ namespace SCVMobil
 
         private async void Guardar_Clicked(object sender, EventArgs e) //Boton para guardar configuracion//
         { 
-            Preferences.Set("SERVER_PORT", eServerPort.Text);
+           
             Preferences.Set("SERVER_IP", eServerIP.Text);
-            Preferences.Set("REGISTROS_PORT", port.Text);
-            Preferences.Set("REGISTROS_IP", registrosIP.Text);
+           
             Preferences.Set("COMMIT_SIZE", eCommitSize.Text);
             var x = Preferences.Get("COMMIT_SIZE", "1000000");
             Preferences.Set("AUTO_SYNC", swAutoSync.ToString());
@@ -420,54 +406,10 @@ namespace SCVMobil
             }
 
             await PopupNavigation.PushAsync(new PopUpGuardarConfig()); //PopUp para guardar la configuracion//
-
-        }
-
-        private async void pinbtn_Clicked(object sender, EventArgs e)  //PING INFERIOR//
-        {
-            try
-            {
-                Ping Pings = new Ping();
-                int timeout = 1;
-                if (Pings.Send(registrosIP.Text, timeout).Status == IPStatus.Success)
-                {
-
-                    try
-                    {
-
-                        string connectionString = "User ID=sysdba;Password=masterkey;" +
-                               "Database=C:\\APP\\GAD\\datos_214.fdb;" +
-                               $"DataSource={registrosIP.Text};Port=3050;Charset=NONE;Server Type=0;";
-
-                        FbConnection fb = new FbConnection(connectionString);
-                   
-                        fb.Open();
-
-
-                        fb.Close();
-                        await PopupNavigation.PushAsync(new PopUpPing()); //popup conexion con exito//
-                    }
-                    catch (Exception)
-                    {
-
-                        await PopupNavigation.PushAsync(new PopUpPingIncorrecto());//popup conexion erronea//
-                    }
-                    
-                }
-                else
-                {
-                    await PopupNavigation.PushAsync(new PopUpPingIncorrecto());//popup conexion erronea//
-                }
-                
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
             
-
         }
+
+        
 
         private async void pinbutton_Clicked(object sender, EventArgs e)
         {

@@ -14,12 +14,12 @@ using Xamarin.Forms;
 
 namespace SCVMobil.Droid
 {
-    [Activity(Label = "SCVMobil", Icon = "@drawable/visitor", Theme = "@style/MyTheme.Splash", MainLauncher = true,  ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
-    
-   
+    [Activity(Label = "SCVMobil", Icon = "@drawable/visitor", Theme = "@style/MyTheme.Splash", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+
+
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
-        
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             SetTheme(Resource.Style.MainTheme);
@@ -43,7 +43,7 @@ namespace SCVMobil.Droid
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 
-       
+
 
 
     }
