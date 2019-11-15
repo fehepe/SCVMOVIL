@@ -15,6 +15,8 @@ using Plugin.Toasts;
 using System.Globalization;
 using System.Threading;
 using System.Timers;
+using SCVMobil.Models;
+using FirebirdSql.Data.FirebirdClient;
 
 namespace SCVMobil
 {
