@@ -21,6 +21,8 @@ namespace SCVMobil.Droid
 
             Rg.Plugins.Popup.Popup.Init(this, savedInstanceState);
 
+            Window.SetStatusBarColor(Android.Graphics.Color.ParseColor("#FF006E")); //Cambio de color del status bar//
+
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
@@ -31,5 +33,7 @@ namespace SCVMobil.Droid
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+
+        
     }
 }
