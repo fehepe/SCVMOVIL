@@ -13,7 +13,7 @@ namespace SCVMobil
     {
         private Dictionary<string, BarcodeReader> mBarcodeReaders;
         private Action<string> method2Call;
-        private BarcodeReader mSelectedReader = null;
+        //private BarcodeReader mSelectedReader = null;
 
         public Escaner(Action<string> method2Call)
         {
