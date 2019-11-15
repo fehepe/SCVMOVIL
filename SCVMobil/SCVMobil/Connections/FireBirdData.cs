@@ -26,7 +26,7 @@ namespace SCVMobil.Connections
         }
 
         // Ejecutar query luego de abrir una conexion con la base de datos
-        public FbDataReader Execute(string query)
+        public string Execute(string query)
         {
             try
             {
@@ -37,18 +37,26 @@ namespace SCVMobil.Connections
                     query,
                     fb);
 
+                var x = command.CommandText;
+                FbDataReader dtResult = command.ExecuteReader();
+                string _dtResult = "";
+                
+                if (dtResult.HasRows)
+                {
 
-                FbDataReader reader = command.ExecuteReader();
-
-                reader.Close();
+                    _dtResult = dtResult[0].ToString();
+                    
+                }
+                dtResult.Close();
 
                 fb.Close();
                 Preferences.Set("SYNC_VSU", true);
 
-                return reader;
+                return _dtResult;
             }
-            catch (Exception)
+            catch (Exception ea)
             {
+                var x = ea.Message;
                 Preferences.Set("SYNC_VSU", false);
                 return null;
             }
@@ -82,11 +90,11 @@ namespace SCVMobil.Connections
            
             string querySync = "SELECT FIRST 1 * FROM COMPANIAS";
 
-            FbDataReader dt = Execute(querySync);
+            string dt = ""; //Execute(querySync);
 
             try
             {
-                if (dt.HasRows)
+                if (dt != "")
                 {
                     Preferences.Set("SYNC_VSU", true);
                 }
@@ -113,169 +121,132 @@ namespace SCVMobil.Connections
         //// Subir Visitantes que NO se han subido
         public void UploadVisits()
         {
-
-            // Cargar los invitados con un valor null en la propiedad SUBIDA
-            var reader = Execute("SELECT * FROM Invitados where SUBIDA is null");
-            List<Invitados> visitasASubir = new List<Invitados>();
-
-            if (reader.HasRows)
+            try
             {
-                while (reader.Read())
-                {
-                    Invitados invitado = new Invitados();
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
-                    invitado.INVITADO_ID = Convert.ToInt32(reader[0]);
-                    invitado.INVIDATO_ID = Convert.ToInt32(reader[1]);
-                    invitado.Subida = Convert.ToBoolean(reader[2]);
-                    invitado.salidaSubida = Convert.ToBoolean(reader[3]);
-                    invitado.verificacionSubida = Convert.ToBoolean(reader[4]);
-                    invitado.SALIDA_ID = Convert.ToInt32(reader[5]);
-                    invitado.Compania_ID = Convert.ToInt32(reader[6]);
-                    invitado.Nombres = reader[7].ToString();
-                    invitado.Apellidos = reader[8].ToString();
-                    invitado.Puerta_Registro = Convert.ToInt32(reader[9]);
-                    invitado.Fecha_Verificacion = reader[10]; //DateTime
-                    invitado.Fecha_Registro = reader[11];//DateTime
-                    invitado.Fecha_Salida = reader[12]; //DateTime
-                    invitado.Tipo = reader[13].ToString();
-                    invitado.Cargo = reader[14].ToString();
-                    invitado.Tiene_Activo = Convert.ToInt32(reader[16]);
-                    invitado.Estatus_ID = Convert.ToInt32(reader[17]);
-                    invitado.Modulo = Convert.ToInt32(reader[18]);
-                    invitado.Empresa_ID = Convert.ToInt32(reader[19]);
-                    invitado.Placa = reader[20].ToString();
-                    invitado.Tipo_Visitante = reader[21].ToString();
-                    invitado.Es_Grupo = Convert.ToInt32(reader[22]);
-                    invitado.Grupo_ID = Convert.ToInt32(reader[23]);
-                    invitado.Puerta_Entrada = Convert.ToInt32(reader[24]);
-                    invitado.Actualizada_La_Salida = Convert.ToInt32(reader[25]);
-                    invitado.Horas_Caducidad = Convert.ToInt32(reader[26]);
-                    invitado.Personas = Convert.ToInt32(reader[27]);
-                    invitado.In_Out = Convert.ToInt32(reader[28]);
-                    invitado.Origen_Entrada = reader[29].ToString();
-                    invitado.Origen_Salida = reader[30].ToString();
-                    invitado.Comentario = reader[31].ToString();
-                    invitado.Origen_IO = Convert.ToInt32(reader[32]);
-                    invitado.Actualizado = Convert.ToInt32(reader[33]);
-                    invitado.Cpost = reader[34].ToString();
-                    invitado.Texto1_Entrada = reader[35].ToString();
-                    invitado.Texto2_Entrada = reader[36].ToString();
-                    invitado.Texto3_Entrada = reader[37].ToString();
-                    invitado.Secuencia_Dia = reader[38].ToString();
-                    invitado.No_Aplica_Induccion = reader[39].ToString();
-                    invitado.Visitado = Convert.ToInt32(reader[40]);
-                    invitado.Lector = Convert.ToInt32(reader[41]);
+                // Cargar los invitados con un valor null en la propiedad SUBIDA
+                    var visitasASubir = db.Query<Invitados>("SELECT * FROM Invitados where SUBIDA is null");
 
-                    //Cargar invitado a visitasASubir
-                    visitasASubir.Add(invitado);
-                }
+                    // Iterar la lista de visitasASubir
+                    foreach (Invitados registro in visitasASubir)
+                    {
+                        #region Variables
+                        string visitado;
+                        string fechaSalida;
+                        string placa;
+                        string queryInv;
+                        #endregion
 
+                        if (registro.Visitado is null)
+                        {
+                            visitado = "null";
+                        }
+                        else
+                        {
+                            visitado = registro.Visitado.ToString();
+                        }
+                        if (registro.Fecha_Salida is null)
+                        {
+                            fechaSalida = "null";
+                        }
+                        else
+                        {
+                            fechaSalida = $"'{registro.Fecha_Salida.ToString()}'";
+                        }
+                        if (registro.Placa is null)
+                        {
+                            placa = "null";
+                        }
+                        else
+                        {
+                            placa = $"'{registro.Placa.ToString()}'";
+                        }
+
+                        queryInv = "SELECT IN_INVIDATO_ID as anyCount FROM INSERTAR_VISITAS(" +
+                            $"{registro.Compania_ID.ToString()}, " +
+                            $"'{registro.Nombres}', " +
+                            $"'{ registro.Apellidos}', " +
+                            $"'{registro.Fecha_Registro.ToString()}', " +
+                            $"'{registro.Cargo}'," +
+                            "0," +
+                            "100," +
+                            "1," +
+                            $"{Util.CoalesceStr(registro.Empresa_ID, "null")}, " +
+                            $"{Util.CoalesceStr(placa, "null")}," +
+                            $"'{registro.Tipo_Visitante}'," +
+                            "0," +
+                            "0," +
+                            $" {Util.CoalesceStr(registro.Puerta_Entrada, "1495")}," +
+                            "0," +
+                            "12," +
+                            "1," +
+                            "1," +
+                            $"'{registro.Origen_Entrada}'," +
+                            $"'{registro.Origen_Salida}'," +
+                            "''," +
+                            "0," +
+                            "'I'," +
+                            "0," +
+                            "''," +
+                            "''," +
+                            "''," +
+                            "1," +
+                            "0," +
+                            $" {Util.CoalesceStr(registro.Visitado, "null")}" +
+                            $", {registro.Lector.ToString()}" +
+                            $", {Util.CoalesceStr(fechaSalida, "null")})";
+
+                        var dtResult = Execute(queryInv);
+
+
+                    if (Preferences.Get("SYNC_VSU",false))
+                    {
+                        ///Insertar visitantes
+                        //string _AnyCount = "";
+                        //int invitadoID = 0;
+
+                        
+
+                        if (!string.IsNullOrEmpty(dtResult))
+                        {
+                            registro.INVIDATO_ID = Convert.ToInt32(dtResult[1]);
+                            registro.Subida = true;
+                            if (!(registro.Fecha_Salida is null))
+                            {
+                                registro.salidaSubida = true;
+                            }
+                            Debug.WriteLine("Invitado subido: " + registro.INVIDATO_ID.ToString());
+                        }
+                        else
+                        {
+                            registro.Subida = null;
+                            if (!(registro.Fecha_Salida is null))
+                            {
+                                registro.salidaSubida = null;
+                            }
+                            try
+                            {
+                                Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: ");
+                                Debug.WriteLine("Error de SQL: ");
+                            }
+                            catch
+                            {
+                                //No Hacer Nada
+                            }
+                        }
+                        db.UpdateAll(visitasASubir);
+                    }
+
+                    }
+                    
+                
             }
-            // Iterar en el arreglo de visitas
-            foreach (Invitados registro in visitasASubir)
+            catch (Exception)
             {
-                /**string visitado;
-                string fechaSalida;
-                string placa;
-                string querryInv;
 
-                if (registro.Visitado is null)
-                {
-                    visitado = "null";
-                }
-                else
-                {
-                    visitado = registro.Visitado.ToString();
-                }
-                if (registro.Fecha_Salida is null)
-                {
-                    fechaSalida = "null";
-                }
-                else
-                {
-                    fechaSalida = $"'{registro.Fecha_Salida.ToString()}'";
-                }
-                if (registro.Placa is null)
-                {
-                    placa = "null";
-                }
-                else
-                {
-                    placa = $"'{registro.Placa.ToString()}'";
-                }**/
-
-                querryInv = "SELECT IN_INVIDATO_ID as anyCount FROM INSERTAR_VISITAS(" +
-                    $"{registro.Compania_ID.ToString()}, " +
-                    $"'{registro.Nombres}', " +
-                    $"'{ registro.Apellidos}', " +
-                    $"'{registro.Fecha_Registro.ToString()}', " +
-                    $"'{registro.Cargo}'," +
-                    "0," +
-                    "100," +
-                    "1," +
-                    $"{Util.CoalesceStr(registro.Empresa_ID, "null")}, " +
-                    $"{Util.CoalesceStr(placa, "null")}," +
-                    $"'{registro.Tipo_Visitante}'," +
-                    "0," +
-                    "0," +
-                    $" {Util.CoalesceStr(registro.Puerta_Entrada, "1495")}," +
-                    "0," +
-                    "12," +
-                    "1," +
-                    "1," +
-                    $"'{registro.Origen_Entrada}'," +
-                    $"'{registro.Origen_Salida}'," +
-                    "''," +
-                    "0," +
-                    "'I'," +
-                    "0," +
-                    "''," +
-                    "''," +
-                    "''," +
-                    "1," +
-                    "0," +
-                    $" {Util.CoalesceStr(registro.Visitado, "null")}" +
-                    $", {registro.Lector.ToString()}" +
-                    $", {Util.CoalesceStr(fechaSalida, "null")})";
-
-                    Execute(querryInv);
-
-
-                ///Insertar visitantes
-               
-
-                //if (content.IsCompleted & content.Result.Contains("ANYCOUNT"))
-                //{
-                //    var respuesta = JsonConvert.DeserializeObject<List<counterObj>>(content.Result);
-                //    registro.INVIDATO_ID = respuesta.First().anyCount;
-                //    registro.Subida = true;
-                //    if (!(registro.Fecha_Salida is null))
-                //    {
-                //        registro.salidaSubida = true;
-                //    }
-                //    Debug.WriteLine("Invitado subido: " + registro.INVIDATO_ID.ToString());
-                //}
-                //else
-                //{
-                //    registro.Subida = null;
-                //    if (!(registro.Fecha_Salida is null))
-                //    {
-                //        registro.salidaSubida = null;
-                //    }
-                //    try
-                //    {
-                //        Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: " + content.Result);
-                //        Debug.WriteLine("Error de SQL: " + content.Result);
-                //    }
-                //    catch
-                //    {
-                //        //No Hacer Nada
-                //    }
-                //}
-
-
+                throw;
             }
-            //db.UpdateAll(visitasASubir);
         }
 
 
@@ -293,7 +264,7 @@ namespace SCVMobil.Connections
             //Iterar el arreglo visitas con reservas
             foreach (InvitadosReservas registro2 in visitasASubir2)
             {
-                string querryInv2;
+                string queryInv2;
                 string visitado2;
                 string fechaSalida2;
                 string placa2;
@@ -323,7 +294,7 @@ namespace SCVMobil.Connections
                     placa2 = "'" + registro2.Placa.ToString() + "'";
                 }
 
-                querryInv2 = "SELECT IN_INVIDATO_ID as anyCount FROM INSERTAR_VISITAS(" +
+                queryInv2 = "SELECT IN_INVIDATO_ID as anyCount FROM INSERTAR_VISITAS(" +
                     "" + registro2.Compania_ID.ToString() + ", " +
                     "'" + registro2.Nombres + "', " +
                     "'" + registro2.Apellidos + "', " +
@@ -357,8 +328,8 @@ namespace SCVMobil.Connections
                     $"{registro2.Lector.ToString()}, " +
                     $"{fechaSalida2})";
 
-                var content = _client.GetStringAsync(url + querryInv2);
-                Debug.WriteLine("Waiting for: " + url + querryInv2);
+                var content = _client.GetStringAsync(url + queryInv2);
+                Debug.WriteLine("Waiting for: " + url + queryInv2);
                 content.Wait();
 
                 if (content.IsCompleted & content.Result.Contains("ANYCOUNT"))
