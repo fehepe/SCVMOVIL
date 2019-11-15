@@ -400,7 +400,7 @@ namespace SCVMobil
             }
         }     
 
-        private async void Guardar_Clicked(object sender, EventArgs e)
+        private async void Guardar_Clicked(object sender, EventArgs e) //Boton para guardar configuracion//
         { 
             Preferences.Set("SERVER_PORT", eServerPort.Text);
             Preferences.Set("SERVER_IP", eServerIP.Text);
@@ -419,7 +419,7 @@ namespace SCVMobil
                 Preferences.Set("DEV", "False");
             }
 
-            await PopupNavigation.PushAsync(new PopUpGuardarConfig());
+            await PopupNavigation.PushAsync(new PopUpGuardarConfig()); //PopUp para guardar la configuracion//
 
         }
 
