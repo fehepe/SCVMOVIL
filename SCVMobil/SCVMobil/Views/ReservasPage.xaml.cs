@@ -45,13 +45,6 @@ namespace SCVMobil
 
 
 
-            //picker.ItemsSource = Preferences.Get("EMPRESAS_LIST", "").Split(',').ToList<string>();
-
-
-
-
-
-
         }
 
         private async void BtnImprimir_Clicked(object sender, EventArgs e)
