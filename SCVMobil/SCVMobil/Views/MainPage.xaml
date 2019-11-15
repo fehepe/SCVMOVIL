@@ -29,7 +29,7 @@
             TextColor="Black"
             FontAttributes="Bold"
             HorizontalTextAlignment="Center"
-            Margin="0,140,0,0"/>
+            Margin="0,180,0,0"/>
                     <Frame
             CornerRadius="15"
             BorderColor="#2196F3"            
@@ -100,7 +100,7 @@
                     </Label>
       
         
-        <Label VerticalOptions="End"  HorizontalOptions="Start"  Margin="0,190,0,0" Text="Desarrollado por:" />
+        <Label VerticalOptions="End"  HorizontalOptions="Start"  Margin="0,130,0,0" Text="Desarrollado por:" />
         <Image VerticalOptions="End" HorizontalOptions="Start"  Source="logo1024" WidthRequest="100" HeightRequest="100" Margin="0,0,0,0"/>
 
        
