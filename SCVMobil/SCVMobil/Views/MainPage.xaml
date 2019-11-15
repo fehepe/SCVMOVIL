@@ -6,14 +6,10 @@
              Title="Inicio">
 
   <ContentPage.ToolbarItems>
-    <ToolbarItem
+        <ToolbarItem
         Text="Configuración"
         Order="Secondary"
         Clicked="ToolbarItem_Clicked"/>
-        <ToolbarItem
-        Text="Test"
-        Order="Secondary"
-        Clicked="ToolbarItem_Clicked_Test"/>
     </ContentPage.ToolbarItems>
   <ScrollView
       VerticalOptions="CenterAndExpand">
