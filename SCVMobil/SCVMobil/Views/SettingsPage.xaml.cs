@@ -15,9 +15,10 @@ using Plugin.Toasts;
 using System.Globalization;
 using System.Threading;
 using System.Timers;
-using System.Net.NetworkInformation;
-using Rg.Plugins.Popup.Services;
 using FirebirdSql.Data.FirebirdClient;
+using Rg.Plugins.Popup.Services;
+using System.Net.NetworkInformation;
+using SCVMobil.Models;
 
 namespace SCVMobil
 {
@@ -46,9 +47,7 @@ namespace SCVMobil
             base.OnAppearing();
             setDefaults();
             eServerIP.Text = Preferences.Get("SERVER_IP", "192.168.1.103");
-            registrosIP.Text = Preferences.Get("REGISTROS_IP", "192.168.1.103");
-            eServerPort.Text = Preferences.Get("SERVER_PORT", "4441");
-            port.Text = Preferences.Get("REGISTROS_PORT", "4440");
+            
             eLector.Text = Preferences.Get("LECTOR", "1");
             entChunkSize.Text = Preferences.Get("CHUNK_SIZE", "50000");
             lbVersion.Text = "Ver: " + Preferences.Get("VERSION", "0.0.0.0.0");
@@ -67,35 +66,13 @@ namespace SCVMobil
             {
                 Preferences.Set("SERVER_IP", "192.168.1.103");
             }
-            if (Preferences.Get("REGISTROS_IP", "N/A") == "N/A")
-            {
-                Preferences.Set("REGISTROS_IP", "192.168.1.103");
-            }
-            if (Preferences.Get("SERVER_PORT", "N/A") == "N/A")
-            {
-                Preferences.Set("SERVER_PORT", "4441");
-            }
-            if (Preferences.Get("REGISTROS_PORT", "N/A") == "N/A")
-            {
-                Preferences.Set("REGISTROS_PORT", "4440");
-            }
+            
 
         }
 
        
 
-        private void Lector_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            Preferences.Set("LECTOR", e.NewTextValue);
-            if (e.NewTextValue == "338")
-            {
-                Preferences.Set("DEV", "True");
-            }
-            else
-            {
-                Preferences.Set("DEV", "False");
-            }
-        }
+        
 
         private async void BtSync_Clicked(object sender, EventArgs e)
         {
@@ -107,6 +84,9 @@ namespace SCVMobil
             {
                 try
                 {
+
+
+
                     //Mostramos el popup
                     popupLoadingView.IsVisible = true;
 
@@ -115,7 +95,7 @@ namespace SCVMobil
                     aiLoading.IsRunning = false;
                     lblLoadingText.Text = "Loading...";
 
-                    var Url1 = "";
+                    var querry1 = "";
 
                     //Vamos a buscar el directorio de la base de datos
                     var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
@@ -129,56 +109,89 @@ namespace SCVMobil
                     Debug.WriteLine("Setting timeout to 20 min");
 
                     string querry = "";
+                    string connectionString = "User ID=sysdba;Password=masterkey;" +
+                           "Database=C:\\APP\\GAD\\datos_214.fdb;" +
+                           $"DataSource={Preferences.Get("SERVER_IP", "localhost")};Port=3050;Charset=NONE;Server Type=0;";
 
-                    var Url = "http://" + Preferences.Get("SERVER_IP", "localhost") + ":" + Preferences.Get("SERVER_PORT", "4444")
-                                    + "/?sql=";
+
+                    FbCommand cmd;
+                    //var Url = "http://" + Preferences.Get("SERVER_IP", "localhost") + ":" + Preferences.Get("SERVER_PORT", "4444")
+                    //+ "/?sql=";
 
                     //TODO: Buscar cuantas cedulas se van a descargar.
 
                     querry = "select count(p.cedula) as anyCount from padron p";
                     int tries = 0;
-                    string contenido;
+                    //string contenido;
+                    int maxRegistro = 0;
                     while (true)
                     {
                         try
                         {
-                            contenido = await _client.GetStringAsync(Url + querry);
+                            FbConnection fb = new FbConnection(connectionString);
+
+                            fb.Open();
+                            FbCommand command = new FbCommand(
+                                querry,
+                                fb);
+
+
+                            FbDataReader reader = command.ExecuteReader();
+
+                            if (reader.HasRows)
+                            {
+                                while (reader.Read())
+                                {
+                                    maxRegistro = Convert.ToInt32(reader[0]);
+                                }
+                            }
+                            else
+                            {
+                                Debug.WriteLine("No rows found.");
+                            }
+                            reader.Close();
+
+                            fb.Close();
+
                             break;
                         }
-                        catch
+                        catch (Exception ex)
                         {
                             if (tries >= 5)
                             {
+
                                 throw new Exception("No se pudo conectar con la base de datos.");
                             }
+                            var x = ex.Message;
                             tries += 1;
-                        } 
+                        }
                     }
-                    var maxRegistroList = JsonConvert.DeserializeObject<List<counterObj>>(contenido);
-                    var maxRegistro = maxRegistroList.First();
+
+                    //var maxRegistroList = JsonConvert.DeserializeObject<List<counterObj>>(contenido);
+                    //var maxRegistro = maxRegistroList.First();
 
                     //Descargar CEDULAS
 
                     querry = "select p.cedula, p.nombres, p.apellido1, p.apellido2 from padron p";
 
-                    if (maxRegistro.anyCount > 0)
+                    if (maxRegistro > 0)
                     {
                         int loadedRegistros = 1;
                         int commitedRegistros = 0;
                         double progress = 0.0;
                         var listPadron = new List<PADRON>();
-                        while (loadedRegistros < maxRegistro.anyCount)
+                        while (loadedRegistros < maxRegistro)
                         {
-                            progress = (double)loadedRegistros / maxRegistro.anyCount;
-                            if (maxRegistro.anyCount - loadedRegistros < iChunkSize - 1)
+                            progress = (double)loadedRegistros / maxRegistro;
+                            if (maxRegistro - loadedRegistros < iChunkSize - 1)
                             {
-                                Url1 = Url1 = Url + querry + " ROWS "
-                                     + loadedRegistros.ToString() + " TO " + maxRegistro.anyCount.ToString();
+                                querry1 = querry1 = querry + " ROWS "
+                                     + loadedRegistros.ToString() + " TO " + maxRegistro.ToString();
                                 progress = 1.0;
                             }
                             else
                             {
-                                Url1 = Url + querry + " ROWS "
+                                querry1 = querry + " ROWS "
                                      + loadedRegistros.ToString() + " TO " + (loadedRegistros + iChunkSize - 1).ToString();
                             }
                             string contenidoTBL;
@@ -187,10 +200,40 @@ namespace SCVMobil
                             {
                                 try
                                 {
-                                    contenidoTBL = await _client.GetStringAsync(Url1);
+                                    FbConnection fb = new FbConnection(connectionString);
+
+                                    fb.Open();
+                                    FbCommand command = new FbCommand(
+                                        querry1,
+                                        fb);
+
+
+                                    FbDataReader reader = command.ExecuteReader();
+
+                                    if (reader.HasRows)
+                                    {
+                                        while (reader.Read())
+                                        {
+                                            PADRON persona = new PADRON();
+                                            persona.CEDULA = reader[0].ToString();
+                                            persona.NOMBRES = reader[1].ToString();
+                                            persona.APELLIDO1 = reader[2].ToString();
+                                            persona.APELLIDO2 = reader[3].ToString();
+
+                                            listPadron.Add(persona);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Debug.WriteLine("No rows found.");
+                                    }
+                                    reader.Close();
+
+                                    fb.Close();
+                                    //contenidoTBL = await _client.GetStringAsync(Url1);
                                     break;
                                 }
-                                catch(Exception et)
+                                catch (Exception et)
                                 {
                                     Debug.WriteLine("Error descargando padron: " + et.Message);
                                     if (triesTBL >= 5)
@@ -200,13 +243,13 @@ namespace SCVMobil
                                     triesTBL += 1;
                                 }
                             }
-                            var listPadronTemp = JsonConvert.DeserializeObject<List<PADRON>>(contenidoTBL);
-                            listPadron = listPadron.Concat(listPadronTemp).ToList();
+                            //var listPadronTemp = JsonConvert.DeserializeObject<List<PADRON>>(contenidoTBL);
+                            //listPadron = listPadron.Concat(listPadronTemp).ToList();
                             if (listPadron.Count >= int.Parse(Preferences.Get("COMMIT_SIZE", "1000000")))
                             {
                                 try
                                 {
-                                    lblLoadingText.Text = "Commited " + commitedRegistros.ToString() + "/" + maxRegistro.anyCount.ToString() + " BOLETAS";
+                                    lblLoadingText.Text = "Commited " + commitedRegistros.ToString() + "/" + maxRegistro.ToString() + " BOLETAS";
                                     Debug.WriteLine("Se van a insertar: " + listPadron.Count.ToString() + " En la BBDD Local");
                                     await Task.Factory.StartNew(() =>
                                     {
@@ -220,7 +263,7 @@ namespace SCVMobil
 
                                 }
                             }
-                            lblLoadingText.Text = "Downloading BOLETAS: " + loadedRegistros.ToString() + "/" + maxRegistro.anyCount.ToString();
+                            lblLoadingText.Text = "Downloading BOLETAS: " + loadedRegistros.ToString() + "/" + maxRegistro.ToString();
                             loadedRegistros = loadedRegistros + iChunkSize;
                             await pbLoading.ProgressTo(progress, 200, Easing.Linear);
 
@@ -254,17 +297,17 @@ namespace SCVMobil
                         var options = new NotificationOptions()
                         {
                             Title = "Error syncronisando",
-                            Description = "Ubo un error en la syncronización, intente nuevamente",
+                            Description = "Hubo un error en la syncronización, intente nuevamente",
                             IsClickable = false // Set to true if you want the result Clicked to come back (if the user clicks it)
                         };
                         var notification = DependencyService.Get<IToastNotificator>();
                         var result = notification.Notify(options);
                     }
-                    catch(Exception eo)
+                    catch (Exception eo)
                     {
                         Debug.WriteLine("Error en notificacion: " + eo.Message);
                     }
-                    
+
                 }
                 finally
                 {
@@ -274,7 +317,7 @@ namespace SCVMobil
                     {
                         _client.Timeout = new TimeSpan(0, 0, 100);
                     }
-                    catch(Exception eu)
+                    catch (Exception eu)
                     {
                         Debug.WriteLine("Error devolviendo el time out: " + eu.Message);
                     }
@@ -346,10 +389,9 @@ namespace SCVMobil
 
         private async void Guardar_Clicked(object sender, EventArgs e) //Boton para guardar configuracion//
         { 
-            Preferences.Set("SERVER_PORT", eServerPort.Text);
+           
             Preferences.Set("SERVER_IP", eServerIP.Text);
-            Preferences.Set("REGISTROS_PORT", port.Text);
-            Preferences.Set("REGISTROS_IP", registrosIP.Text);
+           
             Preferences.Set("COMMIT_SIZE", eCommitSize.Text);
             var x = Preferences.Get("COMMIT_SIZE", "1000000");
             Preferences.Set("AUTO_SYNC", swAutoSync.ToString());
@@ -364,54 +406,10 @@ namespace SCVMobil
             }
 
             await PopupNavigation.PushAsync(new PopUpGuardarConfig()); //PopUp para guardar la configuracion//
-
-        }
-
-        private async void pinbtn_Clicked(object sender, EventArgs e)  //PING INFERIOR//
-        {
-            try
-            {
-                Ping Pings = new Ping();
-                int timeout = 1;
-                if (Pings.Send(registrosIP.Text, timeout).Status == IPStatus.Success)
-                {
-
-                    try
-                    {
-
-                        string connectionString = "User ID=sysdba;Password=masterkey;" +
-                               "Database=C:\\APP\\GAD\\datos_214.fdb;" +
-                               $"DataSource={registrosIP.Text};Port=3050;Charset=NONE;Server Type=0;";
-
-                        FbConnection fb = new FbConnection(connectionString);
-                   
-                        fb.Open();
-
-
-                        fb.Close();
-                        await PopupNavigation.PushAsync(new PopUpPing()); //popup conexion con exito//
-                    }
-                    catch (Exception)
-                    {
-
-                        await PopupNavigation.PushAsync(new PopUpPingIncorrecto());//popup conexion erronea//
-                    }
-                    
-                }
-                else
-                {
-                    await PopupNavigation.PushAsync(new PopUpPingIncorrecto());//popup conexion erronea//
-                }
-                
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
             
-
         }
+
+        
 
         private async void pinbutton_Clicked(object sender, EventArgs e)
         {

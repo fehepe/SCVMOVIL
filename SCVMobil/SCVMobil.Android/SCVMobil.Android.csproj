@@ -173,10 +173,18 @@
     <AndroidResource Include="Resources\drawable\Grupito.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\SplashBackground.xml" />
+    <None Include="Resources\drawable\icons8_settings_32.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\logo1024.png" />
+    <None Include="Resources\drawable\ic_action_assignment.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\drawable\office_head_quarters_hq_building_job-512.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\SplashBackground.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\exit.png" />

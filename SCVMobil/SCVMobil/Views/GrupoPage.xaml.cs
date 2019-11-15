@@ -10,14 +10,15 @@ using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using SCVMobil.Models;
 
 namespace SCVMobil
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class GrupoPage : ContentPage
     {
-        //Variables
-        Escaner scan;
+        ////Variables
+        //Escaner scan;
         Escaner scanner;
         public GrupoPage(string empresa, string visita, string cedula, string nombres)//Constructor
         {

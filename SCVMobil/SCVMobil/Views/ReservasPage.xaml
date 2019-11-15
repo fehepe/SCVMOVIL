@@ -4,8 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="SCVMobil.Reservas"
-              BackgroundColor="#FFFFFF">
+             x:Class="SCVMobil.ReservasPage">
     <ContentPage.Content>
         <ScrollView>
         <StackLayout
@@ -15,70 +14,73 @@
                 Text="ATENCION"
                 HorizontalOptions="Center"
                 Margin="1,20,1,1"
-                FontSize="40"
+                FontSize="50"
                 TextColor="Black"
                 />
+
                 <Label
                 Text="Visitante autorizado"
                 TextColor="Blue"
                 HorizontalOptions="Center"
                 FontSize="18">
+
+
                 </Label>
-            <Label
+                <Label
                 Text="Nombre"
                 FontSize="20"
                 HorizontalOptions="Center"
                  TextColor="Black"
                 />
-            <Label
+                <Label
                   Text="Victoria Ramirez Charles"
                   HorizontalOptions="Center"
                   x:Name="nombre"
                 />
-            <Label
+                <Label
                 Text="Identificacion"
                 FontSize="20"
                   HorizontalOptions="Center"
                  TextColor="Black"
                 />
-            <Label
+                <Label
                  Text="09300762177"
                   HorizontalOptions="Center"
                   x:Name="cedula"
                 />
-            <Label
+                <Label
                 Text="Destino"
                 FontSize="20"
                   HorizontalOptions="Center"
                  TextColor="Black"
                 />
 
-            <Label
+                <Label
               
                   HorizontalOptions="Center"
                 x:Name="empresa"
                 />
-            <Label
+                <Label
                 Text="Fecha Desde:"
                 FontSize="20"
                   HorizontalOptions="Center"
                  TextColor="Black"
                 />
 
-            <Label
+                <Label
                 Text="27/06/2019"
                   HorizontalOptions="Center"
                 x:Name="desde"
             
                 />
-            <Label
+                <Label
                 Text="Fecha Hasta:"
                 FontSize="20"
                   HorizontalOptions="Center"
                  TextColor="Black"
                 />
 
-            <Label
+                <Label
                 Text="28/06/2019"
                   HorizontalOptions="Center"
                 x:Name="hasta"
@@ -97,7 +99,7 @@
                 TextColor="White"
                 ></Button>
 
-        </StackLayout>
+            </StackLayout>
         </ScrollView>
     </ContentPage.Content>
 </ContentPage>

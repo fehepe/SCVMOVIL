@@ -10,6 +10,7 @@ using Microsoft.AppCenter.Crashes;
 using Microsoft.AppCenter.Analytics;
 using System.Net.Http;
 using Newtonsoft.Json;
+using SCVMobil.Models;
 using Rg.Plugins.Popup.Services;
 
 
@@ -17,11 +18,7 @@ namespace SCVMobil
 {
     public partial class MainPage : ContentPage
     {
-       
-        //Variables
-        //--------------------------------------------------------------------------
-        private HttpClient _client = new HttpClient();
-        private string Url = "";
+      
         Escaner scanner;
 
 
@@ -221,7 +218,7 @@ namespace SCVMobil
                         var registroRes = db.Query<VW_RESERVA_VISITA>(querry);
                         if (registroRes.Count > 0)
                         {
-                            //await Navigation.PushAsync(new ReservasPage(registroRes));
+                            await Navigation.PushAsync(new ReservasPage(registroRes));
                         }
                         else
                         {
@@ -252,8 +249,8 @@ namespace SCVMobil
                                 };
                                 Crashes.TrackError(ey, properties);
                                 await PopupNavigation.PushAsync(new PopUpCedulaNoexiste());                    //Invocacion del PopUp para mostrar mesaje de error// 
-                                await Navigation.PushAsync(new RegistroPage(entCedula.Text));
-                                entCedula.Text = entCedula.Text; 
+                                
+                                 
                                    
                                 
 

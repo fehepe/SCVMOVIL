@@ -58,28 +58,28 @@
     <EmbeddedResource Update="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="PopUpCedulaNoexiste.xaml">
+    <EmbeddedResource Update="Views\PopUpCedulaNoexiste.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="PopUpClaveIncorrecta.xaml">
+    <EmbeddedResource Update="Views\PopUpClaveIncorrecta.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="PopUpDatosCorrectos.xaml">
+    <EmbeddedResource Update="Views\PopUpDatosCorrectos.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="PopUpDatosIncorrectos.xaml">
+    <EmbeddedResource Update="Views\PopUpDatosIncorrectos.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="PopUpGuardarConfig.xaml">
+    <EmbeddedResource Update="Views\PopUpGuardarConfig.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="PopUpPing.xaml">
+    <EmbeddedResource Update="Views\PopUpPing.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="PopUpPingIncorrecto.xaml">
+    <EmbeddedResource Update="Views\PopUpPingIncorrecto.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="PopupView.xaml">
+    <EmbeddedResource Update="Views\PopupView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="RegistroPage.xaml">
@@ -95,6 +95,9 @@
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Verificacion.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\ReservasPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
