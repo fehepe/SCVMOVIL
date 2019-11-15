@@ -25,7 +25,8 @@
                     FontSize="18"
                     FontAttributes="Bold"
                     Text="Nombre(s)"
-                    VerticalOptions="Center">
+                    VerticalOptions="Center"
+                    TextColor="#000000">
                 </Label>
             <Frame 
                 CornerRadius="15" 
@@ -46,10 +47,14 @@
             <Label
                     Grid.Row="2"
                     Grid.Column="0" 
+                    TextColor="#000000"
+                
                    FontSize="18"
                     FontAttributes="Bold"
                     Text="Identificación"
-                    VerticalOptions="Center">
+                    VerticalOptions="Center"
+                
+                 >
                 </Label>
             <Frame 
                 CornerRadius="15" 
@@ -74,6 +79,7 @@
                     FontSize="18"
                     FontAttributes="Bold"
                     Text="Destino"
+                    TextColor="#000000"
                     VerticalOptions="Center">
                 </Label>
             <Frame 
@@ -95,6 +101,7 @@
             <Label
                     Grid.Row="4"
                     Grid.Column="0" 
+                TextColor="#000000"
                    FontSize="18"
                     FontAttributes="Bold"
                     x:Name="lblvisitaA"
@@ -122,6 +129,7 @@
                     x:Name="lbPlaca"
                     Grid.Row="5"
                     Grid.Column="0" 
+                TextColor="#000000"
                     FontSize="18"
                     FontAttributes="Bold"
                     Text="Placa"
@@ -153,6 +161,7 @@
                 CornerRadius="20"
                 WidthRequest="190"
                 FontSize="15"
+                FontAttributes="Bold"
                 TextColor="White"/>
         </StackLayout>
     </ContentPage.Content>

@@ -24,6 +24,7 @@
                 BackgroundColor="#F44336" 
                 VerticalOptions="Center"
                 CornerRadius="20" 
+                FontAttributes="Bold"
                 HeightRequest="50"
                 Clicked="BtnSalida_Clicked"
                 TextColor="White">
