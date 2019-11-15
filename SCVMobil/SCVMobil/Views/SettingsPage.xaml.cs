@@ -17,6 +17,7 @@ using System.Threading;
 using System.Timers;
 using FirebirdSql.Data.FirebirdClient;
 using System.Data;
+using SCVMobil.Models;
 
 namespace SCVMobil
 {
@@ -32,7 +33,7 @@ namespace SCVMobil
         // This handles the Web data request
         private HttpClient _client = new HttpClient();
         private HttpClient _client2 = new HttpClient();
-        private string Url = "";
+
 
         public SettingsPage()
         {

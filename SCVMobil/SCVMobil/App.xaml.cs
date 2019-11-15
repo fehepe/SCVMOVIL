@@ -61,7 +61,8 @@ namespace SCVMobil
                     {
                         var fireBird = new FireBirdData();
 
-                        //implementar el metodo tryConnection();
+                        ////implementar el metodo tryConnection();
+                        ////fireBird.TryConnections();
                        
                        // fireBird.tryConnection();
    
@@ -93,13 +94,6 @@ namespace SCVMobil
                         fireBird.DownloadPeople_Destination();
 
                         // Descargar los Invitados.
-
-                        /**string querryDownInv = "SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " INVIDATO_ID, 1 as SUBIDA, IIF(FECHA_SALIDA is null, 0,1) " +
-                        //"as SALIDASUBIDA, COMPANIA_ID, NOMBRES, APELLIDOS, FECHA_REGISTRO, FECHA_SALIDA, TIPO, CARGO, TIENE_ACTIVO, ESTATUS_ID, MODULO, EMPRESA_ID, " +
-                        //"PLACA, TIPO_VISITANTE, ES_GRUPO, GRUPO_ID, PUERTA_ENTRADA, ACTUALIZADA_LA_SALIDA, HORAS_CADUCIDAD, PERSONAS, IN_OUT, ORIGEN_ENTRADA, " +
-                        //"ORIGEN_SALIDA, COMENTARIO, ORIGEN_IO, ACTUALIZADO, CPOST, TEXTO1_ENTRADA, TEXTO2_ENTRADA, TEXTO3_ENTRADA, SECUENCIA_DIA, NO_APLICA_INDUCCION, " +
-                        //"VISITADO, COALESCE(LECTOR, 0) AS LECTOR FROM INVITADOS WHERE INVIDATO_ID > " + Preferences.Get("MAX_INVIDATO_ID", "0") +
-                        //" AND COALESCE(LECTOR, 0) <> " + Preferences.Get("LECTOR", "1") + " ORDER BY INVIDATO_ID DESC";**/
                         fireBird.DownloadGuests();
 
                         // Descargar las salidas.
