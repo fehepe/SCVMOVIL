@@ -9,30 +9,23 @@
         <StackLayout
             Padding="50"
             >
-            <Label Text="Esta Persona aun no salido."
+            <Label Text="Esta persona aun no salido."
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand"
-                   FontSize="20"
-                   />
+                FontSize="20"/>
 
             <Button 
                 x:Name="btnSalida" 
                 Text="Dar Salida" 
           
-                BackgroundColor="#2196F3" 
+                BackgroundColor="DeepPink" 
                 VerticalOptions="Center"
                 CornerRadius="20" 
-                HeightRequest="70"
+                HeightRequest="50"
                 Clicked="BtnSalida_Clicked"
                 TextColor="White">
             </Button>
-            <!--<StackLayout Orientation="Vertical">  
-        <Label Text="Search Country" FontSize="30"></Label>  
-        <SearchBar x:Name="SearchContent" TextChanged="SearchContent_TextChanged"></SearchBar>  
-        <Grid>  
-            <ListView x:Name="CountryList" ItemTapped="CountryList_ItemTapped"></ListView>  
-        </Grid>  
-    </StackLayout> -->
+           
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -11,6 +11,8 @@ using Microsoft.AppCenter.Analytics;
 using System.Net.Http;
 using Newtonsoft.Json;
 using SCVMobil.Models;
+using Rg.Plugins.Popup.Services;
+
 
 namespace SCVMobil
 {
@@ -47,11 +49,9 @@ namespace SCVMobil
 
 
         //--------------------------------------------------------------------------------------
-        private void ToolbarItem_Clicked(object sender, EventArgs e)
+        private async void ToolbarItem_Clicked(object sender, EventArgs e)
         {
-            fmPassConf.VerticalOptions = LayoutOptions.CenterAndExpand;
-            ppPasswordConfig.IsVisible = true;
-            lbWrongPass.IsVisible = false;
+            await PopupNavigation.PushAsync(new PopupView());  //Popup para entrar la contraseña e ir a la configuracion//
         }
 
 
@@ -59,16 +59,7 @@ namespace SCVMobil
         //---------------------------------------------------------------------------------------
         public void refreshPage()
         {
-            if (Preferences.Get("SYNC_VSU", false))
-            {
-                imgNoSync.IsVisible = false;
-                imgSync.IsVisible = true;
-            }
-            else
-            {
-                imgNoSync.IsVisible = true;
-                imgSync.IsVisible = false;
-            }
+           
         }
         //-----------------------------------------------------------------------------------------
         protected override void OnAppearing() //Cuando aparezca la pagina, refrescamos.
@@ -80,7 +71,8 @@ namespace SCVMobil
             entCedula.Text = string.Empty;
             entApellidos.Text = string.Empty;
             entNombres.Text = string.Empty;
-            lblVersion.Text = Preferences.Get("VERSION", "0.0.0.0.0");
+            
+            
 
         }
 
@@ -90,8 +82,8 @@ namespace SCVMobil
         protected override void OnDisappearing()//Cuando la pagina desaparezca
         {
             scanner.GetScanner(false);// Se desactiva el Scaner
-
-            ppCedulaNoExiste.IsVisible = false;// Ocultamos el Popup de documento no existe
+            
+           
             Preferences.Set("PAGE_ACTIVE", "MainPage");
            
 
@@ -116,87 +108,7 @@ namespace SCVMobil
         {
             entrada(entCedula.Text);
         }
-
-        //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-        //Cancelar Ventana de Password
-        private void BtCancelPass_Clicked(object sender, EventArgs e)
-        {
-            ppPasswordConfig.IsVisible = false;
-            entPassword.Text = string.Empty;
-            lbWrongPass.IsVisible = false;
-        }
-        //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-        //OK Ventana de Password
-        private void BtOKPass_Clicked(object sender, EventArgs e)
-        {
-            if (entPassword.Text == "1")
-            {
-                ppPasswordConfig.IsVisible = false;
-                entPassword.Text = string.Empty;
-                Navigation.PushAsync(new AppSettingsPage());
-            }
-            else
-            {
-                lbWrongPass.IsVisible = true;
-                try
-                {
-                    var duration = TimeSpan.FromSeconds(0.5);
-                    Vibration.Vibrate(duration);
-                }
-                catch
-                {
-                    //TODO: HANDLE NO VIBRATE
-                }
-            }
-        }
-        //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        //Revisar Password
-        private void EntPassword_Completed(object sender, EventArgs e)
-        {
-            if (entPassword.Text == "cr52401")
-            {
-                ppPasswordConfig.IsVisible = false;
-                ((Entry)sender).Text = string.Empty;
-                Navigation.PushAsync(new SettingsPage());
-            }
-            else
-            {
-                lbWrongPass.IsVisible = true;
-                ((Entry)sender).Text = string.Empty;
-                Analytics.TrackEvent("Password de config invalido en el escaner" + Preferences.Get("LECTOR", "N/A"));
-                try
-                {
-                    var duration = TimeSpan.FromSeconds(0.5);
-                    Vibration.Vibrate(duration);
-                }
-                catch
-                {
-                    //TODO: HANDLE NO VIBRATE
-                }
-            }
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        //Mover la ventana de password cuando salga el teclado
-        private void EntPassword_Focused(object sender, FocusEventArgs e)
-        {
-            fmPassConf.VerticalOptions = LayoutOptions.StartAndExpand;
-        }
-
-        //Mover la ventna de password cuando se esconda el teclado
-        private void EntPassword_Unfocused(object sender, FocusEventArgs e)
-        {
-            fmPassConf.VerticalOptions = LayoutOptions.CenterAndExpand;
-        }
-
-        //Ok Ventana de Cedula no existe.
-        private void BtOKCedulaNoExiste_Clicked(object sender, EventArgs e)
-        {
-
-            Navigation.PushAsync(new RegisterPage(entCedula.Text));
-        }
+     
 
         //Boton de agregar cedula.
 
@@ -339,9 +251,13 @@ namespace SCVMobil
                                     { "Lector", Preferences.Get("LECTOR", "0")}
                                 };
                                 Crashes.TrackError(ey, properties);
-                                ppCedulaNoExiste.IsVisible = true;
-                                Analytics.TrackEvent("Documento No-Existe: " + inString + " en el escaner " + Preferences.Get("LECTOR", "N/A"));
-                                await TextToSpeech.SpeakAsync("Documento No Existe");
+                                await PopupNavigation.PushAsync(new PopUpCedulaNoexiste());                    //Invocacion del PopUp para mostrar mesaje de error// 
+                                await Navigation.PushAsync(new RegistroPage(entCedula.Text));
+                                entCedula.Text = entCedula.Text; 
+                                   
+                                
+
+                                
                                 try
                                 {
                                     var duration = TimeSpan.FromSeconds(1);
@@ -364,7 +280,11 @@ namespace SCVMobil
                 }
             }
         }
+
+      
+    
     }
+    
 }
 
 

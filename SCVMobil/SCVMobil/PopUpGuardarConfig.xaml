@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<popup:PopupPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             mc:Ignorable="d"
+             x:Class="SCVMobil.PopUpGuardarConfig">
+    <StackLayout Margin="14" Padding="20" Spacing="10" BackgroundColor="White"  VerticalOptions="Center">
+        <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Padding="0,0,0,10">
+            <Label FontAttributes="Bold" TextColor="Black" FontSize="30" Text="Datos guardados"/>
+        </StackLayout>
+        <StackLayout HorizontalOptions="Center">
+            <Label FontSize="20" TextColor="Black" FontAttributes="Bold" HorizontalTextAlignment="Center" Text="Configuracion guardada con exito"/>
+        </StackLayout>
+        <StackLayout Margin="12" Padding="20" Spacing="20"  >
+            <Button BackgroundColor="DodgerBlue"
+                x:Name="configsave"
+                FontSize="20"
+                FontAttributes="Bold"
+                CornerRadius="20"
+                TextColor="White"
+                Text="Ok"
+                Clicked="configsave_Clicked"/>
+        </StackLayout>
+    </StackLayout>
+</popup:PopupPage>

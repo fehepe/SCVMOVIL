@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<popup:PopupPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             mc:Ignorable="d"
+             x:Class="SCVMobil.PopupView">
+
+    <StackLayout Margin="14" Padding="20" Spacing="10" BackgroundColor="White"  VerticalOptions="Center">
+        <StackLayout>
+            <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Padding="0,0,0,10">
+                <Label Text="Contraseña" TextColor="Black" FontAttributes="Bold" FontSize="30"/>
+            </StackLayout>           
+            <Entry x:Name="entPassword"
+                 BackgroundColor="white"                
+                 VerticalOptions="CenterAndExpand"
+                 IsPassword="True"
+                 Placeholder="Contraseña"
+                ></Entry>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+            <Button BackgroundColor="DeepPink"
+                FontSize="20"
+                x:Name="btnCancelar"
+                CornerRadius="20"
+                FontAttributes="Bold"
+                TextColor="White"
+                Text="Cerrar"
+                Clicked="btnCancelar_Clicked"/>
+            <Button BackgroundColor="DodgerBlue"
+                x:Name="entrar"
+                FontSize="20"
+                FontAttributes="Bold"
+                CornerRadius="20"
+                Text="Entrar"  
+                TextColor="White"
+                Clicked="entrar_Clicked"/>
+        </StackLayout>         
+    </StackLayout>
+</popup:PopupPage>
