@@ -88,7 +88,7 @@
                 x:Name="btnImprimir" 
                 Text="IMPRIMIR" 
                 Clicked="BtnImprimir_Clicked"
-                BackgroundColor="Accent" 
+                BackgroundColor="#F44336" 
                 WidthRequest="190"
                 HeightRequest="40"
                 HorizontalOptions="Center"

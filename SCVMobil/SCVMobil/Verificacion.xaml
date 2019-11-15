@@ -142,7 +142,7 @@
             <Button
                 x:Name="btnCorrecto"
                 CornerRadius="20"
-                BackgroundColor="Accent"
+                BackgroundColor="#F44336"
                 TextColor="White"
                 HeightRequest="40"
                 WidthRequest="190"

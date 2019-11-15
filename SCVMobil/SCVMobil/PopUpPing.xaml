@@ -15,7 +15,7 @@
             <Label FontSize="20" TextColor="Black" FontAttributes="Bold" HorizontalTextAlignment="Center" Text="Se ha conectado exitosamente"></Label>
         </StackLayout>
         <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-            <Button BackgroundColor="DeepPink"
+            <Button BackgroundColor="#F44336"
                 FontSize="20"
                 x:Name="okping"
                 CornerRadius="20"

@@ -31,8 +31,8 @@
                         Grid.Column="1" 
                         x:Name="placa"
                         Toggled="Placa_Toggled"
-                        OnColor="DeepPink"
-                        ThumbColor="Accent"/>
+                        OnColor="#F44336"
+                        ThumbColor="#757575"/>
                     <Label                        
                         Grid.Row="1"
                         Grid.Column="0" 
@@ -46,8 +46,8 @@
                         Grid.Column="1"
                         x:Name="visitaA"
                         Toggled="VisitaA_Toggled"
-                         OnColor="DeepPink"
-                        ThumbColor="Accent"/>
+                         OnColor="#F44336"
+                        ThumbColor="#757575"/>
                     <Label
                         Grid.Row="2"
                         Grid.Column="0"
@@ -76,8 +76,8 @@
                         Grid.Column="1"
                         Toggled="verificacion_Toggled"
                         x:Name="verificacion"
-                        OnColor="DeepPink"
-                        ThumbColor="Accent"
+                        OnColor="#F44336"
+                        ThumbColor="#757575"
                         />
                     <Label
                         Grid.Row="4"
@@ -112,7 +112,7 @@
                         Text="Config. Avanzada" 
                         Clicked="BtConfigAvan_Clicked"
                         
-                        BackgroundColor="Accent"
+                        BackgroundColor="#F44336"
                         TextColor="White"                
                         CornerRadius="27"                       
                         WidthRequest="140"
@@ -123,7 +123,7 @@
                         Text="Limpiar DB" 
                         Clicked="BtnClearDB_Clicked"
                         CornerRadius="27"
-                        BackgroundColor="Accent"
+                        BackgroundColor="#F44336"
                         TextColor="White"
                         WidthRequest="140"/>
                 </StackLayout>

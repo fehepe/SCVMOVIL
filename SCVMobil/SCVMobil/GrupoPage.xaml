@@ -101,7 +101,7 @@
 
                 <StackLayout>
                     <Frame CornerRadius="15" 
-                BorderColor="#2196F3"
+                BorderColor="#757575"
                 Padding="5">
                         <Frame CornerRadius="10" 
                     BackgroundColor="White" 
@@ -115,7 +115,7 @@
                         </Frame>
                     </Frame>
                     <Frame CornerRadius="15" 
-                BorderColor="#2196F3"
+                BorderColor="#757575"
                 Padding="5">
                         <Frame CornerRadius="10" 
                     BackgroundColor="White" 

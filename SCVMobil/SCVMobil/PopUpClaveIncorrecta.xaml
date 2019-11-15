@@ -14,7 +14,7 @@
             <Label FontSize="20" FontAttributes="Bold" TextColor="Black" HorizontalTextAlignment="Center" Text="Contraseña incorrecta, por favor ingrese la contraseña correcta"/>
         </StackLayout>
         <StackLayout Margin="12" Padding="20" Spacing="20"  >
-            <Button BackgroundColor="DodgerBlue"
+            <Button BackgroundColor="#F44336"
                 x:Name="claveincorrecta"
                 FontSize="20"
                 FontAttributes="Bold"

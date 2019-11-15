@@ -14,7 +14,7 @@
             <Label FontSize="20" FontAttributes="Bold" HorizontalTextAlignment="Center" TextColor="Black" Text="Datos ingresados correctamente"/>
         </StackLayout>
         <StackLayout Margin="12" Padding="20" Spacing="20"  >
-            <Button BackgroundColor="DodgerBlue"
+            <Button BackgroundColor="#F44336"
                 x:Name="Correcto"
                 FontSize="20"
                 FontAttributes="Bold"

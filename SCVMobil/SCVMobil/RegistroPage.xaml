@@ -20,7 +20,7 @@
             </Label>
             <Frame 
                 CornerRadius="15" 
-                BorderColor="#2196F3" 
+                BorderColor="#757575" 
                 Padding="5">
                 <Frame 
                     CornerRadius="10" 
@@ -42,7 +42,7 @@
                FontSize="20">
             </Label>
             <Frame CornerRadius="15" 
-                BorderColor="#2196F3"
+                BorderColor="#757575"
                 Padding="5">
                 <Frame
                     CornerRadius="10" 
@@ -64,7 +64,7 @@
                 FontSize="20">
             </Label>
             <Frame CornerRadius="15" 
-                BorderColor="#2196F3"
+                BorderColor="#757575"
                 Padding="5">
                 <Frame CornerRadius="10" 
                     BackgroundColor="White" 
@@ -72,7 +72,8 @@
                     <Entry 
                 HorizontalTextAlignment="Center"
                 x:Name="EntryApellido"
-                Placeholder="Alfonso">
+                Placeholder="Alfonso"
+                      >
 
                     </Entry>
                 </Frame>
@@ -81,7 +82,7 @@
                 x:Name="Agregar"
                 Clicked="Agregar_Clicked"
                 Text="Agregar"
-                BackgroundColor="Accent" 
+                BackgroundColor="#F44336" 
                 VerticalOptions="CenterAndExpand"
                 HeightRequest="40"
                 CornerRadius="20"

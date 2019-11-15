@@ -1,8 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:SCVMobil;assembly=SCVMobil"              
-                         
+             xmlns:local="clr-namespace:;assembly=SCVMobil"                 
              x:Class="SCVMobil.MainPage"
              Title="Inicio" 
              BackgroundColor="#FFFFFF"            
@@ -22,6 +21,7 @@
                     VerticalOptions="Start"
                   >
         <!--<BoxView Margin="0,50,10,10"/>-->
+            
         <Label
             
             Text="Escanear Cédula"
@@ -32,7 +32,7 @@
             Margin="0,140,0,0"/>
                     <Frame
             CornerRadius="15"
-            BorderColor="#2196F3"            
+            BorderColor="#757575"            
             Padding="5">
                         
                         <Frame
@@ -45,6 +45,7 @@
                 Keyboard="Keyboard.Numeric" MaxLength="11"/>
                         </Frame>
                     </Frame>
+        
                 <Label
             Text="Nombre:"
             FontSize="20"

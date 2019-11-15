@@ -14,7 +14,7 @@
             <Label FontSize="20" TextColor="Black" FontAttributes="Bold" HorizontalTextAlignment="Center" Text="La cédula escaneada no existe, por favor registre el usuario en registro."/>
         </StackLayout>
         <StackLayout Margin="12" Padding="20" Spacing="20"  >
-            <Button BackgroundColor="DodgerBlue"
+            <Button BackgroundColor="#F44336"
                 x:Name="cedulainexistente"
                 FontSize="20"
                 FontAttributes="Bold"

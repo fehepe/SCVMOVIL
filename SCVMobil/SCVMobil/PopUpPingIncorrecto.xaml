@@ -15,7 +15,7 @@
             <Label FontSize="20" TextColor="Black" FontAttributes="Bold" HorizontalTextAlignment="Center" Text="No se pudo conectar"></Label>
         </StackLayout>
         <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-            <Button BackgroundColor="DeepPink"
+            <Button BackgroundColor="#F44336"
                 FontSize="20"
                 x:Name="okpingincorrecto"
                 CornerRadius="20"
