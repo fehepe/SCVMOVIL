@@ -25,13 +25,7 @@
                 Clicked="BtnSalida_Clicked"
                 TextColor="White">
             </Button>
-            <!--<StackLayout Orientation="Vertical">  
-        <Label Text="Search Country" FontSize="30"></Label>  
-        <SearchBar x:Name="SearchContent" TextChanged="SearchContent_TextChanged"></SearchBar>  
-        <Grid>  
-            <ListView x:Name="CountryList" ItemTapped="CountryList_ItemTapped"></ListView>  
-        </Grid>  
-    </StackLayout> -->
+           
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

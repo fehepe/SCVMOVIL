@@ -3,14 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:SCVMobil"             
              x:Class="SCVMobil.MainPage"
-             Title="Inicio"
+             Title="Inicio"             
              >
   
-    
+   
         <ContentPage.ToolbarItems>
             <ToolbarItem Text="Configuración"
                          Order="Secondary"
                          Clicked="ToolbarItem_Clicked"/>
+            
         </ContentPage.ToolbarItems>
         <ScrollView
       VerticalOptions="CenterAndExpand">
