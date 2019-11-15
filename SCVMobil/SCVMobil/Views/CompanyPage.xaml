@@ -16,18 +16,19 @@
            ></ToolbarItem>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <StackLayout Padding="20">
+        <StackLayout Padding="20"
+                     VerticalOptions="Center">
             <Label
                     Grid.Row="1"
                     Grid.Column="0"
-                    FontSize="15"
+                    FontSize="18"
                     FontAttributes="Bold"
                     Text="Nombre(s)"
                     VerticalOptions="Center">
                 </Label>
             <Frame 
                 CornerRadius="15" 
-                BorderColor="#2196F3" 
+                BorderColor="#757575" 
                 Padding="5">
                 <Frame 
                     CornerRadius="10" 
@@ -44,14 +45,14 @@
             <Label
                     Grid.Row="2"
                     Grid.Column="0" 
-                    FontSize="15"
+                   FontSize="18"
                     FontAttributes="Bold"
                     Text="Identificación"
                     VerticalOptions="Center">
                 </Label>
             <Frame 
                 CornerRadius="15" 
-                BorderColor="#2196F3" 
+                BorderColor="#757575" 
                 Padding="5">
                 <Frame 
                     CornerRadius="10" 
@@ -69,14 +70,14 @@
             <Label
                     Grid.Row="3"
                     Grid.Column="0" 
-                    FontSize="15"
+                    FontSize="18"
                     FontAttributes="Bold"
                     Text="Destino"
                     VerticalOptions="Center">
                 </Label>
             <Frame 
                 CornerRadius="15" 
-                BorderColor="#2196F3" 
+                BorderColor="#757575" 
                 Padding="5">
                 <Frame 
                     CornerRadius="10" 
@@ -93,7 +94,7 @@
             <Label
                     Grid.Row="4"
                     Grid.Column="0" 
-                    FontSize="15"
+                   FontSize="18"
                     FontAttributes="Bold"
                     x:Name="lblvisitaA"
                     Text="Visita a"
@@ -101,7 +102,7 @@
                 </Label>
             <Frame 
                 CornerRadius="15" 
-                BorderColor="#2196F3" 
+                BorderColor="#757575" 
                 Padding="5">
                 <Frame 
                     CornerRadius="10" 
@@ -120,14 +121,14 @@
                     x:Name="lbPlaca"
                     Grid.Row="5"
                     Grid.Column="0" 
-                    FontSize="15"
+                    FontSize="18"
                     FontAttributes="Bold"
                     Text="Placa"
                     VerticalOptions="Center">
                 </Label>
             <Frame 
                 CornerRadius="15" 
-                BorderColor="#2196F3" 
+                BorderColor="#757575" 
                 Padding="5">
                 <Frame 
                     CornerRadius="10" 
@@ -143,7 +144,7 @@
             </Frame>
             <Button  
                 Text="Imprimir"
-                BackgroundColor="Accent" 
+                BackgroundColor="#F44336" 
                 HorizontalOptions="Center"
                 Clicked="BtnImprimir_Clicked"
                 x:Name="btnImprimir"

@@ -14,7 +14,7 @@
             <Label FontSize="20" TextColor="Black" FontAttributes="Bold" HorizontalTextAlignment="Center" Text="Configuracion guardada con exito"/>
         </StackLayout>
         <StackLayout Margin="12" Padding="20" Spacing="20"  >
-            <Button BackgroundColor="DodgerBlue"
+            <Button BackgroundColor="#F44336"
                 x:Name="configsave"
                 FontSize="20"
                 FontAttributes="Bold"

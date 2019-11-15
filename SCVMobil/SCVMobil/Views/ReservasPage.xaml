@@ -7,14 +7,10 @@
              x:Class="SCVMobil.ReservasPage">
     <ContentPage.Content>
         <ScrollView>
-            <StackLayout
-            BackgroundColor="Aqua"
-            >
-                <Image
-                Margin="1,20,1,1"
-                Source="calendar"
-                ></Image>
-                <Label 
+        <StackLayout
+            BackgroundColor="White"
+            >       
+            <Label 
                 Text="ATENCION"
                 HorizontalOptions="Center"
                 Margin="1,20,1,1"
@@ -90,16 +86,17 @@
                 x:Name="hasta"
                 
                 />
-                <Button 
+        
+            <Button 
                 x:Name="btnImprimir" 
                 Text="IMPRIMIR" 
                 Clicked="BtnImprimir_Clicked"
-                BackgroundColor="#fff" 
+                BackgroundColor="#F44336" 
                 WidthRequest="190"
-                HeightRequest="70"
+                HeightRequest="40"
                 HorizontalOptions="Center"
                 CornerRadius="20" 
-                TextColor="Aqua"
+                TextColor="White"
                 ></Button>
 
             </StackLayout>
