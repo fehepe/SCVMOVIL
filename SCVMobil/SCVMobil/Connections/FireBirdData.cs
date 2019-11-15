@@ -116,13 +116,14 @@ namespace SCVMobil.Connections
 
             // Cargar los invitados con un valor null en la propiedad SUBIDA
             var reader = Execute("SELECT * FROM Invitados where SUBIDA is null");
-            List<Invitados> visitasASubi = new List<Invitados>();
+            List<Invitados> visitasASubir = new List<Invitados>();
 
             if (reader.HasRows)
             {
                 while (reader.Read())
                 {
                     Invitados invitado = new Invitados();
+
                     invitado.INVITADO_ID = Convert.ToInt32(reader[0]);
                     invitado.INVIDATO_ID = Convert.ToInt32(reader[1]);
                     invitado.Subida = Convert.ToBoolean(reader[2]);
@@ -130,19 +131,53 @@ namespace SCVMobil.Connections
                     invitado.verificacionSubida = Convert.ToBoolean(reader[4]);
                     invitado.SALIDA_ID = Convert.ToInt32(reader[5]);
                     invitado.Compania_ID = Convert.ToInt32(reader[6]);
+                    invitado.Nombres = reader[7].ToString();
+                    invitado.Apellidos = reader[8].ToString();
+                    invitado.Puerta_Registro = Convert.ToInt32(reader[9]);
+                    invitado.Fecha_Verificacion = reader[10]; //DateTime
+                    invitado.Fecha_Registro = reader[11];//DateTime
+                    invitado.Fecha_Salida = reader[12]; //DateTime
+                    invitado.Tipo = reader[13].ToString();
+                    invitado.Cargo = reader[14].ToString();
+                    invitado.Tiene_Activo = Convert.ToInt32(reader[16]);
+                    invitado.Estatus_ID = Convert.ToInt32(reader[17]);
+                    invitado.Modulo = Convert.ToInt32(reader[18]);
+                    invitado.Empresa_ID = Convert.ToInt32(reader[19]);
+                    invitado.Placa = reader[20].ToString();
+                    invitado.Tipo_Visitante = reader[21].ToString();
+                    invitado.Es_Grupo = Convert.ToInt32(reader[22]);
+                    invitado.Grupo_ID = Convert.ToInt32(reader[23]);
+                    invitado.Puerta_Entrada = Convert.ToInt32(reader[24]);
+                    invitado.Actualizada_La_Salida = Convert.ToInt32(reader[25]);
+                    invitado.Horas_Caducidad = Convert.ToInt32(reader[26]);
+                    invitado.Personas = Convert.ToInt32(reader[27]);
+                    invitado.In_Out = Convert.ToInt32(reader[28]);
+                    invitado.Origen_Entrada = reader[29].ToString();
+                    invitado.Origen_Salida = reader[30].ToString();
+                    invitado.Comentario = reader[31].ToString();
+                    invitado.Origen_IO = Convert.ToInt32(reader[32]);
+                    invitado.Actualizado = Convert.ToInt32(reader[33]);
+                    invitado.Cpost = reader[34].ToString();
+                    invitado.Texto1_Entrada = reader[35].ToString();
+                    invitado.Texto2_Entrada = reader[36].ToString();
+                    invitado.Texto3_Entrada = reader[37].ToString();
+                    invitado.Secuencia_Dia = reader[38].ToString();
+                    invitado.No_Aplica_Induccion = reader[39].ToString();
+                    invitado.Visitado = Convert.ToInt32(reader[40]);
+                    invitado.Lector = Convert.ToInt32(reader[41]);
+
+                    //Cargar invitado a visitasASubir
+                    visitasASubir.Add(invitado);
                 }
 
             }
             // Iterar en el arreglo de visitas
             foreach (Invitados registro in visitasASubir)
             {
-                
-
-                string visitado;
+                /**string visitado;
                 string fechaSalida;
                 string placa;
                 string querryInv;
-
 
                 if (registro.Visitado is null)
                 {
@@ -167,7 +202,7 @@ namespace SCVMobil.Connections
                 else
                 {
                     placa = $"'{registro.Placa.ToString()}'";
-                }
+                }**/
 
                 querryInv = "SELECT IN_INVIDATO_ID as anyCount FROM INSERTAR_VISITAS(" +
                     $"{registro.Compania_ID.ToString()}, " +
