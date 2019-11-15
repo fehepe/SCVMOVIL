@@ -172,5 +172,14 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\Grupito.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\drawable\icons8_settings_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\drawable\ic_action_assignment.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\drawable\office_head_quarters_hq_building_job-512.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>
