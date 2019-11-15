@@ -251,10 +251,6 @@ namespace SCVMobil
                                 await PopupNavigation.PushAsync(new PopUpCedulaNoexiste());                    //Invocacion del PopUp para mostrar mesaje de error// 
                                 await Navigation.PushAsync(new RegistroPage(entCedula.Text));
                                  
-                                   
-                                
-
-                                
                                 try
                                 {
                                     var duration = TimeSpan.FromSeconds(1);
