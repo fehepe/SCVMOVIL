@@ -249,7 +249,7 @@ namespace SCVMobil
                                 };
                                 Crashes.TrackError(ey, properties);
                                 await PopupNavigation.PushAsync(new PopUpCedulaNoexiste());                    //Invocacion del PopUp para mostrar mesaje de error// 
-                                
+                                await Navigation.PushAsync(new RegistroPage(entCedula.Text));
                                  
                                    
                                 

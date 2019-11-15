@@ -101,11 +101,11 @@
                             />
                 </Grid>
                     <Button 
-                        Margin="90,0,90,0"
+                        Margin="100,0,100,20"
                         CornerRadius="30"
                         x:Name="pinbutton"
                         Text="Ping"                                                
-                        BackgroundColor="Accent"                            
+                        BackgroundColor="#F44336"                            
                         TextColor="White"                            
                         Clicked="pinbutton_Clicked"/>
                     <Label
@@ -118,7 +118,7 @@
                 
                     
                     <Grid
-                        Margin="0,0,0,20">
+                        Margin="0,0,0,0">
                         <Grid.RowDefinitions>
 
                         </Grid.RowDefinitions>
@@ -202,7 +202,7 @@
                             <Button 
                                 BorderColor="Accent"
                                 CornerRadius="30"
-                                BackgroundColor="Accent"
+                                BackgroundColor="#F44336"  
                                 TextColor="White"
                                 WidthRequest="140"
                                 Text="Sync"
@@ -212,7 +212,7 @@
                             <Button 
                                 BorderColor="Accent"  
                                 CornerRadius="27"
-                                BackgroundColor="Accent"
+                                BackgroundColor="#F44336" 
                                 TextColor="White"
                                 WidthRequest="140"
                                 Text="Inicializar"
@@ -223,7 +223,7 @@
                                 CornerRadius="30"
                                 x:Name="Guardar"
                                 Text="Guardar"
-                                BackgroundColor="Accent"                            
+                                BackgroundColor="#F44336"                             
                                 TextColor="White"
                                 WidthRequest="140"
                                 Clicked="Guardar_Clicked"/>

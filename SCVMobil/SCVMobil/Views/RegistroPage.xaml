@@ -93,5 +93,5 @@
             </Button>
         </StackLayout>
 
-</ContentPage.Content>
+    </ContentPage.Content>
 </ContentPage>
