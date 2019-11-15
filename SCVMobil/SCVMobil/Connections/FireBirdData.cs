@@ -38,16 +38,16 @@ namespace SCVMobil.Connections
                     fb);
 
                 var x = command.CommandText;
-                FbDataReader dtResult = command.ExecuteReader();
-                string _dtResult = "";
+                var dtResult = command.ExecuteScalar().ToString();
+                string _dtResult = dtResult;
                 
-                if (dtResult.HasRows)
-                {
+                //if (dtResult.HasRows)
+                //{
 
-                    _dtResult = dtResult[0].ToString();
+                //    _dtResult = dtResult[0].ToString();
                     
-                }
-                dtResult.Close();
+                //}
+                //dtResult.Close();
 
                 fb.Close();
                 Preferences.Set("SYNC_VSU", true);
@@ -210,7 +210,7 @@ namespace SCVMobil.Connections
 
                         if (!string.IsNullOrEmpty(dtResult))
                         {
-                            registro.INVIDATO_ID = Convert.ToInt32(dtResult[1]);
+                            registro.INVIDATO_ID = Convert.ToInt32(dtResult);
                             registro.Subida = true;
                             if (!(registro.Fecha_Salida is null))
                             {
