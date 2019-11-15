@@ -54,7 +54,7 @@
                     <Button                            
                             CornerRadius="30"
                             x:Name="pinbutton"
-                            Text="Ping"
+                            Text="Ping"                                                
                             BackgroundColor="Accent"                            
                             TextColor="White"                            
                             Clicked="pinbutton_Clicked"/>
@@ -278,7 +278,7 @@
                         WidthRequest="200" 
                         BackgroundColor="White" 
                         Padding="10">
-                        <!--ActivityIndicator x:Name="activityIndicator" Margin="0,50,0,0" VerticalOptions="Center" HorizontalOptions="Center" Color="Black" WidthRequest="30" HeightRequest="30" ></-->
+                       
                         <Label 
                             TextColor="Black" 
                             Text="Cargando Padron" 

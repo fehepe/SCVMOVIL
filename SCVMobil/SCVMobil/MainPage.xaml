@@ -1,9 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:SCVMobil"             
+             xmlns:local="clr-namespace:SCVMobil;assembly=SCVMobil"              
+                         
              x:Class="SCVMobil.MainPage"
-             Title="Inicio"             
+             Title="Inicio" 
+             BackgroundColor="#FFFFFF"            
              >
   
    
@@ -13,39 +15,37 @@
                          Clicked="ToolbarItem_Clicked"/>
             
         </ContentPage.ToolbarItems>
-        <ScrollView
-      VerticalOptions="CenterAndExpand">
 
-            <AbsoluteLayout
-        Padding="0"
-        HorizontalOptions="FillAndExpand"
-        VerticalOptions="FillAndExpand">
                 <StackLayout
-          Padding="10"
-          Spacing="50"
-          AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
-          AbsoluteLayout.LayoutFlags="All">
-                    <Label
+                  Padding="10"
+                  Orientation="Vertical"
+                    VerticalOptions="Start"
+                  >
+        <!--<BoxView Margin="0,50,10,10"/>-->
+        <Label
+            
             Text="Escanear Cédula"
             FontSize="20"            
             TextColor="Black"
             FontAttributes="Bold"
             HorizontalTextAlignment="Center"
-            Margin="0,0,0,0"/>
+            Margin="0,140,0,0"/>
                     <Frame
             CornerRadius="15"
             BorderColor="#2196F3"            
             Padding="5">
+                        
                         <Frame
               CornerRadius="15"             
               Padding="1">
+
                             <Entry
                 x:Name="entCedula"
                 Completed="EntCedula_Completed"
                 Keyboard="Keyboard.Numeric" MaxLength="11"/>
                         </Frame>
                     </Frame>
-                    <Label
+                <Label
             Text="Nombre:"
             FontSize="20"
             TextColor="Black"
@@ -65,7 +65,11 @@
             x:Name="entNombres"
             IsVisible="False"
             />
-                    <Label
+               
+               
+                
+               
+                <Label
             Text="Apellido:"
             FontSize="20"
             TextColor="Black"
@@ -94,8 +98,15 @@
                     IsVisible="False">
 
                     </Label>
-                </StackLayout>
-            </AbsoluteLayout>
-        </ScrollView>
+      
+        
+        <Label VerticalOptions="End"  HorizontalOptions="Start"  Margin="0,190,0,0" Text="Desarrollado por:" />
+        <Image VerticalOptions="End" HorizontalOptions="Start"  Source="logo1024" WidthRequest="100" HeightRequest="100" Margin="0,0,0,0"/>
+
+       
+    </StackLayout>     
+    
+
+    
     </ContentPage>   
 
