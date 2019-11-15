@@ -15,7 +15,7 @@
                 
                 <Label                    
                     Text="Servidor"
-                    FontSize="20"
+                    FontSize="30"
                     HorizontalOptions="Center"
                     FontAttributes="Bold"
                     Margin="0,0,0,20"
@@ -30,15 +30,14 @@
                                 Width="*"></ColumnDefinition>
                             <ColumnDefinition
                                 Width="2*"></ColumnDefinition>
-                            <ColumnDefinition
-                                Width=".7*"></ColumnDefinition>
+                            
                         </Grid.ColumnDefinitions>
                      
                         <Label
                             Grid.Row="0"
                             Grid.Column="0"
                             Text="IP: " 
-                            FontSize="20" 
+                            FontSize="15" 
                             VerticalTextAlignment="Center"
                             TextColor="Black"/>
                         <Entry 
@@ -51,19 +50,7 @@
                             MaxLength="15"                       
                             WidthRequest="190"
                             x:Name="eServerIP"/>
-                        <Button 
-                            Grid.Row="0"
-                            Grid.Column="2"
-                            WidthRequest="100"
-                            CornerRadius="30"
-                            x:Name="pinbutton"
-                            Text="Ping"                                                
-                            BackgroundColor="Accent"                            
-                            TextColor="White"                            
-                            Clicked="pinbutton_Clicked"/>
                     </Grid>
-
-
                     <Grid
                         Margin="0,0,0,20">
                         <Grid.RowDefinitions>
@@ -77,7 +64,6 @@
                             <ColumnDefinition
                                     Width=".7*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-
                         <Label 
                             Grid.Row="0"
                             Grid.Column="0"
@@ -91,8 +77,8 @@
                             HorizontalTextAlignment="Center"
                             WidthRequest="90"
                             Text="1500000" 
-                            TextColor="Black" 
-                            
+                            FontSize="15"
+                            TextColor="Black"                             
                             Keyboard="Keyboard.Numeric"
                             x:Name="eCommitSize"
                             MaxLength="7"/>
@@ -106,49 +92,63 @@
                         <Entry 
                             Grid.Row="0"
                             Grid.Column="3"
+                            FontSize="15"
                             HorizontalTextAlignment="Center"
                             Text="30" 
                             TextColor="Black"
                             Keyboard="Keyboard.Numeric"
                             x:Name="entChunkSize"
                             />
-                </Grid> 
-                    
-                <Label
-                    Margin="0,10,0,0"
-                    Text="Lector"
-                    FontSize="20"
-                    FontAttributes="Bold"
-                    HorizontalOptions="Center"
-                    TextColor="Black"></Label>
-                
-                    <Label 
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        Text="No." 
-                        VerticalTextAlignment="Center"
-                        FontSize="13" 
-                        TextColor="Black"/>
-                    <Entry 
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        Text="30" 
-                        WidthRequest="50"      
-                        
-                        TextColor="Black"
-                        HorizontalTextAlignment="Start"                  
-                        Keyboard="Keyboard.Numeric"
-                        MaxLength="3"
-                        x:Name="eLector"/>          
-
-
+                </Grid>
+                    <Button 
+                        Margin="90,0,90,0"
+                        CornerRadius="30"
+                        x:Name="pinbutton"
+                        Text="Ping"                                                
+                        BackgroundColor="Accent"                            
+                        TextColor="White"                            
+                        Clicked="pinbutton_Clicked"/>
+                    <Label
+                        Margin="0,10,0,0"
+                        Text="Lector"
+                        FontSize="30"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        TextColor="Black"></Label>
                 
                     
-                  
+                    <Grid
+                        Margin="0,0,0,20">
+                        <Grid.RowDefinitions>
 
-
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                    Width="*"></ColumnDefinition>
+                            <ColumnDefinition
+                                    Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label 
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="No." 
+                            VerticalTextAlignment="Center"
+                            FontSize="15" 
+                            TextColor="Black"/>
+                        <Entry 
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Text="30" 
+                            WidthRequest="50"
+                            TextColor="Black"
+                            HorizontalTextAlignment="Start"                  
+                            Keyboard="Keyboard.Numeric"
+                            MaxLength="3"
+                            x:Name="eLector"/>  
+                    </Grid>
+                    
                     <StackLayout 
-                    VerticalOptions="StartAndExpand">
+                        VerticalOptions="StartAndExpand">
                     <Grid 
                         >
                         <Grid.RowDefinitions>
@@ -180,53 +180,53 @@
 
                         </Switch>
 
-                    </Grid>               
-
-                </StackLayout>
-
-                <Label 
+                    </Grid>
+                    <Label 
                         Margin="0,0,0,0"
                         HorizontalOptions="Center"
                         x:Name="lbVersion"
                         TextColor="Black"                        
                         FontAttributes="Bold"
-                     IsVisible="False"/>
-                    <StackLayout
-                VerticalOptions="EndAndExpand"
+                        />
+                </StackLayout>
+
+                    
+                <StackLayout
+                    VerticalOptions="EndAndExpand"
                     Margin="0,0,0,0">
                         <StackLayout
-                    HorizontalOptions="CenterAndExpand"
-                        Margin="0,0,0,0"
-                        Orientation="Horizontal">
-                        <Button 
-                            BorderColor="Accent"      
-                       
-                            CornerRadius="30"
-                            BackgroundColor="Accent"
-                            TextColor="White"
-                            WidthRequest="140"
-                            Text="Sync"
-                            x:Name="btSync"
-                            Clicked="BtSync_Clicked"
-                           />
-                        <Button 
-                            BorderColor="Accent"  
-                            CornerRadius="27"
-                            BackgroundColor="Accent"
-                            TextColor="White"
-                            WidthRequest="140"
-                            Text="Inicializar"
-                            x:Name="btIni"
-                            Clicked="BtIni_Clicked"
-                             IsVisible="False"/>
+                            HorizontalOptions="CenterAndExpand"
+                            Margin="0,0,0,0"
+                            Orientation="Horizontal">
+                            
+                            <Button 
+                                BorderColor="Accent"
+                                CornerRadius="30"
+                                BackgroundColor="Accent"
+                                TextColor="White"
+                                WidthRequest="140"
+                                Text="Sync"
+                                x:Name="btSync"
+                                Clicked="BtSync_Clicked"
+                               />
+                            <Button 
+                                BorderColor="Accent"  
+                                CornerRadius="27"
+                                BackgroundColor="Accent"
+                                TextColor="White"
+                                WidthRequest="140"
+                                Text="Inicializar"
+                                x:Name="btIni"
+                                Clicked="BtIni_Clicked"
+                                 IsVisible="False"/>
                             <Button
-                            CornerRadius="30"
-                            x:Name="Guardar"
-                            Text="Guardar"
-                            BackgroundColor="Accent"                            
-                            TextColor="White"
-                            WidthRequest="140"
-                            Clicked="Guardar_Clicked"/>
+                                CornerRadius="30"
+                                x:Name="Guardar"
+                                Text="Guardar"
+                                BackgroundColor="Accent"                            
+                                TextColor="White"
+                                WidthRequest="140"
+                                Clicked="Guardar_Clicked"/>
                         </StackLayout>
                 </StackLayout>
                 

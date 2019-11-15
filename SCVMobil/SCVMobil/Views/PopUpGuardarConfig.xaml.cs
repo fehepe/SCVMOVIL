@@ -21,6 +21,9 @@ namespace SCVMobil
         private async void configsave_Clicked(object sender, EventArgs e)
         {
             
+            this.IsVisible = false; //cerrar popup//
+            
+            
             await this.Navigation.PopToRootAsync();
         }
     }
