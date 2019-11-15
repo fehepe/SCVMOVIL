@@ -5,15 +5,18 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
             
              mc:Ignorable="d"
-             x:Class="SCVMobil.SalidaPage">
+             x:Class="SCVMobil.SalidaPage"
+              BackgroundColor="#FFFFFF">
     <ContentPage.Content>
         <StackLayout
             Padding="50"
             >
+            <Image Source="C:\Users\GAD Desarrollo\Documents\SCVMOVIL\SCVMobil\SCVMobil.Android\Resources\drawable\exit.png"/>
             <Label Text="Esta persona aun no salido."
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand"
-                FontSize="20"/>
+                FontSize="20"
+                FontAttributes="Bold"/>
 
             <Button 
                 x:Name="btnSalida" 
