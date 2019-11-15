@@ -14,7 +14,7 @@
                   BackgroundColor="White"               
                 >                    
                 <Label                    
-                    Text="Servidor Padrón"
+                    Text="Servidor"
                     FontSize="20"
                     HorizontalOptions="Center"
                     FontAttributes="Bold"
@@ -41,7 +41,8 @@
                         Text="Puerto:" 
                         VerticalTextAlignment="Center"
                         FontSize="14" 
-                        TextColor="Black"/>
+                        TextColor="Black"
+                        IsVisible="False"/>
                         <Entry                         
                         Text="9000" 
                         WidthRequest="90"                       
@@ -49,7 +50,8 @@
                         Grid.ColumnSpan="2"
                         TextColor="Black"                
                         Keyboard="Keyboard.Numeric"
-                        x:Name="eServerPort" />                      
+                        x:Name="eServerPort" 
+                        IsVisible="False"/>                      
 
                     <Button                            
                             CornerRadius="30"
@@ -127,7 +129,8 @@
                     FontAttributes="Bold"
                     FontSize="20"
                     HorizontalOptions="Center"
-                    TextColor="Black"></Label>
+                    TextColor="Black"
+                    IsVisible="False"></Label>
                                     
                     <Label 
                         Grid.Row="0"
@@ -135,7 +138,8 @@
                         Text="IP: " 
                         FontSize="15" 
                         VerticalTextAlignment="Center"
-                        TextColor="Black"/>
+                        TextColor="Black"
+                        IsVisible="False"/>
                     <Entry 
                         Grid.Row="0"
                         Grid.Column="1"
@@ -145,6 +149,7 @@
                         MaxLength="15"
                         FontSize="17"             
                         x:Name="registrosIP" 
+                        IsVisible="False"
                        
                         />                      
                 
@@ -154,7 +159,8 @@
                         Text="Puerto:" 
                         VerticalTextAlignment="Center"
                         FontSize="13.6" 
-                        TextColor="Black"/>
+                        TextColor="Black"
+                             IsVisible="False"/>
                     <Entry 
                         Grid.Row="1"
                         Grid.Column="1"
@@ -164,7 +170,8 @@
                         TextColor="Black"                         
                         Keyboard="Keyboard.Numeric"                       
                         x:Name="port"
-                        Grid.ColumnSpan="2"/>
+                        Grid.ColumnSpan="2"
+                         IsVisible="False"/>
                        
                     
                     <Button                            
@@ -174,6 +181,7 @@
                             BackgroundColor="Accent"                            
                             TextColor="White"                                                                                
                             Clicked="pinbtn_Clicked"
+                        IsVisible="False"
                            
                         />
 
@@ -220,7 +228,8 @@
                         HorizontalOptions="Center"
                         x:Name="lbVersion"
                         TextColor="Black"                        
-                        FontAttributes="Bold"/>
+                        FontAttributes="Bold"
+                     IsVisible="False"/>
                     <StackLayout
                 VerticalOptions="EndAndExpand"
                     Margin="0,0,0,0">
