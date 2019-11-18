@@ -97,6 +97,7 @@
                 HorizontalOptions="Center"
                 CornerRadius="20" 
                 TextColor="White"
+                FontAttributes="Bold"
                 ></Button>
 
             </StackLayout>

@@ -101,12 +101,13 @@
                             />
                 </Grid>
                     <Button 
-                        Margin="100,0,100,20"
+                        Margin="90,0,90,0"
                         CornerRadius="30"
                         x:Name="pinbutton"
                         Text="Ping"                                                
                         BackgroundColor="#F44336"                            
-                        TextColor="White"                            
+                        TextColor="White"    
+                        FontAttributes="Bold"
                         Clicked="pinbutton_Clicked"/>
                     <Label
                         Margin="0,10,0,0"
@@ -118,7 +119,7 @@
                 
                     
                     <Grid
-                        Margin="0,0,0,0">
+                        Margin="0,0,0,20">
                         <Grid.RowDefinitions>
 
                         </Grid.RowDefinitions>
@@ -202,19 +203,21 @@
                             <Button 
                                 BorderColor="Accent"
                                 CornerRadius="30"
-                                BackgroundColor="#F44336"  
+                                BackgroundColor="#F44336"
                                 TextColor="White"
                                 WidthRequest="140"
                                 Text="Sync"
+                                FontAttributes="Bold"
                                 x:Name="btSync"
                                 Clicked="BtSync_Clicked"
                                />
                             <Button 
                                 BorderColor="Accent"  
                                 CornerRadius="27"
-                                BackgroundColor="#F44336" 
+                                BackgroundColor="Accent"
                                 TextColor="White"
                                 WidthRequest="140"
+                                FontAttributes="Bold"
                                 Text="Inicializar"
                                 x:Name="btIni"
                                 Clicked="BtIni_Clicked"
@@ -223,8 +226,9 @@
                                 CornerRadius="30"
                                 x:Name="Guardar"
                                 Text="Guardar"
-                                BackgroundColor="#F44336"                             
+                                BackgroundColor="#F44336"                            
                                 TextColor="White"
+                                FontAttributes="Bold"
                                 WidthRequest="140"
                                 Clicked="Guardar_Clicked"/>
                         </StackLayout>

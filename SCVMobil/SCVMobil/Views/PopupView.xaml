@@ -28,7 +28,7 @@
                 TextColor="White"
                 Text="Cerrar"
                 Clicked="btnCancelar_Clicked"/>
-            <Button BackgroundColor="#F44336"
+            <Button BackgroundColor="#757575"
                 x:Name="entrar"
                 FontSize="20"
                 FontAttributes="Bold"

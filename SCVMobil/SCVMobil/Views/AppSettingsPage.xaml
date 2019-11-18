@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SCVMobil.AppSettingsPage"
              Title="Configuración de SCV"
+              BackgroundColor="#FFFFFF"
              >
     <ContentPage.Content>
       
@@ -111,7 +112,7 @@
                         x:Name="btConfigAvan" 
                         Text="Config. Avanzada" 
                         Clicked="BtConfigAvan_Clicked"
-                        
+                        FontAttributes="Bold"
                         BackgroundColor="#F44336"
                         TextColor="White"                
                         CornerRadius="27"                       
@@ -125,6 +126,7 @@
                         CornerRadius="27"
                         BackgroundColor="#F44336"
                         TextColor="White"
+                        FontAttributes="Bold"
                         WidthRequest="140"/>
                 </StackLayout>
                 
