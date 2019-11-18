@@ -25,11 +25,6 @@ using SCVMobil.Connections;
 namespace SCVMobil
 {
 
-    public class counterObj
-    {
-        public int anyCount { get; set; }
-    }
-
     public partial class App : Application
     {
         public static System.Timers.Timer syncTimer;
