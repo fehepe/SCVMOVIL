@@ -76,7 +76,8 @@ namespace SCVMobil.Connections
 
         }
 
-        // Rrnar una lista de invitados
+
+        // Retornar una lista de invitados
         public List<Invitados> ExecuteGuest(string query)
         {
             try
@@ -777,7 +778,7 @@ namespace SCVMobil.Connections
 
                         if (!string.IsNullOrEmpty(dtResult))
                         {
-                            registro.INVIDATO_ID = Convert.ToInt32(dtResult[1]);
+                            registro.INVIDATO_ID = Convert.ToInt32(dtResult);
                             registro.Subida = true;
                             if (!(registro.Fecha_Salida is null))
                             {
