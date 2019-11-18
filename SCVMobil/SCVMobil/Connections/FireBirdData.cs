@@ -25,22 +25,44 @@ namespace SCVMobil.Connections
 
         }
 
+
+        // Retornar el Connection String
+        public string connectionString(bool db)
+        {
+            if (db)
+            {
+                string connectionString = "User ID=sysdba;Password=masterkey;" +
+                          "Database=C:\\APP\\GAD\\registros.fdb;" +
+                          $"DataSource={Preferences.Get("SERVER_IP", "192.168.1.170")};Port=3050;Charset=NONE;Server Type=0;";
+                return connectionString;
+            }
+            else
+            {
+                string connectionString = "User ID=sysdba;Password=masterkey;" +
+                          "Database=C:\\APP\\GAD\\datos_214.fdb;" +
+                          $"DataSource={Preferences.Get("SERVER_IP", "localhost")};Port=3050;Charset=NONE;Server Type=0;";
+                return connectionString;
+            }
+        }
+
+
         // Ejecutar query Scalar luego de abrir una conexion con la base de datos
         public string ExecuteScalar(string query)
         {
             try
             {
+                string _dtResult = "";
                 FbConnection fb = new FbConnection(connectionString(true));
-
-                fb.Open();
-                FbCommand command = new FbCommand(
+                using (FbCommand command = new FbCommand(
                     query,
-                    fb);
+                    fb)){
 
-               string _dtResult = command.ExecuteScalar().ToString();
-
-
+                    fb.Open();
+                    _dtResult = command.ExecuteScalar().ToString();
+                }
                 fb.Close();
+                fb.Dispose();
+
                 Preferences.Set("SYNC_VSU", true);
 
                 return _dtResult;
@@ -55,7 +77,7 @@ namespace SCVMobil.Connections
         }
 
 
-        // Ejecutar Reader
+        // Rrnar una lista de invitados
         public List<Invitados> ExecuteGuest(string query)
         {
             try
@@ -100,6 +122,7 @@ namespace SCVMobil.Connections
                         }
                         if (dtResult[4] != System.DBNull.Value)
                         {
+                            var prueba = dtResult[4].ToString();
                             invitado.verificacionSubida = Convert.ToBoolean(dtResult[4]);
                         }
                         if (dtResult[5] != System.DBNull.Value)
@@ -253,6 +276,7 @@ namespace SCVMobil.Connections
                 }
                 dtResult.Close();
                 fb.Close();
+                fb.Dispose();
                 Preferences.Set("SYNC_VSU", true);
                 return GuestsList;
             }
@@ -265,7 +289,7 @@ namespace SCVMobil.Connections
         }        
 
 
-        // Retornar Reservaciones
+        // Retornar lista de Reservaciones
         public List<VW_RESERVA_VISITA> ExecuteReservations(string query)
         {
             try
@@ -287,6 +311,7 @@ namespace SCVMobil.Connections
                     {
                         VW_RESERVA_VISITA reservation = new VW_RESERVA_VISITA();
 
+                        #region Verificacion
                         if (dtResult[0] != System.DBNull.Value)
                         {
                             reservation.VISITA_ID = Convert.ToInt32(dtResult[0]);
@@ -331,11 +356,15 @@ namespace SCVMobil.Connections
                         {
                             reservation.DEPARTAMENTO_NOMBRE = dtResult[9].ToString();
                         }
+                        #endregion
+
                         ReservationsList.Add(reservation);
                     }
                 }
                 dtResult.Close();
                 fb.Close();
+                fb.Dispose();
+
                 Preferences.Set("SYNC_VSU", true);
                 return ReservationsList;
             }
@@ -348,7 +377,7 @@ namespace SCVMobil.Connections
         }
 
 
-        // Retornar Companias
+        // Retornar lsta de Companias
         public List<COMPANIAS> ExecuteCompanies(string query)
         {
             try
@@ -384,6 +413,8 @@ namespace SCVMobil.Connections
                 }
                 dtResult.Close();
                 fb.Close();
+                fb.Dispose();
+
                 Preferences.Set("SYNC_VSU", true);
                 return CompaniesList;
             }
@@ -435,6 +466,8 @@ namespace SCVMobil.Connections
                 }
                 dtResult.Close();
                 fb.Close();
+                fb.Dispose();
+
                 Preferences.Set("SYNC_VSU", true);
                 return PeopleList;
             }
@@ -443,26 +476,6 @@ namespace SCVMobil.Connections
                 var x = ea.Message;
                 Preferences.Set("SYNC_VSU", false);
                 return null;
-            }
-        }
-
-
-        // Retornar el Connection String
-        public string connectionString(bool db)
-        {
-            if (db)
-            {
-                string connectionString = "User ID=sysdba;Password=masterkey;" +
-                          "Database=C:\\APP\\GAD\\registros.fdb;" +
-                          $"DataSource={Preferences.Get("SERVER_IP", "localhost")};Port=3050;Charset=NONE;Server Type=0;";
-                return connectionString;
-            }
-            else
-            {
-                string connectionString = "User ID=sysdba;Password=masterkey;" +
-                          "Database=C:\\APP\\GAD\\datos_214.fdb;" +
-                          $"DataSource={Preferences.Get("SERVER_IP", "localhost")};Port=3050;Charset=NONE;Server Type=0;";
-                return connectionString;
             }
         }
 
@@ -709,7 +722,7 @@ namespace SCVMobil.Connections
                 var content = ExecuteScalar(queryInv2);
 
 
-                if (string.IsNullOrEmpty(content))
+                if (!string.IsNullOrEmpty(content))
                 {
                     
                     registro2.INVIDATO_ID = Convert.ToInt32(content);
@@ -757,7 +770,7 @@ namespace SCVMobil.Connections
                 var content = ExecuteScalar(queryVer);
                 Debug.WriteLine("Waiting for: " + queryVer);
 
-                if (string.IsNullOrEmpty(content))
+                if (!string.IsNullOrEmpty(content))
                 {
                     registro.verificacionSubida = true;
                     Debug.WriteLine("Verificacion subida: ID" + registro.INVIDATO_ID.ToString() + " " + registro.Fecha_Verificacion.ToString());
@@ -793,7 +806,7 @@ namespace SCVMobil.Connections
                 var content = ExecuteScalar(querrySal);
                 Debug.WriteLine("Waiting for: "  + querrySal);
 
-                if (string.IsNullOrEmpty(content))
+                if (!string.IsNullOrEmpty(content))
                 {
                     registro.salidaSubida = true;
                     Debug.WriteLine("Salida subida: ID" + registro.INVIDATO_ID.ToString() + " " + registro.Fecha_Salida.ToString());
@@ -829,7 +842,7 @@ namespace SCVMobil.Connections
                 var content = ExecuteScalar(querrySalOFF);
                 Debug.WriteLine("Waiting for: " + querrySalOFF);
 
-                if (string.IsNullOrEmpty(content))
+                if (!string.IsNullOrEmpty(content))
                 {
                     registros.Subida = true;
                     Debug.WriteLine("Salida subida: ID" + registros.INVIDATO_ID.ToString() + " " + registros.Fecha_Salida.ToString());

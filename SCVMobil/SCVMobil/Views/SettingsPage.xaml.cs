@@ -45,8 +45,8 @@ namespace SCVMobil
         {
             base.OnAppearing();
             setDefaults();
-            eServerIP.Text = Preferences.Get("SERVER_IP", "192.168.1.103");
-            registrosIP.Text = Preferences.Get("REGISTROS_IP", "192.168.1.103");
+            eServerIP.Text = Preferences.Get("SERVER_IP", "192.168.1.170");
+            registrosIP.Text = Preferences.Get("REGISTROS_IP", "192.168.1.170");
             eServerPort.Text = Preferences.Get("SERVER_PORT", "4441");
             port.Text = Preferences.Get("REGISTROS_PORT", "4440");
             eLector.Text = Preferences.Get("LECTOR", "1");
