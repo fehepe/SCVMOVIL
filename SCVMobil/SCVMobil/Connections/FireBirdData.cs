@@ -25,8 +25,8 @@ namespace SCVMobil.Connections
 
         }
 
-        // Ejecutar query luego de abrir una conexion con la base de datos
-        public string Execute(string query)
+        // Ejecutar query Scalar luego de abrir una conexion con la base de datos
+        public string ExecuteScalar(string query)
         {
             try
             {
@@ -37,17 +37,8 @@ namespace SCVMobil.Connections
                     query,
                     fb);
 
-                var x = command.CommandText;
-                FbDataReader dtResult = command.ExecuteReader();
-                string _dtResult = "";
-                
-                if (dtResult.HasRows)
-                {
+               string _dtResult = command.ExecuteScalar().ToString();
 
-                    _dtResult = dtResult[0].ToString();
-                    
-                }
-                dtResult.Close();
 
                 fb.Close();
                 Preferences.Set("SYNC_VSU", true);
@@ -64,7 +55,399 @@ namespace SCVMobil.Connections
         }
 
 
-        //// Retornar el Connection String
+        // Ejecutar Reader
+        public List<Invitados> ExecuteGuest(string query)
+        {
+            try
+            {
+                List<Invitados> GuestsList = new List<Invitados>();
+
+                FbConnection fb = new FbConnection(connectionString(true));
+
+                fb.Open();
+                FbCommand command = new FbCommand(
+                    query,
+                    fb);
+
+                var dtResult = command.ExecuteReader();
+
+                if (dtResult.HasRows)
+                {
+                    while (dtResult.Read())
+                    {
+                        Invitados invitado = new Invitados();
+                        #region Verificar que los valores no sean nulos antes de convertirlos, de lo contrario asignar nulo por defecto
+                        if (dtResult[0] != System.DBNull.Value)
+                        {
+                            invitado.INVITADO_ID = Convert.ToInt32(dtResult[0]);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                        if (dtResult[1] != System.DBNull.Value)
+                        {
+                            invitado.INVIDATO_ID = Convert.ToInt32(dtResult[1]);
+                        }
+                        if (dtResult[2] != System.DBNull.Value)
+                        {
+                            invitado.Subida = Convert.ToBoolean(dtResult[2]);
+                        }
+                        if (dtResult[3] != System.DBNull.Value)
+                        {
+                            invitado.salidaSubida = Convert.ToBoolean(dtResult[3]);
+
+                        }
+                        if (dtResult[4] != System.DBNull.Value)
+                        {
+                            invitado.verificacionSubida = Convert.ToBoolean(dtResult[4]);
+                        }
+                        if (dtResult[5] != System.DBNull.Value)
+                        {
+                            invitado.SALIDA_ID = Convert.ToInt32(dtResult[5]);
+                        }
+                        if (dtResult[6] != System.DBNull.Value)
+                        {
+                            invitado.Compania_ID = Convert.ToInt32(dtResult[6]);
+                        }
+                        if (dtResult[7] != System.DBNull.Value)
+                        {
+                            invitado.Nombres = dtResult[7].ToString();
+                        }
+                        if (dtResult[8] != System.DBNull.Value)
+                        {
+                            invitado.Apellidos = dtResult[8].ToString();
+                        }
+                        if (dtResult[9] != System.DBNull.Value)
+                        {
+                            invitado.Puerta_Registro = Convert.ToInt32(dtResult[9]);
+                        }
+                        if (dtResult[10] != System.DBNull.Value)
+                        {
+                            invitado.Fecha_Verificacion = Convert.ToDateTime(dtResult[10]);
+                        }
+                        if (dtResult[11] != System.DBNull.Value)
+                        {
+                            invitado.Fecha_Registro = Convert.ToDateTime(dtResult[11]);
+                        }
+                        if (dtResult[12] != System.DBNull.Value)
+                        {
+                            invitado.Fecha_Salida = Convert.ToDateTime(dtResult[12]);
+                        }
+                        if (dtResult[13] != System.DBNull.Value)
+                        {
+                            invitado.Tipo = dtResult[13].ToString();
+                        }
+                        if (dtResult[14] != System.DBNull.Value)
+                        {
+                            invitado.Cargo = dtResult[14].ToString();
+                        }
+                        if (dtResult[15] != System.DBNull.Value)
+                        {
+                            invitado.Tiene_Activo = Convert.ToInt32(dtResult[15]);
+                        }
+                        if (dtResult[16] != System.DBNull.Value)
+                        {
+                            invitado.Estatus_ID = Convert.ToInt32(dtResult[16]);
+                        }
+                        if (dtResult[17] != System.DBNull.Value)
+                        {
+                            invitado.Modulo = Convert.ToInt32(dtResult[17]);
+                        }
+                        if (dtResult[18] != System.DBNull.Value)
+                        {
+                            invitado.Empresa_ID = Convert.ToInt32(dtResult[18]);
+                        }
+                        if (dtResult[19] != System.DBNull.Value)
+                        {
+                            invitado.Placa = dtResult[19].ToString();
+                        }
+                        if (dtResult[20] != System.DBNull.Value)
+                        {
+                            invitado.Tipo_Visitante = dtResult[20].ToString();
+                        }
+                        if (dtResult[21] != System.DBNull.Value)
+                        {
+                            invitado.Es_Grupo = Convert.ToInt32(dtResult[21]);
+                        }
+                        if (dtResult[22] != System.DBNull.Value)
+                        {
+                            invitado.Grupo_ID = Convert.ToInt32(dtResult[22]);
+                        }
+                        if (dtResult[23] != System.DBNull.Value)
+                        {
+                            invitado.Puerta_Entrada = Convert.ToInt32(dtResult[23]);
+                        }
+                        if (dtResult[24] != System.DBNull.Value)
+                        {
+                            invitado.Actualizada_La_Salida = Convert.ToInt32(dtResult[24]);
+                        }
+                        if (dtResult[25] != System.DBNull.Value)
+                        {
+                            invitado.Horas_Caducidad = Convert.ToInt32(dtResult[25]);
+                        }
+                        if (dtResult[26] != System.DBNull.Value)
+                        {
+                            invitado.Personas = Convert.ToInt32(dtResult[26]);
+                        }
+                        if (dtResult[27] != System.DBNull.Value)
+                        {
+                            invitado.In_Out = Convert.ToInt32(dtResult[27]);
+                        }
+                        if (dtResult[28] != System.DBNull.Value)
+                        {
+                            invitado.Origen_Entrada = dtResult[28].ToString();
+                        }
+                        if (dtResult[29] != System.DBNull.Value)
+                        {
+                            invitado.Origen_Salida = dtResult[29].ToString();
+                        }
+                        if (dtResult[30] != System.DBNull.Value)
+                        {
+                            invitado.Comentario = dtResult[30].ToString();
+                        }
+                        if (dtResult[31] != System.DBNull.Value)
+                        {
+                            invitado.Origen_IO = Convert.ToInt32(dtResult[31]);
+                        }
+                        if (dtResult[32] != System.DBNull.Value)
+                        {
+                            invitado.Actualizado = Convert.ToInt32(dtResult[32]);
+                        }
+                        if (dtResult[33] != System.DBNull.Value)
+                        {
+                            invitado.Cpost = dtResult[33].ToString();
+                        }
+                        if (dtResult[34] != System.DBNull.Value)
+                        {
+                            invitado.Texto1_Entrada = dtResult[34].ToString();
+                        }
+                        if (dtResult[35] != System.DBNull.Value)
+                        {
+                            invitado.Texto2_Entrada = dtResult[35].ToString();
+                        }
+                        if (dtResult[36] != System.DBNull.Value)
+                        {
+                            invitado.Texto3_Entrada = dtResult[36].ToString();
+                        }
+                        if (dtResult[37] != System.DBNull.Value)
+                        {
+                            invitado.Secuencia_Dia = dtResult[37].ToString();
+                        }
+                        if (dtResult[38] != System.DBNull.Value)
+                        {
+                            invitado.No_Aplica_Induccion = dtResult[38].ToString();
+                        }
+                        if (dtResult[39] != System.DBNull.Value)
+                        {
+                            invitado.Visitado = Convert.ToInt32(dtResult[39]);
+                        }
+                        if (dtResult[40] != System.DBNull.Value)
+                        {
+                            invitado.Lector = Convert.ToInt32(dtResult[40]);
+                        } 
+                        #endregion
+
+                        GuestsList.Add(invitado);
+                    }
+                }
+                dtResult.Close();
+                fb.Close();
+                Preferences.Set("SYNC_VSU", true);
+                return GuestsList;
+            }
+            catch (Exception ea)
+            {
+                var x = ea.Message;
+                Preferences.Set("SYNC_VSU", false);
+                return null;
+            }
+        }        
+
+
+        // Retornar Reservaciones
+        public List<VW_RESERVA_VISITA> ExecuteReservations(string query)
+        {
+            try
+            {
+                List<VW_RESERVA_VISITA> ReservationsList = new List<VW_RESERVA_VISITA>();
+
+                FbConnection fb = new FbConnection(connectionString(true));
+
+                fb.Open();
+                FbCommand command = new FbCommand(
+                    query,
+                    fb);
+
+                var dtResult = command.ExecuteReader();
+
+                if (dtResult.HasRows)
+                {
+                    while (dtResult.Read())
+                    {
+                        VW_RESERVA_VISITA reservation = new VW_RESERVA_VISITA();
+
+                        if (dtResult[0] != System.DBNull.Value)
+                        {
+                            reservation.VISITA_ID = Convert.ToInt32(dtResult[0]);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                        if (dtResult[1] != System.DBNull.Value)
+                        {
+                            reservation.VISITAS_VISITA_A_ID = Convert.ToInt32(dtResult[1]);
+                        }
+                        if (dtResult[2] != System.DBNull.Value)
+                        {
+                            reservation.VISITAS_DOCUMENTO = dtResult[2].ToString();
+                        }
+                        if (dtResult[3] != System.DBNull.Value)
+                        {
+                            reservation.VISITAS_NOMBRE_COMPLETO = dtResult[3].ToString();
+                        }
+                        if (dtResult[4] != System.DBNull.Value)
+                        {
+                            reservation.VISITAS_FECHA_VISITA_DESDE = Convert.ToDateTime(dtResult[4]);
+                        }
+                        if (dtResult[5] != System.DBNull.Value)
+                        {
+                            reservation.VISITAS_FECHA_VISITA_HASTA = Convert.ToDateTime(dtResult[5]);
+                        }
+                        if (dtResult[6] != System.DBNull.Value)
+                        {
+                            reservation.EMPRESAS_NOMBRE = dtResult[6].ToString();
+                        }
+                        if (dtResult[7] != System.DBNull.Value)
+                        {
+                            reservation.VISITAS_FECHA_RESERVA = Convert.ToDateTime(dtResult[7]);
+                        }
+                        if (dtResult[8] != System.DBNull.Value)
+                        {
+                            reservation.VISITAS_DEPARTAMENTO_ID = Convert.ToInt32(dtResult[8]);
+                        }
+                        if (dtResult[9] != System.DBNull.Value)
+                        {
+                            reservation.DEPARTAMENTO_NOMBRE = dtResult[9].ToString();
+                        }
+                        ReservationsList.Add(reservation);
+                    }
+                }
+                dtResult.Close();
+                fb.Close();
+                Preferences.Set("SYNC_VSU", true);
+                return ReservationsList;
+            }
+            catch (Exception ea)
+            {
+                var x = ea.Message;
+                Preferences.Set("SYNC_VSU", false);
+                return null;
+            }
+        }
+
+
+        // Retornar Companias
+        public List<COMPANIAS> ExecuteCompanies(string query)
+        {
+            try
+            {
+                List<COMPANIAS> CompaniesList = new List<COMPANIAS>();
+
+                FbConnection fb = new FbConnection(connectionString(true));
+
+                fb.Open();
+                FbCommand command = new FbCommand(
+                    query,
+                    fb);
+
+                var dtResult = command.ExecuteReader();
+
+                if (dtResult.HasRows)
+                {
+                    while (dtResult.Read())
+                    {
+                        COMPANIAS company = new COMPANIAS();
+                        company.COMPANIA_ID = Convert.ToInt32(dtResult[0]);
+                        if (dtResult[1] != System.DBNull.Value)
+                        {
+                            company.NOMBRE = dtResult[1].ToString();
+                        }
+                        if (dtResult[2] != System.DBNull.Value)
+                        {
+                            company.PUNTO_VSU = Convert.ToInt32(dtResult[2]);
+                        }                     
+
+                        CompaniesList.Add(company);
+                    }
+                }
+                dtResult.Close();
+                fb.Close();
+                Preferences.Set("SYNC_VSU", true);
+                return CompaniesList;
+            }
+            catch (Exception ea)
+            {
+                var x = ea.Message;
+                Preferences.Set("SYNC_VSU", false);
+                return null;
+            }
+        }
+
+
+        // Retornar Personas
+        public List<PERSONAS> ExecutePeople(string query)
+        {
+            try
+            {
+                List<PERSONAS> PeopleList = new List<PERSONAS>();
+
+                FbConnection fb = new FbConnection(connectionString(true));
+
+                fb.Open();
+                FbCommand command = new FbCommand(
+                    query,
+                    fb);
+
+                var dtResult = command.ExecuteReader();
+
+                if (dtResult.HasRows)
+                {
+                    while (dtResult.Read())
+                    {
+                        PERSONAS person = new PERSONAS();
+                        if (dtResult[0] != System.DBNull.Value)
+                        {
+                            person.PERSONA_ID = Convert.ToInt32(dtResult[0]);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                        if (dtResult[1] != System.DBNull.Value)
+                        {
+                            person.NOMBRES_APELLIDOS = dtResult[1].ToString();
+                        }
+
+                        PeopleList.Add(person);
+                    }
+                }
+                dtResult.Close();
+                fb.Close();
+                Preferences.Set("SYNC_VSU", true);
+                return PeopleList;
+            }
+            catch (Exception ea)
+            {
+                var x = ea.Message;
+                Preferences.Set("SYNC_VSU", false);
+                return null;
+            }
+        }
+
+
+        // Retornar el Connection String
         public string connectionString(bool db)
         {
             if (db)
@@ -129,41 +512,42 @@ namespace SCVMobil.Connections
                     var visitasASubir = db.Query<Invitados>("SELECT * FROM Invitados where SUBIDA is null");
 
                     // Iterar la lista de visitasASubir
-                    foreach (Invitados registro in visitasASubir)
-                    {
-                        #region Variables
+                 foreach (Invitados registro in visitasASubir)
+                 {
+                       #region Variables
                         string visitado;
                         string fechaSalida;
                         string placa;
                         string queryInv;
                         #endregion
 
-                        if (registro.Visitado is null)
-                        {
+                       if (registro.Visitado is null)
+                       {
                             visitado = "null";
-                        }
-                        else
-                        {
-                            visitado = registro.Visitado.ToString();
-                        }
-                        if (registro.Fecha_Salida is null)
-                        {
+                       }
+                       else
+                       {
+                          visitado = registro.Visitado.ToString();
+                       }
+                       if (registro.Fecha_Salida is null)
+                       {
                             fechaSalida = "null";
-                        }
-                        else
-                        {
+                       }
+                       else
+                       {
                             fechaSalida = $"'{registro.Fecha_Salida.ToString()}'";
-                        }
-                        if (registro.Placa is null)
-                        {
+                       }
+                       if (registro.Placa is null)
+                       {
                             placa = "null";
-                        }
-                        else
-                        {
-                            placa = $"'{registro.Placa.ToString()}'";
-                        }
+                       }
+                       else
+                       {
+                           placa = $"'{registro.Placa.ToString()}'";
+                       }
 
-                        queryInv = "SELECT IN_INVIDATO_ID as anyCount FROM INSERTAR_VISITAS(" +
+                    #region Query Invitado
+                    queryInv = "SELECT IN_INVIDATO_ID as anyCount FROM INSERTAR_VISITAS(" +
                             $"{registro.Compania_ID.ToString()}, " +
                             $"'{registro.Nombres}', " +
                             $"'{ registro.Apellidos}', " +
@@ -196,17 +580,13 @@ namespace SCVMobil.Connections
                             $" {Util.CoalesceStr(registro.Visitado, "null")}" +
                             $", {registro.Lector.ToString()}" +
                             $", {Util.CoalesceStr(fechaSalida, "null")})";
+                    #endregion
 
-                        var dtResult = Execute(queryInv);
+                    var dtResult = ExecuteScalar(queryInv);
 
 
                     if (Preferences.Get("SYNC_VSU",false))
-                    {
-                        ///Insertar visitantes
-                        //string _AnyCount = "";
-                        //int invitadoID = 0;
-
-                        
+                    {                      
 
                         if (!string.IsNullOrEmpty(dtResult))
                         {
@@ -238,9 +618,7 @@ namespace SCVMobil.Connections
                         db.UpdateAll(visitasASubir);
                     }
 
-                    }
-                    
-                
+                 }           
             }
             catch (Exception)
             {
@@ -257,8 +635,6 @@ namespace SCVMobil.Connections
 
             // Cargar Invitados con reservas a visitasASubir2
             var visitasASubir2 = db.Query<InvitadosReservas>("SELECT * FROM InvitadosReservas where SUBIDA is null");
-
-            string url = $"http://{Preferences.Get("REGISTROS_IP", "192.168.1.103")}:{Preferences.Get("REGISTROS_PORT", "4440")}/?sql=";
             Debug.WriteLine("There are: " + visitasASubir2.Count.ToString() + " To upload");
 
             //Iterar el arreglo visitas con reservas
@@ -294,6 +670,7 @@ namespace SCVMobil.Connections
                     placa2 = "'" + registro2.Placa.ToString() + "'";
                 }
 
+                #region string de la variable queryInv
                 queryInv2 = "SELECT IN_INVIDATO_ID as anyCount FROM INSERTAR_VISITAS(" +
                     "" + registro2.Compania_ID.ToString() + ", " +
                     "'" + registro2.Nombres + "', " +
@@ -327,15 +704,15 @@ namespace SCVMobil.Connections
                     $"{visitado2}, " +
                     $"{registro2.Lector.ToString()}, " +
                     $"{fechaSalida2})";
+                #endregion
 
-                var content = _client.GetStringAsync(url + queryInv2);
-                Debug.WriteLine("Waiting for: " + url + queryInv2);
-                content.Wait();
+                var content = ExecuteScalar(queryInv2);
 
-                if (content.IsCompleted & content.Result.Contains("ANYCOUNT"))
+
+                if (string.IsNullOrEmpty(content))
                 {
-                    var respuesta = JsonConvert.DeserializeObject<List<counterObj>>(content.Result);
-                    registro2.INVIDATO_ID = respuesta.First().anyCount;
+                    
+                    registro2.INVIDATO_ID = Convert.ToInt32(content);
                     registro2.Subida = true;
                     if (!(registro2.Fecha_Salida is null))
                     {
@@ -352,40 +729,35 @@ namespace SCVMobil.Connections
                     }
                     try
                     {
-                        Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: " + content.Result);
-                        Debug.WriteLine("Error de SQL: " + content.Result);
+                        Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: ");
+                        Debug.WriteLine("Error de SQL: ");
                     }
                     catch
                     {
                         //No Hacer Nada
                     }
                 }
-
-
             }
             db.UpdateAll(visitasASubir2);
-
         }
 
 
         //// Subir Verificaciones 
         public void UploadVerifications()
         {
-            string url = $"http://{Preferences.Get("REGISTROS_IP", "192.168.1.158") }:{Preferences.Get("REGISTROS_PORT", "4441")}/?sql=";
             var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
             var verificarASubir = db.Query<Invitados>("SELECT * FROM Invitados where VERIFICACIONSUBIDA is null and Fecha_Verificacion is not null and SUBIDA is not null");
             foreach (Invitados registro in verificarASubir)
             {
-                var querryVer = "SELECT * FROM SP_DAR_VERIFICACION(" + registro.INVIDATO_ID.ToString() + ", " + registro.Puerta_Registro.ToString() + ", '" +
+                var queryVer = "SELECT * FROM SP_DAR_VERIFICACION(" + registro.INVIDATO_ID.ToString() + ", " + registro.Puerta_Registro.ToString() + ", '" +
                 registro.Fecha_Verificacion.ToString() + "')";
 
 
-                var content = _client.GetStringAsync(url + querryVer);
-                Debug.WriteLine("Waiting for: " + url + querryVer);
-                content.Wait();
+                var content = ExecuteScalar(queryVer);
+                Debug.WriteLine("Waiting for: " + queryVer);
 
-                if (content.IsCompleted & content.Result.Contains("OK_ACK"))
+                if (string.IsNullOrEmpty(content))
                 {
                     registro.verificacionSubida = true;
                     Debug.WriteLine("Verificacion subida: ID" + registro.INVIDATO_ID.ToString() + " " + registro.Fecha_Verificacion.ToString());
@@ -395,8 +767,8 @@ namespace SCVMobil.Connections
                     registro.verificacionSubida = null;
                     try
                     {
-                        Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: " + content.Result);
-                        Debug.WriteLine("Error de SQL: " + content.Result);
+                        Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: ");
+                        Debug.WriteLine("Error de SQL: ");
                     }
                     catch
                     {
@@ -410,7 +782,6 @@ namespace SCVMobil.Connections
         //// Subir Salidas
         public void UploadOut()
         {
-            string url = $"http://{Preferences.Get("REGISTROS_IP", "192.168.1.103")}:{Preferences.Get("REGISTROS_PORT", "4440")}/?sql=";
             var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
             var salidasASubir = db.Query<Invitados>("SELECT * FROM Invitados where SALIDASUBIDA is null and FECHA_SALIDA is not null and SUBIDA is not null");
 
@@ -419,11 +790,10 @@ namespace SCVMobil.Connections
                 var querrySal = "SELECT * FROM SP_DAR_SALIDA(" + registro.INVIDATO_ID.ToString() + ", '" + registro.Fecha_Salida.ToString() + "', " +
                 Preferences.Get("LECTOR", "1") + ")";
 
-                var content = _client.GetStringAsync(url + querrySal);
-                Debug.WriteLine("Waiting for: " + url + querrySal);
-                content.Wait();
+                var content = ExecuteScalar(querrySal);
+                Debug.WriteLine("Waiting for: "  + querrySal);
 
-                if (content.IsCompleted & content.Result.Contains("OK_ACK"))
+                if (string.IsNullOrEmpty(content))
                 {
                     registro.salidaSubida = true;
                     Debug.WriteLine("Salida subida: ID" + registro.INVIDATO_ID.ToString() + " " + registro.Fecha_Salida.ToString());
@@ -433,8 +803,8 @@ namespace SCVMobil.Connections
                     registro.salidaSubida = null;
                     try
                     {
-                        Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: " + content.Result);
-                        Debug.WriteLine("Error de SQL: " + content.Result);
+                        Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: ");
+                        Debug.WriteLine("Error de SQL: ");
                     }
                     catch
                     {
@@ -448,7 +818,6 @@ namespace SCVMobil.Connections
         //// Subir Salidas desconocidas
         public void UploadUnknownOuts()
         {
-            string url = $"http://{Preferences.Get("REGISTROS_IP", "192.168.1.103")}:{Preferences.Get("REGISTROS_PORT", "4440")}/?sql=";
             var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
             var salidasOFF = db.Query<SalidaOffline>("SELECT * FROM SalidaOffline where SUBIDA is null");
 
@@ -457,10 +826,10 @@ namespace SCVMobil.Connections
                 var querrySalOFF = "SELECT * FROM SP_DAR_SALIDA(" + registros.INVIDATO_ID + ", '" + registros.Fecha_Salida + "', " +
                 Preferences.Get("LECTOR", "1") + ")";
 
-                var content = _client.GetStringAsync(url + querrySalOFF);
-                Debug.WriteLine("Waiting for: " + url + querrySalOFF);
-                content.Wait();
-                if (content.IsCompleted & content.Result.Contains("OK_ACK"))
+                var content = ExecuteScalar(querrySalOFF);
+                Debug.WriteLine("Waiting for: " + querrySalOFF);
+
+                if (string.IsNullOrEmpty(content))
                 {
                     registros.Subida = true;
                     Debug.WriteLine("Salida subida: ID" + registros.INVIDATO_ID.ToString() + " " + registros.Fecha_Salida.ToString());
@@ -470,8 +839,8 @@ namespace SCVMobil.Connections
                     registros.Subida = null;
                     try
                     {
-                        Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: " + content.Result);
-                        Debug.WriteLine("Error de SQL: " + content.Result);
+                        Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: ");
+                        Debug.WriteLine("Error de SQL: ");
                     }
                     catch
                     {
@@ -487,26 +856,27 @@ namespace SCVMobil.Connections
         public void DownloadReservations()
         {
             var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-            string url = $"http://{Preferences.Get("REGISTROS_IP", "192.168.1.103")}:{Preferences.Get("REGISTROS_PORT", "4440")}/?sql=";
-            string querry = "SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " VISITA_ID,VISITAS_VISITA_A_ID, VISITAS_DOCUMENTO" +
+
+            #region string que contiene el Query
+            string query = "SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " VISITA_ID,VISITAS_VISITA_A_ID, VISITAS_DOCUMENTO" +
                         ", VISITAS_NOMBRE_COMPLETO, CAST(VISITAS_FECHA_VISITA_DESDE as VARCHAR(25)) as VISITAS_FECHA_VISITA_DESDE" +
                         ", CAST(VISITAS_FECHA_VISITA_HASTA as VARCHAR(25)) as VISITAS_FECHA_VISITA_HASTA, EMPRESAS_NOMBRE" +
                         ", CAST(VISITAS_FECHA_RESERVA as VARCHAR(25)) as VISITAS_FECHA_RESERVA, " + " VISITAS_DEPARTAMENTO_ID, " + "DEPARTAMENTO_NOMBRE " +
                         "FROM vw_reserva_visita where VISITA_ID > " + Preferences.Get("MAX_RESERVA_ID", "0") + " ORDER BY VISITA_ID desc";
-            var contentRes = _client.GetStringAsync(url + querry);
-            contentRes.Wait();
+            #endregion
 
-            if (contentRes.IsCompleted)
+            var ListaReservaciones = ExecuteReservations(query);
+
+            if (ListaReservaciones != null)
             {
-                var listReserva = JsonConvert.DeserializeObject<List<VW_RESERVA_VISITA>>(contentRes.Result).ToList();
 
                 try
                 {
-                    if (listReserva.Any())
+                    if (ListaReservaciones.Any())
                     {
-                        db.InsertAll(listReserva);
-                        Debug.WriteLine("MAX_RESERVA_ID: " + listReserva.First().VISITA_ID.ToString());
-                        Preferences.Set("MAX_RESERVA_ID", listReserva.First().VISITA_ID.ToString());
+                        db.InsertAll(ListaReservaciones);
+                        Debug.WriteLine("MAX_RESERVA_ID: " + ListaReservaciones.First().VISITA_ID.ToString());
+                        Preferences.Set("MAX_RESERVA_ID", ListaReservaciones.First().VISITA_ID.ToString());
                         Debug.WriteLine("Reservas Descargadas: " + DateTime.Now);
                     }
                 }
@@ -526,8 +896,8 @@ namespace SCVMobil.Connections
             {
                 try
                 {
-                    Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: " + contentRes.Result);
-                    Debug.WriteLine("Error de SQL: " + contentRes.Result);
+                    Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: ");
+                    Debug.WriteLine("Error de SQL: ");
                 }
                 catch
                 {
@@ -541,29 +911,28 @@ namespace SCVMobil.Connections
         public void DownloadCompanies()
         {
             var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-            string url = $"http://{Preferences.Get("REGISTROS_IP", "192.168.1.103")}:{Preferences.Get("REGISTROS_PORT", "4440")}/?sql=";
-            string querryCompanias = " SELECT FIRST "
+            
+            string queryCompanias = " SELECT FIRST "
                                                + Preferences.Get("CHUNK_SIZE", "10000")
-                                               + " COMPANIA_ID, NOMBRE  FROM COMPANIAS where COMPANIA_ID > "
+                                               + " COMPANIA_ID, NOMBRE, PUNTO_VSU  FROM COMPANIAS where COMPANIA_ID > "
                                                + Preferences.Get("MAX_COMPANIA_ID", "0")
                                                + " ORDER BY COMPANIA_ID desc";
-            var contentRes = _client.GetStringAsync(url + querryCompanias);
 
-            var contentCompanias = _client.GetStringAsync(url + querryCompanias);
-            contentCompanias.Wait();
+            var ListaCompanias = ExecuteCompanies(queryCompanias);
+            
             var stlRegistros = new List<string>();
             var stRegisros = "";
-            if (contentCompanias.IsCompleted)
+            if (ListaCompanias != null)
             {
-                var listCompanias = JsonConvert.DeserializeObject<List<COMPANIAS>>(contentCompanias.Result).ToList();
+                
 
                 try
                 {
-                    if (listCompanias.Any())
+                    if (ListaCompanias.Any())
                     {
-                        db.InsertAll(listCompanias);
-                        Debug.WriteLine("MAX_COMPANIA_ID: " + listCompanias.First().COMPANIA_ID.ToString());
-                        Preferences.Set("MAX_COMPANIA_ID", listCompanias.First().COMPANIA_ID.ToString());
+                        db.InsertAll(ListaCompanias);
+                        Debug.WriteLine("MAX_COMPANIA_ID: " + ListaCompanias.First().COMPANIA_ID.ToString());
+                        Preferences.Set("MAX_COMPANIA_ID", ListaCompanias.First().COMPANIA_ID.ToString());
                         Debug.WriteLine("Companias Descargadas: " + DateTime.Now);
                         string sortNames = "select nombre from companias order by nombre";
                         var Sorting = db.Query<COMPANIAS>(sortNames);
@@ -594,8 +963,8 @@ namespace SCVMobil.Connections
             {
                 try
                 {
-                    Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: " + contentCompanias.Result);
-                    Debug.WriteLine("Error de SQL: " + contentCompanias.Result);
+                    Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: ");
+                    Debug.WriteLine("Error de SQL: ");
                 }
                 catch
                 {
@@ -609,24 +978,23 @@ namespace SCVMobil.Connections
         public void DownloadPeople_Destination()
         {
             var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-            string url = $"http://{Preferences.Get("REGISTROS_IP", "192.168.1.103")}:{Preferences.Get("REGISTROS_PORT", "4440")}/?sql=";
+            
             var stlRegistros2 = new List<string>();
             var stRegisros2 = "";
-            string querryPersonas = " SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " PERSONA_ID, NOMBRES_APELLIDOS FROM PERSONAS where TIPO=1 AND PERSONA_ID > " + Preferences.Get("MAX_PERSONA_ID", "0") + " ORDER BY PERSONA_ID desc";
-            var contentPersonas = _client.GetStringAsync(url + querryPersonas);
+            string queryPersonas = " SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " PERSONA_ID, NOMBRES_APELLIDOS FROM PERSONAS where TIPO=1 AND PERSONA_ID > " + Preferences.Get("MAX_PERSONA_ID", "0") + " ORDER BY PERSONA_ID desc";
+            var ListaPersonas = ExecutePeople(queryPersonas);
 
-            contentPersonas.Wait();
-            if (contentPersonas.IsCompleted)
-            {
-                var listPersonas = JsonConvert.DeserializeObject<List<PERSONAS>>(contentPersonas.Result).ToList();
+
+            if (ListaPersonas != null)
+            { 
 
                 try
                 {
-                    if (listPersonas.Any())
+                    if (ListaPersonas.Any())
                     {
-                        db.InsertAll(listPersonas);
-                        Debug.WriteLine("MAX_PERSONA_ID: " + listPersonas.First().PERSONA_ID.ToString());
-                        Preferences.Set("MAX_PERSONA_ID", listPersonas.First().PERSONA_ID.ToString());
+                        db.InsertAll(ListaPersonas);
+                        Debug.WriteLine("MAX_PERSONA_ID: " + ListaPersonas.First().PERSONA_ID.ToString());
+                        Preferences.Set("MAX_PERSONA_ID", ListaPersonas.First().PERSONA_ID.ToString());
                         Debug.WriteLine("Personas Descargadas: " + DateTime.Now);
 
                         string sortPersons = "select nombres_apellidos from personas order by nombres_apellidos";
@@ -663,8 +1031,8 @@ namespace SCVMobil.Connections
             {
                 try
                 {
-                    Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: " + contentPersonas.Result);
-                    Debug.WriteLine("Error de SQL: " + contentPersonas.Result);
+                    Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: ");
+                    Debug.WriteLine("Error de SQL: ");
                 }
                 catch
                 {
@@ -677,15 +1045,10 @@ namespace SCVMobil.Connections
         //// Descargar Invitados
         public void DownloadGuests()
         {
-            string querry = "SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " VISITA_ID,VISITAS_VISITA_A_ID, VISITAS_DOCUMENTO" +
-                        ", VISITAS_NOMBRE_COMPLETO, CAST(VISITAS_FECHA_VISITA_DESDE as VARCHAR(25)) as VISITAS_FECHA_VISITA_DESDE" +
-                        ", CAST(VISITAS_FECHA_VISITA_HASTA as VARCHAR(25)) as VISITAS_FECHA_VISITA_HASTA, EMPRESAS_NOMBRE" +
-                        ", CAST(VISITAS_FECHA_RESERVA as VARCHAR(25)) as VISITAS_FECHA_RESERVA, " + " VISITAS_DEPARTAMENTO_ID, " + "DEPARTAMENTO_NOMBRE " +
-                        "FROM vw_reserva_visita where VISITA_ID > " + Preferences.Get("MAX_RESERVA_ID", "0") + " ORDER BY VISITA_ID desc";
+            
             var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-            string url = $"http://{Preferences.Get("REGISTROS_IP", "192.168.1.103")}:{Preferences.Get("REGISTROS_PORT", "4440")}/?sql=";
-            var contentRes = _client.GetStringAsync(url + querry);
-            string querryDownInv = $"SELECT FIRST {Preferences.Get("CHUNK_SIZE", "10000")} I1.INVIDATO_ID, 1 AS SUBIDA, IIF(I1.FECHA_SALIDA IS NULL, 0, 1) AS SALIDASUBIDA, I1.COMPANIA_ID" +
+            
+            string queryDownInv = $"SELECT FIRST {Preferences.Get("CHUNK_SIZE", "10000")} I1.INVIDATO_ID, 1 AS SUBIDA, IIF(I1.FECHA_SALIDA IS NULL, 0, 1) AS SALIDASUBIDA, I1.COMPANIA_ID" +
                         ", I1.NOMBRES, I1.APELLIDOS, I1.FECHA_REGISTRO, I1.FECHA_SALIDA, I1.TIPO, I1.CARGO, I1.TIENE_ACTIVO, I1.ESTATUS_ID, I1.MODULO" +
                         ", I1.EMPRESA_ID, I1.PLACA, I1.TIPO_VISITANTE, I1.ES_GRUPO, I1.GRUPO_ID, I1.PUERTA_ENTRADA, I1.ACTUALIZADA_LA_SALIDA" +
                         ", COALESCE(I1.HORAS_CADUCIDAD,0) AS HORAS_CADUCIDAD, I1.PERSONAS, I1.IN_OUT, I1.ORIGEN_ENTRADA, I1.ORIGEN_SALIDA, I1.COMENTARIO, COALESCE(I1.ORIGEN_IO,0) AS ORIGEN_IO, I1.ACTUALIZADO" +
@@ -693,20 +1056,22 @@ namespace SCVMobil.Connections
                         ", COALESCE(I1.LECTOR, 0) AS LECTOR FROM INVITADOS I1 INNER JOIN(SELECT MAX(I2.INVIDATO_ID) AS INVIDATO_ID FROM INVITADOS I2" +
                         $" WHERE INVIDATO_ID > {Preferences.Get("MAX_INVIDATO_ID", "0")} AND COALESCE(LECTOR, 0) <> {Preferences.Get("LECTOR", "1")} " +
                         "GROUP BY I2.CARGO) I3 ON I1.invidato_id = I3.INVIDATO_ID ORDER BY I1.INVIDATO_ID DESC";
-            var contentDownInv = _client.GetStringAsync(url + querryDownInv);
-            contentDownInv.Wait();
-            if (contentDownInv.IsCompleted)
+            
+            
+            var contentDownInv = ExecuteGuest(queryDownInv);
+
+
+            if (contentDownInv != null)
             {
-                var listInvitados = JsonConvert.DeserializeObject<List<Invitados>>(contentDownInv.Result).ToList();
 
                 try
                 {
-                    if (listInvitados.Any())
+                    if (contentDownInv.Any())
                     {
-                        Debug.WriteLine("Se va a descargar: " + listInvitados.Count().ToString() + " Visitas");
-                        db.InsertAll(listInvitados);
-                        Debug.WriteLine("MAX_INVIDATO_ID: " + listInvitados.First().INVIDATO_ID.ToString());
-                        Preferences.Set("MAX_INVIDATO_ID", listInvitados.First().INVIDATO_ID.ToString());
+                        Debug.WriteLine("Se va a descargar: " + contentDownInv.Count().ToString() + " Visitas");
+                        db.InsertAll(contentDownInv);
+                        Debug.WriteLine("MAX_INVIDATO_ID: " + contentDownInv.First().INVIDATO_ID.ToString());
+                        Preferences.Set("MAX_INVIDATO_ID", contentDownInv.First().INVIDATO_ID.ToString());
                         Debug.WriteLine("Visitas Descargadas: " + DateTime.Now);
                     }
                 }
@@ -726,8 +1091,8 @@ namespace SCVMobil.Connections
             {
                 try
                 {
-                    Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: " + contentRes.Result);
-                    Debug.WriteLine("Error de SQL: " + contentRes.Result);
+                    Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: ");
+                    Debug.WriteLine("Error de SQL: ");
                 }
                 catch
                 {
@@ -743,21 +1108,20 @@ namespace SCVMobil.Connections
         public void DownloadOuts()
         {
             var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-            string url = $"http://{Preferences.Get("REGISTROS_IP", "192.168.1.103")}:{Preferences.Get("REGISTROS_PORT", "4440")}/?sql=";
             var maxInvidatoIdLocal = db.Query<counterObj>("SELECT MAX(INVIDATO_ID) as anycount FROM Invitados");
-            var querryDownSal = "SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " INVIDATO_ID, 1 as SUBIDA, 1 as SALIDASUBIDA, COMPANIA_ID, NOMBRES, APELLIDOS, " +
+
+            var queryDownSal = "SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " INVIDATO_ID, 1 as SUBIDA, 1 as SALIDASUBIDA, COMPANIA_ID, NOMBRES, APELLIDOS, " +
             "FECHA_REGISTRO, FECHA_SALIDA, TIPO, CARGO, TIENE_ACTIVO, ESTATUS_ID, MODULO, EMPRESA_ID, PLACA, TIPO_VISITANTE, ES_GRUPO, GRUPO_ID, " +
             "PUERTA_ENTRADA, ACTUALIZADA_LA_SALIDA, HORAS_CADUCIDAD, PERSONAS, IN_OUT, ORIGEN_ENTRADA, ORIGEN_SALIDA, COMENTARIO, ORIGEN_IO, " +
             "ACTUALIZADO, CPOST, TEXTO1_ENTRADA, TEXTO2_ENTRADA, TEXTO3_ENTRADA, SECUENCIA_DIA, NO_APLICA_INDUCCION, VISITADO, COALESCE(LECTOR, 0) AS LECTOR, SALIDA_ID " +
             "FROM INVITADOS WHERE SALIDA_ID > " + Preferences.Get("MAX_SALIDA_ID", "0") + " AND INVIDATO_ID <= " + maxInvidatoIdLocal.First().anyCount.ToString() +
             " AND SALIDA_ID IS NOT NULL AND COALESCE(LECTOR_SALIDA,0) <> " + Preferences.Get("LECTOR", "1") +
             " ORDER BY SALIDA_ID DESC";
-            var contentDownSal = _client.GetStringAsync(url + querryDownSal);
-            contentDownSal.Wait();
+            
+            var listSalidas = ExecuteGuest(queryDownSal);
 
-            if (contentDownSal.IsCompleted)
+            if (listSalidas != null)
             {
-                var listSalidas = JsonConvert.DeserializeObject<List<Invitados>>(contentDownSal.Result);
 
                 try
                 {
