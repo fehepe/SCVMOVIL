@@ -46,7 +46,7 @@ namespace SCVMobil
         {
             base.OnAppearing();
             setDefaults();
-            eServerIP.Text = Preferences.Get("SERVER_IP", "192.168.1.103");
+            eServerIP.Text = Preferences.Get("SERVER_IP", "192.168.1.170");
             
             eLector.Text = Preferences.Get("LECTOR", "1");
             entChunkSize.Text = Preferences.Get("CHUNK_SIZE", "50000");
@@ -64,7 +64,7 @@ namespace SCVMobil
         {
             if(Preferences.Get("SERVER_IP", "N/A") == "N/A")
             {
-                Preferences.Set("SERVER_IP", "192.168.1.103");
+                Preferences.Set("SERVER_IP", "192.168.1.170");
             }
             
 
@@ -152,6 +152,7 @@ namespace SCVMobil
                             reader.Close();
 
                             fb.Close();
+                            fb.Dispose();
 
                             break;
                         }
