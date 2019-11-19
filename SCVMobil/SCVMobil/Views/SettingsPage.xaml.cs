@@ -19,6 +19,7 @@ using FirebirdSql.Data.FirebirdClient;
 using Rg.Plugins.Popup.Services;
 using System.Net.NetworkInformation;
 using SCVMobil.Models;
+using SCVMobil.Connections;
 
 namespace SCVMobil
 {
@@ -34,7 +35,7 @@ namespace SCVMobil
         // This handles the Web data request
         private HttpClient _client = new HttpClient();
         private HttpClient _client2 = new HttpClient();
-        private string Url = "";
+        private FireBirdData fireBird  = new FireBirdData();
 
         public SettingsPage()
         {
@@ -66,8 +67,6 @@ namespace SCVMobil
             {
                 Preferences.Set("SERVER_IP", "192.168.1.170");
             }
-            
-
         }
 
        
@@ -109,9 +108,7 @@ namespace SCVMobil
                     Debug.WriteLine("Setting timeout to 20 min");
 
                     string querry = "";
-                    string connectionString = "User ID=sysdba;Password=masterkey;" +
-                           "Database=C:\\APP\\GAD\\datos_214.fdb;" +
-                           $"DataSource={Preferences.Get("SERVER_IP", "localhost")};Port=3050;Charset=NONE;Server Type=0;";
+                    string connectionString = fireBird.connectionString(false);
 
 
                     FbCommand cmd;
@@ -382,34 +379,40 @@ namespace SCVMobil
                     db.Close();
                 });
             }
-            catch
+            catch(Exception ea)
             {
-                //TODO: Handle exeption
+                Debug.WriteLine("Excepcion encontrada en el evento BtIni_Clicked: " + ea.Message);
             }
         }     
 
         private async void Guardar_Clicked(object sender, EventArgs e) //Boton para guardar configuracion//
-        { 
-           
-            Preferences.Set("SERVER_IP", eServerIP.Text);
-           
-            Preferences.Set("COMMIT_SIZE", eCommitSize.Text);
-            var x = Preferences.Get("COMMIT_SIZE", "1000000");
-            Preferences.Set("AUTO_SYNC", swAutoSync.ToString());
-            Preferences.Set("LECTOR", eLector.Text);
-            if (eLector.Text == "338")
-            {
-                Preferences.Set("DEV", "True");
-            }
-            else
-            {
-                Preferences.Set("DEV", "False");
-            }
+        {
 
-            await PopupNavigation.PushAsync(new PopUpGuardarConfig()); //PopUp para guardar la configuracion//
+            try
+            {
+                Preferences.Set("SERVER_IP", eServerIP.Text);
+
+                Preferences.Set("COMMIT_SIZE", eCommitSize.Text);
+                var x = Preferences.Get("COMMIT_SIZE", "1000000");
+                Preferences.Set("AUTO_SYNC", swAutoSync.ToString());
+                Preferences.Set("LECTOR", eLector.Text);
+                if (eLector.Text == "338")
+                {
+                    Preferences.Set("DEV", "True");
+                }
+                else
+                {
+                    Preferences.Set("DEV", "False");
+                }
+
+                await PopupNavigation.PushAsync(new PopUpGuardarConfig()); //PopUp para guardar la configuracion//
+            }
+            catch (Exception ea)
+            {
+                Debug.WriteLine("Excepcion al guardar: " + ea.Message);
+            }
             
         }
-
         
 
         private async void pinbutton_Clicked(object sender, EventArgs e)
@@ -424,9 +427,7 @@ namespace SCVMobil
 
                     try
                     {
-                        string connectionString = "User ID=sysdba;Password=masterkey;" +
-                                           "Database=C:\\APP\\GAD\\registros.fdb;" +
-                                           $"DataSource={eServerIP.Text};Port=3050;Charset=NONE;Server Type=0;";
+                        string connectionString = fireBird.connectionString(true);
 
                         FbConnection fb = new FbConnection(connectionString);
                         fb.Open();
@@ -435,9 +436,9 @@ namespace SCVMobil
                         fb.Close();
                         await PopupNavigation.PushAsync(new PopUpPing()); //popup conexion con exito//
                     }
-                    catch (Exception)
+                    catch (Exception ea)
                     {
-
+                        Debug.WriteLine("Exception al hacer ping: " + ea.Message);
                         await PopupNavigation.PushAsync(new PopUpPingIncorrecto()); //popup conexion erronea//
                     }
                 }
@@ -447,10 +448,9 @@ namespace SCVMobil
                 }
 
             }
-            catch (Exception)
+            catch (Exception ea)
             {
-
-                throw;
+                Debug.WriteLine("Excepcion al hacer Ping: " + ea.Message);
             }
 
         }

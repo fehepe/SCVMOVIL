@@ -8,10 +8,17 @@
              x:Class="SCVMobil.PopUpClaveIncorrecta">
     <StackLayout Margin="14" Padding="20" Spacing="10" BackgroundColor="White"  VerticalOptions="Center">
         <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Padding="0,0,0,10">
-            <Label FontAttributes="Bold" FontSize="30" TextColor="Black" Text="Contraseña incorrecta"/>
+            <Label FontAttributes="Bold" 
+                   FontSize="30" 
+                   TextColor="Black" 
+                   HorizontalTextAlignment="Center" 
+                   Text="Contraseña incorrecta"/>
         </StackLayout>
         <StackLayout HorizontalOptions="Center">
-            <Label FontSize="20" FontAttributes="Bold" TextColor="Black" HorizontalTextAlignment="Center" Text="Contraseña incorrecta, por favor ingrese la contraseña correcta"/>
+            <Label FontSize="20" 
+                   TextColor="Black" 
+                   HorizontalTextAlignment="Center" 
+                   Text="Inténtelo nuevamente"/>
         </StackLayout>
         <StackLayout Margin="12" Padding="20" Spacing="20"  >
             <Button BackgroundColor="#F44336"

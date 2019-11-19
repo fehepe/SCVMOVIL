@@ -6,22 +6,28 @@
              Title="Inicio" 
              BackgroundColor="#FFFFFF"            
              >
-  
-   
-        <ContentPage.ToolbarItems>
-            <ToolbarItem Text="Configuración"
-                         Order="Secondary"
-                         Clicked="ToolbarItem_Clicked"/>
-            
-        </ContentPage.ToolbarItems>
 
-                <StackLayout
-                  Padding="10"
-                  Orientation="Vertical"
-                    VerticalOptions="Start"
-                  >
-        <!--<BoxView Margin="0,50,10,10"/>-->
-            
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Configuración"
+                         Order="Secondary"
+                         Clicked="ToolbarItem_Clicked"
+        />
+
+    </ContentPage.ToolbarItems>
+    
+    <StackLayout Padding="10"
+                 Orientation="Vertical"
+                 VerticalOptions="Start">
+        <Image
+                    x:Name="imgSync"
+                    Source="wifi"
+                    WidthRequest="30"
+                    HorizontalOptions="End"></Image>
+        <Image
+                    x:Name="imgNoSync"
+                    Source="nowifi"
+                    WidthRequest="30"
+                    HorizontalOptions="End"></Image>
         <Label
             
             Text="Escanear Cédula"
@@ -29,24 +35,28 @@
             TextColor="Black"
             FontAttributes="Bold"
             HorizontalTextAlignment="Center"
-            Margin="0,180,0,0"/>
-                    <Frame
+            Margin="0,180,0,0"
+        />
+        
+        <Frame
             CornerRadius="15"
             BorderColor="#757575"            
             Padding="5">
-                        
-                        <Frame
+            
+            <Frame
               CornerRadius="15"             
               Padding="1">
-
-                            <Entry
+                
+                <Entry
                 x:Name="entCedula"
                 Completed="EntCedula_Completed"
                 Keyboard="Keyboard.Numeric" MaxLength="11"/>
-                        </Frame>
-                    </Frame>
+                
+            </Frame>
+            
+        </Frame>
         
-                <Label
+        <Label
             Text="Nombre:"
             FontSize="20"
             TextColor="Black"
@@ -54,60 +64,62 @@
              x:Name="lblNombres"
             HorizontalTextAlignment="Center"
             Margin="0,20,0,0"
-            IsVisible="False"/>
-                    <Label
-             FontSize="20"
-            TextColor="Blue"
-            FontAttributes="Bold"
-           
-            HorizontalTextAlignment="Center"
-            Margin="0,20,0,0"
-            
-            x:Name="entNombres"
             IsVisible="False"
-            />
-               
-               
-                
-               
-                <Label
-            Text="Apellido:"
-            FontSize="20"
-            TextColor="Black"
-            FontAttributes="Bold"
-            x:Name="lblApellidos"
-            HorizontalTextAlignment="Center"
-            Margin="0,20,0,0"
-            IsVisible="False"></Label>
-                    <Label
+        />
+        
+        <Label FontSize="20"
+               TextColor="Blue"
+               FontAttributes="Bold"
+               HorizontalTextAlignment="Center"
+               Margin="0,20,0,0"
+               x:Name="entNombres"
+               IsVisible="False"
+        />
+
+        <Label Text="Apellido:"
+               FontSize="20"
+               TextColor="Black"
+               FontAttributes="Bold"
+               x:Name="lblApellidos"
+               HorizontalTextAlignment="Center"
+               Margin="0,20,0,0"
+               IsVisible="False">
+
+        </Label>
+        
+        <Label
             FontSize="20"
             TextColor="Blue"
             FontAttributes="Bold"
-           
             HorizontalTextAlignment="Center"
             Margin="0,20,0,20"
-            
             x:Name="entApellidos"
-            IsVisible="False"/>
-                    <Label 
-                    
-                    Text="Version:"
-                    FontSize="Small"
-                    HorizontalOptions="Center"
-                    
-                    VerticalOptions="End"
-                    IsVisible="False">
+            IsVisible="False"
+        />
 
-                    </Label>
-      
+        <Label Text="Version:"
+               FontSize="Small"
+               HorizontalOptions="Center"     
+               VerticalOptions="End"
+               IsVisible="False">
+        </Label>
+
+
+        <Label VerticalOptions="End"
+               HorizontalOptions="Start"
+               Margin="0,170,0,0"
+               Text="Desarrollado por:"
+               TextColor="Black"
+        />
         
-        <Label VerticalOptions="End"  HorizontalOptions="Start"  Margin="0,130,0,0" Text="Desarrollado por:" />
-        <Image VerticalOptions="End" HorizontalOptions="Start"  Source="logo1024" WidthRequest="100" HeightRequest="100" Margin="0,0,0,0"/>
+        <Image VerticalOptions="End"
+               HorizontalOptions="Start"
+               Source="GAD_Logo"
+               WidthRequest="100"
+               HeightRequest="100"
+               Margin="0,0,0,0"
+        />
 
-       
     </StackLayout>     
-    
-
-    
-    </ContentPage>   
+</ContentPage>   
 
