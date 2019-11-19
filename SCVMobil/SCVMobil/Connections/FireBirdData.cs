@@ -552,7 +552,7 @@ namespace SCVMobil.Connections
         }
 
 
-        // Retornar lsta de Companias
+        // Retornar lista de Companias
         public List<COMPANIAS> ExecuteCompanies(string query)
         {
             try
@@ -573,6 +573,8 @@ namespace SCVMobil.Connections
                     while (dtResult.Read())
                     {
                         COMPANIAS company = new COMPANIAS();
+
+                        #region Verificar que los valores no sean nulos antes de la conversion
                         company.COMPANIA_ID = Convert.ToInt32(dtResult[0]);
                         if (dtResult[1] != System.DBNull.Value)
                         {
@@ -581,7 +583,8 @@ namespace SCVMobil.Connections
                         if (dtResult[2] != System.DBNull.Value)
                         {
                             company.PUNTO_VSU = Convert.ToInt32(dtResult[2]);
-                        }                     
+                        }      
+                        #endregion
 
                         CompaniesList.Add(company);
                     }
@@ -602,7 +605,7 @@ namespace SCVMobil.Connections
         }
 
 
-        // Retornar Personas
+        // Retornar lista de Personas
         public List<PERSONAS> ExecutePeople(string query)
         {
             try
@@ -622,6 +625,7 @@ namespace SCVMobil.Connections
                 {
                     while (dtResult.Read())
                     {
+                        #region Verificar que los valores no sean nulos antes de realizar la conversion de ser asi, asignar null
                         PERSONAS person = new PERSONAS();
                         if (dtResult[0] != System.DBNull.Value)
                         {
@@ -635,7 +639,7 @@ namespace SCVMobil.Connections
                         {
                             person.NOMBRES_APELLIDOS = dtResult[1].ToString();
                         }
-
+                        #endregion
                         PeopleList.Add(person);
                     }
                 }
