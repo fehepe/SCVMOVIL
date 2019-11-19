@@ -17,6 +17,7 @@
             
             <Label FontAttributes="Bold" 
                    TextColor="Black" 
+                   HorizontalTextAlignment="Center" 
                    FontSize="30" 
                    Text="Cédula no encontrada"/>           
         </StackLayout>

@@ -35,7 +35,7 @@ namespace SCVMobil
         // This handles the Web data request
         private HttpClient _client = new HttpClient();
         private HttpClient _client2 = new HttpClient();
-        private FireBirdData fireBird;
+        private FireBirdData fireBird  = new FireBirdData();
 
         public SettingsPage()
         {
@@ -436,9 +436,9 @@ namespace SCVMobil
                         fb.Close();
                         await PopupNavigation.PushAsync(new PopUpPing()); //popup conexion con exito//
                     }
-                    catch (Exception)
+                    catch (Exception ea)
                     {
-
+                        Debug.WriteLine("Exception al hacer ping: " + ea.Message);
                         await PopupNavigation.PushAsync(new PopUpPingIncorrecto()); //popup conexion erronea//
                     }
                 }

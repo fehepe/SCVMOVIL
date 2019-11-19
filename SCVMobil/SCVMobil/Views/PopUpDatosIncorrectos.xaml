@@ -6,14 +6,31 @@
              xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
              mc:Ignorable="d"
              x:Class="SCVMobil.PopUpDatosIncorrectos">
-    <StackLayout Margin="14" Padding="20" Spacing="10" BackgroundColor="White"  VerticalOptions="Center">
-        <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Padding="0,0,0,10">
-            <Label FontAttributes="Bold" FontSize="30" TextColor="Black" Text="Datos incorrectos"/>
+    <StackLayout Margin="14" 
+                 Padding="20" 
+                 Spacing="10" 
+                 BackgroundColor="White"  
+                 VerticalOptions="Center">
+        <StackLayout HorizontalOptions="Center" 
+                     VerticalOptions="Center" 
+                     Padding="0,0,0,10">
+            
+            <Label FontAttributes="Bold" 
+                   FontSize="30" 
+                   TextColor="Black" 
+                   Text="Datos incorrectos"/>
+            
         </StackLayout>
         <StackLayout HorizontalOptions="Center">
-            <Label FontSize="20" FontAttributes="Bold" HorizontalTextAlignment="Center" TextColor="Black" Text="Por favor, ingrese los datos correctamente"/>
+            <Label FontSize="20" 
+                   FontAttributes="Bold" 
+                   HorizontalTextAlignment="Center" 
+                   TextColor="Black" 
+                   Text="Por favor, ingrese los datos correctamente"/>
         </StackLayout>
-        <StackLayout Margin="12" Padding="20" Spacing="20"  >
+        <StackLayout Margin="12" 
+                     Padding="20" 
+                     Spacing="20"  >
             <Button BackgroundColor="#F44336"
                 x:Name="datosincorrectos"
                 FontSize="20"
