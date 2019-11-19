@@ -262,7 +262,8 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
-                var x = ea.Message;
+                Debug.WriteLine("Error en el metodo ExecuteScalar: " + ea.Message);
+                
                 Preferences.Set("SYNC_VSU", false);
                 return null;
             }
