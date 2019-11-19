@@ -6,20 +6,17 @@
             
              mc:Ignorable="d"
              x:Class="SCVMobil.SalidaPage"
-             BackgroundColor="#FFFFFF">
-    
+              BackgroundColor="#FFFFFF">
     <ContentPage.Content>
         <StackLayout
-            Padding="50">
-            
+            Padding="50"
+            >
             <Image Source="exit"/>
-            
             <Label Text="Esta persona aun no salido."
-                   VerticalOptions="CenterAndExpand" 
-                   TextColor="Black"
-                   HorizontalOptions="CenterAndExpand"
-                   FontSize="20"
-                   FontAttributes="Bold"/>
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand"
+                FontSize="20"
+                FontAttributes="Bold"/>
 
             <Button 
                 x:Name="btnSalida" 
