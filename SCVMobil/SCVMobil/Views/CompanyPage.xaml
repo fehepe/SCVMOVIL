@@ -110,10 +110,12 @@
                 </Label>
             <Frame 
                 CornerRadius="15" 
+                x:Name="FrameVisitaA"
                 BorderColor="#757575" 
                 Padding="5">
                 <Frame 
                     CornerRadius="10" 
+                    x:Name="FrameVisitaA2"
                     BackgroundColor="White" 
                     Padding="1">
                     <Picker
@@ -137,10 +139,12 @@
                 </Label>
             <Frame 
                 CornerRadius="15" 
+                x:Name="FramaPlaca"
                 BorderColor="#757575" 
                 Padding="5">
                 <Frame 
                     CornerRadius="10" 
+                    x:Name="FramePlaca2"
                     BackgroundColor="White" 
                     Padding="1">
                     <Entry

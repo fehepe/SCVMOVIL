@@ -434,6 +434,7 @@ namespace SCVMobil
 
 
                         fb.Close();
+                        Preferences.Set("SERVER_IP", eServerIP.Text);
                         await PopupNavigation.PushAsync(new PopUpPing()); //popup conexion con exito//
                     }
                     catch (Exception ea)

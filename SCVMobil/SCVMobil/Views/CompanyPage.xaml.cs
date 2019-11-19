@@ -53,11 +53,15 @@ namespace SCVMobil
 
             if(Preferences.Get("PLACA_SELECTED", true))
             {
+                FramaPlaca.IsVisible = true;
+                FramePlaca2.IsVisible = true;
                 lbPlaca.IsVisible = true;
                 entPlaca.IsVisible = true;
             }
             else
             {
+                FramaPlaca.IsVisible = false;
+                FramePlaca2.IsVisible = false;
                 lbPlaca.IsVisible = false;
                 entPlaca.IsVisible = false;
             }
@@ -66,12 +70,16 @@ namespace SCVMobil
 
             if (Preferences.Get("VISITA_A_SELECTED", true)) {
 
+                FrameVisitaA.IsVisible = true;
+                FrameVisitaA2.IsVisible = true;
                 lblvisitaA.IsVisible = true;
                 pickerVisitaA.IsVisible = true;
                 pickerVisitaA.ItemsSource = Preferences.Get("PERSONAS_LIST", "").Split(',').ToList<string>();
             }
             else
             {
+                FrameVisitaA.IsVisible = false;
+                FrameVisitaA2.IsVisible = false;
                 pickerVisitaA.IsVisible = false;
                 pickerVisitaA.ItemsSource = new List<string>();
                 lblvisitaA.IsVisible = false;
@@ -352,7 +360,7 @@ namespace SCVMobil
                         registroInvitados.Tipo_Visitante = "VISITANTE";
                         registroInvitados.Es_Grupo = 0;
                         registroInvitados.Grupo_ID = 0;
-                        registroInvitados.Puerta_Entrada = 1495;//TODO: Cambiar a parametro!
+                        registroInvitados.Puerta_Entrada = Convert.ToInt32(Preferences.Get("LOCALIDAD_VSU", "1495"));//TODO: Cambiar a parametro!
                         registroInvitados.Actualizada_La_Salida = 0;
                         registroInvitados.Horas_Caducidad = 12;
                         registroInvitados.Personas = 1;
@@ -390,8 +398,9 @@ namespace SCVMobil
                         registroInvitados.Placa = entPlaca.Text;
                         registroInvitados.Tipo_Visitante = "VISITANTE";
                         registroInvitados.Es_Grupo = 0;
-                        registroInvitados.Grupo_ID = 0;
-                        registroInvitados.Puerta_Entrada = 1495;
+                        //registroInvitados.Grupo_ID = 0;
+                        
+                        registroInvitados.Puerta_Entrada = Convert.ToInt32(Preferences.Get("LOCALIDAD_VSU", "1495"));
                         registroInvitados.Actualizada_La_Salida = 0;
                         registroInvitados.Horas_Caducidad = 12;
                         registroInvitados.Personas = 1;
@@ -445,7 +454,7 @@ namespace SCVMobil
                     registroInvitados.Tipo_Visitante = "VISITANTE";
                     registroInvitados.Es_Grupo = 0;
                     registroInvitados.Grupo_ID = 0;
-                    registroInvitados.Puerta_Entrada = 1495;
+                    registroInvitados.Puerta_Entrada = Convert.ToInt32(Preferences.Get("LOCALIDAD_VSU", "1495"));
                     registroInvitados.Actualizada_La_Salida = 0;
                     registroInvitados.Horas_Caducidad = 12;
                     registroInvitados.Personas = 1;
