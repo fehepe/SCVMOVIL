@@ -15,6 +15,8 @@ namespace SCVMobil
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AppSettingsPage : ContentPage
     {
+
+        List<int> num = new List<int>();
         public AppSettingsPage()
         {
             InitializeComponent();
@@ -31,6 +33,7 @@ namespace SCVMobil
             Localidad_VSU();
             visitaA.IsToggled = Preferences.Get("VISITA_A_SELECTED", true);
             placa.IsToggled= Preferences.Get("PLACA_SELECTED", true);
+            TiempoVerif.SelectedItem = Preferences.Get("TIEMPOS", "1");
         }
         public void setdefaults()
         {
@@ -44,13 +47,13 @@ namespace SCVMobil
                 Preferences.Set("VERIFICA", false);
                 verificacion.IsToggled = false;
                 lblTiempo.IsVisible = false;
-                entTiempo.IsVisible = false;
+                TiempoVerif.IsVisible = false;
             }
             else
             {
                 verificacion.IsToggled = true;
                 lblTiempo.IsVisible = true;
-                entTiempo.IsVisible = true;
+                TiempoVerif.IsVisible = true;
             }
             
             
@@ -150,17 +153,10 @@ namespace SCVMobil
             
         }
 
-        private void entTiempo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
+       
 
       
-        private void entTiempo_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
+       
         private void verificacion_Toggled(object sender, ToggledEventArgs e)
         {
             Preferences.Set("VERIFICA", e.Value);
@@ -169,13 +165,13 @@ namespace SCVMobil
                 Preferences.Set("VERIFICA", false);
                 verificacion.IsToggled = false;
                 lblTiempo.IsVisible = false;
-                entTiempo.IsVisible = false;
+                TiempoVerif.IsVisible = false;
             }
             else
             {
                 verificacion.IsToggled = true;
                 lblTiempo.IsVisible = true;
-                entTiempo.IsVisible = true;
+                TiempoVerif.IsVisible = true;
             }
         }
 
@@ -193,10 +189,16 @@ namespace SCVMobil
             }
             catch (Exception)
             {
-                
+
             }
-            
-           
+
+
+        }
+
+        private void TiempoVerif_SelectedIndexChanged(object sender, EventArgs e)
+        {
+             Preferences.Set("TIEMPOS", TiempoVerif.SelectedItem.ToString());                        
+
         }
     }
 }

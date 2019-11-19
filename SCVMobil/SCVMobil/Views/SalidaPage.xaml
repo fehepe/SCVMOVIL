@@ -11,7 +11,7 @@
         <StackLayout
             Padding="50"
             >
-            <Image Source="C:\Users\GAD Desarrollo\Documents\SCVMOVIL\SCVMobil\SCVMobil.Android\Resources\drawable\exit.png"/>
+            <Image Source="exit"/>
             <Label Text="Esta persona aun no salido."
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand"
