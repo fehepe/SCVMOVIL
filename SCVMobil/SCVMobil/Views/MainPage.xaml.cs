@@ -27,15 +27,14 @@ namespace SCVMobil
         public MainPage()//Constructor
         {
 
-            Device.StartTimer(TimeSpan.FromSeconds(1), () =>
+
+            Device.StartTimer(TimeSpan.FromSeconds(5), () =>
             {
-                if (Preferences.Get("AUTO_SYNC", "False") == "True")
-                {
+                
                     Device.BeginInvokeOnMainThread(() => refreshPage());
                     Debug.WriteLine("Refreshed");
-
-                }
                 return true;
+                
             });
           
             InitializeComponent();
