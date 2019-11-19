@@ -136,8 +136,10 @@ namespace SCVMobil
                     var querrys = "SELECT * FROM Invitados WHERE INVIDATO_ID= " + inString.Replace("ID", "") + " AND FECHA_SALIDA is null AND Fecha_Verificacion is null";
                     var registroInv = db.Query<Invitados>(querry);
                     var registroVer = db.Query<Invitados>(querrys);
-                    
-                    
+                       
+
+
+
                         if (registroVer.Any() && Preferences.Get("VERIFICA", false))
                         {
                             if (registroVer.First().Fecha_Verificacion is null)
@@ -151,25 +153,33 @@ namespace SCVMobil
                             }
 
 
-                            else if ((registroVer.First().Fecha_Verificacion.Value.Date - DateTime.Now).TotalMinutes.Equals(Preferences.Get("TIEMPOS", "1"))); //REVISAR//
-                            {
-                                DependencyService.Get<IToastMessage>().DisplayMessage("Se ha acaba de verificar este id.");
-                            }
+                           
 
                         }
                         else if (registroInv.Any())
                         {
-                            if (registroInv.First().Fecha_Salida is null)
+                            var time = (DateTime.Now - registroInv.First().Fecha_Verificacion.Value.Date).Seconds;
+                            var pref = Convert.ToDouble(Preferences.Get("TIEMPOS", "1"))*60;
+                            if ( time < pref ) //REVISAR//
                             {
-                                registroInv.First().Fecha_Salida = DateTime.Now;
-                                registroInv.First().salidaSubida = null;
-                                db.UpdateAll(registroInv);
-                                DependencyService.Get<IToastMessage>().DisplayMessage("Se ha dado salida correctamente.");
+                                DependencyService.Get<IToastMessage>().DisplayMessage("Se ha acaba de verificar este id.");
+
                             }
                             else
                             {
-                                DependencyService.Get<IToastMessage>().DisplayMessage("Esta persona ya salió.");
+                                if (registroInv.First().Fecha_Salida is null)
+                                {
+                                    registroInv.First().Fecha_Salida = DateTime.Now;
+                                    registroInv.First().salidaSubida = null;
+                                    db.UpdateAll(registroInv);
+                                    DependencyService.Get<IToastMessage>().DisplayMessage("Se ha dado salida correctamente.");
+                                }
+                                else
+                                {
+                                    DependencyService.Get<IToastMessage>().DisplayMessage("Esta persona ya salió.");
+                                }
                             }
+                            
                         }
 
 

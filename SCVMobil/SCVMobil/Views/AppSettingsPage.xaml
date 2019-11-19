@@ -61,9 +61,8 @@
                         x:Name="entPuerta"
                         Grid.Row="2"
                         Grid.Column="1"
-                        SelectedIndexChanged="entPuerta_SelectedIndexChanged"
-                        ItemsSource="{Binding COMPANIAS}"
-                        ItemDisplayBinding="{Binding PUNTOS_VSU}"/>
+                        SelectedIndexChanged="entPuerta_SelectedIndexChanged"                        
+                        />
                     <Label
                         Grid.Row="3"
                         Grid.Column="0"
