@@ -56,7 +56,16 @@ namespace SCVMobil
         //---------------------------------------------------------------------------------------
         public void refreshPage()
         {
-           
+            if (Preferences.Get("SYNC_VSU", false))
+            {
+                imgNoSync.IsVisible = false;
+                imgSync.IsVisible = true;
+            }
+            else
+            {
+                imgNoSync.IsVisible = true;
+                imgSync.IsVisible = false;
+            }
         }
         //-----------------------------------------------------------------------------------------
         protected override void OnAppearing() //Cuando aparezca la pagina, refrescamos.
@@ -117,7 +126,9 @@ namespace SCVMobil
             entCedula.Text = "";
             entNombres.Text = "";
         }
+
         //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        [Obsolete]
         public async void entrada(String inString)
         {
             if (inString != "")
@@ -248,7 +259,7 @@ namespace SCVMobil
                                     { "Lector", Preferences.Get("LECTOR", "0")}
                                 };
                                 Crashes.TrackError(ey, properties);
-                                await PopupNavigation.PushAsync(new PopUpCedulaNoexiste());                    //Invocacion del PopUp para mostrar mesaje de error// 
+                                await PopupNavigation.PushAsync(new PopUpCedulaNoexiste());  //Invocacion del PopUp para mostrar mesaje de error// 
                                 await Navigation.PushAsync(new RegistroPage(entCedula.Text));
                                  
                                 try
@@ -269,7 +280,7 @@ namespace SCVMobil
                 }
                 else
                 {
-                    DependencyService.Get<IToastMessage>().DisplayMessage("Escaneo un codigo que no es la cedula");
+                    DependencyService.Get<IToastMessage>().DisplayMessage("Ha escaneado un codigo que no es la cedula");
                 }
             }
         }

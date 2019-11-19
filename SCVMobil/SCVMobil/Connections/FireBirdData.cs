@@ -55,7 +55,7 @@ namespace SCVMobil.Connections
                 FbConnection fb = new FbConnection(connectionString(true));
                 using (FbCommand command = new FbCommand(
                     query,
-                    fb)){
+                    fb)) {
 
                     fb.Open();
                     _dtResult = command.ExecuteScalar().ToString();
@@ -69,7 +69,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
-                var x = ea.Message;
+                Debug.WriteLine("Error en el metodo ExecuteScalar, generado por: " + ea.Message);
                 Preferences.Set("SYNC_VSU", false);
                 return null;
             }
@@ -252,6 +252,7 @@ namespace SCVMobil.Connections
                         #endregion
 
                         GuestsList.Add(invitado);
+                        Debug.WriteLine("Usuario agregado, Id: " + invitado.INVITADO_ID);
                     }
                 }
                 dtResult.Close();
@@ -262,7 +263,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
-                var x = ea.Message;
+                Debug.WriteLine("Error en el metodo ExecuteGuest, provocado por: " + ea.Message);
                 Preferences.Set("SYNC_VSU", false);
                 return null;
             }
@@ -448,6 +449,7 @@ namespace SCVMobil.Connections
                         #endregion
 
                         GuestsList.Add(invitado);
+                        Debug.WriteLine("Usuario agregado, Id: " + invitado.INVITADO_ID);
                     }
                 }
                 dtResult.Close();
@@ -458,6 +460,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
+                Debug.WriteLine("Error en el metodo ExecuteGuestOuts, provocado por: " + ea.Message);
                 Preferences.Set("SYNC_VSU", false);
                 return null;
             }
@@ -534,6 +537,7 @@ namespace SCVMobil.Connections
                         #endregion
 
                         ReservationsList.Add(reservation);
+                        Debug.WriteLine("Visita agregada, Id de visita: " + reservation.VISITA_ID);
                     }
                 }
                 dtResult.Close();
@@ -545,7 +549,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
-                var x = ea.Message;
+                Debug.WriteLine("Error en el metodo ExecuteReservations, provocado por: " + ea.Message);
                 Preferences.Set("SYNC_VSU", false);
                 return null;
             }
@@ -575,7 +579,14 @@ namespace SCVMobil.Connections
                         COMPANIAS company = new COMPANIAS();
 
                         #region Verificar que los valores no sean nulos antes de la conversion
-                        company.COMPANIA_ID = Convert.ToInt32(dtResult[0]);
+                        if (dtResult[0] != System.DBNull.Value)
+                        {
+                            company.COMPANIA_ID = Convert.ToInt32(dtResult[0]); 
+                        }
+                        else
+                        {
+                            continue;
+                        }
                         if (dtResult[1] != System.DBNull.Value)
                         {
                             company.NOMBRE = dtResult[1].ToString();
@@ -587,6 +598,7 @@ namespace SCVMobil.Connections
                         #endregion
 
                         CompaniesList.Add(company);
+                        Debug.WriteLine("Compania agregada, Id: " + company.COMPANIA_ID);
                     }
                 }
                 dtResult.Close();
@@ -598,7 +610,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
-                var x = ea.Message;
+                Debug.WriteLine("Error en el metodo ExecuteCompanies, provocado por: " + ea.Message);
                 Preferences.Set("SYNC_VSU", false);
                 return null;
             }
@@ -641,6 +653,7 @@ namespace SCVMobil.Connections
                         }
                         #endregion
                         PeopleList.Add(person);
+                        Debug.WriteLine("Persona agregada, Id: " + person.PERSONA_ID);
                     }
                 }
                 dtResult.Close();
@@ -652,7 +665,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
-                var x = ea.Message;
+                Debug.WriteLine("Error en el metodo ExecutePeople, provocado por: " + ea.Message);
                 Preferences.Set("SYNC_VSU", false);
                 return null;
             }
@@ -686,10 +699,18 @@ namespace SCVMobil.Connections
         //// Proveer informacion relativo a la region
         public void PublicServices()
         {
-            CultureInfo culture = (CultureInfo)CultureInfo.CurrentCulture.Clone();
-            culture.DateTimeFormat.ShortDatePattern = "yyyy-MM-dd";
-            culture.DateTimeFormat.LongTimePattern = "HH:mm:ss";
-            Thread.CurrentThread.CurrentCulture = culture;
+            try
+            {
+                CultureInfo culture = (CultureInfo)CultureInfo.CurrentCulture.Clone();
+                culture.DateTimeFormat.ShortDatePattern = "yyyy-MM-dd";
+                culture.DateTimeFormat.LongTimePattern = "HH:mm:ss";
+                Thread.CurrentThread.CurrentCulture = culture;
+
+            }
+            catch (Exception ea)
+            {
+                Debug.WriteLine("Error en el metodo PublicServices, provocado por: " + ea.Message);
+            }
         }
 
 
@@ -797,25 +818,15 @@ namespace SCVMobil.Connections
                             {
                                 registro.salidaSubida = null;
                             }
-                            try
-                            {
-                                Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: ");
-                                Debug.WriteLine("Error de SQL: ");
-                            }
-                            catch
-                            {
-                                //No Hacer Nada
-                            }
                         }
                         db.UpdateAll(visitasASubir);
                     }
-
                  }           
             }
-            catch (Exception)
+            catch (Exception ea)
             {
-
-                throw;
+                Debug.WriteLine("Excepcion en el metodo UploadVisit, error: "+ ea.Message);
+                Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: " + ea.Message);
             }
         }
 
@@ -823,278 +834,275 @@ namespace SCVMobil.Connections
         //// Subir Visitantes con reservaciones que no se hayan subido
         public void UploadVisitsReservation()
         {
-            var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-
-            // Cargar Invitados con reservas a visitasASubir2
-            var visitasASubir2 = db.Query<InvitadosReservas>("SELECT * FROM InvitadosReservas where SUBIDA is null");
-            Debug.WriteLine("There are: " + visitasASubir2.Count.ToString() + " To upload");
-
-            //Iterar el arreglo visitas con reservas
-            foreach (InvitadosReservas registro2 in visitasASubir2)
+            try
             {
-                string queryInv2;
-                string visitado2;
-                string fechaSalida2;
-                string placa2;
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
-                if (registro2.Visitado is null)
-                {
-                    visitado2 = "null";
-                }
-                else
-                {
-                    visitado2 = registro2.Visitado.ToString();
-                }
-                if (registro2.Fecha_Salida is null)
-                {
-                    fechaSalida2 = "null";
-                }
-                else
-                {
-                    fechaSalida2 = "'" + registro2.Fecha_Salida.ToString() + "'";
-                }
-                if (registro2.Placa is null)
-                {
-                    placa2 = "0000";
-                }
-                else
-                {
-                    placa2 = "'" + registro2.Placa.ToString() + "'";
-                }
+                // Cargar Invitados con reservas a visitasASubir2
+                var visitasASubir2 = db.Query<InvitadosReservas>("SELECT * FROM InvitadosReservas where SUBIDA is null");
+                Debug.WriteLine("There are: " + visitasASubir2.Count.ToString() + " To upload");
 
-                #region string de la variable queryInv
-                queryInv2 = "SELECT IN_INVIDATO_ID as anyCount FROM INSERTAR_VISITAS(" +
-                    "" + registro2.Compania_ID.ToString() + ", " +
-                    "'" + registro2.Nombres + "', " +
-                    "'" + registro2.Apellidos + "', " +
-                    "'" + registro2.Fecha_Registro.ToString() + "', " +
-                    "'" + registro2.Cargo + "'," +
-                    "0," +
-                    "100, " +
-                    "1, " +
-                    $"{Util.Coalesce(registro2.Empresa_ID, "null")}, " +
-                    $"{placa2}," +
-                    $"'{registro2.Tipo_Visitante}'," +
-                    "0, " +
-                    "0, " +
-                    $"{registro2.Puerta_Entrada}," +
-                    "0, " +
-                    "12, " +
-                    "1, " +
-                    "1, " +
-                    "'MANUAL', " +
-                    "'MANUAL', " +
-                    "'PPOOII', " +
-                    "0, " +
-                    "'I', " +
-                    "0, " +
-                    "'', " +
-                    "'', " +
-                    "'', " +
-                    "1, " +
-                    "0, " +
-                    $"{visitado2}, " +
-                    $"{registro2.Lector.ToString()}, " +
-                    $"{fechaSalida2})";
-                #endregion
-
-                var content = ExecuteScalar(queryInv2);
-
-
-                if (!string.IsNullOrEmpty(content))
+                //Iterar el arreglo visitas con reservas
+                foreach (InvitadosReservas registro2 in visitasASubir2)
                 {
-                    
-                    registro2.INVIDATO_ID = Convert.ToInt32(content);
-                    registro2.Subida = true;
-                    if (!(registro2.Fecha_Salida is null))
+                    string queryInv2;
+                    string visitado2;
+                    string fechaSalida2;
+                    string placa2;
+
+                    if (registro2.Visitado is null)
                     {
-                        registro2.salidaSubida = true;
+                        visitado2 = "null";
                     }
-                    Debug.WriteLine("Invitado subido Reserva: " + registro2.INVIDATO_ID.ToString());
+                    else
+                    {
+                        visitado2 = registro2.Visitado.ToString();
+                    }
+                    if (registro2.Fecha_Salida is null)
+                    {
+                        fechaSalida2 = "null";
+                    }
+                    else
+                    {
+                        fechaSalida2 = "'" + registro2.Fecha_Salida.ToString() + "'";
+                    }
+                    if (registro2.Placa is null)
+                    {
+                        placa2 = "0000";
+                    }
+                    else
+                    {
+                        placa2 = "'" + registro2.Placa.ToString() + "'";
+                    }
+
+                    #region string de la variable queryInv
+                    queryInv2 = "SELECT IN_INVIDATO_ID as anyCount FROM INSERTAR_VISITAS(" +
+                        "" + registro2.Compania_ID.ToString() + ", " +
+                        "'" + registro2.Nombres + "', " +
+                        "'" + registro2.Apellidos + "', " +
+                        "'" + registro2.Fecha_Registro.ToString() + "', " +
+                        "'" + registro2.Cargo + "'," +
+                        "0," +
+                        "100, " +
+                        "1, " +
+                        $"{Util.Coalesce(registro2.Empresa_ID, "null")}, " +
+                        $"{placa2}," +
+                        $"'{registro2.Tipo_Visitante}'," +
+                        "0, " +
+                        "0, " +
+                        $"{registro2.Puerta_Entrada}," +
+                        "0, " +
+                        "12, " +
+                        "1, " +
+                        "1, " +
+                        "'MANUAL', " +
+                        "'MANUAL', " +
+                        "'PPOOII', " +
+                        "0, " +
+                        "'I', " +
+                        "0, " +
+                        "'', " +
+                        "'', " +
+                        "'', " +
+                        "1, " +
+                        "0, " +
+                        $"{visitado2}, " +
+                        $"{registro2.Lector.ToString()}, " +
+                        $"{fechaSalida2})";
+                    #endregion
+
+                    var content = ExecuteScalar(queryInv2);
+
+
+                    if (!string.IsNullOrEmpty(content))
+                    {
+
+                        registro2.INVIDATO_ID = Convert.ToInt32(content);
+                        registro2.Subida = true;
+                        if (!(registro2.Fecha_Salida is null))
+                        {
+                            registro2.salidaSubida = true;
+                        }
+                        Debug.WriteLine("Invitado subido Reserva: " + registro2.INVIDATO_ID.ToString());
+                    }
+                    else
+                    {
+                        registro2.Subida = null;
+                        if (!(registro2.Fecha_Salida is null))
+                        {
+                            registro2.salidaSubida = null;
+                        }
+                    }
                 }
-                else
-                {
-                    registro2.Subida = null;
-                    if (!(registro2.Fecha_Salida is null))
-                    {
-                        registro2.salidaSubida = null;
-                    }
-                    try
-                    {
-                        Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: ");
-                        Debug.WriteLine("Error de SQL: ");
-                    }
-                    catch
-                    {
-                        //No Hacer Nada
-                    }
-                }
+                db.UpdateAll(visitasASubir2);
             }
-            db.UpdateAll(visitasASubir2);
+            catch (Exception ea)
+            {
+                Debug.WriteLine("Excepcion en el metodo UploadVisitsReservation, error: " + ea.Message);
+                Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo UploadVisitsReservation, error: " + ea.Message);
+            }
         }
 
 
         //// Subir Verificaciones 
         public void UploadVerifications()
         {
-            var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-
-            var verificarASubir = db.Query<Invitados>("SELECT * FROM Invitados where VERIFICACIONSUBIDA is null and Fecha_Verificacion is not null and SUBIDA is not null");
-            foreach (Invitados registro in verificarASubir)
+            try
             {
-                var queryVer = "SELECT * FROM SP_DAR_VERIFICACION(" + registro.INVIDATO_ID.ToString() + ", " + registro.Puerta_Registro.ToString() + ", '" +
-                registro.Fecha_Verificacion.ToString() + "')";
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
-
-                var content = ExecuteScalar(queryVer);
-                Debug.WriteLine("Waiting for: " + queryVer);
-
-                if (!string.IsNullOrEmpty(content))
+                var verificarASubir = db.Query<Invitados>("SELECT * FROM Invitados where VERIFICACIONSUBIDA is null and Fecha_Verificacion is not null and SUBIDA is not null");
+                foreach (Invitados registro in verificarASubir)
                 {
-                    registro.verificacionSubida = true;
-                    Debug.WriteLine("Verificacion subida: ID" + registro.INVIDATO_ID.ToString() + " " + registro.Fecha_Verificacion.ToString());
-                }
-                else
-                {
-                    registro.verificacionSubida = null;
-                    try
+                    var queryVer = "SELECT * FROM SP_DAR_VERIFICACION(" + registro.INVIDATO_ID.ToString() + ", " + registro.Puerta_Registro.ToString() + ", '" +
+                    registro.Fecha_Verificacion.ToString() + "')";
+
+
+                    var content = ExecuteScalar(queryVer);
+                    Debug.WriteLine("Waiting for: " + queryVer);
+
+                    if (!string.IsNullOrEmpty(content))
                     {
-                        Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: ");
-                        Debug.WriteLine("Error de SQL: ");
+                        registro.verificacionSubida = true;
+                        Debug.WriteLine("Verificacion subida: ID" + registro.INVIDATO_ID.ToString() + " " + registro.Fecha_Verificacion.ToString());
                     }
-                    catch
+                    else
                     {
-                        //No Hacer Nada
+                        registro.verificacionSubida = null;
+
                     }
                 }
+                db.UpdateAll(verificarASubir);
             }
-            db.UpdateAll(verificarASubir);
+            catch (Exception ea)
+            {
+                Debug.WriteLine("Excepcion en el metodo UploadVerifications, error: " + ea.Message);
+                Analytics.TrackEvent("Error en el metodo UploadVerifications, error: " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A") );
+            }
         }
 
         //// Subir Salidas
         public void UploadOut()
         {
-            var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-            var salidasASubir = db.Query<Invitados>("SELECT * FROM Invitados where SALIDASUBIDA is null and FECHA_SALIDA is not null and SUBIDA is not null");
-
-            foreach (Invitados registro in salidasASubir)
+            try
             {
-                var querrySal = "SELECT * FROM SP_DAR_SALIDA(" + registro.INVIDATO_ID.ToString() + ", '" + registro.Fecha_Salida.ToString() + "', " +
-                Preferences.Get("LECTOR", "1") + ")";
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                var salidasASubir = db.Query<Invitados>("SELECT * FROM Invitados where SALIDASUBIDA is null and FECHA_SALIDA is not null and SUBIDA is not null");
 
-                var content = ExecuteScalar(querrySal);
-                Debug.WriteLine("Waiting for: "  + querrySal);
+                foreach (Invitados registro in salidasASubir)
+                {
+                    var querrySal = "SELECT * FROM SP_DAR_SALIDA(" + registro.INVIDATO_ID.ToString() + ", '" + registro.Fecha_Salida.ToString() + "', " +
+                    Preferences.Get("LECTOR", "1") + ")";
 
-                if (!string.IsNullOrEmpty(content))
-                {
-                    registro.salidaSubida = true;
-                    Debug.WriteLine("Salida subida: ID" + registro.INVIDATO_ID.ToString() + " " + registro.Fecha_Salida.ToString());
-                }
-                else
-                {
-                    registro.salidaSubida = null;
-                    try
+                    var content = ExecuteScalar(querrySal);
+                    Debug.WriteLine("Waiting for: " + querrySal);
+
+                    if (!string.IsNullOrEmpty(content))
                     {
-                        Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: ");
-                        Debug.WriteLine("Error de SQL: ");
+                        registro.salidaSubida = true;
+                        Debug.WriteLine("Salida subida: ID" + registro.INVIDATO_ID.ToString() + " " + registro.Fecha_Salida.ToString());
                     }
-                    catch
+                    else
                     {
-                        //No Hacer Nada
+                        registro.salidaSubida = null;
                     }
                 }
+                db.UpdateAll(salidasASubir);
             }
-            db.UpdateAll(salidasASubir);
+            catch (Exception ea)
+            {
+                Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + "\n Excepcion en el metodo UploadOut, Error: "+ ea.Message);
+                Debug.WriteLine("Excepcion en el metodo UploadOut, Error: "+ ea.Message);
+            }
         }
 
         //// Subir Salidas desconocidas
         public void UploadUnknownOuts()
         {
-            var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-            var salidasOFF = db.Query<SalidaOffline>("SELECT * FROM SalidaOffline where SUBIDA is null");
-
-            foreach (SalidaOffline registros in salidasOFF)
+            try
             {
-                var querrySalOFF = "SELECT * FROM SP_DAR_SALIDA(" + registros.INVIDATO_ID + ", '" + registros.Fecha_Salida + "', " +
-                Preferences.Get("LECTOR", "1") + ")";
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                var salidasOFF = db.Query<SalidaOffline>("SELECT * FROM SalidaOffline where SUBIDA is null");
 
-                var content = ExecuteScalar(querrySalOFF);
-                Debug.WriteLine("Waiting for: " + querrySalOFF);
+                foreach (SalidaOffline registros in salidasOFF)
+                {
+                    var querrySalOFF = "SELECT * FROM SP_DAR_SALIDA(" + registros.INVIDATO_ID + ", '" + registros.Fecha_Salida + "', " +
+                    Preferences.Get("LECTOR", "1") + ")";
 
-                if (!string.IsNullOrEmpty(content))
-                {
-                    registros.Subida = true;
-                    Debug.WriteLine("Salida subida: ID" + registros.INVIDATO_ID.ToString() + " " + registros.Fecha_Salida.ToString());
-                }
-                else
-                {
-                    registros.Subida = null;
-                    try
+                    var content = ExecuteScalar(querrySalOFF);
+                    Debug.WriteLine("Waiting for: " + querrySalOFF);
+
+                    if (!string.IsNullOrEmpty(content))
                     {
-                        Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: ");
-                        Debug.WriteLine("Error de SQL: ");
+                        registros.Subida = true;
+                        Debug.WriteLine("Salida subida: ID" + registros.INVIDATO_ID.ToString() + " " + registros.Fecha_Salida.ToString());
                     }
-                    catch
+                    else
                     {
-                        //No Hacer Nada
+                        registros.Subida = null;
+
                     }
                 }
+                db.UpdateAll(salidasOFF);
             }
-            db.UpdateAll(salidasOFF);
+            catch (Exception ea)
+            {
+                Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + "\n Excepcion en el metodo UploadUnknownOuts, Error: "+ ea.Message);
+                Debug.WriteLine("Excepcion en el metodo UploadUnknownOuts, Error: " + ea.Message);
+            }
         }
 
 
         //// Cargar Reservaciones
         public void DownloadReservations()
         {
-            var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-
-            #region string que contiene el Query
-            string query = "SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " VISITA_ID,VISITAS_VISITA_A_ID, VISITAS_DOCUMENTO" +
-                        ", VISITAS_NOMBRE_COMPLETO, CAST(VISITAS_FECHA_VISITA_DESDE as VARCHAR(25)) as VISITAS_FECHA_VISITA_DESDE" +
-                        ", CAST(VISITAS_FECHA_VISITA_HASTA as VARCHAR(25)) as VISITAS_FECHA_VISITA_HASTA, EMPRESAS_NOMBRE" +
-                        ", CAST(VISITAS_FECHA_RESERVA as VARCHAR(25)) as VISITAS_FECHA_RESERVA, " + " VISITAS_DEPARTAMENTO_ID, " + "DEPARTAMENTO_NOMBRE " +
-                        "FROM vw_reserva_visita where VISITA_ID > " + Preferences.Get("MAX_RESERVA_ID", "0") + " ORDER BY VISITA_ID desc";
-            #endregion
-
-            var ListaReservaciones = ExecuteReservations(query);
-
-            if (ListaReservaciones != null)
+            try
             {
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
-                try
+                #region string que contiene el Query
+                string query = "SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " VISITA_ID,VISITAS_VISITA_A_ID, VISITAS_DOCUMENTO" +
+                            ", VISITAS_NOMBRE_COMPLETO, CAST(VISITAS_FECHA_VISITA_DESDE as VARCHAR(25)) as VISITAS_FECHA_VISITA_DESDE" +
+                            ", CAST(VISITAS_FECHA_VISITA_HASTA as VARCHAR(25)) as VISITAS_FECHA_VISITA_HASTA, EMPRESAS_NOMBRE" +
+                            ", CAST(VISITAS_FECHA_RESERVA as VARCHAR(25)) as VISITAS_FECHA_RESERVA, " + " VISITAS_DEPARTAMENTO_ID, " + "DEPARTAMENTO_NOMBRE " +
+                            "FROM vw_reserva_visita where VISITA_ID > " + Preferences.Get("MAX_RESERVA_ID", "0") + " ORDER BY VISITA_ID desc";
+                #endregion
+
+                var ListaReservaciones = ExecuteReservations(query);
+
+                if (ListaReservaciones != null)
                 {
-                    if (ListaReservaciones.Any())
+                    try
                     {
-                        db.InsertAll(ListaReservaciones);
-                        Debug.WriteLine("MAX_RESERVA_ID: " + ListaReservaciones.First().VISITA_ID.ToString());
-                        Preferences.Set("MAX_RESERVA_ID", ListaReservaciones.First().VISITA_ID.ToString());
-                        Debug.WriteLine("Reservas Descargadas: " + DateTime.Now);
+                        if (ListaReservaciones.Any())
+                        {
+                            db.InsertAll(ListaReservaciones);
+                            Debug.WriteLine("MAX_RESERVA_ID: " + ListaReservaciones.First().VISITA_ID.ToString());
+                            Preferences.Set("MAX_RESERVA_ID", ListaReservaciones.First().VISITA_ID.ToString());
+                            Debug.WriteLine("Reservas Descargadas: " + DateTime.Now);
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    var properties = new Dictionary<string, string> {
+                    catch (Exception ex)
+                    {
+                        var properties = new Dictionary<string, string> {
                                             { "Category", "Error insertando reservas" },
                                             { "Code", "App.xaml.cs Line: 472" },
                                             { "Lector", Preferences.Get("LECTOR", "N/A")}
                                         };
-                    Debug.WriteLine("Excepcion insertando reservas: " + ex.ToString());
-                    Crashes.TrackError(ex, properties);
-                }
+                        Debug.WriteLine("Excepcion insertando reservas: " + ex.ToString());
+                        Crashes.TrackError(ex, properties);
+                    }
 
+                }
+                else
+                {
+                    Debug.WriteLine("ListaReservaciones = null");
+                }
             }
-            else
+            catch (Exception ea)
             {
-                try
-                {
-                    Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: ");
-                    Debug.WriteLine("Error de SQL: ");
-                }
-                catch
-                {
-                    //No Hacer Nada
-                }
+                Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadReservations, Error: " + ea.Message);
+                Debug.WriteLine("Excepcion en el metodo DownloadReservations, Error: " + ea.Message);
             }
         }
 
@@ -1102,66 +1110,61 @@ namespace SCVMobil.Connections
         //// Cargar Companies
         public void DownloadCompanies()
         {
-            var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-            
-            string queryCompanias = " SELECT FIRST "
-                                               + Preferences.Get("CHUNK_SIZE", "10000")
-                                               + " COMPANIA_ID, NOMBRE, PUNTO_VSU  FROM COMPANIAS where COMPANIA_ID > "
-                                               + Preferences.Get("MAX_COMPANIA_ID", "0")
-                                               + " ORDER BY COMPANIA_ID desc";
-
-            var ListaCompanias = ExecuteCompanies(queryCompanias);
-            
-            var stlRegistros = new List<string>();
-            var stRegisros = "";
-            if (ListaCompanias != null)
+            try
             {
-                
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
-                try
+                string queryCompanias = " SELECT FIRST "
+                                                   + Preferences.Get("CHUNK_SIZE", "10000")
+                                                   + " COMPANIA_ID, NOMBRE, PUNTO_VSU  FROM COMPANIAS where COMPANIA_ID > "
+                                                   + Preferences.Get("MAX_COMPANIA_ID", "0")
+                                                   + " ORDER BY COMPANIA_ID desc";
+
+                var ListaCompanias = ExecuteCompanies(queryCompanias);
+
+                var stlRegistros = new List<string>();
+                var stRegisros = "";
+                if (ListaCompanias != null)
                 {
-                    if (ListaCompanias.Any())
+                    try
                     {
-                        db.InsertAll(ListaCompanias);
-                        Debug.WriteLine("MAX_COMPANIA_ID: " + ListaCompanias.First().COMPANIA_ID.ToString());
-                        Preferences.Set("MAX_COMPANIA_ID", ListaCompanias.First().COMPANIA_ID.ToString());
-                        Debug.WriteLine("Companias Descargadas: " + DateTime.Now);
-                        string sortNames = "select nombre from companias order by nombre";
-                        var Sorting = db.Query<COMPANIAS>(sortNames);
-                        foreach (COMPANIAS registro in Sorting)
+                        if (ListaCompanias.Any())
                         {
-                            //db.Insert(registro);
-                            Debug.WriteLine("EMPRESAS: " + registro.NOMBRE);
-                            stlRegistros.Add(registro.NOMBRE.ToString());
-                            stRegisros = stRegisros + "," + registro.NOMBRE.ToString();
+                            db.InsertAll(ListaCompanias);
+                            Debug.WriteLine("MAX_COMPANIA_ID: " + ListaCompanias.First().COMPANIA_ID.ToString());
+                            Preferences.Set("MAX_COMPANIA_ID", ListaCompanias.First().COMPANIA_ID.ToString());
+                            Debug.WriteLine("Companias Descargadas: " + DateTime.Now);
+                            string sortNames = "select nombre from companias order by nombre";
+                            var Sorting = db.Query<COMPANIAS>(sortNames);
+                            foreach (COMPANIAS registro in Sorting)
+                            {
+                                //db.Insert(registro);
+                                Debug.WriteLine("EMPRESAS: " + registro.NOMBRE);
+                                stlRegistros.Add(registro.NOMBRE.ToString());
+                                stRegisros = stRegisros + "," + registro.NOMBRE.ToString();
+                            }
+                            stRegisros = stRegisros.TrimStart(',');
+                            Preferences.Set("COMPANIAS_LIST", stRegisros);
                         }
-                        stRegisros = stRegisros.TrimStart(',');
-                        Preferences.Set("COMPANIAS_LIST", stRegisros);
                     }
-                }
-                catch (Exception ex)
-                {
-                    var properties = new Dictionary<string, string> {
+                    catch (Exception ex)
+                    {
+                        var properties = new Dictionary<string, string> {
                                             { "Category", "Error insertando Companias" },
                                             { "Code", "App.xaml.cs Line: 516" },
                                             { "Lector", Preferences.Get("LECTOR", "N/A")}
                                         };
-                    Debug.WriteLine("Excepcion insertando Companias: " + ex.ToString());
-                    Crashes.TrackError(ex, properties);
+                        Debug.WriteLine("Excepcion insertando Companias: " + ex.ToString());
+                        Crashes.TrackError(ex, properties);
+                    }
+
                 }
 
             }
-            else
+            catch (Exception ea)
             {
-                try
-                {
-                    Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: ");
-                    Debug.WriteLine("Error de SQL: ");
-                }
-                catch
-                {
-                    //No Hacer Nada
-                }
+                Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadCompanies, Error: " + ea.Message);
+                Debug.WriteLine("Error de SQL: "+ea.Message);
             }
         }
 
@@ -1169,67 +1172,63 @@ namespace SCVMobil.Connections
         //// Cargar Personas(Destinos)
         public void DownloadPeople_Destination()
         {
-            var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-            
-            var stlRegistros2 = new List<string>();
-            var stRegisros2 = "";
-            string queryPersonas = " SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " PERSONA_ID, NOMBRES_APELLIDOS FROM PERSONAS where TIPO=1 AND PERSONA_ID > " + Preferences.Get("MAX_PERSONA_ID", "0") + " ORDER BY PERSONA_ID desc";
-            var ListaPersonas = ExecutePeople(queryPersonas);
+            try
+            {
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+
+                var stlRegistros2 = new List<string>();
+                var stRegisros2 = "";
+                string queryPersonas = " SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " PERSONA_ID, NOMBRES_APELLIDOS FROM PERSONAS where TIPO=1 AND PERSONA_ID > " + Preferences.Get("MAX_PERSONA_ID", "0") + " ORDER BY PERSONA_ID desc";
+                var ListaPersonas = ExecutePeople(queryPersonas);
 
 
-            if (ListaPersonas != null)
-            { 
-
-                try
+                if (ListaPersonas != null)
                 {
-                    if (ListaPersonas.Any())
-                    {
-                        db.InsertAll(ListaPersonas);
-                        Debug.WriteLine("MAX_PERSONA_ID: " + ListaPersonas.First().PERSONA_ID.ToString());
-                        Preferences.Set("MAX_PERSONA_ID", ListaPersonas.First().PERSONA_ID.ToString());
-                        Debug.WriteLine("Personas Descargadas: " + DateTime.Now);
 
-                        string sortPersons = "select nombres_apellidos from personas order by nombres_apellidos";
-                        var Sorting = db.Query<PERSONAS>(sortPersons);
-                        foreach (var registro in Sorting)
+                    try
+                    {
+                        if (ListaPersonas.Any())
                         {
-                            if (registro.NOMBRES_APELLIDOS != null)
+                            db.InsertAll(ListaPersonas);
+                            Debug.WriteLine("MAX_PERSONA_ID: " + ListaPersonas.First().PERSONA_ID.ToString());
+                            Preferences.Set("MAX_PERSONA_ID", ListaPersonas.First().PERSONA_ID.ToString());
+                            Debug.WriteLine("Personas Descargadas: " + DateTime.Now);
+
+                            string sortPersons = "select nombres_apellidos from personas order by nombres_apellidos";
+                            var Sorting = db.Query<PERSONAS>(sortPersons);
+                            foreach (var registro in Sorting)
                             {
-                                //db.Insert(registro);
-                                Debug.WriteLine("Personas: " + registro.NOMBRES_APELLIDOS);
-                                stlRegistros2.Add(registro.NOMBRES_APELLIDOS.ToString());
-                                stRegisros2 = stRegisros2 + "," + registro.NOMBRES_APELLIDOS.ToString();
+                                if (registro.NOMBRES_APELLIDOS != null)
+                                {
+                                    //db.Insert(registro);
+                                    Debug.WriteLine("Personas: " + registro.NOMBRES_APELLIDOS);
+                                    stlRegistros2.Add(registro.NOMBRES_APELLIDOS.ToString());
+                                    stRegisros2 = stRegisros2 + "," + registro.NOMBRES_APELLIDOS.ToString();
+                                }
+
                             }
+                            stRegisros2 = stRegisros2.TrimStart(',');
+                            Preferences.Set("PERSONAS_LIST", stRegisros2);
 
                         }
-                        stRegisros2 = stRegisros2.TrimStart(',');
-                        Preferences.Set("PERSONAS_LIST", stRegisros2);
-
                     }
-                }
-                catch (Exception ex)
-                {
-                    var properties = new Dictionary<string, string> {
+                    catch (Exception ex)
+                    {
+                        var properties = new Dictionary<string, string> {
                                             { "Category", "Error insertando Personas" },
                                             { "Code", "App.xaml.cs Line: 243" },
                                             { "Lector", Preferences.Get("LECTOR", "N/A")}
                                         };
-                    Debug.WriteLine("Excepcion insertando Personas: " + ex.ToString());
-                    Crashes.TrackError(ex, properties);
-                }
+                        Debug.WriteLine("Excepcion insertando Personas: " + ex.ToString());
+                        Crashes.TrackError(ex, properties);
+                    }
 
+                }
             }
-            else
+            catch (Exception ea)
             {
-                try
-                {
-                    Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: ");
-                    Debug.WriteLine("Error de SQL: ");
-                }
-                catch
-                {
-                    //No Hacer Nada
-                }
+                Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadPeople_Destination, Error: "+ ea.Message);
+                Debug.WriteLine("Excepcion en el metodo DownloadPeople_Destination, Error: " + ea.Message);
             }
         }
 
@@ -1237,114 +1236,115 @@ namespace SCVMobil.Connections
         //// Descargar Invitados
         public void DownloadGuests()
         {
-            
-            var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-            
-            string queryDownInv = $"SELECT FIRST {Preferences.Get("CHUNK_SIZE", "10000")} I1.INVIDATO_ID, 1 AS SUBIDA, IIF(I1.FECHA_SALIDA IS NULL, 0, 1) AS SALIDASUBIDA, I1.COMPANIA_ID" +
-                        ", I1.NOMBRES, I1.APELLIDOS, I1.FECHA_REGISTRO, I1.FECHA_SALIDA, I1.TIPO, I1.CARGO, I1.TIENE_ACTIVO, I1.ESTATUS_ID, I1.MODULO" +
-                        ", I1.EMPRESA_ID, I1.PLACA, I1.TIPO_VISITANTE, I1.ES_GRUPO, I1.GRUPO_ID, I1.PUERTA_ENTRADA, I1.ACTUALIZADA_LA_SALIDA" +
-                        ", COALESCE(I1.HORAS_CADUCIDAD,0) AS HORAS_CADUCIDAD, I1.PERSONAS, I1.IN_OUT, I1.ORIGEN_ENTRADA, I1.ORIGEN_SALIDA, I1.COMENTARIO, COALESCE(I1.ORIGEN_IO,0) AS ORIGEN_IO, I1.ACTUALIZADO" +
-                        ", I1.CPOST, I1.TEXTO1_ENTRADA, I1.TEXTO2_ENTRADA, I1.TEXTO3_ENTRADA, I1.SECUENCIA_DIA, I1.NO_APLICA_INDUCCION, I1.VISITADO" +
-                        ", COALESCE(I1.LECTOR, 0) AS LECTOR FROM INVITADOS I1 INNER JOIN(SELECT MAX(I2.INVIDATO_ID) AS INVIDATO_ID FROM INVITADOS I2" +
-                        $" WHERE INVIDATO_ID > {Preferences.Get("MAX_INVIDATO_ID", "0")} AND COALESCE(LECTOR, 0) <> {Preferences.Get("LECTOR", "1")} " +
-                        "GROUP BY I2.CARGO) I3 ON I1.invidato_id = I3.INVIDATO_ID ORDER BY I1.INVIDATO_ID DESC";
-            
-            
-            var contentDownInv = ExecuteGuest(queryDownInv);
-
-
-            if (contentDownInv != null)
+            try
             {
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
-                try
+                string queryDownInv = $"SELECT FIRST {Preferences.Get("CHUNK_SIZE", "10000")} I1.INVIDATO_ID, 1 AS SUBIDA, IIF(I1.FECHA_SALIDA IS NULL, 0, 1) AS SALIDASUBIDA, I1.COMPANIA_ID" +
+                            ", I1.NOMBRES, I1.APELLIDOS, I1.FECHA_REGISTRO, I1.FECHA_SALIDA, I1.TIPO, I1.CARGO, I1.TIENE_ACTIVO, I1.ESTATUS_ID, I1.MODULO" +
+                            ", I1.EMPRESA_ID, I1.PLACA, I1.TIPO_VISITANTE, I1.ES_GRUPO, I1.GRUPO_ID, I1.PUERTA_ENTRADA, I1.ACTUALIZADA_LA_SALIDA" +
+                            ", COALESCE(I1.HORAS_CADUCIDAD,0) AS HORAS_CADUCIDAD, I1.PERSONAS, I1.IN_OUT, I1.ORIGEN_ENTRADA, I1.ORIGEN_SALIDA, I1.COMENTARIO, COALESCE(I1.ORIGEN_IO,0) AS ORIGEN_IO, I1.ACTUALIZADO" +
+                            ", I1.CPOST, I1.TEXTO1_ENTRADA, I1.TEXTO2_ENTRADA, I1.TEXTO3_ENTRADA, I1.SECUENCIA_DIA, I1.NO_APLICA_INDUCCION, I1.VISITADO" +
+                            ", COALESCE(I1.LECTOR, 0) AS LECTOR FROM INVITADOS I1 INNER JOIN(SELECT MAX(I2.INVIDATO_ID) AS INVIDATO_ID FROM INVITADOS I2" +
+                            $" WHERE INVIDATO_ID > {Preferences.Get("MAX_INVIDATO_ID", "0")} AND COALESCE(LECTOR, 0) <> {Preferences.Get("LECTOR", "1")} " +
+                            "GROUP BY I2.CARGO) I3 ON I1.invidato_id = I3.INVIDATO_ID ORDER BY I1.INVIDATO_ID DESC";
+
+
+                var contentDownInv = ExecuteGuest(queryDownInv);
+
+
+                if (contentDownInv != null)
                 {
-                    if (contentDownInv.Any())
+
+                    try
                     {
-                        Debug.WriteLine("Se va a descargar: " + contentDownInv.Count().ToString() + " Visitas");
-                        db.InsertAll(contentDownInv);
-                        Debug.WriteLine("MAX_INVIDATO_ID: " + contentDownInv.First().INVIDATO_ID.ToString());
-                        Preferences.Set("MAX_INVIDATO_ID", contentDownInv.First().INVIDATO_ID.ToString());
-                        Debug.WriteLine("Visitas Descargadas: " + DateTime.Now);
+                        if (contentDownInv.Any())
+                        {
+                            Debug.WriteLine("Se va a descargar: " + contentDownInv.Count().ToString() + " Visitas");
+                            db.InsertAll(contentDownInv);
+                            Debug.WriteLine("MAX_INVIDATO_ID: " + contentDownInv.First().INVIDATO_ID.ToString());
+                            Preferences.Set("MAX_INVIDATO_ID", contentDownInv.First().INVIDATO_ID.ToString());
+                            Debug.WriteLine("Visitas Descargadas: " + DateTime.Now);
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    var properties = new Dictionary<string, string> {
+                    catch (Exception ex)
+                    {
+                        var properties = new Dictionary<string, string> {
                                             { "Category", "Error insertando reservas" },
                                             { "Code", "App.xaml.cs Line: 631" },
                                             { "Lector", Preferences.Get("LECTOR", "N/A")}
                                         };
-                    Debug.WriteLine("Excepcion insetando reservas: " + ex.ToString());
-                    Crashes.TrackError(ex, properties);
-                }
+                        Debug.WriteLine("Excepcion insetando reservas: " + ex.ToString());
+                        Crashes.TrackError(ex, properties);
+                    }
 
+                }
             }
-            else
+            catch (Exception ea)
             {
-                try
-                {
-                    Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: ");
-                    Debug.WriteLine("Error de SQL: ");
-                }
-                catch
-                {
-                    //No Hacer Nada
-                }
+                Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadGuests, Error: " + ea.Message);
+                Debug.WriteLine("Excepcion en el metodo DownloadGuests, Error: " + ea.Message);
             }
-
-            var maxInvidatoIdLocal = db.Query<counterObj>("SELECT MAX(INVIDATO_ID) as anycount FROM Invitados");
         }
 
 
         //// Descargar Salidas
         public void DownloadOuts()
         {
-            var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-            var maxInvidatoIdLocal = db.Query<counterObj>("SELECT MAX(INVIDATO_ID) as anycount FROM Invitados");
-
-            var queryDownSal = "SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " INVIDATO_ID, 1 as SUBIDA, 1 as SALIDASUBIDA, COMPANIA_ID, NOMBRES, APELLIDOS, " +
-            "FECHA_REGISTRO, FECHA_SALIDA, TIPO, CARGO, TIENE_ACTIVO, ESTATUS_ID, MODULO, EMPRESA_ID, PLACA, TIPO_VISITANTE, ES_GRUPO, GRUPO_ID, " +
-            "PUERTA_ENTRADA, ACTUALIZADA_LA_SALIDA, HORAS_CADUCIDAD, PERSONAS, IN_OUT, ORIGEN_ENTRADA, ORIGEN_SALIDA, COMENTARIO, ORIGEN_IO, " +
-            "ACTUALIZADO, CPOST, TEXTO1_ENTRADA, TEXTO2_ENTRADA, TEXTO3_ENTRADA, SECUENCIA_DIA, NO_APLICA_INDUCCION, VISITADO, COALESCE(LECTOR, 0) AS LECTOR, SALIDA_ID " +
-            "FROM INVITADOS WHERE SALIDA_ID > " + Preferences.Get("MAX_SALIDA_ID", "0") + " AND INVIDATO_ID <= " + maxInvidatoIdLocal.First().anyCount.ToString() +
-            " AND SALIDA_ID IS NOT NULL AND COALESCE(LECTOR_SALIDA,0) <> " + Preferences.Get("LECTOR", "1") +
-            " ORDER BY SALIDA_ID DESC";
-            
-            var listSalidas = ExecuteGuestOuts(queryDownSal);
-
-            if (listSalidas != null)
+            try
             {
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                var maxInvidatoIdLocal = db.Query<counterObj>("SELECT MAX(INVIDATO_ID) as anycount FROM Invitados");
 
-                try
+                var queryDownSal = "SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " INVIDATO_ID, 1 as SUBIDA, 1 as SALIDASUBIDA, COMPANIA_ID, NOMBRES, APELLIDOS, " +
+                "FECHA_REGISTRO, FECHA_SALIDA, TIPO, CARGO, TIENE_ACTIVO, ESTATUS_ID, MODULO, EMPRESA_ID, PLACA, TIPO_VISITANTE, ES_GRUPO, GRUPO_ID, " +
+                "PUERTA_ENTRADA, ACTUALIZADA_LA_SALIDA, HORAS_CADUCIDAD, PERSONAS, IN_OUT, ORIGEN_ENTRADA, ORIGEN_SALIDA, COMENTARIO, ORIGEN_IO, " +
+                "ACTUALIZADO, CPOST, TEXTO1_ENTRADA, TEXTO2_ENTRADA, TEXTO3_ENTRADA, SECUENCIA_DIA, NO_APLICA_INDUCCION, VISITADO, COALESCE(LECTOR, 0) AS LECTOR, SALIDA_ID " +
+                "FROM INVITADOS WHERE SALIDA_ID > " + Preferences.Get("MAX_SALIDA_ID", "0") + " AND INVIDATO_ID <= " + maxInvidatoIdLocal.First().anyCount.ToString() +
+                " AND SALIDA_ID IS NOT NULL AND COALESCE(LECTOR_SALIDA,0) <> " + Preferences.Get("LECTOR", "1") +
+                " ORDER BY SALIDA_ID DESC";
+
+                var listSalidas = ExecuteGuestOuts(queryDownSal);
+
+                if (listSalidas != null)
                 {
-                    if (listSalidas.Any())
+
+                    try
                     {
-                        foreach (Invitados registro in listSalidas)
+                        if (listSalidas.Any())
                         {
-                            var invitadoId = db.Query<counterObj>("SELECT INVITADO_ID as anycount FROM Invitados WHERE INVIDATO_ID = " + registro.INVIDATO_ID.ToString());
-                            if (invitadoId.Any())
+                            foreach (Invitados registro in listSalidas)
                             {
-                                registro.INVITADO_ID = invitadoId.First().anyCount;
+                                var invitadoId = db.Query<counterObj>("SELECT INVITADO_ID as anycount FROM Invitados WHERE INVIDATO_ID = " + registro.INVIDATO_ID.ToString());
+                                if (invitadoId.Any())
+                                {
+                                    registro.INVITADO_ID = invitadoId.First().anyCount;
+                                }
                             }
+                            Debug.WriteLine("Se va a descargar: " + listSalidas.Count().ToString() + " Salidas");
+                            db.UpdateAll(listSalidas);
+                            Debug.WriteLine("MAX_SALIDA_ID: " + listSalidas.First().SALIDA_ID.ToString());
+                            Preferences.Set("MAX_SALIDA_ID", listSalidas.First().SALIDA_ID.ToString());
+                            Debug.WriteLine("Salidas Descargadas: " + DateTime.Now);
                         }
-                        Debug.WriteLine("Se va a descargar: " + listSalidas.Count().ToString() + " Salidas");
-                        db.UpdateAll(listSalidas);
-                        Debug.WriteLine("MAX_SALIDA_ID: " + listSalidas.First().SALIDA_ID.ToString());
-                        Preferences.Set("MAX_SALIDA_ID", listSalidas.First().SALIDA_ID.ToString());
-                        Debug.WriteLine("Salidas Descargadas: " + DateTime.Now);
                     }
-                }
-                catch (Exception ex)
-                {
-                    var properties = new Dictionary<string, string> {
+                    catch (Exception ex)
+                    {
+                        var properties = new Dictionary<string, string> {
                                             { "Category", "Error descargando Salidas" },
                                             { "Code", "App.xaml.cs Line: 683" },
                                             { "Lector", Preferences.Get("LECTOR", "N/A")}
                                         };
-                    Debug.WriteLine("Excepcion descargando Salidas: " + ex.ToString());
-                    Crashes.TrackError(ex, properties);
-                }
+                        Debug.WriteLine("Excepcion descargando Salidas: " + ex.ToString());
+                        Crashes.TrackError(ex, properties);
+                    }
 
+                }
+            }
+            catch (Exception ea)
+            {
+                Analytics.TrackEvent("Excepcion en el metodo DownloadOuts, Error: " + ea.Message);
+                Debug.WriteLine("Excepcion en el metodo DownloadOuts, Error: " + ea.Message);
             }
         }
     }

@@ -6,12 +6,31 @@
              xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
              mc:Ignorable="d"
              x:Class="SCVMobil.PopUpGuardarConfig">
-    <StackLayout Margin="14" Padding="20" Spacing="10" BackgroundColor="White"  VerticalOptions="Center">
-        <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Padding="0,0,0,10">
-            <Label FontAttributes="Bold" TextColor="Black" FontSize="30" Text="Datos guardados"/>
+    
+    <StackLayout Margin="14"
+                 Padding="20" 
+                 Spacing="10" 
+                 BackgroundColor="White" 
+                 VerticalOptions="Center">
+        
+        <StackLayout HorizontalOptions="Center" 
+                     VerticalOptions="Center"
+                     Padding="0,0,0,10">
+            
+            <Label FontAttributes="Bold" 
+                   TextColor="Black" 
+                   FontSize="30"
+                   Text="Datos guardados"/>
+            
         </StackLayout>
+        
         <StackLayout HorizontalOptions="Center">
-            <Label FontSize="20" TextColor="Black" FontAttributes="Bold" HorizontalTextAlignment="Center" Text="Configuracion guardada con exito"/>
+            
+            <Label FontSize="20" 
+                   TextColor="Black" 
+                   FontAttributes="Bold"
+                   HorizontalTextAlignment="Center"
+                   Text="Configuración guardada con éxito"/>
         </StackLayout>
         <StackLayout Margin="12" Padding="20" Spacing="20"  >
             <Button BackgroundColor="#F44336"
