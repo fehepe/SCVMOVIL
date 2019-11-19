@@ -76,7 +76,8 @@ namespace SCVMobil.Connections
 
         }
 
-        // Rrnar una lista de invitados
+
+        // Retornar una lista de invitados
         public List<Invitados> ExecuteGuest(string query)
         {
             try
@@ -100,7 +101,7 @@ namespace SCVMobil.Connections
                         #region Verificar que los valores no sean nulos antes de convertirlos, de lo contrario asignar nulo por defecto
                         if (dtResult[0] != System.DBNull.Value)
                         {
-                            invitado.INVITADO_ID = Convert.ToInt32(dtResult[0]);
+                            invitado.INVIDATO_ID = Convert.ToInt32(dtResult[0]);
                         }
                         else
                         {
@@ -108,165 +109,145 @@ namespace SCVMobil.Connections
                         }
                         if (dtResult[1] != System.DBNull.Value)
                         {
-                            invitado.INVIDATO_ID = Convert.ToInt32(dtResult[1]);
+                            invitado.Subida = Convert.ToBoolean(dtResult[1]);
                         }
                         if (dtResult[2] != System.DBNull.Value)
                         {
-                            invitado.Subida = Convert.ToBoolean(dtResult[2]);
+                            invitado.salidaSubida = Convert.ToBoolean(dtResult[2]);
                         }
                         if (dtResult[3] != System.DBNull.Value)
                         {
-                            invitado.salidaSubida = Convert.ToBoolean(dtResult[3]);
+                            invitado.Compania_ID = Convert.ToInt32(dtResult[3]);
 
                         }
                         if (dtResult[4] != System.DBNull.Value)
                         {
                             var prueba = dtResult[4].ToString();
-                            invitado.verificacionSubida = Convert.ToBoolean(dtResult[4]);
+                            invitado.Nombres = dtResult[4].ToString();
                         }
                         if (dtResult[5] != System.DBNull.Value)
                         {
-                            invitado.SALIDA_ID = Convert.ToInt32(dtResult[5]);
+                            invitado.Apellidos = dtResult[5].ToString();
                         }
                         if (dtResult[6] != System.DBNull.Value)
                         {
-                            invitado.Compania_ID = Convert.ToInt32(dtResult[6]);
+                            invitado.Fecha_Registro = Convert.ToDateTime(dtResult[6]);
                         }
                         if (dtResult[7] != System.DBNull.Value)
                         {
-                            invitado.Nombres = dtResult[7].ToString();
+                            invitado.Fecha_Salida = Convert.ToDateTime(dtResult[7]);
                         }
                         if (dtResult[8] != System.DBNull.Value)
                         {
-                            invitado.Apellidos = dtResult[8].ToString();
+                            invitado.Tipo = dtResult[8].ToString();
                         }
                         if (dtResult[9] != System.DBNull.Value)
                         {
-                            invitado.Puerta_Registro = Convert.ToInt32(dtResult[9]);
+                            invitado.Cargo = dtResult[9].ToString();
                         }
                         if (dtResult[10] != System.DBNull.Value)
                         {
-                            invitado.Fecha_Verificacion = Convert.ToDateTime(dtResult[10]);
+                            invitado.Tiene_Activo = Convert.ToInt32(dtResult[10]);
                         }
                         if (dtResult[11] != System.DBNull.Value)
                         {
-                            invitado.Fecha_Registro = Convert.ToDateTime(dtResult[11]);
+                            invitado.Estatus_ID = Convert.ToInt32(dtResult[11]);
                         }
                         if (dtResult[12] != System.DBNull.Value)
                         {
-                            invitado.Fecha_Salida = Convert.ToDateTime(dtResult[12]);
+                            invitado.Modulo = Convert.ToInt32(dtResult[12]);
                         }
                         if (dtResult[13] != System.DBNull.Value)
                         {
-                            invitado.Tipo = dtResult[13].ToString();
+                            invitado.Empresa_ID = Convert.ToInt32(dtResult[13]);
                         }
                         if (dtResult[14] != System.DBNull.Value)
                         {
-                            invitado.Cargo = dtResult[14].ToString();
+                            invitado.Placa = dtResult[14].ToString();
                         }
                         if (dtResult[15] != System.DBNull.Value)
                         {
-                            invitado.Tiene_Activo = Convert.ToInt32(dtResult[15]);
+                            invitado.Tipo_Visitante = dtResult[15].ToString();
                         }
                         if (dtResult[16] != System.DBNull.Value)
                         {
-                            invitado.Estatus_ID = Convert.ToInt32(dtResult[16]);
+                            invitado.Es_Grupo = Convert.ToInt32(dtResult[16]);
                         }
                         if (dtResult[17] != System.DBNull.Value)
                         {
-                            invitado.Modulo = Convert.ToInt32(dtResult[17]);
+                            invitado.Grupo_ID = Convert.ToInt32(dtResult[17]);
                         }
                         if (dtResult[18] != System.DBNull.Value)
                         {
-                            invitado.Empresa_ID = Convert.ToInt32(dtResult[18]);
+                            invitado.Puerta_Entrada = Convert.ToInt32(dtResult[18]);
                         }
                         if (dtResult[19] != System.DBNull.Value)
                         {
-                            invitado.Placa = dtResult[19].ToString();
+                            invitado.Actualizada_La_Salida = Convert.ToInt32(dtResult[19]);
                         }
                         if (dtResult[20] != System.DBNull.Value)
                         {
-                            invitado.Tipo_Visitante = dtResult[20].ToString();
+                            invitado.Horas_Caducidad = Convert.ToInt32(dtResult[20]);
                         }
                         if (dtResult[21] != System.DBNull.Value)
                         {
-                            invitado.Es_Grupo = Convert.ToInt32(dtResult[21]);
+                            invitado.Personas = Convert.ToInt32(dtResult[21]);
                         }
                         if (dtResult[22] != System.DBNull.Value)
                         {
-                            invitado.Grupo_ID = Convert.ToInt32(dtResult[22]);
+                            invitado.In_Out = Convert.ToInt32(dtResult[22]);
                         }
                         if (dtResult[23] != System.DBNull.Value)
                         {
-                            invitado.Puerta_Entrada = Convert.ToInt32(dtResult[23]);
+                            invitado.Origen_Entrada = dtResult[23].ToString(); ;
                         }
                         if (dtResult[24] != System.DBNull.Value)
                         {
-                            invitado.Actualizada_La_Salida = Convert.ToInt32(dtResult[24]);
+                            invitado.Origen_Salida = dtResult[24].ToString();
                         }
                         if (dtResult[25] != System.DBNull.Value)
                         {
-                            invitado.Horas_Caducidad = Convert.ToInt32(dtResult[25]);
+                            invitado.Comentario = dtResult[25].ToString();
                         }
                         if (dtResult[26] != System.DBNull.Value)
                         {
-                            invitado.Personas = Convert.ToInt32(dtResult[26]);
+                            invitado.Origen_IO = Convert.ToInt32(dtResult[26]);
                         }
                         if (dtResult[27] != System.DBNull.Value)
                         {
-                            invitado.In_Out = Convert.ToInt32(dtResult[27]);
+                            invitado.Actualizado = Convert.ToInt32(dtResult[27]);
                         }
                         if (dtResult[28] != System.DBNull.Value)
                         {
-                            invitado.Origen_Entrada = dtResult[28].ToString();
+                            invitado.Cpost = dtResult[28].ToString();
                         }
                         if (dtResult[29] != System.DBNull.Value)
                         {
-                            invitado.Origen_Salida = dtResult[29].ToString();
+                            invitado.Texto1_Entrada = dtResult[29].ToString();
                         }
                         if (dtResult[30] != System.DBNull.Value)
                         {
-                            invitado.Comentario = dtResult[30].ToString();
+                            invitado.Texto2_Entrada = dtResult[30].ToString();
                         }
                         if (dtResult[31] != System.DBNull.Value)
                         {
-                            invitado.Origen_IO = Convert.ToInt32(dtResult[31]);
+                            invitado.Texto3_Entrada = dtResult[31].ToString();
                         }
                         if (dtResult[32] != System.DBNull.Value)
                         {
-                            invitado.Actualizado = Convert.ToInt32(dtResult[32]);
+                            invitado.Secuencia_Dia = dtResult[32].ToString(); ;
                         }
                         if (dtResult[33] != System.DBNull.Value)
                         {
-                            invitado.Cpost = dtResult[33].ToString();
+                            invitado.No_Aplica_Induccion = dtResult[33].ToString();
                         }
                         if (dtResult[34] != System.DBNull.Value)
                         {
-                            invitado.Texto1_Entrada = dtResult[34].ToString();
+                            invitado.Visitado = Convert.ToInt32(dtResult[34]);
                         }
                         if (dtResult[35] != System.DBNull.Value)
                         {
-                            invitado.Texto2_Entrada = dtResult[35].ToString();
-                        }
-                        if (dtResult[36] != System.DBNull.Value)
-                        {
-                            invitado.Texto3_Entrada = dtResult[36].ToString();
-                        }
-                        if (dtResult[37] != System.DBNull.Value)
-                        {
-                            invitado.Secuencia_Dia = dtResult[37].ToString();
-                        }
-                        if (dtResult[38] != System.DBNull.Value)
-                        {
-                            invitado.No_Aplica_Induccion = dtResult[38].ToString();
-                        }
-                        if (dtResult[39] != System.DBNull.Value)
-                        {
-                            invitado.Visitado = Convert.ToInt32(dtResult[39]);
-                        }
-                        if (dtResult[40] != System.DBNull.Value)
-                        {
-                            invitado.Lector = Convert.ToInt32(dtResult[40]);
+                            invitado.Lector = Convert.ToInt32(dtResult[35]);
                         }
                         #endregion
 
@@ -309,6 +290,7 @@ namespace SCVMobil.Connections
                     while (dtResult.Read())
                     {
                         Invitados invitado = new Invitados();
+
                         #region Verificar que los valores no sean nulos antes de convertirlos, de lo contrario asignar nulo por defecto
                         if (dtResult[0] != System.DBNull.Value)
                         {
@@ -476,7 +458,6 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
-                var x = ea.Message;
                 Preferences.Set("SYNC_VSU", false);
                 return null;
             }
@@ -571,7 +552,7 @@ namespace SCVMobil.Connections
         }
 
 
-        // Retornar lsta de Companias
+        // Retornar lista de Companias
         public List<COMPANIAS> ExecuteCompanies(string query)
         {
             try
@@ -592,6 +573,8 @@ namespace SCVMobil.Connections
                     while (dtResult.Read())
                     {
                         COMPANIAS company = new COMPANIAS();
+
+                        #region Verificar que los valores no sean nulos antes de la conversion
                         company.COMPANIA_ID = Convert.ToInt32(dtResult[0]);
                         if (dtResult[1] != System.DBNull.Value)
                         {
@@ -600,7 +583,8 @@ namespace SCVMobil.Connections
                         if (dtResult[2] != System.DBNull.Value)
                         {
                             company.PUNTO_VSU = Convert.ToInt32(dtResult[2]);
-                        }                     
+                        }      
+                        #endregion
 
                         CompaniesList.Add(company);
                     }
@@ -621,7 +605,7 @@ namespace SCVMobil.Connections
         }
 
 
-        // Retornar Personas
+        // Retornar lista de Personas
         public List<PERSONAS> ExecutePeople(string query)
         {
             try
@@ -641,6 +625,7 @@ namespace SCVMobil.Connections
                 {
                     while (dtResult.Read())
                     {
+                        #region Verificar que los valores no sean nulos antes de realizar la conversion de ser asi, asignar null
                         PERSONAS person = new PERSONAS();
                         if (dtResult[0] != System.DBNull.Value)
                         {
@@ -654,7 +639,7 @@ namespace SCVMobil.Connections
                         {
                             person.NOMBRES_APELLIDOS = dtResult[1].ToString();
                         }
-
+                        #endregion
                         PeopleList.Add(person);
                     }
                 }
@@ -797,7 +782,7 @@ namespace SCVMobil.Connections
 
                         if (!string.IsNullOrEmpty(dtResult))
                         {
-                            registro.INVIDATO_ID = Convert.ToInt32(dtResult[1]);
+                            registro.INVIDATO_ID = Convert.ToInt32(dtResult);
                             registro.Subida = true;
                             if (!(registro.Fecha_Salida is null))
                             {
