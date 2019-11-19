@@ -16,7 +16,8 @@ using System.Globalization;
 using System.Threading;
 using System.Timers;
 using FirebirdSql.Data.FirebirdClient;
-using System.Data;
+using Rg.Plugins.Popup.Services;
+using System.Net.NetworkInformation;
 using SCVMobil.Models;
 
 namespace SCVMobil
@@ -33,7 +34,7 @@ namespace SCVMobil
         // This handles the Web data request
         private HttpClient _client = new HttpClient();
         private HttpClient _client2 = new HttpClient();
-
+        private string Url = "";
 
         public SettingsPage()
         {
@@ -46,9 +47,7 @@ namespace SCVMobil
             base.OnAppearing();
             setDefaults();
             eServerIP.Text = Preferences.Get("SERVER_IP", "192.168.1.170");
-            registrosIP.Text = Preferences.Get("REGISTROS_IP", "192.168.1.170");
-            eServerPort.Text = Preferences.Get("SERVER_PORT", "4441");
-            port.Text = Preferences.Get("REGISTROS_PORT", "4440");
+            
             eLector.Text = Preferences.Get("LECTOR", "1");
             entChunkSize.Text = Preferences.Get("CHUNK_SIZE", "50000");
             lbVersion.Text = "Ver: " + Preferences.Get("VERSION", "0.0.0.0.0");
@@ -65,40 +64,15 @@ namespace SCVMobil
         {
             if(Preferences.Get("SERVER_IP", "N/A") == "N/A")
             {
-                Preferences.Set("SERVER_IP", "192.168.1.103");
+                Preferences.Set("SERVER_IP", "192.168.1.170");
             }
-            if (Preferences.Get("REGISTROS_IP", "N/A") == "N/A")
-            {
-                Preferences.Set("REGISTROS_IP", "192.168.1.103");
-            }
-            if (Preferences.Get("SERVER_PORT", "N/A") == "N/A")
-            {
-                Preferences.Set("SERVER_PORT", "4441");
-            }
-            if (Preferences.Get("REGISTROS_PORT", "N/A") == "N/A")
-            {
-                Preferences.Set("REGISTROS_PORT", "4440");
-            }
+            
 
         }
 
-        private void Server_port_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            Preferences.Set("SERVER_PORT", e.NewTextValue);
-        }
+       
 
-        private void Lector_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            Preferences.Set("LECTOR", e.NewTextValue);
-            if (e.NewTextValue == "338")
-            {
-                Preferences.Set("DEV", "True");
-            }
-            else
-            {
-                Preferences.Set("DEV", "False");
-            }
-        }
+        
 
         private async void BtSync_Clicked(object sender, EventArgs e)
         {
@@ -178,6 +152,7 @@ namespace SCVMobil
                             reader.Close();
 
                             fb.Close();
+                            fb.Dispose();
 
                             break;
                         }
@@ -411,42 +386,73 @@ namespace SCVMobil
             {
                 //TODO: Handle exeption
             }
-        }
+        }     
 
-        private void EregistrosIP_Unfocused(object sender, FocusEventArgs e)
-        {
+        private async void Guardar_Clicked(object sender, EventArgs e) //Boton para guardar configuracion//
+        { 
+           
             Preferences.Set("SERVER_IP", eServerIP.Text);
-        }
-
-
-        private void EntChunkSize_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            Preferences.Set("CHUNK_SIZE", e.NewTextValue);
-        }
-
-        private void SwAutoSync_Toggled(object sender, ToggledEventArgs e)
-        {
-            Preferences.Set("AUTO_SYNC", e.Value.ToString());
-        }
-
-        private void ECommitSize_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            Preferences.Set("COMMIT_SIZE", e.NewTextValue);
+           
+            Preferences.Set("COMMIT_SIZE", eCommitSize.Text);
             var x = Preferences.Get("COMMIT_SIZE", "1000000");
-        }
+            Preferences.Set("AUTO_SYNC", swAutoSync.ToString());
+            Preferences.Set("LECTOR", eLector.Text);
+            if (eLector.Text == "338")
+            {
+                Preferences.Set("DEV", "True");
+            }
+            else
+            {
+                Preferences.Set("DEV", "False");
+            }
 
-        private void registrosIP_Unfocused(object sender, FocusEventArgs e)
-        {
-            Preferences.Set("REGISTROS_IP", registrosIP.Text);
-        }
-
-        private void port_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            Preferences.Set("REGISTROS_PORT", e.NewTextValue);
+            await PopupNavigation.PushAsync(new PopUpGuardarConfig()); //PopUp para guardar la configuracion//
+            
         }
 
         
 
-        
+        private async void pinbutton_Clicked(object sender, EventArgs e)
+        {
+            try
+            {              
+                Ping Pings = new Ping();
+                int timeout = 1;
+
+                if (Pings.Send(eServerIP.Text, timeout).Status == IPStatus.Success)
+                {
+
+                    try
+                    {
+                        string connectionString = "User ID=sysdba;Password=masterkey;" +
+                                           "Database=C:\\APP\\GAD\\registros.fdb;" +
+                                           $"DataSource={eServerIP.Text};Port=3050;Charset=NONE;Server Type=0;";
+
+                        FbConnection fb = new FbConnection(connectionString);
+                        fb.Open();
+
+
+                        fb.Close();
+                        await PopupNavigation.PushAsync(new PopUpPing()); //popup conexion con exito//
+                    }
+                    catch (Exception)
+                    {
+
+                        await PopupNavigation.PushAsync(new PopUpPingIncorrecto()); //popup conexion erronea//
+                    }
+                }
+                else
+                {
+                    await PopupNavigation.PushAsync(new PopUpPingIncorrecto());//popup conexion erronea//
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
     }
 }

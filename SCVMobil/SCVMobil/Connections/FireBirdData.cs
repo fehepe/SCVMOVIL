@@ -279,10 +279,10 @@ namespace SCVMobil.Connections
                 FbConnection fb = new FbConnection(connectionString(true));
 
                 fb.Open();
+
                 FbCommand command = new FbCommand(
                     query,
                     fb);
-
                 var dtResult = command.ExecuteReader();
 
                 if (dtResult.HasRows)

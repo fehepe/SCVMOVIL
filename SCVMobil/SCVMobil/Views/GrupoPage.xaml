@@ -5,7 +5,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              Title="GRUPOS"
-             x:Class="SCVMobil.GrupoPage">
+             x:Class="SCVMobil.GrupoPage"
+              BackgroundColor="#FFFFFF">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem 
@@ -20,13 +21,7 @@
                 
             Padding="20"
             
-            >
-
-                <Image
-                Source="grupo"
-                HeightRequest="100"
-                />
-
+            >               
                 <StackLayout
                 Orientation="Horizontal"
                 >
@@ -105,20 +100,13 @@
                     </Frame>
                 </ContentView>
 
-
-
-
                 <StackLayout>
-                    <Frame 
-                CornerRadius="10" 
-                BorderColor="#2196F3" 
-                BackgroundColor="#2196F3"
-                Margin="1,20"
+                    <Frame CornerRadius="15" 
+                BorderColor="#757575"
                 Padding="5">
-                        <Frame 
-                   CornerRadius="10" 
-                   BackgroundColor="White" 
-                   Padding="1">
+                        <Frame CornerRadius="10" 
+                    BackgroundColor="White" 
+                    Padding="1" >
                             <Entry
                     x:Name="cedula"
                     Completed="Cedula_Completed"
@@ -127,16 +115,12 @@
                     />
                         </Frame>
                     </Frame>
-                    <Frame 
-                CornerRadius="10" 
-                BorderColor="#2196F3" 
-                BackgroundColor="#2196F3"
-           
+                    <Frame CornerRadius="15" 
+                BorderColor="#757575"
                 Padding="5">
-                        <Frame 
-                   CornerRadius="10" 
-                   BackgroundColor="White" 
-                   Padding="1">
+                        <Frame CornerRadius="10" 
+                    BackgroundColor="White" 
+                    Padding="1" >
                             <Entry
                     x:Name="Nombres"
                    HorizontalTextAlignment="Center"

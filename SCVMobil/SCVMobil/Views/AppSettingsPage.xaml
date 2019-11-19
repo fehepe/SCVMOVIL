@@ -2,15 +2,17 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SCVMobil.AppSettingsPage"
-             Title="Configuración de SCV">
+             Title="Configuración de SCV"
+              BackgroundColor="#FFFFFF"
+             >
     <ContentPage.Content>
-        <StackLayout Padding="40"
-                     >
+      
+        <StackLayout Padding="40">
             <StackLayout
                 VerticalOptions="CenterAndExpand"
                 Margin="0,0,0,0">
                 <Grid
-                    RowSpacing="30"
+                    RowSpacing="50"
                     Margin="0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -29,20 +31,24 @@
                         Grid.Row="0"
                         Grid.Column="1" 
                         x:Name="placa"
-                        Toggled="Placa_Toggled"/>
-                    <Label
+                        Toggled="Placa_Toggled"
+                        OnColor="#F44336"
+                        ThumbColor="#757575"/>
+                    <Label                        
                         Grid.Row="1"
                         Grid.Column="0" 
                         FontSize="25"
                         FontAttributes="Bold"
                         TextColor="Black"
-                        Text="Visita A"
+                        Text="Visita a"
                         VerticalOptions="Center"/>
                     <Switch
                         Grid.Row="1"
                         Grid.Column="1"
                         x:Name="visitaA"
-                        Toggled="VisitaA_Toggled"/>
+                        Toggled="VisitaA_Toggled"
+                         OnColor="#F44336"
+                        ThumbColor="#757575"/>
                     <Label
                         Grid.Row="2"
                         Grid.Column="0"
@@ -51,14 +57,13 @@
                         FontAttributes="Bold"
                         Text="Puerta"
                         VerticalOptions="Center"/>
-                    <Picker
-                        
+                    <Picker                        
                         x:Name="entPuerta"
                         Grid.Row="2"
                         Grid.Column="1"
                         SelectedIndexChanged="entPuerta_SelectedIndexChanged"
-                        
-                        />
+                        ItemsSource="{Binding COMPANIAS}"
+                        ItemDisplayBinding="{Binding PUNTOS_VSU}"/>
                     <Label
                         Grid.Row="3"
                         Grid.Column="0"
@@ -72,18 +77,20 @@
                         Grid.Column="1"
                         Toggled="verificacion_Toggled"
                         x:Name="verificacion"
+                        OnColor="#F44336"
+                        ThumbColor="#757575"
                         />
                     <Label
                         Grid.Row="4"
                         Grid.Column="0"
                         FontSize="20"
-                         TextColor="Black"
+                        TextColor="Black"
                         FontAttributes="Bold"
                         x:Name="lblTiempo"
                         Text="Tiempo de verificacion"
                         VerticalOptions="Center"/>
-                    <Entry 
-                        
+
+                    <Entry                     
                         x:Name="entTiempo"                           
                         Grid.Row="4"
                         Grid.Column="1"
@@ -93,11 +100,8 @@
             </StackLayout>
             <StackLayout
                 VerticalOptions="EndAndExpand">
-                <BoxView
-                    HorizontalOptions="FillAndExpand"
-                    HeightRequest="3"
-                    Color="Black"
-                    Margin="-40,0,-40,0"></BoxView>
+                
+               
                 <StackLayout
                     HorizontalOptions="CenterAndExpand"
                         Margin="0,0,0,-20"
@@ -108,8 +112,8 @@
                         x:Name="btConfigAvan" 
                         Text="Config. Avanzada" 
                         Clicked="BtConfigAvan_Clicked"
-                        
-                        BackgroundColor="Blue"
+                        FontAttributes="Bold"
+                        BackgroundColor="#F44336"
                         TextColor="White"                
                         CornerRadius="27"                       
                         WidthRequest="140"
@@ -120,8 +124,9 @@
                         Text="Limpiar DB" 
                         Clicked="BtnClearDB_Clicked"
                         CornerRadius="27"
-                        BackgroundColor="Blue"
+                        BackgroundColor="#F44336"
                         TextColor="White"
+                        FontAttributes="Bold"
                         WidthRequest="140"/>
                 </StackLayout>
                 

@@ -15,17 +15,15 @@ using Xamarin.Forms.Xaml;
 namespace SCVMobil
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class RegisterPage : ContentPage
+    public partial class RegistroPage : ContentPage
     {
-        public RegisterPage(string data)
+        public RegistroPage(string data)
         {
             InitializeComponent();
             EntryCedula.Text = data;
         }
 
-    
-
-        private async void Agregar_Clicked_1(object sender, EventArgs e)
+        private async void Agregar_Clicked(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(EntryCedula.Text) || string.IsNullOrEmpty(EntryNombre.Text) || string.IsNullOrEmpty(EntryApellido.Text) || EntryCedula.Text.Length != 11)
             {
@@ -66,6 +64,7 @@ namespace SCVMobil
 
 
             }
+
         }
     }
 }

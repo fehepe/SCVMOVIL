@@ -5,34 +5,24 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="SCVMobil.Verificacion"
-             Title="Verificacion">
+             Title="Verificacion"
+              BackgroundColor="#FFFFFF">
     <ContentPage.Content>
         <StackLayout
             VerticalOptions="Center"
-            Padding="40">
-            <Label Text="Datos de Invitado"
+            Padding="40"
+            >
+            <Label Text="Datos del invitado"
                  FontSize="35"
                    FontAttributes="Bold"
-                   TextColor="Black"
-                   
+                   TextColor="Black"                   
                    HorizontalOptions="CenterAndExpand"
-                   Margin="0,0,0,40"/>
-            <Grid
-                
-                RowSpacing="15">
-                <Grid.RowDefinitions>
-                    <RowDefinition
-                        Height="*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition
-                        Width="*"/>
-                </Grid.ColumnDefinitions>
-
+                   Margin="0,0,0,40"/>          
+               
                 <Label
                     Grid.Row="0"
                     Grid.Column="0"
-                    Text="Identificacion:"
+                    Text="Identificación:"
                     TextColor="Black"
                     FontSize="20"
                     VerticalTextAlignment="Center"
@@ -40,6 +30,7 @@
                     HorizontalTextAlignment="Center"
                     HorizontalOptions="Center"
                     ></Label>
+               
                 <Label
                     x:Name="lblCedula"
                     VerticalTextAlignment="Center"
@@ -148,16 +139,17 @@
                     HorizontalTextAlignment="Center"
                     HorizontalOptions="Center"
                     ></Label>
-            </Grid>
+            
             <Button
                 x:Name="btnCorrecto"
-                CornerRadius="23"
-                BackgroundColor="Blue"
+                CornerRadius="20"
+                BackgroundColor="#F44336"
                 TextColor="White"
-                HeightRequest="75"
+                HeightRequest="40"
+                WidthRequest="190"
                 Clicked="btnCorrecto_Clicked"
                 Text="Correcto"
-                FontSize="20"
+                FontSize="17"
                 FontAttributes="Bold"
                 Margin="0,20,0,0"/>
         </StackLayout>

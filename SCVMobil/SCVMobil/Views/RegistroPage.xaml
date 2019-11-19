@@ -4,9 +4,8 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="SCVMobil.RegisterPage"
-             Title="Registro"
-             BackgroundColor="#FFFFFF">
+             x:Class="SCVMobil.RegistroPage"
+             Title="Registro">
     <ContentPage.Content>
         <StackLayout
             VerticalOptions="Center"
@@ -81,7 +80,7 @@
             </Frame>
             <Button  
                 x:Name="Agregar"
-                Clicked="Agregar_Clicked_1"
+                Clicked="Agregar_Clicked"
                 Text="Agregar"
                 BackgroundColor="#F44336" 
                 VerticalOptions="CenterAndExpand"
@@ -90,7 +89,6 @@
                 WidthRequest="190"
                 Margin="30,40,30,0"
                 FontSize="17"
-                FontAttributes="Bold"
                 TextColor="White">
             </Button>
         </StackLayout>
