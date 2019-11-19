@@ -147,9 +147,6 @@ namespace SCVMobil
                     //var registroInv = db.Query<Invitados>(querry);
                     var registroVer = db.Query<Invitados>(querrys);
                        
-
-
-
                         if (registroVer.Any() )
                         {
                             if (Preferences.Get("VERIFICA", false))

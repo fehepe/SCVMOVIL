@@ -32,6 +32,7 @@ namespace SCVMobil
             setdefaults();
             Localidad_VSU();
             visitaA.IsToggled = Preferences.Get("VISITA_A_SELECTED", true);
+
             placa.IsToggled= Preferences.Get("PLACA_SELECTED", true);
             TiempoVerif.SelectedItem = Preferences.Get("TIEMPOS", "1");
         }

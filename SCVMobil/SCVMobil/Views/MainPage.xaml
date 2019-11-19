@@ -107,7 +107,7 @@
 
         <Label VerticalOptions="End"
                HorizontalOptions="Start"
-               Margin="0,170,0,0"
+               Margin="0,140,0,0"
                Text="Desarrollado por:"
                TextColor="Black"
         />
@@ -117,7 +117,6 @@
                Source="GAD_Logo"
                WidthRequest="100"
                HeightRequest="100"
-               Margin="0,0,0,0"
         />
 
     </StackLayout>     
