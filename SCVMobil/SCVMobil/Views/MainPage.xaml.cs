@@ -132,77 +132,87 @@ namespace SCVMobil
                 if (inString.StartsWith("ID"))
                 {
                         
-                    var querry = "SELECT * FROM Invitados WHERE INVIDATO_ID = " + inString.Replace("ID", "") + " AND FECHA_SALIDA is null AND Fecha_Verificacion is not null";
-                    var querrys = "SELECT * FROM Invitados WHERE INVIDATO_ID= " + inString.Replace("ID", "") + " AND FECHA_SALIDA is null AND Fecha_Verificacion is null";
-                    var registroInv = db.Query<Invitados>(querry);
+                   // var querry = "SELECT * FROM Invitados WHERE INVIDATO_ID = " + inString.Replace("ID", "") + " AND FECHA_SALIDA is null AND Fecha_Verificacion is not null";
+                    var querrys = "SELECT * FROM Invitados WHERE INVIDATO_ID= " + inString.Replace("ID", "") + " AND FECHA_SALIDA is null";
+                    //var registroInv = db.Query<Invitados>(querry);
                     var registroVer = db.Query<Invitados>(querrys);
                        
 
 
 
-                        if (registroVer.Any() && Preferences.Get("VERIFICA", false))
+                        if (registroVer.Any() )
                         {
-                            if (registroVer.First().Fecha_Verificacion is null)
+                            if (Preferences.Get("VERIFICA", false))
+                            {
+
+                                if (registroVer.First().Fecha_Verificacion is null)
+                                {
+                                    registroVer.First().Fecha_Verificacion = DateTime.Now;
+                                    registroVer.First().Puerta_Registro = Convert.ToInt32(Preferences.Get("PUERTA", "1459").ToString());
+                                    registroVer.First().verificacionSubida = null;
+                                    db.UpdateAll(registroVer);
+                                    DependencyService.Get<IToastMessage>().DisplayMessage("Se ha verificado correctamente.");
+                                    await Navigation.PushAsync(new Verificacion(registroVer.First()));
+                                }
+                                else
+                                {
+                                    var time = (DateTime.Now - registroVer.First().Fecha_Verificacion.Value).TotalSeconds;
+                                    var pref = Convert.ToDouble(Preferences.Get("TIEMPOS", "1")) * 60;
+                                    if (time < pref) //REVISAR//
+                                    {
+                                        DependencyService.Get<IToastMessage>().DisplayMessage("Se ha acaba de verificar este id.");
+                                    }
+                                    else
+                                    {
+                                        if (registroVer.First().Fecha_Salida is null)
+                                        {
+
+                                            registroVer.First().Fecha_Salida = DateTime.Now;
+                                            registroVer.First().salidaSubida = null;
+                                            db.UpdateAll(registroVer);
+                                            DependencyService.Get<IToastMessage>().DisplayMessage("Se ha dado salida correctamente.");
+                                        }
+                                    }
+
+                                }
+                            }
+                            else
                             {
                                 registroVer.First().Fecha_Verificacion = DateTime.Now;
                                 registroVer.First().Puerta_Registro = Convert.ToInt32(Preferences.Get("PUERTA", "1459").ToString());
                                 registroVer.First().verificacionSubida = null;
+                                registroVer.First().Fecha_Salida = DateTime.Now;
+                                registroVer.First().salidaSubida = null;
                                 db.UpdateAll(registroVer);
-                                DependencyService.Get<IToastMessage>().DisplayMessage("Se ha verificado correctamente.");
-                                await Navigation.PushAsync(new Verificacion(registroVer.First()));
+                                DependencyService.Get<IToastMessage>().DisplayMessage("Se ha dado salida correctamente.");
                             }
-
-
-                           
-
-                        }
-                        else if (registroInv.Any())
+                        }                        
+                        else
                         {
-                            var time = (DateTime.Now - registroInv.First().Fecha_Verificacion.Value.Date).Seconds;
-                            var pref = Convert.ToDouble(Preferences.Get("TIEMPOS", "1"))*60;
-                            if ( time < pref ) //REVISAR//
-                            {
-                                DependencyService.Get<IToastMessage>().DisplayMessage("Se ha acaba de verificar este id.");
 
-                            }
-                            else
+                            if (!Preferences.Get("SYNC_VSU", false))
                             {
-                                if (registroInv.First().Fecha_Salida is null)
+                                var querrySal = "SELECT * FROM SalidaOffline WHERE INVIDATO_ID = " + inString.Replace("ID", "");
+                                var registroSal = db.Query<SalidaOffline>(querrySal);
+                                if (!registroSal.Any())
                                 {
-                                    registroInv.First().Fecha_Salida = DateTime.Now;
-                                    registroInv.First().salidaSubida = null;
-                                    db.UpdateAll(registroInv);
-                                    DependencyService.Get<IToastMessage>().DisplayMessage("Se ha dado salida correctamente.");
+                                    //Hacer el insert a la base de datos local para subirlo mas tarde
+                                    var SalOF = new SalidaOffline();
+                                    SalOF.INVIDATO_ID = int.Parse(inString.Replace("ID", ""));
+                                    SalOF.Fecha_Salida = DateTime.Now;
+                                    SalOF.Subida = null;
+                                    db.Insert(SalOF);
                                 }
                                 else
                                 {
-                                    DependencyService.Get<IToastMessage>().DisplayMessage("Esta persona ya salió.");
+                                    DependencyService.Get<IToastMessage>().DisplayMessage("Este ID de Salida ya se encuentra en la base de datos");
                                 }
                             }
-                            
+                            else
+                            {
+                                DependencyService.Get<IToastMessage>().DisplayMessage("Este ID de Salida no existe.");
+                            }
                         }
-
-
-                        else
-                        {
-                        DependencyService.Get<IToastMessage>().DisplayMessage("No existe este ID de salida");
-
-                        var querrySal = "SELECT * FROM SalidaOffline WHERE INVIDATO_ID = " + inString.Replace("ID", "");
-                        var registroSal = db.Query<SalidaOffline>(querrySal);
-                        if (!registroSal.Any())
-                        {
-                            //Hacer el insert a la base de datos local para subirlo mas tarde
-                            var SalOF = new SalidaOffline();
-                            SalOF.INVIDATO_ID = int.Parse(inString.Replace("ID", ""));
-                            SalOF.Fecha_Salida = DateTime.Now;
-                            SalOF.Subida = null;
-                            db.Insert(SalOF);
-                        }
-                        else
-                        {
-                            DependencyService.Get<IToastMessage>().DisplayMessage("Este ID de Salida ya se encuentra en la base de datos");
-                        }
-                    }
                 }
                 else
                 {
@@ -217,7 +227,6 @@ namespace SCVMobil
                         
                         querry = "SELECT * FROM PADRON WHERE CEDULA = '" + inString + "'";
                         var registro = db.Query<PADRON>(querry);
-
                         entCedula.Text = registro.First().CEDULA;
                         entNombres.Text = registro.First().NOMBRES;
                         entApellidos.Text = registro.First().APELLIDO1 + " " + registro.First().APELLIDO2;
