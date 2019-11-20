@@ -67,9 +67,9 @@
                         Grid.Row="3"
                         Grid.Column="0"
                         FontSize="20"
-                         TextColor="Black"
+                        TextColor="Black"
                         FontAttributes="Bold"
-                        Text="Modo Verficacion"
+                        Text="Modo Verificacion"
                         VerticalOptions="Center"/>
                     <Switch
                         Grid.Row="3"

@@ -83,9 +83,6 @@ namespace SCVMobil
             {
                 try
                 {
-
-
-
                     //Mostramos el popup
                     popupLoadingView.IsVisible = true;
 
@@ -127,7 +124,7 @@ namespace SCVMobil
                         {
                             FbConnection fb = new FbConnection(connectionString);
 
-                            fb.Open();
+                             fb.Open();
                             FbCommand command = new FbCommand(
                                 querry,
                                 fb);
@@ -256,9 +253,9 @@ namespace SCVMobil
                                     commitedRegistros = commitedRegistros + listPadron.Count;
                                     listPadron.Clear();
                                 }
-                                catch
+                                catch(Exception ea)
                                 {
-
+                                    Debug.WriteLine("Se ha encontrado una excepcion, Error: " + ea.Message);
                                 }
                             }
                             lblLoadingText.Text = "Downloading BOLETAS: " + loadedRegistros.ToString() + "/" + maxRegistro.ToString();
@@ -288,7 +285,7 @@ namespace SCVMobil
                 }
                 catch (Exception ey)
                 {
-                    Debug.WriteLine("Error syncronisando: " + ey);
+                    Debug.WriteLine("Error syncronisando: " + ey.Message);
                     popupLoadingView.IsVisible = false;
                     try
                     {
@@ -436,6 +433,7 @@ namespace SCVMobil
                         fb.Close();
                         Preferences.Set("SERVER_IP", eServerIP.Text);
                         await PopupNavigation.PushAsync(new PopUpPing()); //popup conexion con exito//
+                        Debug.WriteLine("Ping exitoso a la ip: "+ eServerIP.Text);
                     }
                     catch (Exception ea)
                     {
