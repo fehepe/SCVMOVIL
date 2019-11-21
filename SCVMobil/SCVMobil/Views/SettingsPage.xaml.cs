@@ -52,7 +52,7 @@ namespace SCVMobil
             
             eLector.Text = Preferences.Get("LECTOR", "1");
             entChunkSize.Text = Preferences.Get("CHUNK_SIZE", "50000");
-            lbVersion.Text = "Ver: " + Preferences.Get("VERSION", "0.0.0.0.0");
+            lbVersion.Text = "Ver: " + Preferences.Get("VERSION", "3.0");
             swAutoSync.IsToggled = Preferences.Get("AUTO_SYNC", "False") == "True";
             eCommitSize.Text = Preferences.Get("COMMIT_SIZE", "1000000");
            

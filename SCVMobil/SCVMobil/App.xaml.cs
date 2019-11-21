@@ -139,7 +139,7 @@ namespace SCVMobil
                 Preferences.Set("DB_PATH", dbPath);
 
                 //Setiamos la Version
-                Preferences.Set("VERSION", "1.28.5.19.1");
+                Preferences.Set("VERSION", "3.0");
 
                 //Conectar con la base de datos
                 var db = new SQLiteConnection(dbPath);
