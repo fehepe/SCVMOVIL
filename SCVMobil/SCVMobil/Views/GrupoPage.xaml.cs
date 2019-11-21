@@ -11,6 +11,8 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using SCVMobil.Models;
+using Rg.Plugins.Popup.Services;
+using SCVMobil.Views;
 
 namespace SCVMobil
 {
@@ -25,7 +27,7 @@ namespace SCVMobil
             InitializeComponent();
             this.empresa.Text = empresa;
             this.visitaA.Text = visita;
-            this.cedula.Text = cedula;
+            //this.cedula.Text = cedula;
             this.Nombres.Text = nombres;
             Nombres.Completed += Nombres_Completed;
             this.cedula.Completed += Cedula_Completed;
@@ -41,36 +43,43 @@ namespace SCVMobil
 
         private async void Nombres_Completed(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(cedula.Text))
+            try
             {
-                await DisplayAlert("Error", "Debe Ingresar Cedula", "Aceptar");
-                cedula.Focus();
-                return;
-            }
-            if (string.IsNullOrEmpty(Nombres.Text))
-            {
-                await DisplayAlert("Error", "Debe Ingresar nombres y apellidos", "Aceptar");
-                Nombres.Focus();
-                return;
-            }
+                if (string.IsNullOrEmpty(cedula.Text))
+                {
+                    await DisplayAlert("Error", "Debe Ingresar Cedula", "Aceptar");
+                    cedula.Focus();
+                    return;
+                }
+                if (string.IsNullOrEmpty(Nombres.Text))
+                {
+                    await DisplayAlert("Error", "Debe Ingresar nombres y apellidos", "Aceptar");
+                    Nombres.Focus();
+                    return;
+                }
 
-            Visitas visita = new Visitas
-            {
-                Cedula = cedula.Text,
-                Nombres = Nombres.Text,
-                Empresa = empresa.Text,
-                VisitaA = visitaA.Text,
+                Visitas visita = new Visitas
+                {
+                    Cedula = cedula.Text,
+                    Nombres = Nombres.Text,
+                    Empresa = empresa.Text,
+                    VisitaA = visitaA.Text,
 
-            };
-            using (var datos = new DataAccess())
-            {
-                datos.InsertVisita(visita);
-                listaGrupo.ItemsSource = datos.GetVisitas();
+                };
+                using (var datos = new DataAccess())
+                {
+                    datos.InsertVisita(visita);
+                    listaGrupo.ItemsSource = datos.GetVisitas();
+                }
+                cedula.Text = string.Empty;
+                Nombres.Text = string.Empty;
+
+                await DisplayAlert("Confirmacion", "Visita agregada", "Aceptar");
             }
-            cedula.Text = string.Empty;
-            Nombres.Text = string.Empty;
-
-            await DisplayAlert("Confirmacion", "Visita agregada", "Aceptar");
+            catch (Exception ea)
+            {
+                Debug.WriteLine("Ha ocurrido una excepcion, motivo: "+ ea.Message);
+            }
 
         }
 
@@ -81,11 +90,20 @@ namespace SCVMobil
         }
         protected override void OnDisappearing()// Cuando desaparezca la pantalla, apagamos el scanner
         {
-            base.OnDisappearing();
-            scanner.GetScanner(false);
-            ppCedulaNoExiste.IsVisible = false;
-           
+            try
+            {
 
+                //cedula.Text = string.Empty;
+                base.OnDisappearing();
+                scanner.GetScanner(false);
+                ppCedulaNoExiste.IsVisible = false;
+
+
+            }
+            catch (Exception ea)
+            {
+                Debug.WriteLine("Ha ocurrido una excepcion en el OnDisappearing, motivo: " + ea.Message);
+            }
         }
 
         private void Cedula_Completed(object sender, EventArgs e)
@@ -94,31 +112,59 @@ namespace SCVMobil
         }
         public void cedulaScanned(string inString)// Metodo que se invoca cuando se scanea un documento
         {
-            if (inString.Contains("|"))
+            try
             {
-                inString = inString.Substring(0, inString.IndexOf("|") + 0);
-                //Creamos la coneccion con la base de datos.
-                entrada(inString);
+                if (inString.Contains("|"))
+                {
+                    inString = inString.Substring(0, inString.IndexOf("|") + 0);
+                    //Creamos la coneccion con la base de datos.
+                    entrada(inString);
+                }
+                else
+                {
+                    entrada(inString);
+                }
             }
-            else
+            catch (Exception ea)
             {
-                entrada(inString);
+                Debug.WriteLine("Ha ocurrido una excepcion en el metodo cedulaScanned, motivo: " + ea.Message);
             }
 
         }
         private void BtOKCedulaNoExiste_Clicked(object sender, EventArgs e)
         {
 
-            Navigation.PushAsync(new MainPage());
+            try
+            {
+                Navigation.PushAsync(new MainPage());
+            }
+            catch (Exception ea)
+            {
+                Debug.WriteLine("Ha ocurrido una excepcion, en el BtOKCedulaNoExiste_Clicked, motivo: " + ea.Message);
+            }
         }
+
         protected override void OnAppearing() //Cuando aparesca la pagina, refrescamos.
         {
-            Debug.WriteLine("Appeared");
 
-            scanner.GetScanner(true);
-            cedula.Text = string.Empty;
-            Nombres.Text = string.Empty;
-             
+            try
+            {
+                Debug.WriteLine("Appeared");
+                if (Preferences.Get("VISITA_A_SELECTED", false) == false)
+                {
+                    VisitaALabel.IsVisible = false;
+                    FrameName1.IsVisible = false;
+                    FrameName2.IsVisible = false;
+                }
+                cedula.Text = string.Empty;
+                Nombres.Text = string.Empty;
+                scanner.GetScanner(true);
+            }
+            catch (Exception ea)
+            {
+                Debug.WriteLine("Ha ocurrido una excepcion, en el metodo OnAppeared, motivo: " + ea.Message);
+            }
+            
         }
 
         private async void ToolbarItem_Clicked(object sender, EventArgs e)//Metodo para imprimir los grupos
@@ -161,7 +207,7 @@ namespace SCVMobil
                 registroInvitados.Tipo_Visitante = "VISITANTE";
                 registroInvitados.Es_Grupo = 0;
                 registroInvitados.Grupo_ID = 0;
-                registroInvitados.Puerta_Entrada = 2;
+                registroInvitados.Puerta_Entrada = Convert.ToInt32(Preferences.Get("LOCALIDAD_VSU", "1495"));
                 registroInvitados.Actualizada_La_Salida = 0;
                 registroInvitados.Horas_Caducidad = 12;
                 registroInvitados.Personas = 1;
@@ -200,7 +246,7 @@ namespace SCVMobil
                     registroInvitados.Tipo_Visitante = "VISITANTE";
                     registroInvitados.Es_Grupo = 0;
                     registroInvitados.Grupo_ID = 0;
-                    registroInvitados.Puerta_Entrada = 2;
+                    registroInvitados.Puerta_Entrada = Convert.ToInt32(Preferences.Get("LOCALIDAD_VSU", "1495"));
                     registroInvitados.Actualizada_La_Salida = 0;
                     registroInvitados.Horas_Caducidad = 12;
                     registroInvitados.Personas = 1;
@@ -225,148 +271,213 @@ namespace SCVMobil
 
         public async void entrada(String inString)
         {
-            if (inString != "")
+            try
             {
-                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-                //Vamos a ver si es un ID de salida.
-                if (inString.StartsWith("ID"))
-                {
-                    var querry = "SELECT * FROM Invitados WHERE INVIDATO_ID = " + inString.Replace("ID", "") + " AND FECHA_SALIDA is null";
-                    var registroInv = db.Query<Invitados>(querry);
-                    if (registroInv.Any())
-                    {
-                        if (registroInv.First().Fecha_Salida is null)
-                        {
-                            registroInv.First().Fecha_Salida = DateTime.Now;
-                            registroInv.First().salidaSubida = null;
-                            db.UpdateAll(registroInv);
-                            //await DisplayAlert("Salida", "Se ha dado salida correctamente.", "OK");
-                            DependencyService.Get<IToastMessage>().DisplayMessage("Se ha dado salida correctamente.");
-                        }
-                        else
-                        {
-                            //await DisplayAlert("Error", "Esta persona ya salió.", "OK");
-                            DependencyService.Get<IToastMessage>().DisplayMessage("Esta persona ya salió.");
-                        }
-
-                    }
-                    else
-                    {
-                        // await DisplayAlert("Error", "No existe este ID de salida", "OK");
-                        DependencyService.Get<IToastMessage>().DisplayMessage("No existe este ID de salida");
-
-                    }
-
-                }
-                else
+                if (inString != "")
                 {
 
-                    //Vamos a verificar si la persona ya entro.
-                    var querry = "SELECT * FROM INVITADOS WHERE CARGO = '" + inString + "' AND FECHA_SALIDA is NULL";
-
-                    var registroVerifInv = db.Query<Invitados>(querry);
-
-                    if (registroVerifInv.Any())
+                    if (inString.Length == 11 || inString.StartsWith("ID"))
                     {
-                        //Esto quiere decir que aun la persona no ha salido.
-                         db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-                         querry = "SELECT * FROM Invitados WHERE CARGO = '" + inString + "' AND FECHA_SALIDA is null";
-                        var registroInv = db.Query<Invitados>(querry);
-                        registroInv.First().Fecha_Salida = DateTime.Now;
-                        registroInv.First().salidaSubida = null;
-              
-                        db.UpdateAll(registroInv);
-
-                        DependencyService.Get<IToastMessage>().DisplayMessage("Se ha dado salida correctamente.");
-                    }
-
-
-                    else
-                    {
-                        // Como no tiene reserva entramos.
-                        //Buscamos la cedula en el padron.
-                        querry = "SELECT * FROM PADRON WHERE CEDULA = '" + inString + "'";
-                        //var que = "select * from VW_RESERVA_VISITA where VISITAS_DOCUMENTO='" + inString + "'";
-                        //var registro2 = db.Query<VW_RESERVA_VISITA>(que);
-
-                        try
+                        var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                        //Vamos a ver si es un ID de salida.
+                        if (inString.StartsWith("ID"))
                         {
-                            //Ejecutamos el query.
-                            var registro = db.Query<PADRON>(querry);
-                            //  var registro2 = db.Query<VW_RESERVA_VISITA>(que);
 
+                            // var querry = "SELECT * FROM Invitados WHERE INVIDATO_ID = " + inString.Replace("ID", "") + " AND FECHA_SALIDA is null AND Fecha_Verificacion is not null";
+                            var querrys = "SELECT * FROM Invitados WHERE INVIDATO_ID= " + inString.Replace("ID", "") + " AND FECHA_SALIDA is null";
+                            //var registroInv = db.Query<Invitados>(querry);
+                            var registroVer = db.Query<Invitados>(querrys);
 
-                            if (registro.First().CEDULA == " ")
+                            if (registroVer.Any())
                             {
-                                await DisplayAlert("Error", "No puede dejar este campo vacio", "Aceptar");
-                                cedula.Text = registro.First().CEDULA;
-                                Nombres.Text = registro.First().NOMBRES + " " + registro.First().APELLIDO1 + " " + registro.First().APELLIDO2;
+                                if (Preferences.Get("VERIFICA", false))
+                                {
 
+                                    if (registroVer.First().Fecha_Verificacion is null)
+                                    {
+                                        registroVer.First().Fecha_Verificacion = DateTime.Now;
+                                        registroVer.First().Puerta_Registro = Convert.ToInt32(Preferences.Get("PUERTA", "1459").ToString());
+                                        registroVer.First().verificacionSubida = null;
+                                        db.UpdateAll(registroVer);
+                                        DependencyService.Get<IToastMessage>().DisplayMessage("Se ha verificado correctamente.");
+                                        await Navigation.PushAsync(new Verificacion(registroVer.First()));
+                                    }
+                                    else
+                                    {
+                                        var time = (DateTime.Now - registroVer.First().Fecha_Verificacion.Value).TotalSeconds;
+                                        var pref = Convert.ToDouble(Preferences.Get("TIEMPOS", "1")) * 60;
+                                        if (time < pref) //REVISAR//
+                                        {
+                                            DependencyService.Get<IToastMessage>().DisplayMessage("Se ha acaba de verificar este id.");
+                                        }
+                                        else
+                                        {
+                                            if (registroVer.First().Fecha_Salida is null)
+                                            {
 
+                                                registroVer.First().Fecha_Salida = DateTime.Now;
+                                                registroVer.First().salidaSubida = null;
+                                                db.UpdateAll(registroVer);
+                                                DependencyService.Get<IToastMessage>().DisplayMessage("Se ha dado salida correctamente.");
+                                            }
+                                        }
+
+                                    }
+                                }
+                                else
+                                {
+                                    registroVer.First().Fecha_Verificacion = DateTime.Now;
+                                    registroVer.First().Puerta_Registro = Convert.ToInt32(Preferences.Get("PUERTA", "1459").ToString());
+                                    registroVer.First().verificacionSubida = null;
+                                    registroVer.First().Fecha_Salida = DateTime.Now;
+                                    registroVer.First().salidaSubida = null;
+                                    db.UpdateAll(registroVer);
+                                    DependencyService.Get<IToastMessage>().DisplayMessage("Se ha dado salida correctamente.");
+                                }
                             }
                             else
                             {
-                                cedula.Text = registro.First().CEDULA;
-                                Nombres.Text = registro.First().NOMBRES + " " + registro.First().APELLIDO1 + " " + registro.First().APELLIDO2;
 
-                                Visitas visita = new Visitas
+                                if (!Preferences.Get("SYNC_VSU", false))
                                 {
-                                    Cedula = cedula.Text,
-                                    Nombres = Nombres.Text,
-                                    Empresa = empresa.Text,
-                                    VisitaA = visitaA.Text,
-
-                                };
-                                using (var datos = new DataAccess())
-                                {
-                                    datos.InsertVisita(visita);
-                                    listaGrupo.ItemsSource = datos.GetVisitas();
+                                    var querrySal = "SELECT * FROM SalidaOffline WHERE INVIDATO_ID = " + inString.Replace("ID", "");
+                                    var registroSal = db.Query<SalidaOffline>(querrySal);
+                                    if (!registroSal.Any())
+                                    {
+                                        //Hacer el insert a la base de datos local para subirlo mas tarde
+                                        var SalOF = new SalidaOffline();
+                                        SalOF.INVIDATO_ID = int.Parse(inString.Replace("ID", ""));
+                                        SalOF.Fecha_Salida = DateTime.Now;
+                                        SalOF.Subida = null;
+                                        db.Insert(SalOF);
+                                    }
+                                    else
+                                    {
+                                        DependencyService.Get<IToastMessage>().DisplayMessage("Este ID de Salida ya se encuentra en la base de datos");
+                                    }
                                 }
-                                cedula.Text = string.Empty;
-                                Nombres.Text = string.Empty;
-
-                                //DisplayAlert("Confirmacion", "Visita agregada", "Aceptar");
-                                DependencyService.Get<IToastMessage>().DisplayMessage("Visita agregada");
-
+                                else
+                                {
+                                    DependencyService.Get<IToastMessage>().DisplayMessage("Este ID de Salida no existe.");
+                                }
                             }
-
-                            db.Close();
                         }
-                        catch (Exception ey)
+                        else
                         {
-                            //Documento no econtrado
-                            {
 
-                                Nombres.Text = string.Empty;
-                                cedula.Text = inString;
-                                /*var properties = new Dictionary<string, string> {
-                                    { "Category", "Documento NO EXISTE?" },
-                                    { "Code", "MainPage.xaml.cs Line: 179" },
-                                    { "Lector", Preferences.Get("LECTOR", "0")}
-                                }; */
-                                //Crashes.TrackError(ey, properties);
-                                //ppCedulaNoExiste.IsVisible = true;
-                                await DisplayAlert("Error", "Este documento ya esta en la lista o no existe en el Padron", "Aceptar");
-                                Analytics.TrackEvent("Documento No-Existe: " + inString + " en el escaner " + Preferences.Get("LECTOR", "N/A"));
-                                // await TextToSpeech.SpeakAsync("Documento No Existe");
+                            //Vamos a verificar si la persona ya entro.
+                            var querry = "SELECT * FROM INVITADOS WHERE CARGO = '" + inString + "' AND FECHA_SALIDA is NULL";
+
+                            var registroVerifInv = db.Query<Invitados>(querry);
+
+                            if (registroVerifInv.Any())
+                            {
+                                //Esto quiere decir que aun la persona no ha salido.
+
+                                registroVerifInv.First().Fecha_Salida = DateTime.Now;
+                                registroVerifInv.First().salidaSubida = null;
+                                db.UpdateAll(registroVerifInv);
+                                DependencyService.Get<IToastMessage>().DisplayMessage("Se ha dado salida correctamente.");
+                            }
+                            else
+                            {
+                                // Como no tiene reserva entramos.
+                                //Buscamos la cedula en el padron.
+                                querry = "SELECT * FROM PADRON WHERE CEDULA = '" + inString + "'";
+                                //var que = "select * from VW_RESERVA_VISITA where VISITAS_DOCUMENTO='" + inString + "'";
+                                //var registro2 = db.Query<VW_RESERVA_VISITA>(que);
+
                                 try
                                 {
-                                    var duration = TimeSpan.FromSeconds(1);
-                                    Vibration.Vibrate(duration);
+                                    //Ejecutamos el query.
+                                    var registro = db.Query<PADRON>(querry);
+                                    //  var registro2 = db.Query<VW_RESERVA_VISITA>(que);
+
+                                    var x = string.IsNullOrEmpty(registro.First().CEDULA);
+                                    if (string.IsNullOrEmpty(registro.First().CEDULA))
+                                    {
+                                        await DisplayAlert("Error", "No puede dejar este campo vacio", "Aceptar");
+                                        cedula.Text = registro.First().CEDULA;
+                                        Nombres.Text = registro.First().NOMBRES + " " + registro.First().APELLIDO1 + " " + registro.First().APELLIDO2;
+
+
+                                    }
+                                    else
+                                    {
+                                        cedula.Text = registro.First().CEDULA;
+                                        Nombres.Text = registro.First().NOMBRES + " " + registro.First().APELLIDO1 + " " + registro.First().APELLIDO2;
+
+                                        Visitas visita = new Visitas
+                                        {
+                                            Cedula = cedula.Text,
+                                            Nombres = Nombres.Text,
+                                            Empresa = empresa.Text,
+                                            VisitaA = visitaA.Text,
+
+                                        };
+                                        using (var datos = new DataAccess())
+                                        {
+                                            datos.InsertVisita(visita);
+                                            listaGrupo.ItemsSource = datos.GetVisitas();
+                                        }
+                                        cedula.Text = string.Empty;
+                                        Nombres.Text = string.Empty;
+
+                                        //DisplayAlert("Confirmacion", "Visita agregada", "Aceptar");
+                                        DependencyService.Get<IToastMessage>().DisplayMessage("Visita agregada");
+
+                                    }
+
+                                    db.Close();
                                 }
-                                catch
+                                catch (Exception ey)
                                 {
-                                    //TODO: HANDLE NO VIBRATE
+                                    await Navigation.PushAsync(new RegistroPage(inString, false));
+                                    //Documento no econtrado
+                                    {
+
+                                        Nombres.Text = string.Empty;
+                                        cedula.Text = inString;
+                                        /*var properties = new Dictionary<string, string> {
+                                            { "Category", "Documento NO EXISTE?" },
+                                            { "Code", "MainPage.xaml.cs Line: 179" },
+                                            { "Lector", Preferences.Get("LECTOR", "0")}
+                                        }; */
+                                        //Crashes.TrackError(ey, properties);
+                                        //ppCedulaNoExiste.IsVisible = true;
+
+                                        await PopupNavigation.PushAsync(new PopUpCedulaNoEncontradaGrupo());                                        // Analytics.TrackEvent("Documento No-Existe: " + inString + " en el escaner " + Preferences.Get("LECTOR", "N/A"));
+                                        // await TextToSpeech.SpeakAsync("Documento No Existe");
+                                        try
+                                        {
+                                            var duration = TimeSpan.FromSeconds(1);
+                                            Vibration.Vibrate(duration);
+                                        }
+                                        catch
+                                        {
+                                            //TODO: HANDLE NO VIBRATE
+                                        }
+                                        Debug.WriteLine(ey);
+                                    }
                                 }
-                                Debug.WriteLine(ey);
                             }
+
                         }
                     }
-
+                    else
+                    {
+                        DependencyService.Get<IToastMessage>().DisplayMessage("Ha escaneado un codigo que no es la cedula");
+                    }
                 }
+            }
+            catch (Exception ea)
+            {
+                Debug.WriteLine("Ha ocurrido una excepcion en el metodo entrada, motivo: " + ea.Message);
             }
 
         }
+
+        
         private void ListaGrupo_ItemSelected(object sender, SelectedItemChangedEventArgs e)// Cuando se selecciona un item se convoca este metodo
         {
             var item = e.SelectedItem;

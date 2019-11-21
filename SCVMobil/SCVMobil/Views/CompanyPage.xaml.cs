@@ -65,27 +65,27 @@ namespace SCVMobil
                 lbPlaca.IsVisible = false;
                 entPlaca.IsVisible = false;
             }
-        
+
             //entPlaca.Text = Preferences.Get("LETRA", "");
 
-            if (Preferences.Get("VISITA_A_SELECTED", true)) {
+            pickerVisitaA.ItemsSource = Preferences.Get("PERSONAS_LIST", "").Split(',').ToList<string>();
 
+            if (!string.IsNullOrEmpty(pickerVisitaA.ItemsSource[0].ToString()) && Preferences.Get("VISITA_A_SELECTED", true))
+            {
                 FrameVisitaA.IsVisible = true;
                 FrameVisitaA2.IsVisible = true;
                 lblvisitaA.IsVisible = true;
                 pickerVisitaA.IsVisible = true;
-                pickerVisitaA.ItemsSource = Preferences.Get("PERSONAS_LIST", "").Split(',').ToList<string>();
             }
             else
             {
+                Preferences.Set("VISITA_A_SELECTED", false);
                 FrameVisitaA.IsVisible = false;
                 FrameVisitaA2.IsVisible = false;
                 pickerVisitaA.IsVisible = false;
                 pickerVisitaA.ItemsSource = new List<string>();
                 lblvisitaA.IsVisible = false;
             }
-
-            // pickerVisitaA.ItemsSource = Preferences.Get("PERSONAS_LIST", "").Split(',').ToList<string>();
 
             pickerDestino.ItemsSource = Preferences.Get("COMPANIAS_LIST", "").Split(',').ToList<string>();
             try
@@ -117,7 +117,6 @@ namespace SCVMobil
         {
             base.OnDisappearing();
             scan.GetScanner(false);
-            
         }
 
         //----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -426,7 +425,7 @@ namespace SCVMobil
                 }
                 else
                 {
-                    DependencyService.Get<IToastMessage>().DisplayMessage("Necesita seleccionar un destino y a quien visita.");
+                    DependencyService.Get<IToastMessage>().DisplayMessage("Necesita seleccionar un destino y/o a quien visita.");
                 }
             }
             else 
@@ -488,10 +487,7 @@ namespace SCVMobil
         {
             try
             {
-              
-                    Preferences.Set("PERSONA_SELECTED", pickerVisitaA.SelectedItem.ToString());
-                 
-              
+                Preferences.Set("PERSONA_SELECTED", pickerVisitaA.SelectedItem.ToString()); 
             }
             catch (Exception ex)
             {
@@ -505,23 +501,12 @@ namespace SCVMobil
 
             {
                 Preferences.Set("COMPANIA_SELECTED", pickerDestino.SelectedItem.ToString());
-                
-              
-
             }
             catch (Exception ex)
             {
                 Debug.WriteLine("Exception catched while trying to set preference \"COMPANIA_SELECTED\": " + ex);
             }
         }
-
-       
-
-      
-
-       
-       
-
        
 
         //------------------------------------------------------------------------------------------------------------------------------------
@@ -576,16 +561,8 @@ namespace SCVMobil
             }
             using (var datos = new DataAccess())
             {
-
                 await Navigation.PushAsync(new GrupoPage(pickerDestino.SelectedItem.ToString(), pickerVisitaA.SelectedItem.ToString(), entCedula.Text, entNombre.Text));// Enviamos todo la informacion al GrupoPage
-
-
             }
         }
-
-
-
-
-
     }
 }

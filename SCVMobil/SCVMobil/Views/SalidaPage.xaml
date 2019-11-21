@@ -14,7 +14,7 @@
             
             <Image Source="exit"/>
             
-            <Label Text="Esta persona aun no salido."
+            <Label Text="Esta persona aun no ha salido."
                    VerticalOptions="CenterAndExpand" 
                    TextColor="Black"
                    HorizontalOptions="CenterAndExpand"

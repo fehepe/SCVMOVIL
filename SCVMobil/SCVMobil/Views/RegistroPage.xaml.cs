@@ -1,6 +1,7 @@
 ﻿using Microsoft.AppCenter.Crashes;
 using Rg.Plugins.Popup.Services;
 using SCVMobil.Models;
+using SCVMobil.Views;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -17,10 +18,12 @@ namespace SCVMobil
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class RegistroPage : ContentPage
     {
-        public RegistroPage(string data)
+        public bool LastPage;
+        public RegistroPage(string data, bool LastPage)
         {
             InitializeComponent();
             EntryCedula.Text = data;
+            this.LastPage = LastPage;
         }
 
         private async void Agregar_Clicked(object sender, EventArgs e)
@@ -41,8 +44,18 @@ namespace SCVMobil
                 try
                 {
                     db.Insert(padronRegistro);
-                    await PopupNavigation.PushAsync(new PopUpDatosCorrectos());
-                    Navigation.PushAsync(new CompanyPage(EntryCedula.Text, EntryNombre.Text, EntryApellido.Text));
+
+                    if (LastPage == true)
+                    {
+                        await PopupNavigation.PushAsync(new PopUpDatosCorrectos());
+                        Navigation.PushAsync(new CompanyPage(EntryCedula.Text, EntryNombre.Text, EntryApellido.Text)); 
+                    }
+                    else
+                    {
+                        Navigation.PopAsync();
+                        await PopupNavigation.PushAsync(new PopUpRegistrado_Hacia_Grupo());
+
+                    }
                     EntryApellido.Text = "";
                     EntryCedula.Text = "";
                     EntryNombre.Text = "";

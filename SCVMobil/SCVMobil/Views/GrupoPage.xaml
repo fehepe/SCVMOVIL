@@ -16,15 +16,13 @@
            ></ToolbarItem>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <ScrollView>
+        
+        
             <StackLayout
+            Padding="20">
                 
-            Padding="20"
-            
-            >               
                 <StackLayout
-                Orientation="Horizontal"
-                >
+                Orientation="Horizontal">
                     <Label
                     TextColor="Black"
                     FontSize="20"
@@ -33,12 +31,10 @@
                   >
                     </Label>
                     <Label
-                    
                     TextColor="Black"
                     FontSize="20"
                      x:Name="empresa"
                     Text="Gad Intermec"
-                   
                    />
                 </StackLayout>
 
@@ -50,6 +46,7 @@
                     Grid.Column="0"
                     TextColor="Black"
                     FontSize="20"
+                        x:Name="VisitaALabel"
                     FontAttributes="Bold"
                     Text="Visita a :"
                   >
@@ -59,10 +56,8 @@
                     Grid.Column="1"
                     TextColor="Black"
                     FontSize="20"
-                     x:Name="visitaA"
-                    Text="Mironchy"
-                   
-                    >
+                    x:Name="visitaA"
+                    Text="Mironchy">
                     </Label>
 
                 </StackLayout>
@@ -101,46 +96,62 @@
                 </ContentView>
 
                 <StackLayout>
+                    <Label TextColor="Black"
+                           FontSize="15"
+                           HorizontalTextAlignment="Center"
+                           Text="Escanee o ingrese la próxima cédula">
+                    </Label>
+                    
+                    
                     <Frame CornerRadius="15" 
-                BorderColor="#757575"
-                Padding="5">
+                           BorderColor="#757575"
+                           Padding="5"
+                           x:Name="Frame1">
                         <Frame CornerRadius="10" 
-                    BackgroundColor="White" 
-                    Padding="1" >
-                            <Entry
-                    x:Name="cedula"
-                    Completed="Cedula_Completed"
-                    MaxLength="11"
-                    HorizontalTextAlignment="Center"
-                    />
-                        </Frame>
-                    </Frame>
-                    <Frame CornerRadius="15" 
-                BorderColor="#757575"
-                Padding="5">
-                        <Frame CornerRadius="10" 
-                    BackgroundColor="White" 
-                    Padding="1" >
-                            <Entry
-                    x:Name="Nombres"
-                   HorizontalTextAlignment="Center"
-                    Placeholder="Nombre y Apellido"
-                      
-               
-                    />
+                               BackgroundColor="White" 
+                               x:Name="Frame2"
+                               Padding="1" >
+                            <Entry x:Name="cedula"
+                                   Keyboard="Keyboard.Numeric"
+                                   HorizontalTextAlignment="Center"
+                                   Completed="Cedula_Completed"
+                                   MaxLength="11"/>
                         </Frame>
                     </Frame>
 
-                    <ListView
-             
-                x:Name="listaGrupo"
-                    ItemSelected="ListaGrupo_ItemSelected"
-                />
-                </StackLayout>
+                    
+                    <Frame CornerRadius="15" 
+                           BorderColor="#757575"
+                           Padding="5"
+                           x:Name="FrameName1">
+                        <Frame CornerRadius="10" 
+                               BackgroundColor="White" 
+                               Padding="1"
+                               x:Name="FrameName2">
+                            <Entry x:Name="Nombres"
+                                   HorizontalTextAlignment="Center"
+                                   Placeholder="Nombre y Apellido"/>
+                        </Frame>
+                    </Frame>
 
-
+                <ScrollView>
+                    <ListView x:Name="listaGrupo"                              
+                                  ItemSelected="ListaGrupo_ItemSelected">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <StackLayout>
+                                        <Label Text="{Binding Nombres}" FontAttributes="Bold" TextColor="Black"></Label>
+                                        <Label Text="{Binding Cedula}" TextColor="Black"></Label>
+                                    </StackLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </ScrollView>
+            </StackLayout>
 
             </StackLayout>
-        </ScrollView>
+        
     </ContentPage.Content>
 </ContentPage>

@@ -22,8 +22,6 @@ namespace SCVMobil
         private void datosincorrectos_Clicked(object sender, EventArgs e)
         {
             this.IsVisible = false;
-           
-
         }
     }
 }

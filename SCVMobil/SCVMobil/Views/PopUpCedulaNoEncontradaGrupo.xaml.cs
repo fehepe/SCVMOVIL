@@ -8,18 +8,17 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace SCVMobil
+namespace SCVMobil.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class PopUpCedulaNoexiste : PopupPage
+    public partial class PopUpCedulaNoEncontradaGrupo : PopupPage
     {
-        public PopUpCedulaNoexiste()
+        public PopUpCedulaNoEncontradaGrupo()
         {
             InitializeComponent();
         }
-
-        private void cedulainexistente_Clicked(object sender, EventArgs e)
-        {            
+        private void Agregar_Clicked(object sender, EventArgs e)
+        {
             this.IsVisible = false;
         }
     }

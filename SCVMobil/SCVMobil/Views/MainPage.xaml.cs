@@ -26,7 +26,6 @@ namespace SCVMobil
 
         public MainPage()//Constructor
         {
-
             Device.StartTimer(TimeSpan.FromSeconds(1), () =>
             {
                 if (Preferences.Get("AUTO_SYNC", "False") == "True")
@@ -40,8 +39,6 @@ namespace SCVMobil
           
             InitializeComponent();
             scanner = new Escaner(cedulaScanned);
-           
-            
         }
 
 
@@ -76,10 +73,6 @@ namespace SCVMobil
             scanner.GetScanner(true);
             entCedula.Text = string.Empty;
             entApellidos.Text = string.Empty;
-            entNombres.Text = string.Empty;
-            
-            
-
         }
 
         //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -136,178 +129,174 @@ namespace SCVMobil
             {
                 if (inString.Length == 11 || inString.StartsWith("ID"))
                 {
-
-                
-                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-                //Vamos a ver si es un ID de salida.
-                if (inString.StartsWith("ID"))
-                {
+                    var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                    //Vamos a ver si es un ID de salida.
+                    if (inString.StartsWith("ID"))
+                    {
                         
-                   // var querry = "SELECT * FROM Invitados WHERE INVIDATO_ID = " + inString.Replace("ID", "") + " AND FECHA_SALIDA is null AND Fecha_Verificacion is not null";
-                    var querrys = "SELECT * FROM Invitados WHERE INVIDATO_ID= " + inString.Replace("ID", "") + " AND FECHA_SALIDA is null";
-                    //var registroInv = db.Query<Invitados>(querry);
-                    var registroVer = db.Query<Invitados>(querrys);
+                       // var querry = "SELECT * FROM Invitados WHERE INVIDATO_ID = " + inString.Replace("ID", "") + " AND FECHA_SALIDA is null AND Fecha_Verificacion is not null";
+                        var querrys = "SELECT * FROM Invitados WHERE INVIDATO_ID= " + inString.Replace("ID", "") + " AND FECHA_SALIDA is null";
+                        //var registroInv = db.Query<Invitados>(querry);
+                        var registroVer = db.Query<Invitados>(querrys);
                        
-                        if (registroVer.Any() )
-                        {
-                            if (Preferences.Get("VERIFICA", false))
+                            if (registroVer.Any() )
                             {
+                                if (Preferences.Get("VERIFICA", false))
+                                {
 
-                                if (registroVer.First().Fecha_Verificacion is null)
+                                    if (registroVer.First().Fecha_Verificacion is null)
+                                    {
+                                        registroVer.First().Fecha_Verificacion = DateTime.Now;
+                                        registroVer.First().Puerta_Registro = Convert.ToInt32(Preferences.Get("PUERTA", "1459").ToString());
+                                        registroVer.First().verificacionSubida = null;
+                                        db.UpdateAll(registroVer);
+                                        DependencyService.Get<IToastMessage>().DisplayMessage("Se ha verificado correctamente.");
+                                        await Navigation.PushAsync(new Verificacion(registroVer.First()));
+                                    }
+                                    else
+                                    {
+                                        var time = (DateTime.Now - registroVer.First().Fecha_Verificacion.Value).TotalSeconds;
+                                        var pref = Convert.ToDouble(Preferences.Get("TIEMPOS", "1")) * 60;
+                                        if (time < pref) //REVISAR//
+                                        {
+                                            DependencyService.Get<IToastMessage>().DisplayMessage("Se ha acaba de verificar este id.");
+                                        }
+                                        else
+                                        {
+                                            if (registroVer.First().Fecha_Salida is null)
+                                            {
+
+                                                registroVer.First().Fecha_Salida = DateTime.Now;
+                                                registroVer.First().salidaSubida = null;
+                                                db.UpdateAll(registroVer);
+                                                DependencyService.Get<IToastMessage>().DisplayMessage("Se ha dado salida correctamente.");
+                                            }
+                                        }
+
+                                    }
+                                }
+                                else
                                 {
                                     registroVer.First().Fecha_Verificacion = DateTime.Now;
                                     registroVer.First().Puerta_Registro = Convert.ToInt32(Preferences.Get("PUERTA", "1459").ToString());
                                     registroVer.First().verificacionSubida = null;
+                                    registroVer.First().Fecha_Salida = DateTime.Now;
+                                    registroVer.First().salidaSubida = null;
                                     db.UpdateAll(registroVer);
-                                    DependencyService.Get<IToastMessage>().DisplayMessage("Se ha verificado correctamente.");
-                                    await Navigation.PushAsync(new Verificacion(registroVer.First()));
+                                    DependencyService.Get<IToastMessage>().DisplayMessage("Se ha dado salida correctamente.");
                                 }
-                                else
+                            }                        
+                            else
+                            {
+
+                                if (!Preferences.Get("SYNC_VSU", false))
                                 {
-                                    var time = (DateTime.Now - registroVer.First().Fecha_Verificacion.Value).TotalSeconds;
-                                    var pref = Convert.ToDouble(Preferences.Get("TIEMPOS", "1")) * 60;
-                                    if (time < pref) //REVISAR//
+                                    var querrySal = "SELECT * FROM SalidaOffline WHERE INVIDATO_ID = " + inString.Replace("ID", "");
+                                    var registroSal = db.Query<SalidaOffline>(querrySal);
+                                    if (!registroSal.Any())
                                     {
-                                        DependencyService.Get<IToastMessage>().DisplayMessage("Se ha acaba de verificar este id.");
+                                        //Hacer el insert a la base de datos local para subirlo mas tarde
+                                        var SalOF = new SalidaOffline();
+                                        SalOF.INVIDATO_ID = int.Parse(inString.Replace("ID", ""));
+                                        SalOF.Fecha_Salida = DateTime.Now;
+                                        SalOF.Subida = null;
+                                        db.Insert(SalOF);
                                     }
                                     else
                                     {
-                                        if (registroVer.First().Fecha_Salida is null)
-                                        {
-
-                                            registroVer.First().Fecha_Salida = DateTime.Now;
-                                            registroVer.First().salidaSubida = null;
-                                            db.UpdateAll(registroVer);
-                                            DependencyService.Get<IToastMessage>().DisplayMessage("Se ha dado salida correctamente.");
-                                        }
+                                        DependencyService.Get<IToastMessage>().DisplayMessage("Este ID de Salida ya se encuentra en la base de datos");
                                     }
-
-                                }
-                            }
-                            else
-                            {
-                                registroVer.First().Fecha_Verificacion = DateTime.Now;
-                                registroVer.First().Puerta_Registro = Convert.ToInt32(Preferences.Get("PUERTA", "1459").ToString());
-                                registroVer.First().verificacionSubida = null;
-                                registroVer.First().Fecha_Salida = DateTime.Now;
-                                registroVer.First().salidaSubida = null;
-                                db.UpdateAll(registroVer);
-                                DependencyService.Get<IToastMessage>().DisplayMessage("Se ha dado salida correctamente.");
-                            }
-                        }                        
-                        else
-                        {
-
-                            if (!Preferences.Get("SYNC_VSU", false))
-                            {
-                                var querrySal = "SELECT * FROM SalidaOffline WHERE INVIDATO_ID = " + inString.Replace("ID", "");
-                                var registroSal = db.Query<SalidaOffline>(querrySal);
-                                if (!registroSal.Any())
-                                {
-                                    //Hacer el insert a la base de datos local para subirlo mas tarde
-                                    var SalOF = new SalidaOffline();
-                                    SalOF.INVIDATO_ID = int.Parse(inString.Replace("ID", ""));
-                                    SalOF.Fecha_Salida = DateTime.Now;
-                                    SalOF.Subida = null;
-                                    db.Insert(SalOF);
                                 }
                                 else
                                 {
-                                    DependencyService.Get<IToastMessage>().DisplayMessage("Este ID de Salida ya se encuentra en la base de datos");
+                                    DependencyService.Get<IToastMessage>().DisplayMessage("Este ID de Salida no existe.");
                                 }
                             }
-                            else
-                            {
-                                DependencyService.Get<IToastMessage>().DisplayMessage("Este ID de Salida no existe.");
-                            }
-                        }
-                }
-                else
-                {
-
-                    //Vamos a verificar si la persona ya entro.
-                    var querry = "SELECT * FROM INVITADOS WHERE CARGO = '" + inString + "' AND FECHA_SALIDA is NULL";
-
-                    var registroVerifInv = db.Query<Invitados>(querry);
-
-                    if (registroVerifInv.Any())
-                    {
-                        
-                        querry = "SELECT * FROM PADRON WHERE CEDULA = '" + inString + "'";
-                        var registro = db.Query<PADRON>(querry);
-                        entCedula.Text = registro.First().CEDULA;
-                        entNombres.Text = registro.First().NOMBRES;
-                        entApellidos.Text = registro.First().APELLIDO1 + " " + registro.First().APELLIDO2;
-                        //Esto quiere decir que aun la persona no ha salido.
-                        await Navigation.PushAsync(new SalidaPage(inString, entNombres.Text, entApellidos.Text));
                     }
                     else
                     {
-                        //Vamos a ver si la persona tiene una reserva.
 
-                        querry = "SELECT * FROM VW_RESERVA_VISITA WHERE VISITAS_DOCUMENTO = '" + inString + "' and visitas_Fecha_reserva="+DateTime.Today.Ticks;
+                        //Vamos a verificar si la persona ya entro.
+                        var querry = "SELECT * FROM INVITADOS WHERE CARGO = '" + inString + "' AND FECHA_SALIDA is NULL";
 
+                        var registroVerifInv = db.Query<Invitados>(querry);
 
-                        var registroRes = db.Query<VW_RESERVA_VISITA>(querry);
-                        if (registroRes.Count > 0)
+                        if (registroVerifInv.Any())
                         {
-                            await Navigation.PushAsync(new ReservasPage(registroRes));
+                        
+                            querry = "SELECT * FROM PADRON WHERE CEDULA = '" + inString + "'";
+                            var registro = db.Query<PADRON>(querry);
+                            entCedula.Text = registro.First().CEDULA;
+                            entNombres.Text = registro.First().NOMBRES;
+                            entApellidos.Text = registro.First().APELLIDO1 + " " + registro.First().APELLIDO2;
+                            //Esto quiere decir que aun la persona no ha salido.
+                            await Navigation.PushAsync(new SalidaPage(inString, entNombres.Text, entApellidos.Text));
                         }
                         else
                         {
-                            // Como no tiene reserva entramos.
-                            //Buscamos la cedula en el padron.
-                            querry = "SELECT * FROM PADRON WHERE CEDULA = '" + inString + "'";
+                            //Vamos a ver si la persona tiene una reserva.
 
-                            try
+                            querry = "SELECT * FROM VW_RESERVA_VISITA WHERE VISITAS_DOCUMENTO = '" + inString + "' and visitas_Fecha_reserva="+DateTime.Today.Ticks;
+
+
+                            var registroRes = db.Query<VW_RESERVA_VISITA>(querry);
+                            if (registroRes.Count > 0)
                             {
-                                //Ejecutamos el query.
-                                var registro = db.Query<PADRON>(querry);
-
-                                entCedula.Text = registro.First().CEDULA;
-                                entNombres.Text = registro.First().NOMBRES;
-                                entApellidos.Text = registro.First().APELLIDO1 + " " + registro.First().APELLIDO2;
-                                await Navigation.PushAsync(new CompanyPage(entCedula.Text, entNombres.Text, entApellidos.Text));
-
+                                await Navigation.PushAsync(new ReservasPage(registroRes));
                             }
-                            catch (Exception ey)
+                            else
                             {
-                                entApellidos.Text = string.Empty;
-                                entNombres.Text = string.Empty;
-                                entCedula.Text = inString;
-                                var properties = new Dictionary<string, string> {
-                                    { "Category", "Documento NO EXISTE?" },
-                                    { "Code", "MainPage.xaml.cs Line: 179" },
-                                    { "Lector", Preferences.Get("LECTOR", "0")}
-                                };
-                                Crashes.TrackError(ey, properties);
-                                await PopupNavigation.PushAsync(new PopUpCedulaNoexiste());  //Invocacion del PopUp para mostrar mesaje de error// 
-                                await Navigation.PushAsync(new RegistroPage(entCedula.Text));
-                                 
+                                // Como no tiene reserva entramos.
+                                //Buscamos la cedula en el padron.
+                                querry = "SELECT * FROM PADRON WHERE CEDULA = '" + inString + "'";
+
                                 try
                                 {
-                                    var duration = TimeSpan.FromSeconds(1);
-                                    Vibration.Vibrate(duration);
+                                    //Ejecutamos el query.
+                                    var registro = db.Query<PADRON>(querry);
+
+                                    entCedula.Text = registro.First().CEDULA;
+                                    entNombres.Text = registro.First().NOMBRES;
+                                    entApellidos.Text = registro.First().APELLIDO1 + " " + registro.First().APELLIDO2;
+                                    await Navigation.PushAsync(new CompanyPage(entCedula.Text, entNombres.Text, entApellidos.Text));
+
                                 }
-                                catch
+                                catch (Exception ey)
                                 {
-                                    //TODO: HANDLE NO VIBRATE
+                                    entApellidos.Text = string.Empty;
+                                    entNombres.Text = string.Empty;
+                                    entCedula.Text = inString;
+                                    var properties = new Dictionary<string, string> {
+                                        { "Category", "Documento NO EXISTE?" },
+                                        { "Code", "MainPage.xaml.cs Line: 179" },
+                                        { "Lector", Preferences.Get("LECTOR", "0")}
+                                    };
+                                    Crashes.TrackError(ey, properties);
+                                    await PopupNavigation.PushAsync(new PopUpCedulaNoexiste());  //Invocacion del PopUp para mostrar mesaje de error// 
+                                    await Navigation.PushAsync(new RegistroPage(entCedula.Text, true));
+                                 
+                                    try
+                                    {
+                                        var duration = TimeSpan.FromSeconds(1);
+                                        Vibration.Vibrate(duration);
+                                    }
+                                    catch
+                                    {
+                                        //TODO: HANDLE NO VIBRATE
+                                    }
+                                    Debug.WriteLine(ey);
                                 }
-                                Debug.WriteLine(ey);
                             }
                         }
-                    }
 
+                    }
                 }
-                }
-                else
-                {
-                    DependencyService.Get<IToastMessage>().DisplayMessage("Ha escaneado un codigo que no es la cedula");
-                }
+                    else
+                    {
+                        DependencyService.Get<IToastMessage>().DisplayMessage("Ha escaneado un codigo que no es la cedula");
+                    }
             }
         }
-
-      
     
     }
     
