@@ -78,7 +78,8 @@ namespace SCVMobil
             }
             catch (Exception ea)
             {
-                Debug.WriteLine("Ha ocurrido una excepcion, motivo: "+ ea.Message);
+                Debug.WriteLine("Error en Nombres_Completed, motivo: "+ ea.Message);
+                Analytics.TrackEvent("Error al ingresar nombre seleccionadas: " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
 
         }
@@ -103,6 +104,7 @@ namespace SCVMobil
             catch (Exception ea)
             {
                 Debug.WriteLine("Ha ocurrido una excepcion en el OnDisappearing, motivo: " + ea.Message);
+                Analytics.TrackEvent("Error al apagar el scanner: " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
         }
 
@@ -128,6 +130,7 @@ namespace SCVMobil
             catch (Exception ea)
             {
                 Debug.WriteLine("Ha ocurrido una excepcion en el metodo cedulaScanned, motivo: " + ea.Message);
+                Analytics.TrackEvent("Error escanear cedula: " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
 
         }
@@ -141,6 +144,7 @@ namespace SCVMobil
             catch (Exception ea)
             {
                 Debug.WriteLine("Ha ocurrido una excepcion, en el BtOKCedulaNoExiste_Clicked, motivo: " + ea.Message);
+                Analytics.TrackEvent("Error al presionar boton ok  seleccionadas: " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
         }
 
@@ -163,6 +167,7 @@ namespace SCVMobil
             catch (Exception ea)
             {
                 Debug.WriteLine("Ha ocurrido una excepcion, en el metodo OnAppeared, motivo: " + ea.Message);
+                Analytics.TrackEvent("Error al refrescar pagina: " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
             
         }
@@ -170,103 +175,112 @@ namespace SCVMobil
         private async void ToolbarItem_Clicked(object sender, EventArgs e)//Metodo para imprimir los grupos
         {
 
-            var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-            //Creamos el query para buscar el documento.
-            var querry = "SELECT * FROM Visitas";
-
-            var registro = db.Query<Visitas>(querry);
-            foreach (Visitas registros in registro)
-
+            try
             {
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                //Creamos el query para buscar el documento.
+                var querry = "SELECT * FROM Visitas";
 
+                var registro = db.Query<Visitas>(querry);
+                foreach (Visitas registros in registro)
 
-                var registroInvitados = new Invitados();
-
-                //Vamos a buscar la compania seleccionada 
-
-
-                if (Preferences.Get("VISITA_A_SELECTED", true))
                 {
+
+
+                    var registroInvitados = new Invitados();
+
                     //Vamos a buscar la compania seleccionada 
 
-                    var TBL_COMPANIAS = db.Query<COMPANIAS>("SELECT COMPANIA_ID FROM COMPANIAS WHERE NOMBRE = '" + empresa.Text + "'");
 
-                //Vamos a buscar la persona seleccionada
+                    if (Preferences.Get("VISITA_A_SELECTED", true))
+                    {
+                        //Vamos a buscar la compania seleccionada 
 
-                var TBL_PERSONAS = db.Query<PERSONAS>("SELECT PERSONA_ID FROM PERSONAS WHERE NOMBRES_APELLIDOS = '" + visitaA.Text + "'");
-                registroInvitados.Compania_ID = TBL_COMPANIAS.First().COMPANIA_ID;
-                registroInvitados.Nombres = registros.Nombres;
-                registroInvitados.Apellidos = " ";
-                registroInvitados.Fecha_Registro = DateTime.Now;
-                registroInvitados.Cargo = registros.Cedula;
-                registroInvitados.Tiene_Activo = 0;
-                registroInvitados.Estatus_ID = 100;
-                registroInvitados.Modulo = 1;
-                registroInvitados.Empresa_ID = 8;
-                registroInvitados.Placa = "00000";
-                registroInvitados.Tipo_Visitante = "VISITANTE";
-                registroInvitados.Es_Grupo = 0;
-                registroInvitados.Grupo_ID = 0;
-                registroInvitados.Puerta_Entrada = Convert.ToInt32(Preferences.Get("LOCALIDAD_VSU", "1495"));
-                registroInvitados.Actualizada_La_Salida = 0;
-                registroInvitados.Horas_Caducidad = 12;
-                registroInvitados.Personas = 1;
-                registroInvitados.In_Out = 1;
-                registroInvitados.Origen_Entrada = "MANUAL";
-                registroInvitados.Origen_Salida = "MANUAL";
-                registroInvitados.Comentario = "";
-                registroInvitados.Origen_IO = 0;
-                registroInvitados.Cpost = "I";
-                registroInvitados.Actualizado = 0;
-                registroInvitados.Secuencia_Dia = "1";
-                registroInvitados.No_Aplica_Induccion = "0";
-                registroInvitados.Subida = null;
-                registroInvitados.Visitado = TBL_PERSONAS.First().PERSONA_ID;
-                registroInvitados.Lector = int.Parse(Preferences.Get("LECTOR", "1"));
-                db.Insert(registroInvitados);
+                        var TBL_COMPANIAS = db.Query<COMPANIAS>("SELECT COMPANIA_ID FROM COMPANIAS WHERE NOMBRE = '" + empresa.Text + "'");
 
+                        //Vamos a buscar la persona seleccionada
+
+                        var TBL_PERSONAS = db.Query<PERSONAS>("SELECT PERSONA_ID FROM PERSONAS WHERE NOMBRES_APELLIDOS = '" + visitaA.Text + "'");
+                        registroInvitados.Compania_ID = TBL_COMPANIAS.First().COMPANIA_ID;
+                        registroInvitados.Nombres = registros.Nombres;
+                        registroInvitados.Apellidos = " ";
+                        registroInvitados.Fecha_Registro = DateTime.Now;
+                        registroInvitados.Cargo = registros.Cedula;
+                        registroInvitados.Tiene_Activo = 0;
+                        registroInvitados.Estatus_ID = 100;
+                        registroInvitados.Modulo = 1;
+                        registroInvitados.Empresa_ID = 8;
+                        registroInvitados.Placa = "00000";
+                        registroInvitados.Tipo_Visitante = "VISITANTE";
+                        registroInvitados.Es_Grupo = 0;
+                        registroInvitados.Grupo_ID = 0;
+                        registroInvitados.Puerta_Entrada = Convert.ToInt32(Preferences.Get("LOCALIDAD_VSU", "1495"));
+                        registroInvitados.Actualizada_La_Salida = 0;
+                        registroInvitados.Horas_Caducidad = 12;
+                        registroInvitados.Personas = 1;
+                        registroInvitados.In_Out = 1;
+                        registroInvitados.Origen_Entrada = "MANUAL";
+                        registroInvitados.Origen_Salida = "MANUAL";
+                        registroInvitados.Comentario = "";
+                        registroInvitados.Origen_IO = 0;
+                        registroInvitados.Cpost = "I";
+                        registroInvitados.Actualizado = 0;
+                        registroInvitados.Secuencia_Dia = "1";
+                        registroInvitados.No_Aplica_Induccion = "0";
+                        registroInvitados.Subida = null;
+                        registroInvitados.Visitado = TBL_PERSONAS.First().PERSONA_ID;
+                        registroInvitados.Lector = int.Parse(Preferences.Get("LECTOR", "1"));
+                        db.Insert(registroInvitados);
+
+                    }
+                    else
+                    {
+                        var TBL_COMPANIAS = db.Query<COMPANIAS>("SELECT COMPANIA_ID FROM COMPANIAS WHERE NOMBRE = '" + empresa.Text + "'");
+
+                        //Vamos a buscar la persona seleccionada
+
+                        var TBL_PERSONAS = db.Query<PERSONAS>("SELECT PERSONA_ID FROM PERSONAS WHERE NOMBRES_APELLIDOS = '" + visitaA.Text + "'");
+                        registroInvitados.Compania_ID = TBL_COMPANIAS.First().COMPANIA_ID;
+                        registroInvitados.Nombres = registros.Nombres;
+                        registroInvitados.Apellidos = " ";
+                        registroInvitados.Fecha_Registro = DateTime.Now;
+                        registroInvitados.Cargo = registros.Cedula;
+                        registroInvitados.Tiene_Activo = 0;
+                        registroInvitados.Estatus_ID = 100;
+                        registroInvitados.Modulo = 1;
+                        registroInvitados.Empresa_ID = 8;
+                        registroInvitados.Placa = "00000";
+                        registroInvitados.Tipo_Visitante = "VISITANTE";
+                        registroInvitados.Es_Grupo = 0;
+                        registroInvitados.Grupo_ID = 0;
+                        registroInvitados.Puerta_Entrada = Convert.ToInt32(Preferences.Get("LOCALIDAD_VSU", "1495"));
+                        registroInvitados.Actualizada_La_Salida = 0;
+                        registroInvitados.Horas_Caducidad = 12;
+                        registroInvitados.Personas = 1;
+                        registroInvitados.In_Out = 1;
+                        registroInvitados.Origen_Entrada = "MANUAL";
+                        registroInvitados.Origen_Salida = "MANUAL";
+                        registroInvitados.Comentario = "";
+                        registroInvitados.Origen_IO = 0;
+                        registroInvitados.Cpost = "I";
+                        registroInvitados.Actualizado = 0;
+                        registroInvitados.Secuencia_Dia = "1";
+                        registroInvitados.No_Aplica_Induccion = "0";
+                        registroInvitados.Subida = null;
+                        registroInvitados.Visitado = null;
+                        registroInvitados.Lector = int.Parse(Preferences.Get("LECTOR", "1"));
+                        db.Insert(registroInvitados);
+                    }
+
+                    await Navigation.PopToRootAsync();
                 }
-                else
-                {
-                    var TBL_COMPANIAS = db.Query<COMPANIAS>("SELECT COMPANIA_ID FROM COMPANIAS WHERE NOMBRE = '" + empresa.Text + "'");
-
-                    //Vamos a buscar la persona seleccionada
-
-                    var TBL_PERSONAS = db.Query<PERSONAS>("SELECT PERSONA_ID FROM PERSONAS WHERE NOMBRES_APELLIDOS = '" + visitaA.Text + "'");
-                    registroInvitados.Compania_ID = TBL_COMPANIAS.First().COMPANIA_ID;
-                    registroInvitados.Nombres = registros.Nombres;
-                    registroInvitados.Apellidos = " ";
-                    registroInvitados.Fecha_Registro = DateTime.Now;
-                    registroInvitados.Cargo = registros.Cedula;
-                    registroInvitados.Tiene_Activo = 0;
-                    registroInvitados.Estatus_ID = 100;
-                    registroInvitados.Modulo = 1;
-                    registroInvitados.Empresa_ID = 8;
-                    registroInvitados.Placa = "00000";
-                    registroInvitados.Tipo_Visitante = "VISITANTE";
-                    registroInvitados.Es_Grupo = 0;
-                    registroInvitados.Grupo_ID = 0;
-                    registroInvitados.Puerta_Entrada = Convert.ToInt32(Preferences.Get("LOCALIDAD_VSU", "1495"));
-                    registroInvitados.Actualizada_La_Salida = 0;
-                    registroInvitados.Horas_Caducidad = 12;
-                    registroInvitados.Personas = 1;
-                    registroInvitados.In_Out = 1;
-                    registroInvitados.Origen_Entrada = "MANUAL";
-                    registroInvitados.Origen_Salida = "MANUAL";
-                    registroInvitados.Comentario = "";
-                    registroInvitados.Origen_IO = 0;
-                    registroInvitados.Cpost = "I";
-                    registroInvitados.Actualizado = 0;
-                    registroInvitados.Secuencia_Dia = "1";
-                    registroInvitados.No_Aplica_Induccion = "0";
-                    registroInvitados.Subida = null;
-                    registroInvitados.Visitado = null;
-                    registroInvitados.Lector = int.Parse(Preferences.Get("LECTOR", "1"));
-                    db.Insert(registroInvitados);
-                }
-
-            await Navigation.PopToRootAsync();
-          }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error en ToolBarItem");
+                Analytics.TrackEvent("Error al buscar visitas: " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+                throw;
+            }
         }
 
         public async void entrada(String inString)
@@ -458,6 +472,7 @@ namespace SCVMobil
                                             //TODO: HANDLE NO VIBRATE
                                         }
                                         Debug.WriteLine(ey);
+                                        
                                     }
                                 }
                             }
@@ -473,6 +488,7 @@ namespace SCVMobil
             catch (Exception ea)
             {
                 Debug.WriteLine("Ha ocurrido una excepcion en el metodo entrada, motivo: " + ea.Message);
+                Analytics.TrackEvent("Error al verificar si es un id de salida " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
 
         }

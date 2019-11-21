@@ -20,6 +20,7 @@ using Rg.Plugins.Popup.Services;
 using System.Net.NetworkInformation;
 using SCVMobil.Models;
 using SCVMobil.Connections;
+using Microsoft.AppCenter.Analytics;
 
 namespace SCVMobil
 {
@@ -152,6 +153,8 @@ namespace SCVMobil
                         }
                         catch (Exception ex)
                         {
+                            Analytics.TrackEvent("Error al conectarse a base de datos " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+                            Debug.WriteLine("Error en Sync");
                             if (tries >= 5)
                             {
 
@@ -230,7 +233,8 @@ namespace SCVMobil
                                 }
                                 catch (Exception et)
                                 {
-                                    Debug.WriteLine("Error descargando padron: " + et.Message);
+                                    Debug.WriteLine("Error en Sycn" + et.Message);
+                                    Analytics.TrackEvent("Error descargando padron:  " + et.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
                                     if (triesTBL >= 5)
                                     {
                                         throw new Exception("No se pudo conectar con la base de datos: " + et.Message);
@@ -379,6 +383,7 @@ namespace SCVMobil
             catch(Exception ea)
             {
                 Debug.WriteLine("Excepcion encontrada en el evento BtIni_Clicked: " + ea.Message);
+                Analytics.TrackEvent("Error al inicializar  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
         }     
 
@@ -406,7 +411,9 @@ namespace SCVMobil
             }
             catch (Exception ea)
             {
-                Debug.WriteLine("Excepcion al guardar: " + ea.Message);
+                Debug.WriteLine("Error en el metodo guardar: " + ea.Message);
+               
+                Analytics.TrackEvent("Error al guardar configuracion:  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
             
         }
@@ -437,7 +444,8 @@ namespace SCVMobil
                     }
                     catch (Exception ea)
                     {
-                        Debug.WriteLine("Exception al hacer ping: " + ea.Message);
+                        Debug.WriteLine("Error en el metodo pingbtn" + ea.Message);
+                        Analytics.TrackEvent("Exception al hacer ping:  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
                         await PopupNavigation.PushAsync(new PopUpPingIncorrecto()); //popup conexion erronea//
                     }
                 }
@@ -449,7 +457,8 @@ namespace SCVMobil
             }
             catch (Exception ea)
             {
-                Debug.WriteLine("Excepcion al hacer Ping: " + ea.Message);
+                Debug.WriteLine("Error en el metodo pingbtn " + ea.Message);
+                Analytics.TrackEvent("Exception al hacer ping:  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
 
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AppCenter.Crashes;
+﻿using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 using Rg.Plugins.Popup.Services;
 using SCVMobil.Models;
 using SCVMobil.Views;
@@ -72,6 +73,7 @@ namespace SCVMobil
                     };
                     Crashes.TrackError(ey, properties);
                     Debug.WriteLine("No se pudo Insertar el documento. Exception: " + ey.ToString());
+                    Analytics.TrackEvent("Error al ingresar registro " + ey.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
 
                 }
 

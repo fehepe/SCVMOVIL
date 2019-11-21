@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿using Microsoft.AppCenter.Analytics;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,14 +15,7 @@ namespace SCVMobil
     public partial class SalidaPage : ContentPage
     {
         String cedula, apellido, nombres;
-        /* List<string> country = new List<string>
-         {
-             "India",
-             "pakistan",
-             "Srilanka",
-             "Bangladesh",
-             "Afghanistan"
-         }; */
+     
         public SalidaPage(String cedula, String nombres, string apellidos)
         {
             InitializeComponent();
@@ -34,17 +28,26 @@ namespace SCVMobil
         //Este metodo sirve para dar salida a una cedula que ya esta dentro
         private async void BtnSalida_Clicked(object sender, EventArgs e)
         {
-            var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-            var querry = "SELECT * FROM Invitados WHERE CARGO = '" +cedula  +"' AND FECHA_SALIDA is null";
-            var registroInv = db.Query<Invitados>(querry);
-            registroInv.First().Fecha_Salida = DateTime.Now;
-            registroInv.First().salidaSubida = null;
-            db.UpdateAll(registroInv);
-            DependencyService.Get<IToastMessage>().DisplayMessage("Se ha dado salida correctamente.");
-            await Navigation.PopToRootAsync();
-            //await Navigation.PushAsync(new CompanyPage(cedula, nombres, apellido));
-            btnSalida.IsEnabled = false;
+            try
+            {
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                var querry = "SELECT * FROM Invitados WHERE CARGO = '" + cedula + "' AND FECHA_SALIDA is null";
+                var registroInv = db.Query<Invitados>(querry);
+                registroInv.First().Fecha_Salida = DateTime.Now;
+                registroInv.First().salidaSubida = null;
+                db.UpdateAll(registroInv);
+                DependencyService.Get<IToastMessage>().DisplayMessage("Se ha dado salida correctamente.");
+                await Navigation.PopToRootAsync();
+                //await Navigation.PushAsync(new CompanyPage(cedula, nombres, apellido));
+                btnSalida.IsEnabled = false;
 
+            }
+            catch (Exception ee)
+            {
+                
+                Analytics.TrackEvent("Error al dar salida " + ee.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+                throw;
+            }
         }
 
 

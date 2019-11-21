@@ -273,7 +273,9 @@ namespace SCVMobil
                                     Crashes.TrackError(ey, properties);
                                     await PopupNavigation.PushAsync(new PopUpCedulaNoexiste());  //Invocacion del PopUp para mostrar mesaje de error// 
                                     await Navigation.PushAsync(new RegistroPage(entCedula.Text, true));
-                                 
+                                    Debug.WriteLine("Entrada");
+                                    Analytics.TrackEvent("Error al buscar cedula en el padron" + ey.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+                                    
                                     try
                                     {
                                         var duration = TimeSpan.FromSeconds(1);

@@ -98,7 +98,7 @@ namespace SCVMobil
                 catch (Exception ey)
                 {
                     Preferences.Set("SYNC_VSU", false);
-
+                    Analytics.TrackEvent("Error al conectarse con firebird: " + ey.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
                     Debug.WriteLine("Exeption in timer: " + ey.ToString());
                 }
                 finally
@@ -117,9 +117,7 @@ namespace SCVMobil
             InitializeComponent();
             MainPage = new NavigationPage(new MainPage())
             {
-                //Aqui se puede cambiar el color de la barra de navegacion.
-                //BarBackgroundColor = Color.FromHex("#0000FF"),
-                //BarTextColor = Color.White
+                
             };
         }
 
@@ -131,45 +129,46 @@ namespace SCVMobil
                   "ios={Your iOS App secret here}",
                   typeof(Analytics), typeof(Crashes));
             Distribute.SetEnabledAsync(true);
-
-            //Crear string para la base de datos
-            string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "dbSCV.db");
-
-            //Guardamos el string de la base de datos en una preferencia.
-            Preferences.Set("DB_PATH", dbPath);
-
-            //Setiamos la Version
-            Preferences.Set("VERSION", "1.28.5.19.1");
-
-            //Conectar con la base de datos
-            var db = new SQLiteConnection(dbPath);
-
-            //db.DropTable<PADRON>();
-            //db.DropTable<COMPANIAS>();
-            //db.DropTable<PERSONAS>();
-            //db.DropTable<VW_RESERVA_VISITA>();
-            //db.DropTable<Invitados>();
-            //Preferences.Set("MAX_INVIDATO_ID","0");
-            //Preferences.Set("MAX_SALIDA_ID", "0");
-            //Creamos las tablas necesarias.
-            //db.CreateTable<Puertas>();
-            db.CreateTable<PADRON>();
-            db.CreateTable<COMPANIAS>();
-            db.CreateTable<PERSONAS>();
-            db.CreateTable<VW_RESERVA_VISITA>();
-            db.CreateTable<Invitados>();
-            db.CreateTable<InvitadosReservas>();
-            db.CreateTable<SalidaOffline>();
-            db.CreateTable<PLACA>(); 
-
-            //Crear los indices de la tabla
-            Task.Factory.StartNew(() =>
+            try
             {
-                Debug.WriteLine("Creating indexes");
-                db.CreateIndex("PADRON", "CEDULA", true);
-                Debug.WriteLine("DONE! creating indexes");
-            });
-            ;
+
+                //Crear string para la base de datos
+                string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "dbSCV.db");
+
+                //Guardamos el string de la base de datos en una preferencia.
+                Preferences.Set("DB_PATH", dbPath);
+
+                //Setiamos la Version
+                Preferences.Set("VERSION", "1.28.5.19.1");
+
+                //Conectar con la base de datos
+                var db = new SQLiteConnection(dbPath);
+
+
+                db.CreateTable<PADRON>();
+                db.CreateTable<COMPANIAS>();
+                db.CreateTable<PERSONAS>();
+                db.CreateTable<VW_RESERVA_VISITA>();
+                db.CreateTable<Invitados>();
+                db.CreateTable<InvitadosReservas>();
+                db.CreateTable<SalidaOffline>();
+                db.CreateTable<PLACA>();
+
+                //Crear los indices de la tabla
+                Task.Factory.StartNew(() =>
+                {
+                    Debug.WriteLine("Creating indexes");
+                    db.CreateIndex("PADRON", "CEDULA", true);
+                    Debug.WriteLine("DONE! creating indexes");
+                });
+                ;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Error onStart");
+                Analytics.TrackEvent("Error al crear tablas: " + e.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+                throw;
+            }
 
 
             //Iniciar servicio de subida en el background
