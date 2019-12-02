@@ -21,12 +21,18 @@ using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using SCVMobil.Models;
 using SCVMobil.Connections;
+using Plugin.DeviceInfo;
+using SCVMobil.Connections;
+using System.Security.Cryptography;
+using SCVMobil.Views;
 
 namespace SCVMobil
 {
 
     public partial class App : Application
     {
+        const int counter = 130;
+        VerifyHash verification = new VerifyHash(counter);
         public static System.Timers.Timer syncTimer;
         //private static object preferences;
 
@@ -115,16 +121,42 @@ namespace SCVMobil
         public App()
         {
             InitializeComponent();
-            MainPage = new NavigationPage(new MainPage())
+
+            //Retornar el Serial Number del dispositivo
+            
+            //var deviceId = CrossDeviceInfo.Current.Id;
+            //Variable que indica si el dispositivo ya se ha serializado
+            bool isSet = Preferences.Get("IS_SET", false);
+
+            using (MD5 md5Hash = MD5.Create())
             {
-                //Aqui se puede cambiar el color de la barra de navegacion.
-                //BarBackgroundColor = Color.FromHex("#0000FF"),
-                //BarTextColor = Color.White
-            };
+                if (isSet == false)
+                {
+                    MainPage = new NavigationPage(new LicensePage());
+                    //Preferences.Set("SERIAL", verification.GetMd5Hash(md5Hash, deviceId, counter));
+                    //if (verification.VerifyMd5Hash(md5Hash, deviceId, Preferences.Get("SERIAL", "N/A")))
+                    //{
+                    //    Preferences.Set("IS_SET", true);
+                    //    Debug.WriteLine("Los Hashes son IDENTICOS");
+                    //}
+                    //else
+                    //{
+                    //    Debug.WriteLine("Hashes DISTINTOS");
+                    //    MainPage = new NavigationPage(new LicensePage());
+                    //}
+                   
+                }
+                else if (isSet == true)
+                {
+                    MainPage = new NavigationPage(new MainPage());
+                }
+            }
+
         }
 
         protected override void OnStart()
-        {
+        {          
+
             //Configuracion del App Center
             AppCenter.Start("android=364e9032-e9db-4d3a-a76f-c2095b3293d1;" +
                   "uwp={Your UWP App secret here};" +
