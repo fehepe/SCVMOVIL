@@ -22,7 +22,7 @@
                 TextColor="Black"
                 Margin="0,0,0,10"/>
             <Label
-            Text="Ingrese la licencia"
+            Text="Licencia SCVMovil"
             FontSize="20"            
             TextColor="Black"
             FontAttributes="Bold"
