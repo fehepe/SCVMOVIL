@@ -68,37 +68,37 @@ namespace SCVMobil
                        // fireBird.tryConnection();
    
                         // Implementar servicios Periodicos.
-                        fireBird.PublicServices();
+                        //fireBird.PublicServices();
 
-                        // Subir visitantes.
-                        fireBird.UploadVisits();
+                        //// Subir visitantes.
+                        //fireBird.UploadVisits();
 
-                        // Cargar Visitantes con reservas.
-                        fireBird.UploadVisitsReservation();
+                        //// Cargar Visitantes con reservas.
+                        //fireBird.UploadVisitsReservation();
 
-                        // Subir las Verificacion.
-                        fireBird.UploadVerifications();
+                        //// Subir las Verificacion.
+                        //fireBird.UploadVerifications();
 
-                        // Subir las salidas.
-                        fireBird.UploadOut();
+                        //// Subir las salidas.
+                        //fireBird.UploadOut();
 
-                        // Subir las salidasDesconocidas.
-                        fireBird.UploadUnknownOuts();
+                        //// Subir las salidasDesconocidas.
+                        //fireBird.UploadUnknownOuts();
 
-                        // Descargar las reservas.
-                        fireBird.DownloadReservations();
+                        //// Descargar las reservas.
+                        //fireBird.DownloadReservations();
 
-                        // Descargar las companies.
-                        fireBird.DownloadCompanies();
+                        //// Descargar las companies.
+                        //fireBird.DownloadCompanies();
 
-                        // Descargar las personas(destinos).
-                        fireBird.DownloadPeople_Destination();
+                        //// Descargar las personas(destinos).
+                        //fireBird.DownloadPeople_Destination();
 
-                        // Descargar los Invitados.
-                        fireBird.DownloadGuests();
+                        //// Descargar los Invitados.
+                        //fireBird.DownloadGuests();
 
-                        // Descargar las salidas.
-                        fireBird.DownloadOuts();
+                        //// Descargar las salidas.
+                        //fireBird.DownloadOuts();
                     }
                 }
                 catch (Exception ey)
@@ -120,7 +120,7 @@ namespace SCVMobil
 
         public App()
         {
-            InitializeComponent();
+            InitializeComponent();         
 
             bool isSet = Preferences.Get("IS_SET", false);
 

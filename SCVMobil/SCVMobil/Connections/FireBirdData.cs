@@ -31,9 +31,9 @@ namespace SCVMobil.Connections
         {
             if (db)
             {
-                string connectionString = "User ID=sysdba;Password=masterkey;" +
-                          "Database=C:\\APP\\GAD\\registros.fdb;" +
-                          $"DataSource={Preferences.Get("SERVER_IP", "192.168.1.170")};Port=3050;Charset=NONE;Server Type=0;";
+                string connectionString =   "User ID=sysdba;Password=masterkey;" +
+                                            "Database=C:\\APP\\GAD\\registros.fdb;" +
+                                            $"DataSource={Preferences.Get("SERVER_IP", "192.168.1.103")};Port=3050;Charset=NONE;Server Type=0;";
                 return connectionString;
             }
             else
@@ -1345,6 +1345,49 @@ namespace SCVMobil.Connections
             {
                 Analytics.TrackEvent("Excepcion en el metodo DownloadOuts, Error: " + ea.Message);
                 Debug.WriteLine("Excepcion en el metodo DownloadOuts, Error: " + ea.Message);
+            }
+        }
+
+        public List<Time> Timee()
+        {
+            string query = "select current_time FROM rdb$database";
+            try
+            {
+
+                List<Time> tiempo = new List<Time>();
+                FbConnection fb = new FbConnection(connectionString(true));
+
+                fb.Open();
+                FbCommand command = new FbCommand(
+                    query,
+                    fb);
+
+                var dtResult = command.ExecuteReader();
+
+                if (dtResult.HasRows)
+                {
+                    while (dtResult.Read())
+                    {
+                        Time t = new Time();
+                        if (dtResult[0] != System.DBNull.Value)
+                        {
+                            t.fecha = dtResult[0].ToString();
+                        }
+
+
+                        tiempo.Add(t);
+                    }
+                }
+                dtResult.Close();
+                fb.Close();
+                fb.Dispose();
+                Preferences.Set("SYNC_VSU", true);
+                return tiempo;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Error en la hora de base de datos " + e.Message);
+                return new List<Time>();
             }
         }
     }
