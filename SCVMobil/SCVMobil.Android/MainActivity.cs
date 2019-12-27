@@ -66,7 +66,7 @@ namespace SCVMobil.Droid
                 alert.SetMessage("No se pudo conectar a la base de datos");
                 alert.SetButton("OK", (c, ev) =>
                 {
-                    JavaSystem.Exit(0);
+                   // JavaSystem.Exit(0);
                 });
                 alert.Show();
             }
@@ -93,7 +93,7 @@ namespace SCVMobil.Droid
                             {
 
                                 Xamarin.Forms.Forms.Context.StartActivity(new Android.Content.Intent(Android.Provider.Settings.ActionDateSettings));
-                                JavaSystem.Exit(0);
+                                
 
                             });
                             alert.Show();
