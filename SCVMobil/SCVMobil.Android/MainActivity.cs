@@ -13,6 +13,7 @@ using Android.Content.Res;
 using Xamarin.Forms;
 using SCVMobil.Connections;
 using Java.Lang;
+using System.Timers;
 
 namespace SCVMobil.Droid
 {
@@ -54,17 +55,18 @@ namespace SCVMobil.Droid
         private void setCurrentTime()
         {
 
-           
-            var query = fireBirdData.Timee();
-            if (query.Count < 0)
+            
+            var query = fireBirdData.hora();
+            var query2 = fireBirdData.min();
+            if (query.Count < 0 || query2.Count < 0 || query.Count == 0 || query2.Count == 0)
             {
                 Android.App.AlertDialog.Builder dialog = new AlertDialog.Builder(this);
                 AlertDialog alert = dialog.Create();
-                alert.SetTitle("Title");
+                alert.SetTitle("Mensaje");
                 alert.SetMessage("No se pudo conectar a la base de datos");
                 alert.SetButton("OK", (c, ev) =>
                 {
-
+                    
                 });
                 alert.Show();
             }
@@ -72,32 +74,42 @@ namespace SCVMobil.Droid
             {
                 foreach (var item in query)
                 {
-                    var tiempo = DateTime.Now.ToString("HH:mm:ss");
-                    if (item.fecha == tiempo)
+                    foreach (var item2 in query2)
                     {
-                        Android.App.AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-                        AlertDialog alert = dialog.Create();
-                        alert.SetTitle("Connexion:");
-                        alert.SetMessage("Se conecto, hora: " + item.fecha);
-                        alert.SetButton("OK", (c, ev) =>
+                        var tiempo = DateTime.Now.ToString("HH:mm:ss");
+                        var src = DateTime.Now;
+                        var hm = new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, 0);
+                        if (item.fecha == Convert.ToString(hm.Hour) && item2.minuto == Convert.ToString(hm.Minute))
                         {
+                            Android.App.AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                            AlertDialog alert = dialog.Create();
+                            alert.SetTitle("Conexion:");
+                            alert.SetMessage("Conectado, hora: " + item.fecha + ":" + item2.minuto);
+                            alert.SetButton("OK", (c, ev) =>
+                            {
 
-
-                        });
-                        alert.Show();
-                    }
-                    else
-                    {
-                        Android.App.AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-                        AlertDialog alert = dialog.Create();
-                        alert.SetTitle("Mensaje:");
-                        alert.SetMessage("Arregle la hora de su dispositivo");
-                        alert.SetButton("OK", (c, ev) =>
+                            });
+                            alert.Show();
+                           
+                        }
+                        else
                         {
-                            JavaSystem.Exit(0);
-                        });
-                        alert.Show();
+                            Android.App.AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                            AlertDialog alert = dialog.Create();
+                            alert.SetTitle("Mensaje:");
+                            alert.SetMessage("Arregle la hora de su dispositivo");
+                            alert.SetButton("OK", (c, ev) =>
+                            {
+
+                                Xamarin.Forms.Forms.Context.StartActivity(new Android.Content.Intent(Android.Provider.Settings.ActionSettings));
+                                JavaSystem.Exit(0);
+
+                            });
+                            alert.Show();
+                            break;
+                        }
                     }
+                    
                     
                 }
 

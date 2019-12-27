@@ -63,43 +63,44 @@ namespace SCVMobil
                         var fireBird = new FireBirdData();
 
                         ////implementar el metodo tryConnection();
-                        ////fireBird.TryConnections();
                        
-                       // fireBird.tryConnection();
-   
-                        // Implementar servicios Periodicos.
-                        //fireBird.PublicServices();
 
-                        //// Subir visitantes.
-                        //fireBird.UploadVisits();
+                        fireBird.tryConnection();
 
-                        //// Cargar Visitantes con reservas.
-                        //fireBird.UploadVisitsReservation();
+                        //Implementar servicios Periodicos.
+                        fireBird.PublicServices();
 
-                        //// Subir las Verificacion.
-                        //fireBird.UploadVerifications();
+                        // Subir visitantes.
+                        fireBird.UploadVisits();
 
-                        //// Subir las salidas.
-                        //fireBird.UploadOut();
+                        // Cargar Visitantes con reservas.
+                        fireBird.UploadVisitsReservation();
 
-                        //// Subir las salidasDesconocidas.
-                        //fireBird.UploadUnknownOuts();
+                        // Subir las Verificacion.
+                        fireBird.UploadVerifications();
 
-                        //// Descargar las reservas.
-                        //fireBird.DownloadReservations();
+                        // Subir las salidas.
+                        fireBird.UploadOut();
 
-                        //// Descargar las companies.
-                        //fireBird.DownloadCompanies();
+                        // Subir las salidasDesconocidas.
+                        fireBird.UploadUnknownOuts();
 
-                        //// Descargar las personas(destinos).
-                        //fireBird.DownloadPeople_Destination();
+                        // Descargar las reservas.
+                        fireBird.DownloadReservations();
 
-                        //// Descargar los Invitados.
-                        //fireBird.DownloadGuests();
+                        // Descargar las companies.
+                        fireBird.DownloadCompanies();
 
-                        //// Descargar las salidas.
-                        //fireBird.DownloadOuts();
+                        // Descargar las personas(destinos).
+                        fireBird.DownloadPeople_Destination();
+
+                        // Descargar los Invitados.
+                        fireBird.DownloadGuests();
+
+                        // Descargar las salidas.
+                        fireBird.DownloadOuts();
                     }
+                    
                 }
                 catch (Exception ey)
                 {
