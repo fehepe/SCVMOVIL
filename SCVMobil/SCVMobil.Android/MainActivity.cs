@@ -12,6 +12,7 @@ using Android.Text;
 using Android.Content.Res;
 using Xamarin.Forms;
 using SCVMobil.Connections;
+using Java.Lang;
 
 namespace SCVMobil.Droid
 {
@@ -25,17 +26,18 @@ namespace SCVMobil.Droid
         protected override void OnCreate(Bundle savedInstanceState)
         {
             SetTheme(Resource.Style.MainTheme);
-            showCurrentTime = FindViewById<TextView>(Resource.Id.time);
-            setCurrentTime();            
+                       
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
-
+            showCurrentTime = FindViewById<TextView>(Resource.Id.toolbar);
+            setCurrentTime();
+            
             Rg.Plugins.Popup.Popup.Init(this, savedInstanceState);
 
             Window.SetStatusBarColor(Android.Graphics.Color.ParseColor("#D32F2F")); //Cambio de color del status bar//
-
+            
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
@@ -48,12 +50,11 @@ namespace SCVMobil.Droid
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 
+        [Obsolete]
         private void setCurrentTime()
         {
 
-            //string time = string.Format("{0}",
-            //DateTime.Now.ToString("HH:mm").PadLeft(2, '0'));
-            //showCurrentTime.Text = time;
+           
             var query = fireBirdData.Timee();
             if (query.Count < 0)
             {
@@ -71,16 +72,33 @@ namespace SCVMobil.Droid
             {
                 foreach (var item in query)
                 {
-                    Android.App.AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-                    AlertDialog alert = dialog.Create();
-                    alert.SetTitle("Title");
-                    alert.SetMessage("Se conecto, hora: " + item.fecha);
-                    alert.SetButton("OK", (c, ev) =>
+                    var tiempo = DateTime.Now.ToString("HH:mm:ss");
+                    if (item.fecha == tiempo)
                     {
-                       
+                        Android.App.AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                        AlertDialog alert = dialog.Create();
+                        alert.SetTitle("Connexion:");
+                        alert.SetMessage("Se conecto, hora: " + item.fecha);
+                        alert.SetButton("OK", (c, ev) =>
+                        {
 
-                    });
-                    alert.Show();
+
+                        });
+                        alert.Show();
+                    }
+                    else
+                    {
+                        Android.App.AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                        AlertDialog alert = dialog.Create();
+                        alert.SetTitle("Mensaje:");
+                        alert.SetMessage("Arregle la hora de su dispositivo");
+                        alert.SetButton("OK", (c, ev) =>
+                        {
+                            JavaSystem.Exit(0);
+                        });
+                        alert.Show();
+                    }
+                    
                 }
 
             }
