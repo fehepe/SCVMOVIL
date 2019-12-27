@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using Xamarin.Essentials;
+using Xamarin.Forms.PlatformConfiguration;
 
 namespace SCVMobil.Connections
 {
@@ -31,19 +32,9 @@ namespace SCVMobil.Connections
         {
             if (db)
             {
-                try
-                {
-                    string connectionString = "User ID=sysdba;Password=masterkey;" +
-                                      "Database=C:\\APP\\GAD\\registros.fdb;" +
-                                      $"DataSource={Preferences.Get("SERVER_IP", "192.168.1.170")};Port=3050;Charset=NONE;Server Type=0;";
-                    return connectionString;
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine("Error en el metodo connectionString, generado por: " + e.Message);
-                    Analytics.TrackEvent("Error al obtener ruta de base de datos: " + Preferences.Get("LECTOR", "N/A") + " Error: " + e.Message);
-                    throw;
-                }
+                string connectionString = "User ID = sysdba; Password = masterkey; Database = C:\\APP\\GAD\\registros.fdb; " +
+                                          $"DataSource={Preferences.Get("SERVER_IP", "192.168.1.103")};Port=3050;Charset=NONE;Server Type=0;";
+                return connectionString;
             }
             else
             {
@@ -79,7 +70,6 @@ namespace SCVMobil.Connections
             catch (Exception ea)
             {
                 Debug.WriteLine("Error en el metodo ExecuteScalar, generado por: " + ea.Message);
-                Analytics.TrackEvent("Error de conexion de base de datos: " + Preferences.Get("LECTOR", "N/A") + " Error: " + ea.Message);
                 Preferences.Set("SYNC_VSU", false);
                 return null;
             }
@@ -274,7 +264,6 @@ namespace SCVMobil.Connections
             catch (Exception ea)
             {
                 Debug.WriteLine("Error en el metodo ExecuteGuest, provocado por: " + ea.Message);
-                Analytics.TrackEvent("Error al obtener listado de invitados y conexion de base de datos: " + Preferences.Get("LECTOR", "N/A") + " Error: " + ea.Message);
                 Preferences.Set("SYNC_VSU", false);
                 return null;
             }
@@ -472,7 +461,6 @@ namespace SCVMobil.Connections
             catch (Exception ea)
             {
                 Debug.WriteLine("Error en el metodo ExecuteGuestOuts, provocado por: " + ea.Message);
-                Analytics.TrackEvent("Error al obtener listado de invitados y conexion de base de datos: " + Preferences.Get("LECTOR", "N/A") + " Error: " + ea.Message);
                 Preferences.Set("SYNC_VSU", false);
                 return null;
             }
@@ -562,7 +550,6 @@ namespace SCVMobil.Connections
             catch (Exception ea)
             {
                 Debug.WriteLine("Error en el metodo ExecuteReservations, provocado por: " + ea.Message);
-                Analytics.TrackEvent("Error al obtener lista de reservaciones y conexion de base de datos: " + Preferences.Get("LECTOR", "N/A") + " Error: " + ea.Message);
                 Preferences.Set("SYNC_VSU", false);
                 return null;
             }
@@ -624,7 +611,6 @@ namespace SCVMobil.Connections
             catch (Exception ea)
             {
                 Debug.WriteLine("Error en el metodo ExecuteCompanies, provocado por: " + ea.Message);
-                Analytics.TrackEvent("Error al obtener listado de compañias y conexion de base de datos: " + Preferences.Get("LECTOR", "N/A") + " Error: " + ea.Message);
                 Preferences.Set("SYNC_VSU", false);
                 return null;
             }
@@ -680,7 +666,6 @@ namespace SCVMobil.Connections
             catch (Exception ea)
             {
                 Debug.WriteLine("Error en el metodo ExecutePeople, provocado por: " + ea.Message);
-                Analytics.TrackEvent("Error al obtener listado de personas y conexion de base de datos: " + Preferences.Get("LECTOR", "N/A") + " Error: " + ea.Message);
                 Preferences.Set("SYNC_VSU", false);
                 return null;
             }
@@ -702,10 +687,9 @@ namespace SCVMobil.Connections
                     Preferences.Set("SYNC_VSU", true);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Debug.WriteLine("Error en el metodo ExecutePeople, provocado por: " + e.Message);
-                Analytics.TrackEvent("Error de conexion a base de datos obteniendo informacion " + Preferences.Get("LECTOR", "N/A") + " Error: " + e.Message);
+
                 Preferences.Set("SYNC_VSU", false);
             }
             
@@ -726,8 +710,6 @@ namespace SCVMobil.Connections
             catch (Exception ea)
             {
                 Debug.WriteLine("Error en el metodo PublicServices, provocado por: " + ea.Message);
-                Analytics.TrackEvent("Error al proveer horas y fechas " + Preferences.Get("LECTOR", "N/A") + " Error: " + ea.Message);
-
             }
         }
 
@@ -844,7 +826,7 @@ namespace SCVMobil.Connections
             catch (Exception ea)
             {
                 Debug.WriteLine("Excepcion en el metodo UploadVisit, error: "+ ea.Message);
-                Analytics.TrackEvent("Error de subir visitas: " + Preferences.Get("LECTOR", "N/A") + " Error: " + ea.Message);
+                Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: " + ea.Message);
             }
         }
 
@@ -957,7 +939,7 @@ namespace SCVMobil.Connections
             catch (Exception ea)
             {
                 Debug.WriteLine("Excepcion en el metodo UploadVisitsReservation, error: " + ea.Message);
-                Analytics.TrackEvent("Error al subir visitas con reservacion " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo UploadVisitsReservation, error: " + ea.Message);
+                Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo UploadVisitsReservation, error: " + ea.Message);
             }
         }
 
@@ -995,7 +977,7 @@ namespace SCVMobil.Connections
             catch (Exception ea)
             {
                 Debug.WriteLine("Excepcion en el metodo UploadVerifications, error: " + ea.Message);
-                Analytics.TrackEvent("Error al subir verificacion en la base de datos de firebird error: " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A") );
+                Analytics.TrackEvent("Error en el metodo UploadVerifications, error: " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A") );
             }
         }
 
@@ -1029,7 +1011,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
-                Analytics.TrackEvent("Error al subir salidas en la base de datos de firebird error: " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+                Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + "\n Excepcion en el metodo UploadOut, Error: "+ ea.Message);
                 Debug.WriteLine("Excepcion en el metodo UploadOut, Error: "+ ea.Message);
             }
         }
@@ -1065,7 +1047,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
-                Analytics.TrackEvent("Error al subir salidas desconocidas a base de datos: " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+                Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + "\n Excepcion en el metodo UploadUnknownOuts, Error: "+ ea.Message);
                 Debug.WriteLine("Excepcion en el metodo UploadUnknownOuts, Error: " + ea.Message);
             }
         }
@@ -1108,7 +1090,6 @@ namespace SCVMobil.Connections
                                             { "Lector", Preferences.Get("LECTOR", "N/A")}
                                         };
                         Debug.WriteLine("Excepcion insertando reservas: " + ex.ToString());
-                        Analytics.TrackEvent("Error al insertar en listas de reservaciones reservaciones: " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
                         Crashes.TrackError(ex, properties);
                     }
 
@@ -1120,7 +1101,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
-                Analytics.TrackEvent("Error al cargar reservaciones en la base de datos de firebird error: " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+                Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadReservations, Error: " + ea.Message);
                 Debug.WriteLine("Excepcion en el metodo DownloadReservations, Error: " + ea.Message);
             }
         }
@@ -1174,7 +1155,6 @@ namespace SCVMobil.Connections
                                             { "Lector", Preferences.Get("LECTOR", "N/A")}
                                         };
                         Debug.WriteLine("Excepcion insertando Companias: " + ex.ToString());
-                        Analytics.TrackEvent("Error al insertar compañias en base de datos : " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
                         Crashes.TrackError(ex, properties);
                     }
 
@@ -1183,7 +1163,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
-                Analytics.TrackEvent("Error al cargar compañias: " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+                Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadCompanies, Error: " + ea.Message);
                 Debug.WriteLine("Error de SQL: "+ea.Message);
             }
         }
@@ -1240,7 +1220,6 @@ namespace SCVMobil.Connections
                                             { "Lector", Preferences.Get("LECTOR", "N/A")}
                                         };
                         Debug.WriteLine("Excepcion insertando Personas: " + ex.ToString());
-                        Analytics.TrackEvent("Error al insertar personas en base de datos: " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
                         Crashes.TrackError(ex, properties);
                     }
 
@@ -1248,7 +1227,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
-                Analytics.TrackEvent("Error al cargar personas de la base de datos : " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadPeople_Destination, Error: "+ ea.Message);
+                Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadPeople_Destination, Error: "+ ea.Message);
                 Debug.WriteLine("Excepcion en el metodo DownloadPeople_Destination, Error: " + ea.Message);
             }
         }
@@ -1296,7 +1275,6 @@ namespace SCVMobil.Connections
                                             { "Lector", Preferences.Get("LECTOR", "N/A")}
                                         };
                         Debug.WriteLine("Excepcion insetando reservas: " + ex.ToString());
-                        Analytics.TrackEvent("Error cargar en la base de datos de firebird error: " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
                         Crashes.TrackError(ex, properties);
                     }
 
@@ -1305,7 +1283,7 @@ namespace SCVMobil.Connections
             catch (Exception ea)
             {
                 Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadGuests, Error: " + ea.Message);
-                Debug.WriteLine("Error al descargar invitados, Error: " + ea.Message);
+                Debug.WriteLine("Excepcion en el metodo DownloadGuests, Error: " + ea.Message);
             }
         }
 
@@ -1358,7 +1336,6 @@ namespace SCVMobil.Connections
                                             { "Lector", Preferences.Get("LECTOR", "N/A")}
                                         };
                         Debug.WriteLine("Excepcion descargando Salidas: " + ex.ToString());
-                        Analytics.TrackEvent("Error al actualizar lista de salidas " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
                         Crashes.TrackError(ex, properties);
                     }
 
@@ -1366,9 +1343,96 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
-                Analytics.TrackEvent("Error al descargar salidas  , Error: " + ea.Message);
+                Analytics.TrackEvent("Excepcion en el metodo DownloadOuts, Error: " + ea.Message);
                 Debug.WriteLine("Excepcion en el metodo DownloadOuts, Error: " + ea.Message);
             }
         }
+
+        public List<Time> hora()
+        {
+            string query = "select EXTRACT(hour FROM current_time) FROM rdb$database";
+            try
+            {
+
+                List<Time> tiempo = new List<Time>();                
+                FbConnection fb = new FbConnection(connectionString(true));
+                
+                fb.Open();                
+                
+                FbCommand command = new FbCommand(
+                    query,
+                    fb);
+
+                var dtResult = command.ExecuteReader();
+
+                if (dtResult.HasRows)
+                {
+                    while (dtResult.Read())
+                    {
+                        Time t = new Time();
+                        if (dtResult[0] != System.DBNull.Value)
+                        {
+                            t.fecha = dtResult[0].ToString();
+                        }
+
+
+                        tiempo.Add(t);
+                    }
+                }
+                dtResult.Close();
+                fb.Close();
+                fb.Dispose();
+                Preferences.Set("SYNC_VSU", true);
+                return tiempo;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Error en la hora de base de datos " + e.Message);
+                return new List<Time>();
+            }
+        }  //hora//
+
+        public List<Minuto> min()
+        {
+            string query = "select EXTRACT(minute FROM current_time) FROM rdb$database";
+            try
+            {
+
+                List<Minuto> minutos = new List<Minuto>();
+                FbConnection fb = new FbConnection(connectionString(true));
+
+                fb.Open();
+                FbCommand command = new FbCommand(
+                    query,
+                    fb);
+
+                var dtResult = command.ExecuteReader();
+
+                if (dtResult.HasRows)
+                {
+                    while (dtResult.Read())
+                    {
+                        Minuto m = new Minuto();
+                        if (dtResult[0] != System.DBNull.Value)
+                        {
+                            m.minuto = dtResult[0].ToString();
+                        }
+
+
+                        minutos.Add(m);
+                    }
+                }
+                dtResult.Close();
+                fb.Close();
+                fb.Dispose();
+                Preferences.Set("SYNC_VSU", true);
+                return minutos;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Error en la hora de base de datos " + e.Message);
+                return new List<Minuto>();
+            }
+        } //minuto//
     }
 }

@@ -21,12 +21,18 @@ using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using SCVMobil.Models;
 using SCVMobil.Connections;
+using Plugin.DeviceInfo;
+using SCVMobil.Connections;
+using System.Security.Cryptography;
+using SCVMobil.Views;
 
 namespace SCVMobil
 {
 
     public partial class App : Application
     {
+        const int counter = 130;
+        VerifyHash verification = new VerifyHash(counter);
         public static System.Timers.Timer syncTimer;
         //private static object preferences;
 
@@ -57,11 +63,11 @@ namespace SCVMobil
                         var fireBird = new FireBirdData();
 
                         ////implementar el metodo tryConnection();
-                        ////fireBird.TryConnections();
                        
-                       // fireBird.tryConnection();
-   
-                        // Implementar servicios Periodicos.
+
+                        fireBird.tryConnection();
+
+                        //Implementar servicios Periodicos.
                         fireBird.PublicServices();
 
                         // Subir visitantes.
@@ -94,11 +100,12 @@ namespace SCVMobil
                         // Descargar las salidas.
                         fireBird.DownloadOuts();
                     }
+                    
                 }
                 catch (Exception ey)
                 {
                     Preferences.Set("SYNC_VSU", false);
-                    Analytics.TrackEvent("Error al conectarse con firebird: " + ey.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+
                     Debug.WriteLine("Exeption in timer: " + ey.ToString());
                 }
                 finally
@@ -114,61 +121,70 @@ namespace SCVMobil
 
         public App()
         {
-            InitializeComponent();
-            MainPage = new NavigationPage(new MainPage())
+            InitializeComponent();         
+
+            bool isSet = Preferences.Get("IS_SET", false);
+
+            if (isSet == false)
             {
-                
-            };
+                MainPage = new NavigationPage(new LicensePage());
+                   
+            }
+            else if (isSet == true)
+            {
+                MainPage = new NavigationPage(new MainPage());
+            }
+
         }
 
         protected override void OnStart()
-        {
+        {          
+
             //Configuracion del App Center
             AppCenter.Start("android=364e9032-e9db-4d3a-a76f-c2095b3293d1;" +
                   "uwp={Your UWP App secret here};" +
                   "ios={Your iOS App secret here}",
                   typeof(Analytics), typeof(Crashes));
             Distribute.SetEnabledAsync(true);
-            try
+
+            //Crear string para la base de datos
+            string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "dbSCV.db");
+
+            //Guardamos el string de la base de datos en una preferencia.
+            Preferences.Set("DB_PATH", dbPath);
+
+            //Setiamos la Version
+            Preferences.Set("VERSION", "1.28.5.19.1");
+
+            //Conectar con la base de datos
+            var db = new SQLiteConnection(dbPath);
+
+            //db.DropTable<PADRON>();
+            //db.DropTable<COMPANIAS>();
+            //db.DropTable<PERSONAS>();
+            //db.DropTable<VW_RESERVA_VISITA>();
+            //db.DropTable<Invitados>();
+            //Preferences.Set("MAX_INVIDATO_ID","0");
+            //Preferences.Set("MAX_SALIDA_ID", "0");
+            //Creamos las tablas necesarias.
+            //db.CreateTable<Puertas>();
+            db.CreateTable<PADRON>();
+            db.CreateTable<COMPANIAS>();
+            db.CreateTable<PERSONAS>();
+            db.CreateTable<VW_RESERVA_VISITA>();
+            db.CreateTable<Invitados>();
+            db.CreateTable<InvitadosReservas>();
+            db.CreateTable<SalidaOffline>();
+            db.CreateTable<PLACA>(); 
+
+            //Crear los indices de la tabla
+            Task.Factory.StartNew(() =>
             {
-
-                //Crear string para la base de datos
-                string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "dbSCV.db");
-
-                //Guardamos el string de la base de datos en una preferencia.
-                Preferences.Set("DB_PATH", dbPath);
-
-                //Setiamos la Version
-                Preferences.Set("VERSION", "3.0");
-
-                //Conectar con la base de datos
-                var db = new SQLiteConnection(dbPath);
-
-
-                db.CreateTable<PADRON>();
-                db.CreateTable<COMPANIAS>();
-                db.CreateTable<PERSONAS>();
-                db.CreateTable<VW_RESERVA_VISITA>();
-                db.CreateTable<Invitados>();
-                db.CreateTable<InvitadosReservas>();
-                db.CreateTable<SalidaOffline>();
-                db.CreateTable<PLACA>();
-
-                //Crear los indices de la tabla
-                Task.Factory.StartNew(() =>
-                {
-                    Debug.WriteLine("Creating indexes");
-                    db.CreateIndex("PADRON", "CEDULA", true);
-                    Debug.WriteLine("DONE! creating indexes");
-                });
-                ;
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Error onStart");
-                Analytics.TrackEvent("Error al crear tablas: " + e.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
-                throw;
-            }
+                Debug.WriteLine("Creating indexes");
+                db.CreateIndex("PADRON", "CEDULA", true);
+                Debug.WriteLine("DONE! creating indexes");
+            });
+            ;
 
 
             //Iniciar servicio de subida en el background
