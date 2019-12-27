@@ -54,8 +54,6 @@ namespace SCVMobil.Droid
         [Obsolete]
         private void setCurrentTime()
         {
-
-
             var query = fireBirdData.hora();
             var query2 = fireBirdData.min();
             if (query.Count < 0 || query2.Count < 0 || query.Count == 0 || query2.Count == 0)
@@ -91,10 +89,7 @@ namespace SCVMobil.Droid
                             alert.SetMessage("Hora incorrecta. Redireccion a la configuracion");
                             alert.SetButton("OK", (c, ev) =>
                             {
-
                                 Xamarin.Forms.Forms.Context.StartActivity(new Android.Content.Intent(Android.Provider.Settings.ActionDateSettings));
-                                
-
                             });
                             alert.Show();
                             break;
@@ -106,10 +101,6 @@ namespace SCVMobil.Droid
 
             }
         }
-
-
-
-
-        
+  
     }
 }
