@@ -101,7 +101,7 @@ namespace SCVMobil.Droid
                             alert.SetButton("OK", (c, ev) =>
                             {
 
-                                Xamarin.Forms.Forms.Context.StartActivity(new Android.Content.Intent(Android.Provider.Settings.ActionSettings));
+                                Xamarin.Forms.Forms.Context.StartActivity(new Android.Content.Intent(Android.Provider.Settings.ActionDateSettings));
                                 JavaSystem.Exit(0);
 
                             });
