@@ -12,7 +12,7 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using SCVMobil.Models;
 using Rg.Plugins.Popup.Services;
-
+using SCVMobil.Connections;
 
 namespace SCVMobil
 {
@@ -20,7 +20,7 @@ namespace SCVMobil
     {
       
         Escaner scanner;
-
+        
 
         //---------------------------------------------------------------------------
 
@@ -66,6 +66,8 @@ namespace SCVMobil
         //-----------------------------------------------------------------------------------------
         protected override void OnAppearing() //Cuando aparezca la pagina, refrescamos.
         {
+            
+
             if (Navigation.NavigationStack.Count >= 2 && !Preferences.Get("IsSet", false))
             {
                 Application.Current.MainPage.Navigation.RemovePage(Navigation.NavigationStack.First());
@@ -78,7 +80,7 @@ namespace SCVMobil
             entCedula.Text = string.Empty;
             entApellidos.Text = string.Empty;
         }
-
+        
         //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -87,7 +89,9 @@ namespace SCVMobil
             scanner.GetScanner(false);// Se desactiva el Scaner
            
             Preferences.Set("PAGE_ACTIVE", "MainPage");
+
            
+
 
         }
         //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

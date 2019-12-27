@@ -21,6 +21,7 @@ namespace SCVMobil
         private void okping_Clicked(object sender, EventArgs e)
         {
             this.IsVisible = false;
+            Navigation.PopToRootAsync();
         }
     }
 }

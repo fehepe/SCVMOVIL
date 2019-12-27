@@ -49,6 +49,7 @@ namespace SCVMobil
             base.OnAppearing();
             setDefaults();
             eServerIP.Text = Preferences.Get("SERVER_IP", "192.168.1.170");
+
             
             eLector.Text = Preferences.Get("LECTOR", "1");
             entChunkSize.Text = Preferences.Get("CHUNK_SIZE", "50000");

@@ -66,7 +66,7 @@ namespace SCVMobil.Droid
                 alert.SetMessage("No se pudo conectar a la base de datos");
                 alert.SetButton("OK", (c, ev) =>
                 {
-
+                    JavaSystem.Exit(0);
                 });
                 alert.Show();
             }
@@ -87,8 +87,8 @@ namespace SCVMobil.Droid
                         {
                             Android.App.AlertDialog.Builder dialog = new AlertDialog.Builder(this);
                             AlertDialog alert = dialog.Create();
-                            alert.SetTitle("Mensaje:");
-                            alert.SetMessage("Arregle la hora de su dispositivo");
+                            alert.SetTitle("Error:");
+                            alert.SetMessage("Hora incorrecta. Redireccion a la configuracion");
                             alert.SetButton("OK", (c, ev) =>
                             {
 
