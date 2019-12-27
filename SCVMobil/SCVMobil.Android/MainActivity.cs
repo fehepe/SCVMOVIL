@@ -55,7 +55,7 @@ namespace SCVMobil.Droid
         private void setCurrentTime()
         {
 
-            
+
             var query = fireBirdData.hora();
             var query2 = fireBirdData.min();
             if (query.Count < 0 || query2.Count < 0 || query.Count == 0 || query2.Count == 0)
@@ -66,7 +66,7 @@ namespace SCVMobil.Droid
                 alert.SetMessage("No se pudo conectar a la base de datos");
                 alert.SetButton("OK", (c, ev) =>
                 {
-                    
+
                 });
                 alert.Show();
             }
@@ -81,16 +81,7 @@ namespace SCVMobil.Droid
                         var hm = new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, 0);
                         if (item.fecha == Convert.ToString(hm.Hour) && item2.minuto == Convert.ToString(hm.Minute))
                         {
-                            Android.App.AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-                            AlertDialog alert = dialog.Create();
-                            alert.SetTitle("Conexion:");
-                            alert.SetMessage("Conectado, hora: " + item.fecha + ":" + item2.minuto);
-                            alert.SetButton("OK", (c, ev) =>
-                            {
-
-                            });
-                            alert.Show();
-                           
+                            break;
                         }
                         else
                         {
@@ -109,8 +100,8 @@ namespace SCVMobil.Droid
                             break;
                         }
                     }
-                    
-                    
+
+
                 }
 
             }
