@@ -63,12 +63,28 @@ namespace SCVMobil
             {
                 imgNoSync.IsVisible = true;
                 imgSync.IsVisible = false;
-                entCedula.IsEnabled = false;
+                entCedula.IsEnabled = false;                
+          
             }
         }
         //-----------------------------------------------------------------------------------------
         protected override void OnAppearing() //Cuando aparezca la pagina, refrescamos.
-        {           
+        {
+            if (Preferences.Get("SYNC_VSU", false))
+            {
+                imgNoSync.IsVisible = false;
+                imgSync.IsVisible = true;
+                entCedula.IsEnabled = true;
+
+            }
+            else
+            {
+                imgNoSync.IsVisible = true;
+                imgSync.IsVisible = false;
+                entCedula.IsEnabled = false;
+                DisplayAlert("Error","Error de conexion","Ok");
+
+            }
 
             if (Navigation.NavigationStack.Count >= 2 && !Preferences.Get("IsSet", false))
             {

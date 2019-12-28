@@ -79,8 +79,7 @@ namespace SCVMobil
                                 }
                                 else
                                 {
-                                    Preferences.Set("SYNC_VSU", false);
-                                    Current.MainPage.DisplayAlert("Error", "Hora incorrecta", "ok");
+                                    Preferences.Set("SYNC_VSU", false);                                                                      
                                     break;
                                 }
                             }
