@@ -52,21 +52,23 @@ namespace SCVMobil
         //---------------------------------------------------------------------------------------
         public void refreshPage()
         {
+            
             if (Preferences.Get("SYNC_VSU", false))
             {
                 imgNoSync.IsVisible = false;
                 imgSync.IsVisible = true;
+                entCedula.IsEnabled = true;
             }
             else
             {
                 imgNoSync.IsVisible = true;
                 imgSync.IsVisible = false;
+                entCedula.IsEnabled = false;
             }
         }
         //-----------------------------------------------------------------------------------------
         protected override void OnAppearing() //Cuando aparezca la pagina, refrescamos.
-        {
-            
+        {           
 
             if (Navigation.NavigationStack.Count >= 2 && !Preferences.Get("IsSet", false))
             {

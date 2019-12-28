@@ -42,7 +42,7 @@ namespace SCVMobil
             syncTimer = new System.Timers.Timer(2000);
             // Asignar el evento.
             
-           syncTimer.Elapsed += OnTimedEvent;
+            syncTimer.Elapsed += OnTimedEvent;
             syncTimer.AutoReset = true;
             syncTimer.Enabled = true;
         }
@@ -62,6 +62,9 @@ namespace SCVMobil
                     {
                         var fireBird = new FireBirdData();
 
+                        fireBird.hora();
+
+                        fireBird.min();
                         ////implementar el metodo tryConnection();
                        
 
@@ -100,6 +103,11 @@ namespace SCVMobil
                         // Descargar las salidas.
                         fireBird.DownloadOuts();
                     }
+                    else
+                    {
+                        Application.Current.MainPage.DisplayAlert("Error", "No tiene acceso a internet", "ok");
+                        Preferences.Set("SYNC_VSU", false);
+                    }
                     
                 }
                 catch (Exception ey)
@@ -121,25 +129,26 @@ namespace SCVMobil
 
         public App()
         {
-            InitializeComponent();         
+            InitializeComponent();
 
             bool isSet = Preferences.Get("IS_SET", false);
 
             if (isSet == false)
             {
                 MainPage = new NavigationPage(new LicensePage());
-                   
+
             }
             else if (isSet == true)
             {
                 MainPage = new NavigationPage(new MainPage());
             }
-
         }
+        
 
         protected override void OnStart()
-        {          
-
+        {
+            
+           
             //Configuracion del App Center
             AppCenter.Start("android=364e9032-e9db-4d3a-a76f-c2095b3293d1;" +
                   "uwp={Your UWP App secret here};" +
