@@ -23,8 +23,7 @@ namespace SCVMobil.Droid
 
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
-        FireBirdData fireBirdData = new FireBirdData();
-        private TextView showCurrentTime;
+        
         protected override void OnCreate(Bundle savedInstanceState)
         {
             SetTheme(Resource.Style.MainTheme);
@@ -33,8 +32,8 @@ namespace SCVMobil.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
-            showCurrentTime = FindViewById<TextView>(Resource.Id.toolbar);
-            //setCurrentTime();
+            
+            
             
             Rg.Plugins.Popup.Popup.Init(this, savedInstanceState);
 
@@ -52,59 +51,9 @@ namespace SCVMobil.Droid
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 
-        [Obsolete]
-        private void setCurrentTime()
-        {
-            //var query = fireBirdData.hora();
-            //var query2 = fireBirdData.min();
-            //if (query.Count < 0 || query2.Count < 0 || query.Count == 0 || query2.Count == 0)
-            //{
-            //    Android.App.AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-            //    AlertDialog alert = dialog.Create();
-            //    alert.SetTitle("Mensaje");
-            //    alert.SetMessage("No se pudo conectar a la base de datos");
-            //    alert.SetButton("OK", (c, ev) =>
-            //    {
-
-            //        // JavaSystem.Exit(0);
-            //    });
-            //    alert.Show();
-            //}
-            //else
-            //{
-            //    foreach (var item in query)
-            //    {
-            //        foreach (var item2 in query2)
-            //        {
-            //            var tiempo = DateTime.Now.ToString("HH:mm:ss");
-            //            var src = DateTime.Now;
-            //            var hm = new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, 0);
-            //            if (item.fecha == Convert.ToString(hm.Hour) && item2.minuto == Convert.ToString(hm.Minute))
-            //            {
-            //                break;
-            //            }
-            //            else
-            //            {
-            //                Preferences.Set("SYNC_VSU", false);
-
-            //                Android.App.AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-            //                AlertDialog alert = dialog.Create();
-            //                alert.SetTitle("Error:");
-            //                alert.SetMessage("Hora incorrecta. Redireccion a la configuracion");
-            //                alert.SetButton("OK", (c, ev) =>
-            //                {
-            //                    Xamarin.Forms.Forms.Context.StartActivity(new Android.Content.Intent(Android.Provider.Settings.ActionDateSettings));
-            //                });
-            //                alert.Show();
-            //                break;
-            //            }
-            //        }
-
-
-            //    }
-
-            //}
-        }
+      
+        
+        
   
     }
 }

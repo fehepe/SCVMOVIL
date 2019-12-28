@@ -1386,7 +1386,7 @@ namespace SCVMobil.Connections
                 dtResult.Close();
                 fb.Close();
                 fb.Dispose();
-                Preferences.Set("SYNC_VSU", true);
+                //Preferences.Set("SYNC_VSU", true);
                 return tiempo;
             }
             catch (Exception e)
@@ -1429,7 +1429,7 @@ namespace SCVMobil.Connections
                 dtResult.Close();
                 fb.Close();
                 fb.Dispose();
-                Preferences.Set("SYNC_VSU", true);
+                //Preferences.Set("SYNC_VSU", true);
                 return minutos;
             }
             catch (Exception e)

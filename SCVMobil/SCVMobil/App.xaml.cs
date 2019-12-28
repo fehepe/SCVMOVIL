@@ -61,31 +61,51 @@ namespace SCVMobil
                     if (Connectivity.NetworkAccess == NetworkAccess.Internet)
                     {
                         var fireBird = new FireBirdData();
+                        var src = DateTime.Now;
+                        var hm = new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, 0);
 
-                        var query = fireBird.hora();
+                        var query = fireBird.hora().Find(elemento => elemento.fecha == hm.Hour.ToString());
 
-                        var query2 = fireBird.min();
-
-                        foreach (var item in query)
+                        var query2 = fireBird.min().Find(element => element.minuto == hm.Minute.ToString());
+                        do
                         {
-                            foreach (var item2 in query2) //Evaluar la hora//
+                            if(query == null)
                             {
-                                var tiempo = DateTime.Now.ToString("HH:mm:ss");
-                                var src = DateTime.Now;
-                                var hm = new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, 0);
-                                if (item.fecha == Convert.ToString(hm.Hour) && item2.minuto == Convert.ToString(hm.Minute))
-                                {
-                                    break;
-                                }
-                                else
-                                {
-                                    Preferences.Set("SYNC_VSU", false);                                                                      
-                                    break;
-                                }
+                                Preferences.Set("SYNC_VSU", false);
+                               
                             }
-
-
+                            else
+                            {
+                                Preferences.Set("SYNC_VSU", true);
+                                break;
+                            }
                         }
+                        while(query == null);
+                                       
+                        //var query = fireBird.hora();
+
+                        //var query2 = fireBird.min();
+
+                        //foreach (var item in query)
+                        //{
+                        //    foreach (var item2 in query2) //Evaluar la hora//
+                        //    {
+                        //        var tiempo = DateTime.Now.ToString("HH:mm:ss");
+                        //        var src = DateTime.Now;
+                        //        var hm = new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, 0);
+                        //        if (item.fecha == Convert.ToString(hm.Hour) && item2.minuto == Convert.ToString(hm.Minute))
+                        //        {
+                        //            break;
+                        //        }
+                        //        else
+                        //        {
+                        //            Preferences.Set("SYNC_VSU", false);                                                                      
+                        //            break;
+                        //        }
+                        //    }
+
+
+                        //}
                         ////implementar el metodo tryConnection();
 
 
