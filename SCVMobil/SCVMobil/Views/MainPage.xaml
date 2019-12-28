@@ -28,6 +28,14 @@
                     Source="nowifi"
                     WidthRequest="30"
                     HorizontalOptions="End"></Image>
+        <StackLayout HorizontalOptions="CenterAndExpand"
+                     HeightRequest="2">
+            <Label Text="Sin conexion"
+                   IsVisible="False"
+                   x:Name="aviso"
+                   FontSize="Body"
+                   FontAttributes="Bold"/>
+        </StackLayout>
         <Label
             
             Text="Escanear Cédula"

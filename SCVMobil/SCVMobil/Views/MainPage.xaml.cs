@@ -60,12 +60,14 @@ namespace SCVMobil
                     imgNoSync.IsVisible = false;
                     imgSync.IsVisible = true;
                     entCedula.IsEnabled = true;
+                    aviso.IsVisible = false;
                 }
                 else
                 {
                     imgNoSync.IsVisible = true;
                     imgSync.IsVisible = false;
                     entCedula.IsEnabled = false;
+                    aviso.IsVisible = true;
 
                 }
             }
