@@ -54,95 +54,67 @@ namespace SCVMobil
             Debug.WriteLine("New Timer Running");
             HttpClient _client = new HttpClient();
             _client.Timeout = new TimeSpan(0, 0, 100);
+            var fireBird = new FireBirdData();
+            var src = DateTime.Now;
+            var hm = new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, 0);
             await Task.Factory.StartNew(() => //Crear un nuevo thread!
             {
                 try
                 {
                     if (Connectivity.NetworkAccess == NetworkAccess.Internet)
                     {
-                        var fireBird = new FireBirdData();
-                        var src = DateTime.Now;
-                        var hm = new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, 0);
-
-                        var query = fireBird.hora().Find(elemento => elemento.fecha == hm.Hour.ToString());
-
-                        var query2 = fireBird.min().Find(element => element.minuto == hm.Minute.ToString());
-                        do
+                        var query = fireBird.hora();
+                        foreach (var item in query)
                         {
-                            if(query == null)
+                            while(item.fecha != hm.Hour.ToString())                           
                             {
-                                Preferences.Set("SYNC_VSU", false);
-                               
+                                Preferences.Set("SYNC_VSU", false);//
+                                break;
                             }
-                            else
+                            while (item.fecha == hm.Hour.ToString()) //
                             {
-                                Preferences.Set("SYNC_VSU", true);
+                                //implementar el metodo tryConnection();
+
+                                Preferences.Set("SYNC_VSU", true);//
+                                fireBird.tryConnection();
+
+                                //Implementar servicios Periodicos.
+                                fireBird.PublicServices();
+
+                                // Subir visitantes.
+                                fireBird.UploadVisits();
+
+                                // Cargar Visitantes con reservas.
+                                fireBird.UploadVisitsReservation();
+
+                                // Subir las Verificacion.
+                                fireBird.UploadVerifications();
+
+                                // Subir las salidas.
+                                fireBird.UploadOut();
+
+                                // Subir las salidasDesconocidas.
+                                fireBird.UploadUnknownOuts();
+
+                                // Descargar las reservas.
+                                fireBird.DownloadReservations();
+
+                                // Descargar las companies.
+                                fireBird.DownloadCompanies();
+
+                                // Descargar las personas(destinos).
+                                fireBird.DownloadPeople_Destination();
+
+                                // Descargar los Invitados.
+                                fireBird.DownloadGuests();
+
+                                // Descargar las salidas.
+                                fireBird.DownloadOuts();
+
                                 break;
                             }
                         }
-                        while(query == null);
-                                       
-                        //var query = fireBird.hora();
-
-                        //var query2 = fireBird.min();
-
-                        //foreach (var item in query)
-                        //{
-                        //    foreach (var item2 in query2) //Evaluar la hora//
-                        //    {
-                        //        var tiempo = DateTime.Now.ToString("HH:mm:ss");
-                        //        var src = DateTime.Now;
-                        //        var hm = new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, 0);
-                        //        if (item.fecha == Convert.ToString(hm.Hour) && item2.minuto == Convert.ToString(hm.Minute))
-                        //        {
-                        //            break;
-                        //        }
-                        //        else
-                        //        {
-                        //            Preferences.Set("SYNC_VSU", false);                                                                      
-                        //            break;
-                        //        }
-                        //    }
-
-
-                        //}
-                        ////implementar el metodo tryConnection();
-
-
-                        fireBird.tryConnection();
-
-                        //Implementar servicios Periodicos.
-                        fireBird.PublicServices();
-
-                        // Subir visitantes.
-                        fireBird.UploadVisits();
-
-                        // Cargar Visitantes con reservas.
-                        fireBird.UploadVisitsReservation();
-
-                        // Subir las Verificacion.
-                        fireBird.UploadVerifications();
-
-                        // Subir las salidas.
-                        fireBird.UploadOut();
-
-                        // Subir las salidasDesconocidas.
-                        fireBird.UploadUnknownOuts();
-
-                        // Descargar las reservas.
-                        fireBird.DownloadReservations();
-
-                        // Descargar las companies.
-                        fireBird.DownloadCompanies();
-
-                        // Descargar las personas(destinos).
-                        fireBird.DownloadPeople_Destination();
-
-                        // Descargar los Invitados.
-                        fireBird.DownloadGuests();
-
-                        // Descargar las salidas.
-                        fireBird.DownloadOuts();
+ 
                     }
                     else
                     {                        
@@ -154,6 +126,7 @@ namespace SCVMobil
                 catch (Exception ey)
                 {
                     Preferences.Set("SYNC_VSU", false);
+                    Debug.WriteLine("Error en la conexion de internet" + ey);
 
                     Debug.WriteLine("Exeption in timer: " + ey.ToString());
                 }
@@ -189,7 +162,6 @@ namespace SCVMobil
         protected override void OnStart()
         {
             
-           
             //Configuracion del App Center
             AppCenter.Start("android=364e9032-e9db-4d3a-a76f-c2095b3293d1;" +
                   "uwp={Your UWP App secret here};" +
@@ -225,7 +197,7 @@ namespace SCVMobil
             db.CreateTable<Invitados>();
             db.CreateTable<InvitadosReservas>();
             db.CreateTable<SalidaOffline>();
-            db.CreateTable<PLACA>(); 
+            db.CreateTable<PLACA>();
 
             //Crear los indices de la tabla
             Task.Factory.StartNew(() =>
@@ -253,6 +225,7 @@ namespace SCVMobil
             // Handle when your app resumes
             //Preferences.Set("PAGE_ACTIVE", "NONE");
             Preferences.Set("PAGE_ACTIVE", "NONE");
+
         }
 
 
