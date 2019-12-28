@@ -62,11 +62,33 @@ namespace SCVMobil
                     {
                         var fireBird = new FireBirdData();
 
-                        fireBird.hora();
+                        var query = fireBird.hora();
+                        
+                        var query2 = fireBird.min();
 
-                        fireBird.min();
+                        foreach (var item in query)
+                        {
+                            foreach (var item2 in query2) //Evaluar la hora//
+                            {
+                                var tiempo = DateTime.Now.ToString("HH:mm:ss");
+                                var src = DateTime.Now;
+                                var hm = new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, 0);
+                                if (item.fecha == Convert.ToString(hm.Hour) && item2.minuto == Convert.ToString(hm.Minute))
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    Preferences.Set("SYNC_VSU", false);
+                                    Current.MainPage.DisplayAlert("Error", "Hora incorrecta", "ok");                
+                                    break;
+                                }
+                            }
+
+
+                        }
                         ////implementar el metodo tryConnection();
-                       
+
 
                         fireBird.tryConnection();
 
