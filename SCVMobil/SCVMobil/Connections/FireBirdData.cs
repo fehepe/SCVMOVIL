@@ -1391,6 +1391,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception e)
             {
+                Preferences.Set("SYNC_VSU", false);
                 Debug.WriteLine("Error en la hora de base de datos " + e.Message);
                 return new List<Time>();
             }
@@ -1434,6 +1435,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception e)
             {
+                Preferences.Set("SYNC_VSU", false);
                 Debug.WriteLine("Error en la hora de base de datos " + e.Message);
                 return new List<Minuto>();
             }
