@@ -63,7 +63,7 @@ namespace SCVMobil
                         var fireBird = new FireBirdData();
 
                         var query = fireBird.hora();
-                        
+
                         var query2 = fireBird.min();
 
                         foreach (var item in query)
@@ -80,7 +80,7 @@ namespace SCVMobil
                                 else
                                 {
                                     Preferences.Set("SYNC_VSU", false);
-                                    Current.MainPage.DisplayAlert("Error", "Hora incorrecta", "ok");                
+                                    Current.MainPage.DisplayAlert("Error", "Hora incorrecta", "ok");
                                     break;
                                 }
                             }
@@ -126,9 +126,9 @@ namespace SCVMobil
                         fireBird.DownloadOuts();
                     }
                     else
-                    {
-                        Application.Current.MainPage.DisplayAlert("Error", "No tiene acceso a internet", "ok");
+                    {                        
                         Preferences.Set("SYNC_VSU", false);
+                        
                     }
                     
                 }
