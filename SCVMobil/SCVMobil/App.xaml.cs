@@ -170,9 +170,11 @@ namespace SCVMobil
                 if (item.fecha != hm.Hour.ToString()) //NEW//
                 {
                     MainPage.DisplayAlert("Sin conexion", "Revise su conexion a internet o la hora de su dispositivo", "ok");//NEW//
+                    Preferences.Set("SYNC_VSU", false);
                 }
                 else
                 {
+                    Preferences.Set("SYNC_VSU", true);
                     //Configuracion del App Center
                     AppCenter.Start("android=364e9032-e9db-4d3a-a76f-c2095b3293d1;" +
                           "uwp={Your UWP App secret here};" +
@@ -250,11 +252,12 @@ namespace SCVMobil
             {
                 if (item.fecha != hm.Hour.ToString()) //
                 {
-                    MainPage.DisplayAlert("Sin conexion", "Revise su conexion a internet o la hora de su dispositivo", "ok");                   
+                    MainPage.DisplayAlert("Sin conexion", "Revise su conexion a internet o la hora de su dispositivo", "ok");
+                    Preferences.Set("SYNC_VSU", false);
                 }
                 else
                 {
-                    Preferences.Get("SYNC_VSU", true);
+                    Preferences.Set("SYNC_VSU", true);
                    // Preferences.Set("PAGE_ACTIVE", "NONE"); //Old//
                 }
             }
