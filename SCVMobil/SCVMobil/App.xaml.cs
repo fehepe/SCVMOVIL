@@ -49,6 +49,7 @@ namespace SCVMobil
 
        public async static void OnTimedEvent(object sender, ElapsedEventArgs e)
        {
+
             
             syncTimer.Enabled = false;
             Debug.WriteLine("New Timer Running");
@@ -61,14 +62,18 @@ namespace SCVMobil
             {
                 try
                 {
-                    if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+                    if (Connectivity.NetworkAccess == NetworkAccess.Internet) //
                     {
+                        Preferences.Set("nowifi", false);
+                        Preferences.Set("wifi", true);
                         var query = fireBird.hora();
                         foreach (var item in query)
                         {
                             while(item.fecha != hm.Hour.ToString())                           
                             {
                                 Preferences.Set("SYNC_VSU", false);//
+                                Preferences.Set("nowifi", true);
+                                Preferences.Set("wifi", false);
                                 break;
                             }
                             while (item.fecha == hm.Hour.ToString()) //
@@ -76,6 +81,8 @@ namespace SCVMobil
                                 //implementar el metodo tryConnection();
 
                                 Preferences.Set("SYNC_VSU", true);//
+                                Preferences.Set("nowifi", false);
+                                Preferences.Set("wifi", true);
                                 fireBird.tryConnection();
 
                                 //Implementar servicios Periodicos.
@@ -117,15 +124,32 @@ namespace SCVMobil
  
                     }
                     else
-                    {                        
-                        Preferences.Set("SYNC_VSU", false);
+                    {
                         
+                        var x = Preferences.Get("Hora", Convert.ToString(hm.Hour));
+                        var y = Convert.ToString(hm.Hour);
+                        if ((Preferences.Get("Hora", Convert.ToString(hm.Hour)) == Convert.ToString(hm.Hour)))
+                        {
+                            Preferences.Set("SYNC_VSU", true);
+                            Preferences.Set("nowifi", true);
+                            Preferences.Set("wifi", false);
+
+                        }
+                        else
+                        {
+                            Preferences.Set("SYNC_VSU", false);
+                            Preferences.Set("nowifi", true);
+                            Preferences.Set("wifi", false);
+                        }
+                        //Preferences.Set("SYNC_VSU", true); //
                     }
                     
                 }
                 catch (Exception ey)
                 {
                     Preferences.Set("SYNC_VSU", false);
+                    Preferences.Set("nowifi", true);
+                    Preferences.Set("wifi", false);
                     Debug.WriteLine("Error en la conexion de internet" + ey);
 
                     Debug.WriteLine("Exeption in timer: " + ey.ToString());
@@ -144,6 +168,7 @@ namespace SCVMobil
         public App()
         {
             InitializeComponent();
+            
 
             bool isSet = Preferences.Get("IS_SET", false);
 
@@ -165,67 +190,83 @@ namespace SCVMobil
             var src = DateTime.Now; //NEW//
             var hm = new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, 0);//NEW//
             var query = fireBird.hora(); //
-            foreach (var item in query) //
+            if(Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
-                if (item.fecha != hm.Hour.ToString()) //NEW//
+                foreach (var item in query) //
                 {
-                    MainPage.DisplayAlert("Sin conexion", "Revise su conexion a internet o la hora de su dispositivo", "ok");//NEW//
-                    Preferences.Set("SYNC_VSU", false);
-                }
-                else
-                {
-                    Preferences.Set("SYNC_VSU", true);
-                    //Configuracion del App Center
-                    AppCenter.Start("android=364e9032-e9db-4d3a-a76f-c2095b3293d1;" +
-                          "uwp={Your UWP App secret here};" +
-                          "ios={Your iOS App secret here}",
-                          typeof(Analytics), typeof(Crashes));
-                    Distribute.SetEnabledAsync(true);
-
-                    //Crear string para la base de datos
-                    string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "dbSCV.db");
-
-                    //Guardamos el string de la base de datos en una preferencia.
-                    Preferences.Set("DB_PATH", dbPath);
-
-                    //Setiamos la Version
-                    Preferences.Set("VERSION", "1.28.5.19.1");
-
-                    //Conectar con la base de datos
-                    var db = new SQLiteConnection(dbPath);
-
-                    //db.DropTable<PADRON>();
-                    //db.DropTable<COMPANIAS>();
-                    //db.DropTable<PERSONAS>();
-                    //db.DropTable<VW_RESERVA_VISITA>();
-                    //db.DropTable<Invitados>();
-                    //Preferences.Set("MAX_INVIDATO_ID","0");
-                    //Preferences.Set("MAX_SALIDA_ID", "0");
-                    //Creamos las tablas necesarias.
-                    //db.CreateTable<Puertas>();
-                    db.CreateTable<PADRON>();
-                    db.CreateTable<COMPANIAS>();
-                    db.CreateTable<PERSONAS>();
-                    db.CreateTable<VW_RESERVA_VISITA>();
-                    db.CreateTable<Invitados>();
-                    db.CreateTable<InvitadosReservas>();
-                    db.CreateTable<SalidaOffline>();
-                    db.CreateTable<PLACA>();
-
-                    //Crear los indices de la tabla
-                    Task.Factory.StartNew(() =>
+                    if (item.fecha != hm.Hour.ToString()) //NEW//
                     {
-                        Debug.WriteLine("Creating indexes");
-                        db.CreateIndex("PADRON", "CEDULA", true);
-                        Debug.WriteLine("DONE! creating indexes");
-                    });
-                    ;
+                        MainPage.DisplayAlert("Sin conexion", "Revise su conexion a internet o la hora de su dispositivo", "ok");//NEW//
+                        Preferences.Set("SYNC_VSU", false);
+                        Preferences.Set("nowifi", true);
+                        Preferences.Set("wifi", false);
+
+                    }
+                    else
+                    {
+
+                        Preferences.Set("SYNC_VSU", true);
+                        Preferences.Set("nowifi", false);
+                        Preferences.Set("wifi", true);
+                        //Configuracion del App Center
+                        AppCenter.Start("android=364e9032-e9db-4d3a-a76f-c2095b3293d1;" +
+                              "uwp={Your UWP App secret here};" +
+                              "ios={Your iOS App secret here}",
+                              typeof(Analytics), typeof(Crashes));
+                        Distribute.SetEnabledAsync(true);
+
+                        //Crear string para la base de datos
+                        string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "dbSCV.db");
+
+                        //Guardamos el string de la base de datos en una preferencia.
+                        Preferences.Set("DB_PATH", dbPath);
+
+                        //Setiamos la Version
+                        Preferences.Set("VERSION", "1.28.5.19.1");
+
+                        //Conectar con la base de datos
+                        var db = new SQLiteConnection(dbPath);
+
+                        //db.DropTable<PADRON>();
+                        //db.DropTable<COMPANIAS>();
+                        //db.DropTable<PERSONAS>();
+                        //db.DropTable<VW_RESERVA_VISITA>();
+                        //db.DropTable<Invitados>();
+                        //Preferences.Set("MAX_INVIDATO_ID","0");
+                        //Preferences.Set("MAX_SALIDA_ID", "0");
+                        //Creamos las tablas necesarias.
+                        //db.CreateTable<Puertas>();
+                        db.CreateTable<PADRON>();
+                        db.CreateTable<COMPANIAS>();
+                        db.CreateTable<PERSONAS>();
+                        db.CreateTable<VW_RESERVA_VISITA>();
+                        db.CreateTable<Invitados>();
+                        db.CreateTable<InvitadosReservas>();
+                        db.CreateTable<SalidaOffline>();
+                        db.CreateTable<PLACA>();
+
+                        //Crear los indices de la tabla
+                        Task.Factory.StartNew(() =>
+                        {
+                            Debug.WriteLine("Creating indexes");
+                            db.CreateIndex("PADRON", "CEDULA", true);
+                            Debug.WriteLine("DONE! creating indexes");
+                        });
+                        ;
 
 
-                    //Iniciar servicio de subida en el background
-                    SetTimer();
+                        //Iniciar servicio de subida en el background
+                        SetTimer();
+                    }
                 }
             }
+            else
+            {
+                Preferences.Set("SYNC_VSU", false);
+                Preferences.Set("nowifi", true);
+                Preferences.Set("wifi", false);
+            }
+            
 
                 
             
@@ -244,23 +285,51 @@ namespace SCVMobil
             // Handle when your app resumes
             //Preferences.Set("PAGE_ACTIVE", "NONE");
             //Preferences.Set("PAGE_ACTIVE", "NONE");
-            var fireBird = new FireBirdData(); // NEW //
-            var src = DateTime.Now; //
-            var hm = new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, 0); //
-            var query = fireBird.hora(); //
-            foreach (var item in query) //
+            var src = DateTime.Now; //NEW//
+            var hm = new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, 0);//NEW//    
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
-                if (item.fecha != hm.Hour.ToString()) //
+                if ((Preferences.Get("Hora", Convert.ToString(hm.Hour)) == Convert.ToString(hm.Hour)))
                 {
-                    MainPage.DisplayAlert("Sin conexion", "Revise su conexion a internet o la hora de su dispositivo", "ok");
-                    Preferences.Set("SYNC_VSU", false);
+
+                    Preferences.Set("SYNC_VSU", true); //
+                                                       //Preferences.Set("nowifi", true);
+                    Preferences.Set("wifi", false);
                 }
                 else
                 {
-                    Preferences.Set("SYNC_VSU", true);
-                   // Preferences.Set("PAGE_ACTIVE", "NONE"); //Old//
+                    MainPage.DisplayAlert("Sin conexion", "Conectese a internet", "ok");
+                    Preferences.Set("SYNC_VSU", false);
+                    //Preferences.Set("nowifi", true);
+                    Preferences.Set("wifi", false);
                 }
             }
+            else
+            {
+                
+                Preferences.Set("nowifi", true);
+                Preferences.Set("wifi", false);
+            }
+             
+
+            ////VA////
+            //var fireBird = new FireBirdData(); // NEW //
+            //var src = DateTime.Now; //
+            //var hm = new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, 0); //
+            //var query = fireBird.hora(); //
+            //foreach (var item in query) //
+            //{
+            //    if (item.fecha != hm.Hour.ToString()) //
+            //    {
+            //        MainPage.DisplayAlert("Sin conexion", "Revise la hora de su dispositivo", "ok");
+            //        Preferences.Set("SYNC_VSU", false);                    
+            //    }
+            //    else
+            //    {
+            //        Preferences.Set("SYNC_VSU", true);
+            //       // Preferences.Set("PAGE_ACTIVE", "NONE"); //Old//
+            //    }
+            //}
         }
 
 

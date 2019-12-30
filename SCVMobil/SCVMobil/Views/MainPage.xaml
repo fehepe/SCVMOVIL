@@ -5,7 +5,7 @@
              x:Class="SCVMobil.MainPage"
              Title="Inicio" 
              BackgroundColor="#FFFFFF"            
-             >
+             x:Name="mainn">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Configuración"
@@ -18,13 +18,13 @@
     <StackLayout Padding="10"
                  Orientation="Vertical"
                  VerticalOptions="Start">
-        <Image
+        <Image                 
                     x:Name="imgSync"
                     Source="wifi"
                     WidthRequest="30"
                     HorizontalOptions="End"></Image>
         <Image
-                    x:Name="imgNoSync"
+                    x:Name="imgNoSync"                     
                     Source="nowifi"
                     WidthRequest="30"
                     HorizontalOptions="End"></Image>

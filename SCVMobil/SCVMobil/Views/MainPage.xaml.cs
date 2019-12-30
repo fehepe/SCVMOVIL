@@ -21,12 +21,12 @@ namespace SCVMobil
       
         Escaner scanner;
         
-
+        
         //---------------------------------------------------------------------------
 
         public MainPage()//Constructor
         {
-
+            
             Device.StartTimer(TimeSpan.FromSeconds(1), () =>
             {
                 
@@ -38,6 +38,7 @@ namespace SCVMobil
           
             InitializeComponent();
             scanner = new Escaner(cedulaScanned);
+            
         }
 
 
@@ -52,20 +53,23 @@ namespace SCVMobil
         //---------------------------------------------------------------------------------------
         public void refreshPage()
         {
-
+            
             try
             {
+                
                 if (Preferences.Get("SYNC_VSU", false))
-                {
-                    imgNoSync.IsVisible = false;
-                    imgSync.IsVisible = true;
+                {                  
+                    imgNoSync.IsVisible = Preferences.Get("nowifi", true);
+                    imgSync.IsVisible = Preferences.Get("wifi", false);
                     entCedula.IsEnabled = true;
                     aviso.IsVisible = false;
+                    
                 }
                 else
                 {
-                    imgNoSync.IsVisible = true;
-                    imgSync.IsVisible = false;
+                    
+                    imgNoSync.IsVisible = Preferences.Get("nowifi", false);
+                    imgSync.IsVisible = Preferences.Get("wifi", true);
                     entCedula.IsEnabled = false;
                     aviso.IsVisible = true;
 
@@ -77,6 +81,8 @@ namespace SCVMobil
                 throw;
             }
         }
+
+       
         //-----------------------------------------------------------------------------------------
         protected override void OnAppearing() //Cuando aparezca la pagina, refrescamos.
         {          
