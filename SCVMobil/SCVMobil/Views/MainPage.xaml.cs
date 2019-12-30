@@ -85,9 +85,9 @@ namespace SCVMobil
        
         //-----------------------------------------------------------------------------------------
         protected override void OnAppearing() //Cuando aparezca la pagina, refrescamos.
-        {          
+        {
 
-            if (Navigation.NavigationStack.Count >= 2 && !Preferences.Get("IsSet", false))
+            if (Navigation.NavigationStack.Count >= 2 && !Preferences.Get("IS_SET", false))
             {
                 Application.Current.MainPage.Navigation.RemovePage(Navigation.NavigationStack.First());
                 Preferences.Set("IS_SET", true);

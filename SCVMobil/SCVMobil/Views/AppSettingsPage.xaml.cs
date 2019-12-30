@@ -21,7 +21,9 @@ namespace SCVMobil
         public AppSettingsPage()
         {
             InitializeComponent();
+            
         }
+        
 
         private void BtConfigAvan_Clicked(object sender, EventArgs e)
         {
