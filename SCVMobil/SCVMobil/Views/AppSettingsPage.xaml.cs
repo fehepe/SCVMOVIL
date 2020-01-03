@@ -96,7 +96,7 @@ namespace SCVMobil
             {
                 Debug.WriteLine("Error en el metodo LOCALIDAD _VSU");
                 Analytics.TrackEvent("Error al mostrar compañias: " + e.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
-                throw;
+                
             }
 
            
@@ -169,7 +169,7 @@ namespace SCVMobil
             {
                 Debug.WriteLine("Error en BtnClearDB");
                 Analytics.TrackEvent("Error al limpiar base de datos " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
-                throw;
+               
             }
 
             

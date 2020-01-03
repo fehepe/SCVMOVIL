@@ -450,6 +450,7 @@ namespace SCVMobil
                 }
                 else
                 {
+                    Preferences.Set("SYNC_VSU",false);
                     await PopupNavigation.PushAsync(new PopUpPingIncorrecto());//popup conexion erronea//
                 }
 

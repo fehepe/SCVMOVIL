@@ -38,7 +38,10 @@ namespace SCVMobil
           
             InitializeComponent();
             scanner = new Escaner(cedulaScanned);
-            
+            entCedula.IsEnabled = Preferences.Get("ENTCEDULA", true);
+            aviso.IsVisible = Preferences.Get("aviso", false);
+
+
         }
 
 
@@ -61,17 +64,20 @@ namespace SCVMobil
                 {                  
                     imgNoSync.IsVisible = Preferences.Get("nowifi", true);
                     imgSync.IsVisible = Preferences.Get("wifi", false);
-                    entCedula.IsEnabled = true;
-                    aviso.IsVisible = false;
-                    
+                    entCedula.IsEnabled = Preferences.Get("ENTCEDULA", false);
+                    aviso.IsVisible = Preferences.Get("aviso", false);
+                    //entCedula.IsEnabled = false; //
+                    //aviso.IsVisible = true;
+
                 }
                 else
                 {
                     
                     imgNoSync.IsVisible = Preferences.Get("nowifi", false);
                     imgSync.IsVisible = Preferences.Get("wifi", true);
-                    entCedula.IsEnabled = false;
-                    aviso.IsVisible = true;
+                    entCedula.IsEnabled = Preferences.Get("ENTCEDULA", true);
+                    aviso.IsVisible = Preferences.Get("aviso", true);
+                    //aviso.IsVisible = false;
 
                 }
             }
