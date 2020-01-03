@@ -64,7 +64,7 @@ namespace SCVMobil
                 {                  
                     imgNoSync.IsVisible = Preferences.Get("nowifi", true);
                     imgSync.IsVisible = Preferences.Get("wifi", false);
-                    entCedula.IsEnabled = Preferences.Get("ENTCEDULA", false);
+                    entCedula.IsEnabled = Preferences.Get("ENTCEDULA", false);                 
                     aviso.IsVisible = Preferences.Get("aviso", false);
                     //entCedula.IsEnabled = false; //
                     //aviso.IsVisible = true;

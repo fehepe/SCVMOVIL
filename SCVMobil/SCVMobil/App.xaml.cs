@@ -190,8 +190,7 @@ namespace SCVMobil
                 });
                 ;
                 //Iniciar servicio de subida en el background
-                SetTimer();
-                
+                SetTimer();              
                
             
 
@@ -200,42 +199,40 @@ namespace SCVMobil
         protected override void OnSleep()
         {
             // Handle when your app sleeps
-            checkDateTime();
+          
         }
 
         protected override void OnResume()
         {
             // Handle when your app resumes
             //Preferences.Set("PAGE_ACTIVE", "NONE");
-            Preferences.Set("PAGE_ACTIVE", "NONE");
-            checkDateTime();
+            //Preferences.Set("PAGE_ACTIVE", "NONE");
+            //checkDateTime();
 
         }
-        public void checkDateTime()
+        public async void checkDateTime()
         {
             var fireBird = new FireBirdData(); //NEW//
             var src = DateTime.Now; //NEW//
-            
+            var fechactual = Convert.ToDateTime(fireBird.obtenerfecha());
+
             try
             {
-                var fechactual = Convert.ToDateTime(fireBird.obtenerfecha());
+               
                 if (src <= fechactual.AddMinutes(30) && src >= fechactual.AddMinutes(-30))
                 {
                     Preferences.Set("nowifi", false);
                     Preferences.Set("ENTCEDULA", true);
                     Preferences.Set("wifi", true);
                     Preferences.Set("aviso", false);
-                    
                 }
                 else
                 {
-                    MainPage.DisplayAlert("Error", "Fecha Incorrecta", "ok");//NEW//
+                    await MainPage.DisplayAlert("Error", "Fecha Incorrecta", "ok");//NEW//
                     Preferences.Set("nowifi", true);
                     Preferences.Set("ENTCEDULA", false);
-                    Preferences.Set("aviso", true);
                     Preferences.Set("wifi", false);
-
-                    
+                    Preferences.Set("aviso", true);
                 }
             }
             catch (Exception)
@@ -243,9 +240,7 @@ namespace SCVMobil
 
                 
             }
-            //NEW//
-            
-            
+      
         }
 
 

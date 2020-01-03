@@ -32,11 +32,11 @@ namespace SCVMobil.Connections
         {
             if (db)
             {
-                string connectionString = "User ID = sysdba; Password = masterkey; Database = C:\\APP\\GAD\\registros.fdb; " +
-                                          $"DataSource={Preferences.Get("SERVER_IP", "192.168.1.14")};Port=3050;Charset=NONE;Server Type=0;";
+                //string connectionString = "User ID = sysdba; Password = masterkey; Database = C:\\APP\\GAD\\registros.fdb; " +
+                //                          $"DataSource={Preferences.Get("SERVER_IP", "192.168.1.14")};Port=3050;Charset=NONE;Server Type=0;";
 
-                //string connectionString = "User ID=sysdba;Password=masterkey;Database=C:\\Users\\Abraham\\Desktop\\Codes\\registros\\registros.fdb;" +
-                //                           $"DataSource={Preferences.Get("SERVER_IP", "192.168.2.120")};Port=3050;Charset=NONE;Server Type=0;"; //Connectionstring//
+                string connectionString = "User ID=sysdba;Password=masterkey;Database=C:\\Users\\Abraham\\Desktop\\Codes\\registros\\registros.fdb;" +
+                                           $"DataSource={Preferences.Get("SERVER_IP", "192.168.2.120")};Port=3050;Charset=NONE;Server Type=0;"; //Connectionstring//
 
                 return connectionString;
             }
@@ -1374,12 +1374,13 @@ namespace SCVMobil.Connections
                 fb.Close();
                 fb.Dispose();
                 //Preferences.Set("SYNC_VSU", true);
+               
                 return fecha;
             }
             catch (Exception e)
             {
                 Preferences.Set("SYNC_VSU", false);
-                Debug.WriteLine("Error en el mes de base de datos " + e.Message);
+                Debug.WriteLine("Error en la fecha de base de datos " + e.Message);
                 return null;
             }
         }
