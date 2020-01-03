@@ -229,6 +229,7 @@ namespace SCVMobil
                 else
                 {
                     await MainPage.DisplayAlert("Error", "Fecha Incorrecta", "ok");//NEW//
+                    await MainPage.DisplayAlert("Mensaje", "La fecha actual es: " + fechactual, "ok");//NEW//
                     Preferences.Set("nowifi", true);
                     Preferences.Set("ENTCEDULA", false);
                     Preferences.Set("wifi", false);
