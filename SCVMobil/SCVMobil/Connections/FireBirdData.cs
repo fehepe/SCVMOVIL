@@ -19,7 +19,7 @@ namespace SCVMobil.Connections
 {
     public class FireBirdData
     {
-        HttpClient _client = new HttpClient();
+        //HttpClient _client = new HttpClient();
 
         public FireBirdData()
         {
