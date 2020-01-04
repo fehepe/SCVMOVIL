@@ -218,15 +218,15 @@ namespace SCVMobil
 
             try
             {
-               
-                if (src <= fechactual.AddMinutes(30) && src >= fechactual.AddMinutes(-30))
+
+                if (src <= fechactual.AddMinutes(30) && src >= fechactual.AddMinutes(-30) && src.Day == fechactual.Day && src.Year == fechactual.Year && src.Month == fechactual.Month)
                 {
                     Preferences.Set("nowifi", false);
                     Preferences.Set("ENTCEDULA", true);
                     Preferences.Set("wifi", true);
                     Preferences.Set("aviso", false);
                 }
-                else
+                else if( src.Hour != fechactual.Hour || src.Day != fechactual.Day || src.Year != fechactual.Year || src.Month != fechactual.Month || src >= fechactual.AddMinutes(30) && src <= fechactual.AddMinutes(-30))
                 {
                     await MainPage.DisplayAlert("Error", "Fecha Incorrecta", "ok");//NEW//
                     await MainPage.DisplayAlert("Mensaje", "La fecha actual es: " + fechactual, "ok");//NEW//
