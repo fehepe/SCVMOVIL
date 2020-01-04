@@ -142,7 +142,19 @@ namespace SCVMobil
 
         protected override void OnStart()
         {
-            checkDateTime();
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+                checkDateTime();
+            }
+            else
+            {
+                MainPage.DisplayAlert("Error", "Sin conexion a internet", "ok");//NEW//
+                Preferences.Set("nowifi", true);
+                Preferences.Set("ENTCEDULA", false);
+                Preferences.Set("wifi", false);
+                Preferences.Set("aviso", true);
+            }
+
             //Configuracion del App Center
             AppCenter.Start("android=364e9032-e9db-4d3a-a76f-c2095b3293d1;" +
                         "uwp={Your UWP App secret here};" +
@@ -215,7 +227,7 @@ namespace SCVMobil
             var fireBird = new FireBirdData(); //NEW//
             var src = DateTime.Now; //NEW//
             var fechactual = Convert.ToDateTime(fireBird.obtenerfecha());
-
+            
             try
             {
 
@@ -226,7 +238,7 @@ namespace SCVMobil
                     Preferences.Set("wifi", true);
                     Preferences.Set("aviso", false);
                 }
-                else if( src.Hour != fechactual.Hour || src.Day != fechactual.Day || src.Year != fechactual.Year || src.Month != fechactual.Month || src >= fechactual.AddMinutes(30) && src <= fechactual.AddMinutes(-30))
+                else if(src >= fechactual.AddMinutes(30) && src <= fechactual.AddMinutes(-30) || src.Hour != fechactual.Hour || src.Day != fechactual.Day || src.Year != fechactual.Year || src.Month != fechactual.Month )
                 {
                     await MainPage.DisplayAlert("Error", "Fecha Incorrecta", "ok");//NEW//
                     await MainPage.DisplayAlert("Mensaje", "La fecha actual es: " + fechactual, "ok");//NEW//
@@ -243,7 +255,7 @@ namespace SCVMobil
             }
       
         }
-
+        
 
     }
 }
