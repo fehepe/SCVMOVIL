@@ -413,57 +413,7 @@ namespace SCVMobil
                 Debug.WriteLine("Error en el metodo guardar: " + ea.Message);
                
                 Analytics.TrackEvent("Error al guardar configuracion:  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
-            }
-
-            try
-            {
-                Ping Pings = new Ping();
-                int timeout = 1;
-
-                if (Pings.Send(eServerIP.Text, timeout).Status == IPStatus.Success)
-                {
-
-                    try
-                    {
-                        string connectionString = fireBird.connectionString(true);
-
-                        FbConnection fb = new FbConnection(connectionString);
-                        fb.Open();
-
-
-                        fb.Close();
-                        Preferences.Set("SERVER_IP", eServerIP.Text);
-                        Preferences.Set("SYNC_VSU", true);
-                        Preferences.Set("nowifi", false);
-                        Preferences.Set("ENTCEDULA", true);
-                        Preferences.Set("wifi", true);
-                        Preferences.Set("aviso", false);
-                        await PopupNavigation.PushAsync(new PopUpPing()); //popup conexion con exito//
-                        Debug.WriteLine("Ping exitoso a la ip: " + eServerIP.Text);
-                    }
-                    catch (Exception ea)
-                    {
-                        Debug.WriteLine("Error en el metodo pingbtn" + ea.Message);
-                        Analytics.TrackEvent("Exception al hacer ping:  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
-                        await PopupNavigation.PushAsync(new PopUpPingIncorrecto()); //popup conexion erronea//
-                    }
-                }
-                else
-                {
-                    Preferences.Set("SYNC_VSU", false);
-                    Preferences.Set("nowifi", true);
-                    Preferences.Set("ENTCEDULA", false);
-                    Preferences.Set("wifi", false);
-                    Preferences.Set("aviso", true);
-                    await PopupNavigation.PushAsync(new PopUpPingIncorrecto());//popup conexion erronea//
-                }
-
-            }
-            catch (Exception ea)
-            {
-                Debug.WriteLine("Error en el metodo pingbtn " + ea.Message);
-                Analytics.TrackEvent("Exception al hacer ping:  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
-            }
+            }            
 
         }
         
@@ -488,29 +438,34 @@ namespace SCVMobil
 
                         fb.Close();
                         Preferences.Set("SERVER_IP", eServerIP.Text);
-                        Preferences.Set("SYNC_VSU", true);
+                        //Preferences.Set("SYNC_VSU", true);
                         Preferences.Set("nowifi", false);
                         Preferences.Set("ENTCEDULA", true);
                         Preferences.Set("wifi", true);
                         Preferences.Set("aviso", false);
-                        await PopupNavigation.PushAsync(new PopUpPing()); //popup conexion con exito//
+                        Preferences.Set("SERVEROFF", false); //
+
+                        await DisplayAlert("Conectado","Se ha conectado","ok");
+                        //await PopupNavigation.PushAsync(new PopUpPing()); //popup conexion con exito//
                         Debug.WriteLine("Ping exitoso a la ip: "+ eServerIP.Text);
                     }
                     catch (Exception ea)
                     {
                         Debug.WriteLine("Error en el metodo pingbtn" + ea.Message);
                         Analytics.TrackEvent("Exception al hacer ping:  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
-                        await PopupNavigation.PushAsync(new PopUpPingIncorrecto()); //popup conexion erronea//
+                        //await PopupNavigation.PushAsync(new PopUpPingIncorrecto()); //popup conexion erronea//
                     }
                 }
                 else
                 {
-                    Preferences.Set("SYNC_VSU",false);
+                    //Preferences.Set("SYNC_VSU",false);
                     Preferences.Set("nowifi", true);
                     Preferences.Set("ENTCEDULA", false);
                     Preferences.Set("wifi", false);
-                    Preferences.Set("aviso", true);
-                    await PopupNavigation.PushAsync(new PopUpPingIncorrecto());//popup conexion erronea//
+                    //Preferences.Set("aviso", true);
+                    Preferences.Set("SERVEROFF", true); //
+                    await DisplayAlert("Error", "No se pudo establecer conexion", "ok");
+                    //await PopupNavigation.PushAsync(new PopUpPingIncorrecto());//popup conexion erronea//
                 }
 
             }

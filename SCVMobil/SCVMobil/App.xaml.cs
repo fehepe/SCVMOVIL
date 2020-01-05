@@ -237,6 +237,7 @@ namespace SCVMobil
                     Preferences.Set("ENTCEDULA", true);
                     Preferences.Set("wifi", true);
                     Preferences.Set("aviso", false);
+                    Preferences.Set("CONFIG", true);
                 }
                 else if(src >= fechactual.AddMinutes(30) && src <= fechactual.AddMinutes(-30) || src.Hour != fechactual.Hour || src.Day != fechactual.Day || src.Year != fechactual.Year || src.Month != fechactual.Month )
                 {
@@ -246,6 +247,7 @@ namespace SCVMobil
                     Preferences.Set("ENTCEDULA", false);
                     Preferences.Set("wifi", false);
                     Preferences.Set("aviso", true);
+                    Preferences.Set("CONFIG", false);
                 }
             }
             catch (Exception)

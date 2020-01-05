@@ -11,6 +11,7 @@
         <ToolbarItem Text="Configuración"
                          Order="Secondary"
                          Clicked="ToolbarItem_Clicked"
+                     x:Name="configbtn"
         />
 
     </ContentPage.ToolbarItems>
@@ -30,7 +31,11 @@
                     HorizontalOptions="End"></Image>
         <StackLayout HorizontalOptions="CenterAndExpand"
                      HeightRequest="2">
-           
+            <Label Text="Sin conexion al servidor"
+                   IsVisible="False"
+                   x:Name="sinserver"
+                   FontSize="Body"
+                   FontAttributes="Bold"/>
             <Label Text="Sin conexion"
                    IsVisible="False"
                    x:Name="aviso"

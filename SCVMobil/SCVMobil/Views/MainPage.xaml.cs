@@ -40,6 +40,9 @@ namespace SCVMobil
             scanner = new Escaner(cedulaScanned);
             entCedula.IsEnabled = Preferences.Get("ENTCEDULA", true);
             aviso.IsVisible = Preferences.Get("aviso", false);
+            sinserver.IsVisible = Preferences.Get("SERVEROFF", false);
+            configbtn.IsEnabled = Preferences.Get("CONFIG",true);
+
 
 
         }
@@ -66,6 +69,8 @@ namespace SCVMobil
                     imgSync.IsVisible = Preferences.Get("wifi", false);
                     entCedula.IsEnabled = Preferences.Get("ENTCEDULA", false);                 
                     aviso.IsVisible = Preferences.Get("aviso", false);
+                    sinserver.IsVisible = Preferences.Get("SERVEROFF", false); //
+                    configbtn.IsEnabled = Preferences.Get("CONFIG", false);
                     //entCedula.IsEnabled = false; //
                     //aviso.IsVisible = true;
 
@@ -77,6 +82,8 @@ namespace SCVMobil
                     imgSync.IsVisible = Preferences.Get("wifi", true);
                     entCedula.IsEnabled = Preferences.Get("ENTCEDULA", true);
                     aviso.IsVisible = Preferences.Get("aviso", true);
+                    sinserver.IsVisible = Preferences.Get("SERVEROFF", true); //
+                    configbtn.IsEnabled = Preferences.Get("CONFIG", true);
                     //aviso.IsVisible = false;
 
                 }
