@@ -227,11 +227,16 @@ namespace SCVMobil
             var fireBird = new FireBirdData(); //NEW//
             var src = DateTime.Now; //NEW//
             var fechactual = Convert.ToDateTime(fireBird.obtenerfecha());
+            var fechamaxima = fechactual.AddMinutes(2);
+            var fechaminima = fechactual.AddMinutes(-2);
+            Preferences.Set("MINUTOMINIMO",fechaminima);
+            int i = DateTime.Compare(src, fechamaxima);
+            int k = DateTime.Compare(src, fechaminima);
             
             try
             {
 
-                if (src <= fechactual.AddMinutes(2) && src >= fechactual.AddMinutes(-2) && src.Hour == fechactual.Hour && src.Day == fechactual.Day && src.Year == fechactual.Year && src.Month == fechactual.Month)
+                if (Convert.ToInt32(src) <= i && Convert.ToInt32(src) >= k)
                 {
                     Preferences.Set("nowifi", false);
                     Preferences.Set("ENTCEDULA", true);
@@ -239,10 +244,10 @@ namespace SCVMobil
                     Preferences.Set("aviso", false);
                     Preferences.Set("CONFIG", true);
                 }
-                else if(src >= fechactual.AddMinutes(30) && src <= fechactual.AddMinutes(-30) || src.Hour != fechactual.Hour || src.Day != fechactual.Day || src.Year != fechactual.Year || src.Month != fechactual.Month )
+                else
                 {
-                    await MainPage.DisplayAlert("Error", "Fecha Incorrecta", "ok");//NEW//
-                    await MainPage.DisplayAlert("Mensaje", "La fecha actual es: " + fechactual, "ok");//NEW//
+                    await MainPage.DisplayAlert("Error", "Fecha Incorrecta", "ok");
+                    await MainPage.DisplayAlert("Mensaje", "La fecha actual es: " + fechactual, "ok");
                     Preferences.Set("nowifi", true);
                     Preferences.Set("ENTCEDULA", false);
                     Preferences.Set("wifi", false);
