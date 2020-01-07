@@ -36,7 +36,7 @@ namespace SCVMobil.Connections
                 //                          $"DataSource={Preferences.Get("SERVER_IP", "192.168.1.14")};Port=3050;Charset=NONE;Server Type=0;";
 
                 string connectionString = "User ID=sysdba;Password=masterkey;Database=C:\\Users\\Abraham\\Desktop\\Codes\\registros\\registros.fdb;" +
-                                           $"DataSource={Preferences.Get("SERVER_IP", "192.168.2.120")};Port=3050;Charset=NONE;Server Type=0;"; //Connectionstring//
+                                           $"DataSource={Preferences.Get("SERVER_IP", "192.168.2.120")};Port=3050;Charset=NONE;Server Type=0; Timeout=5;"; //Connectionstring//
 
                 return connectionString;
             }

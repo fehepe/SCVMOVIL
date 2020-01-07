@@ -231,7 +231,7 @@ namespace SCVMobil
             try
             {
 
-                if (src <= fechactual.AddMinutes(30) && src >= fechactual.AddMinutes(-30) && src.Hour == fechactual.Hour && src.Day == fechactual.Day && src.Year == fechactual.Year && src.Month == fechactual.Month)
+                if (src <= fechactual.AddMinutes(2) && src >= fechactual.AddMinutes(-2) && src.Hour == fechactual.Hour && src.Day == fechactual.Day && src.Year == fechactual.Year && src.Month == fechactual.Month)
                 {
                     Preferences.Set("nowifi", false);
                     Preferences.Set("ENTCEDULA", true);
