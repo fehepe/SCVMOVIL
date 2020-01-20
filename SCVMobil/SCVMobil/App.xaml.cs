@@ -63,11 +63,11 @@ namespace SCVMobil
                         var fireBird = new FireBirdData();
 
                         ////implementar el metodo tryConnection();
-                        ////fireBird.TryConnections();
                        
-                       // fireBird.tryConnection();
-   
-                        // Implementar servicios Periodicos.
+
+                        fireBird.tryConnection();
+
+                        //Implementar servicios Periodicos.
                         fireBird.PublicServices();
 
                         // Subir visitantes.
@@ -100,6 +100,7 @@ namespace SCVMobil
                         // Descargar las salidas.
                         fireBird.DownloadOuts();
                     }
+                    
                 }
                 catch (Exception ey)
                 {
@@ -120,7 +121,7 @@ namespace SCVMobil
 
         public App()
         {
-            InitializeComponent();
+            InitializeComponent();         
 
             bool isSet = Preferences.Get("IS_SET", false);
 
