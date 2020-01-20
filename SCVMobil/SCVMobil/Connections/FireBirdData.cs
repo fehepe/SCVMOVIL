@@ -594,7 +594,11 @@ namespace SCVMobil.Connections
                         if (dtResult[2] != System.DBNull.Value)
                         {
                             company.PUNTO_VSU = Convert.ToInt32(dtResult[2]);
-                        }      
+                        }
+                        if (dtResult[3] != System.DBNull.Value)
+                        {
+                            company.ESTATUS = Convert.ToInt32(dtResult[2]);
+                        }
                         #endregion
 
                         CompaniesList.Add(company);
@@ -1116,7 +1120,7 @@ namespace SCVMobil.Connections
 
                 string queryCompanias = " SELECT FIRST "
                                                    + Preferences.Get("CHUNK_SIZE", "10000")
-                                                   + " COMPANIA_ID, NOMBRE, PUNTO_VSU  FROM COMPANIAS where COMPANIA_ID > "
+                                                   + " COMPANIA_ID, NOMBRE, PUNTO_VSU, ESTATUS  FROM COMPANIAS where COMPANIA_ID > "
                                                    + Preferences.Get("MAX_COMPANIA_ID", "0")
                                                    + " ORDER BY COMPANIA_ID desc";
 
@@ -1134,7 +1138,7 @@ namespace SCVMobil.Connections
                             Debug.WriteLine("MAX_COMPANIA_ID: " + ListaCompanias.First().COMPANIA_ID.ToString());
                             Preferences.Set("MAX_COMPANIA_ID", ListaCompanias.First().COMPANIA_ID.ToString());
                             Debug.WriteLine("Companias Descargadas: " + DateTime.Now);
-                            string sortNames = "select nombre from companias order by nombre";
+                            string sortNames = "select nombre from companias where ESTATUS = 1 AND PUNTO_VSU = 0 order by nombre";
                             var Sorting = db.Query<COMPANIAS>(sortNames);
                             foreach (COMPANIAS registro in Sorting)
                             {

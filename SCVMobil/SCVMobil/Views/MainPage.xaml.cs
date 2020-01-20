@@ -67,7 +67,7 @@ namespace SCVMobil
         //-----------------------------------------------------------------------------------------
         protected override void OnAppearing() //Cuando aparezca la pagina, refrescamos.
         {
-            if (Navigation.NavigationStack.Count >= 2 && !Preferences.Get("IsSet", false))
+            if (Navigation.NavigationStack.Count >= 2 && !Preferences.Get("IS_SET", false))
             {
                 Application.Current.MainPage.Navigation.RemovePage(Navigation.NavigationStack.First());
                 Preferences.Set("IS_SET", true);
@@ -128,22 +128,24 @@ namespace SCVMobil
         [Obsolete]
         public async void entrada(String inString)
         {
-           
-            if (inString != "")
+
+            try
             {
-                if (inString.Length == 11 || inString.StartsWith("ID"))
+                if (inString != "")
                 {
-                    var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-                    //Vamos a ver si es un ID de salida.
-                    if (inString.StartsWith("ID"))
+                    if (inString.Length == 11 || inString.StartsWith("ID"))
                     {
-                        
-                       // var querry = "SELECT * FROM Invitados WHERE INVIDATO_ID = " + inString.Replace("ID", "") + " AND FECHA_SALIDA is null AND Fecha_Verificacion is not null";
-                        var querrys = "SELECT * FROM Invitados WHERE INVIDATO_ID= " + inString.Replace("ID", "") + " AND FECHA_SALIDA is null";
-                        //var registroInv = db.Query<Invitados>(querry);
-                        var registroVer = db.Query<Invitados>(querrys);
-                       
-                            if (registroVer.Any() )
+                        var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                        //Vamos a ver si es un ID de salida.
+                        if (inString.StartsWith("ID"))
+                        {
+
+                            // var querry = "SELECT * FROM Invitados WHERE INVIDATO_ID = " + inString.Replace("ID", "") + " AND FECHA_SALIDA is null AND Fecha_Verificacion is not null";
+                            var querrys = "SELECT * FROM Invitados WHERE INVIDATO_ID= " + inString.Replace("ID", "") + " AND FECHA_SALIDA is null";
+                            //var registroInv = db.Query<Invitados>(querry);
+                            var registroVer = db.Query<Invitados>(querrys);
+
+                            if (registroVer.Any())
                             {
                                 if (Preferences.Get("VERIFICA", false))
                                 {
@@ -189,7 +191,7 @@ namespace SCVMobil
                                     db.UpdateAll(registroVer);
                                     DependencyService.Get<IToastMessage>().DisplayMessage("Se ha dado salida correctamente.");
                                 }
-                            }                        
+                            }
                             else
                             {
 
@@ -216,89 +218,95 @@ namespace SCVMobil
                                     DependencyService.Get<IToastMessage>().DisplayMessage("Este ID de Salida no existe.");
                                 }
                             }
-                    }
-                    else
-                    {
-
-                        //Vamos a verificar si la persona ya entro.
-                        var querry = "SELECT * FROM INVITADOS WHERE CARGO = '" + inString + "' AND FECHA_SALIDA is NULL";
-
-                        var registroVerifInv = db.Query<Invitados>(querry);
-
-                        if (registroVerifInv.Any())
-                        {
-                        
-                            querry = "SELECT * FROM PADRON WHERE CEDULA = '" + inString + "'";
-                            var registro = db.Query<PADRON>(querry);
-                            entCedula.Text = registro.First().CEDULA;
-                            entNombres.Text = registro.First().NOMBRES;
-                            entApellidos.Text = registro.First().APELLIDO1 + " " + registro.First().APELLIDO2;
-                            //Esto quiere decir que aun la persona no ha salido.
-                            await Navigation.PushAsync(new SalidaPage(inString, entNombres.Text, entApellidos.Text));
                         }
                         else
                         {
-                            //Vamos a ver si la persona tiene una reserva.
 
-                            querry = "SELECT * FROM VW_RESERVA_VISITA WHERE VISITAS_DOCUMENTO = '" + inString + "' and visitas_Fecha_reserva="+DateTime.Today.Ticks;
+                            //Vamos a verificar si la persona ya entro.
+                            var querry = "SELECT * FROM INVITADOS WHERE CARGO = '" + inString + "' AND FECHA_SALIDA is NULL";
 
+                            var registroVerifInv = db.Query<Invitados>(querry);
 
-                            var registroRes = db.Query<VW_RESERVA_VISITA>(querry);
-                            if (registroRes.Count > 0)
+                            if (registroVerifInv.Any())
                             {
-                                await Navigation.PushAsync(new ReservasPage(registroRes));
+
+                                querry = "SELECT * FROM PADRON WHERE CEDULA = '" + inString + "'";
+                                var registro = db.Query<PADRON>(querry);
+                                entCedula.Text = registro.First().CEDULA;
+                                entNombres.Text = registro.First().NOMBRES;
+                                entApellidos.Text = registro.First().APELLIDO1 + " " + registro.First().APELLIDO2;
+                                //Esto quiere decir que aun la persona no ha salido.
+                                await Navigation.PushAsync(new SalidaPage(inString, entNombres.Text, entApellidos.Text));
                             }
                             else
                             {
-                                // Como no tiene reserva entramos.
-                                //Buscamos la cedula en el padron.
-                                querry = "SELECT * FROM PADRON WHERE CEDULA = '" + inString + "'";
+                                //Vamos a ver si la persona tiene una reserva.
 
-                                try
+                                querry = "SELECT * FROM VW_RESERVA_VISITA WHERE VISITAS_DOCUMENTO = '" + inString + "' and visitas_Fecha_reserva=" + DateTime.Today.Ticks;
+
+
+                                var registroRes = db.Query<VW_RESERVA_VISITA>(querry);
+                                if (registroRes.Count > 0)
                                 {
-                                    //Ejecutamos el query.
-                                    var registro = db.Query<PADRON>(querry);
-
-                                    entCedula.Text = registro.First().CEDULA;
-                                    entNombres.Text = registro.First().NOMBRES;
-                                    entApellidos.Text = registro.First().APELLIDO1 + " " + registro.First().APELLIDO2;
-                                    await Navigation.PushAsync(new CompanyPage(entCedula.Text, entNombres.Text, entApellidos.Text));
-
+                                    await Navigation.PushAsync(new ReservasPage(registroRes));
                                 }
-                                catch (Exception ey)
+                                else
                                 {
-                                    entApellidos.Text = string.Empty;
-                                    entNombres.Text = string.Empty;
-                                    entCedula.Text = inString;
-                                    var properties = new Dictionary<string, string> {
+                                    // Como no tiene reserva entramos.
+                                    //Buscamos la cedula en el padron.
+                                    querry = "SELECT * FROM PADRON WHERE CEDULA = '" + inString + "'";
+
+                                    try
+                                    {
+                                        //Ejecutamos el query.
+                                        var registro = db.Query<PADRON>(querry);
+
+                                        entCedula.Text = registro.First().CEDULA;
+                                        entNombres.Text = registro.First().NOMBRES;
+                                        entApellidos.Text = registro.First().APELLIDO1 + " " + registro.First().APELLIDO2;
+                                        await Navigation.PushAsync(new CompanyPage(entCedula.Text, entNombres.Text, entApellidos.Text));
+
+                                    }
+                                    catch (Exception ey)
+                                    {
+                                        entApellidos.Text = string.Empty;
+                                        entNombres.Text = string.Empty;
+                                        entCedula.Text = inString;
+                                        var properties = new Dictionary<string, string> {
                                         { "Category", "Documento NO EXISTE?" },
                                         { "Code", "MainPage.xaml.cs Line: 179" },
                                         { "Lector", Preferences.Get("LECTOR", "0")}
                                     };
-                                    Crashes.TrackError(ey, properties);
-                                    await PopupNavigation.PushAsync(new PopUpCedulaNoexiste());  //Invocacion del PopUp para mostrar mesaje de error// 
-                                    await Navigation.PushAsync(new RegistroPage(entCedula.Text, true));
-                                 
-                                    try
-                                    {
-                                        var duration = TimeSpan.FromSeconds(1);
-                                        Vibration.Vibrate(duration);
+                                        Crashes.TrackError(ey, properties);
+                                        await PopupNavigation.PushAsync(new PopUpCedulaNoexiste());  //Invocacion del PopUp para mostrar mesaje de error// 
+                                        await Navigation.PushAsync(new RegistroPage(entCedula.Text, true));
+
+                                        try
+                                        {
+                                            var duration = TimeSpan.FromSeconds(1);
+                                            Vibration.Vibrate(duration);
+                                        }
+                                        catch
+                                        {
+                                            //TODO: HANDLE NO VIBRATE
+                                        }
+                                        Debug.WriteLine(ey);
                                     }
-                                    catch
-                                    {
-                                        //TODO: HANDLE NO VIBRATE
-                                    }
-                                    Debug.WriteLine(ey);
                                 }
                             }
-                        }
 
+                        }
                     }
-                }
                     else
                     {
                         DependencyService.Get<IToastMessage>().DisplayMessage("Ha escaneado un codigo que no es la cedula");
                     }
+                }
+            }
+            catch (Exception)
+            {
+
+                
             }
         }
     
