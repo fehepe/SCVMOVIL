@@ -33,7 +33,7 @@ namespace SCVMobil.Connections
             if (db)
             {
                 string connectionString = "User ID = sysdba; Password = masterkey; Database = C:\\APP\\GAD\\registros.fdb; " +
-                                          $"DataSource={Preferences.Get("SERVER_IP", "192.168.1.103")};Port=3050;Charset=NONE;Server Type=0;";
+                                          $"DataSource={Preferences.Get("SERVER_IP", "172.16.1.92")};Port=3050;Charset=NONE;Server Type=0;";
 
                 //string connectionString = "User ID=sysdba;Password=masterkey;Database=C:\\Users\\Abraham\\Desktop\\Codes\\registros\\registros.fdb;" +
                 //                           $"DataSource={Preferences.Get("SERVER_IP", "192.168.2.120")};Port=3050;Charset=NONE;Server Type=0; Timeout=5;"; //Connectionstring//
@@ -588,10 +588,7 @@ namespace SCVMobil.Connections
                         {
                             company.COMPANIA_ID = Convert.ToInt32(dtResult[0]); 
                         }
-                        else
-                        {
-                            continue;
-                        }
+                        
                         if (dtResult[1] != System.DBNull.Value)
                         {
                             company.NOMBRE = dtResult[1].ToString();
@@ -602,7 +599,7 @@ namespace SCVMobil.Connections
                         }
                         if (dtResult[3] != System.DBNull.Value)
                         {
-                            company.ESTATUS = Convert.ToInt32(dtResult[2]);
+                            company.ESTATUS = Convert.ToInt32(dtResult[3]);
                         }
                         #endregion
 
@@ -1143,7 +1140,7 @@ namespace SCVMobil.Connections
                             Debug.WriteLine("MAX_COMPANIA_ID: " + ListaCompanias.First().COMPANIA_ID.ToString());
                             Preferences.Set("MAX_COMPANIA_ID", ListaCompanias.First().COMPANIA_ID.ToString());
                             Debug.WriteLine("Companias Descargadas: " + DateTime.Now);
-                            string sortNames = "select nombre from companias where ESTATUS = 1 AND PUNTO_VSU = 0 order by nombre";
+                            string sortNames = "select nombre from companias where ESTATUS = 1 order by nombre";
                             var Sorting = db.Query<COMPANIAS>(sortNames);
                             foreach (COMPANIAS registro in Sorting)
                             {
@@ -1360,7 +1357,7 @@ namespace SCVMobil.Connections
         
         public string obtenerfecha()
         {
-            string query = "select current_timestamp FROM rdb$database";
+            string query = "select current_timestamp FROM Invitados";
             try
             {
                 string fecha = "";

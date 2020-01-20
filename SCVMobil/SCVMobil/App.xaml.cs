@@ -126,16 +126,16 @@ namespace SCVMobil
             
 
             bool isSet = Preferences.Get("IS_SET", false);
+            MainPage = new NavigationPage(new MainPage());
+            //if (isSet == false)
+            //{
+            //    MainPage = new NavigationPage(new LicensePage());
 
-            if (isSet == false)
-            {
-                MainPage = new NavigationPage(new LicensePage());
-
-            }
-            else if (isSet == true)
-            {
-                MainPage = new NavigationPage(new MainPage());
-            }
+            //}
+            //else if (isSet == true)
+            //{
+                
+            //}
         }
 
         
@@ -144,7 +144,12 @@ namespace SCVMobil
         {
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
-                checkDateTime();
+                //checkDateTime();
+                Preferences.Set("nowifi", false);
+                Preferences.Set("ENTCEDULA", true);
+                Preferences.Set("wifi", true);
+                Preferences.Set("aviso", false);
+                Preferences.Set("CONFIG", true);
             }
             else
             {
@@ -224,17 +229,18 @@ namespace SCVMobil
         }
         public async void checkDateTime()
         {
-            var fireBird = new FireBirdData(); //NEW//
-            var src = DateTime.Now; //NEW//
-            var fechactual = Convert.ToDateTime(fireBird.obtenerfecha());
-            var fechamaxima = fechactual.AddMinutes(2);
-            var fechaminima = fechactual.AddMinutes(-2);
-            Preferences.Set("MINUTOMINIMO",fechaminima);
-            int i = DateTime.Compare(src, fechamaxima);
-            int k = DateTime.Compare(src, fechaminima);
+            
             
             try
             {
+                var fireBird = new FireBirdData(); //NEW//
+                var src = DateTime.Now; //NEW//
+                var fechactual = Convert.ToDateTime(fireBird.obtenerfecha());
+                var fechamaxima = fechactual.AddMinutes(2);
+                var fechaminima = fechactual.AddMinutes(-2);
+                Preferences.Set("MINUTOMINIMO", fechaminima);
+                int i = DateTime.Compare(src, fechamaxima);
+                int k = DateTime.Compare(src, fechaminima);
 
                 if (Convert.ToInt32(src) <= i && Convert.ToInt32(src) >= k)
                 {

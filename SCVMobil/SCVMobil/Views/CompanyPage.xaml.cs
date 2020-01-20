@@ -324,177 +324,185 @@ namespace SCVMobil
 
         private async void BtnImprimir_Clicked(object sender, EventArgs e)//Metodo del boton de Imprimir
         {
-
-            var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-
-            if (pickerVisitaA.IsVisible)
+            try
             {
-                if (pickerDestino.SelectedItem != null  || pickerVisitaA.SelectedItem != null)
+
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+
+                if (pickerVisitaA.IsVisible)
                 {
-
-                    var registroInvitados = new Invitados();
-
-                     //Vamos a buscar la compania seleccionada 
-                    try
+                    if (pickerDestino.SelectedItem != null || pickerVisitaA.SelectedItem != null)
                     {
-                        var TBL_COMPANIAS = db.Query<COMPANIAS>("SELECT COMPANIA_ID FROM COMPANIAS WHERE NOMBRE = '" + pickerDestino.SelectedItem.ToString() + "'");
 
-                     //Vamos a buscar la persona seleccionada
-                    
-                        if (pickerVisitaA.SelectedIndex != -1)
+                        var registroInvitados = new Invitados();
+
+                        //Vamos a buscar la compania seleccionada 
+                        try
                         {
-                            var TBL_PERSONAS = db.Query<PERSONAS>("SELECT PERSONA_ID FROM PERSONAS WHERE NOMBRES_APELLIDOS = '" + pickerVisitaA.SelectedItem.ToString() + "'");
-                            int? visitaA;
-                            if (TBL_PERSONAS.Any())
+                            var TBL_COMPANIAS = db.Query<COMPANIAS>("SELECT COMPANIA_ID FROM COMPANIAS WHERE NOMBRE = '" + pickerDestino.SelectedItem.ToString() + "'");
+
+                            //Vamos a buscar la persona seleccionada
+
+                            if (pickerVisitaA.SelectedIndex != -1)
                             {
-                                visitaA = TBL_PERSONAS.First().PERSONA_ID;
+                                var TBL_PERSONAS = db.Query<PERSONAS>("SELECT PERSONA_ID FROM PERSONAS WHERE NOMBRES_APELLIDOS = '" + pickerVisitaA.SelectedItem.ToString() + "'");
+                                int? visitaA;
+                                if (TBL_PERSONAS.Any())
+                                {
+                                    visitaA = TBL_PERSONAS.First().PERSONA_ID;
+                                }
+                                else
+                                {
+                                    visitaA = null;
+                                }
+                                registroInvitados.Compania_ID = TBL_COMPANIAS.First().COMPANIA_ID;
+                                registroInvitados.Nombres = stNombre;
+                                registroInvitados.Apellidos = stApellidos;
+                                registroInvitados.Fecha_Registro = DateTime.Now;
+                                registroInvitados.Cargo = entCedula.Text;
+                                registroInvitados.Tiene_Activo = 0;
+                                registroInvitados.Estatus_ID = 100;
+                                registroInvitados.Modulo = 1;
+                                registroInvitados.Empresa_ID = null;
+                                registroInvitados.Placa = entPlaca.Text;
+                                registroInvitados.Tipo_Visitante = "VISITANTE";
+                                registroInvitados.Es_Grupo = 0;
+                                registroInvitados.Grupo_ID = 0;
+                                registroInvitados.Puerta_Entrada = Convert.ToInt32(Preferences.Get("LOCALIDAD_VSU", "1495"));//TODO: Cambiar a parametro!
+                                registroInvitados.Actualizada_La_Salida = 0;
+                                registroInvitados.Horas_Caducidad = 12;
+                                registroInvitados.Personas = 1;
+                                registroInvitados.In_Out = 1;
+                                registroInvitados.Origen_Entrada = "VISTA";
+                                registroInvitados.Origen_Salida = "VISTA";
+                                registroInvitados.Comentario = "";
+                                registroInvitados.Origen_IO = 0;
+                                registroInvitados.Cpost = "I";
+                                registroInvitados.Actualizado = 0;
+                                registroInvitados.Secuencia_Dia = "1";
+                                registroInvitados.No_Aplica_Induccion = "0";
+                                registroInvitados.Subida = null;
+                                registroInvitados.salidaSubida = null;
+                                registroInvitados.Visitado = visitaA;
+                                registroInvitados.Lector = int.Parse(Preferences.Get("LECTOR", "1"));
+
+                                db.Insert(registroInvitados);
+                                btnImprimir.IsEnabled = false;
+                                await Navigation.PopToRootAsync();
                             }
                             else
                             {
-                                visitaA = null;
+
+
+                                registroInvitados.Compania_ID = TBL_COMPANIAS.First().COMPANIA_ID;
+                                registroInvitados.Nombres = stNombre;
+                                registroInvitados.Apellidos = stApellidos;
+                                registroInvitados.Fecha_Registro = DateTime.Now;
+                                registroInvitados.Cargo = entCedula.Text;
+                                registroInvitados.Tiene_Activo = 0;
+                                registroInvitados.Estatus_ID = 100;
+                                registroInvitados.Modulo = 1;
+                                registroInvitados.Empresa_ID = null;
+                                registroInvitados.Placa = entPlaca.Text;
+                                registroInvitados.Tipo_Visitante = "VISITANTE";
+                                registroInvitados.Es_Grupo = 0;
+                                //registroInvitados.Grupo_ID = 0;
+
+                                registroInvitados.Puerta_Entrada = Convert.ToInt32(Preferences.Get("LOCALIDAD_VSU", "1495"));
+                                registroInvitados.Actualizada_La_Salida = 0;
+                                registroInvitados.Horas_Caducidad = 12;
+                                registroInvitados.Personas = 1;
+                                registroInvitados.In_Out = 1;
+                                registroInvitados.Origen_Entrada = "VISTA";
+                                registroInvitados.Origen_Salida = "VISTA";
+                                registroInvitados.Comentario = "";
+                                registroInvitados.Origen_IO = 0;
+                                registroInvitados.Cpost = "I";
+                                registroInvitados.Actualizado = 0;
+                                registroInvitados.Secuencia_Dia = "1";
+                                registroInvitados.No_Aplica_Induccion = "0";
+                                registroInvitados.Subida = null;
+                                registroInvitados.salidaSubida = null;
+                                registroInvitados.Visitado = null;
+                                registroInvitados.Lector = int.Parse(Preferences.Get("LECTOR", "1"));
+
+                                db.Insert(registroInvitados);
+                                btnImprimir.IsEnabled = false;
+                                await Navigation.PopToRootAsync();
+
                             }
-                            registroInvitados.Compania_ID = TBL_COMPANIAS.First().COMPANIA_ID;
-                            registroInvitados.Nombres = stNombre;
-                            registroInvitados.Apellidos = stApellidos;
-                            registroInvitados.Fecha_Registro = DateTime.Now;
-                            registroInvitados.Cargo = entCedula.Text;
-                            registroInvitados.Tiene_Activo = 0;
-                            registroInvitados.Estatus_ID = 100;
-                            registroInvitados.Modulo = 1;
-                            registroInvitados.Empresa_ID = null;
-                            registroInvitados.Placa = entPlaca.Text;
-                            registroInvitados.Tipo_Visitante = "VISITANTE";
-                            registroInvitados.Es_Grupo = 0;
-                            registroInvitados.Grupo_ID = 0;
-                            registroInvitados.Puerta_Entrada = Convert.ToInt32(Preferences.Get("LOCALIDAD_VSU", "1495"));//TODO: Cambiar a parametro!
-                            registroInvitados.Actualizada_La_Salida = 0;
-                            registroInvitados.Horas_Caducidad = 12;
-                            registroInvitados.Personas = 1;
-                            registroInvitados.In_Out = 1;
-                            registroInvitados.Origen_Entrada = "VISTA";
-                            registroInvitados.Origen_Salida = "VISTA";
-                            registroInvitados.Comentario = "";
-                            registroInvitados.Origen_IO = 0;
-                            registroInvitados.Cpost = "I";
-                            registroInvitados.Actualizado = 0;
-                            registroInvitados.Secuencia_Dia = "1";
-                            registroInvitados.No_Aplica_Induccion = "0";
-                            registroInvitados.Subida = null;
-                            registroInvitados.salidaSubida = null;
-                            registroInvitados.Visitado = visitaA;
-                            registroInvitados.Lector = int.Parse(Preferences.Get("LECTOR", "1"));
-
-                            db.Insert(registroInvitados);
-                            btnImprimir.IsEnabled = false;
-                            await Navigation.PopToRootAsync();
                         }
-                        else
+                        catch (Exception ex)
                         {
-
-
-                            registroInvitados.Compania_ID = TBL_COMPANIAS.First().COMPANIA_ID;
-                            registroInvitados.Nombres = stNombre;
-                            registroInvitados.Apellidos = stApellidos;
-                            registroInvitados.Fecha_Registro = DateTime.Now;
-                            registroInvitados.Cargo = entCedula.Text;
-                            registroInvitados.Tiene_Activo = 0;
-                            registroInvitados.Estatus_ID = 100;
-                            registroInvitados.Modulo = 1;
-                            registroInvitados.Empresa_ID = null;
-                            registroInvitados.Placa = entPlaca.Text;
-                            registroInvitados.Tipo_Visitante = "VISITANTE";
-                            registroInvitados.Es_Grupo = 0;
-                            //registroInvitados.Grupo_ID = 0;
-
-                            registroInvitados.Puerta_Entrada = Convert.ToInt32(Preferences.Get("LOCALIDAD_VSU", "1495"));
-                            registroInvitados.Actualizada_La_Salida = 0;
-                            registroInvitados.Horas_Caducidad = 12;
-                            registroInvitados.Personas = 1;
-                            registroInvitados.In_Out = 1;
-                            registroInvitados.Origen_Entrada = "VISTA";
-                            registroInvitados.Origen_Salida = "VISTA";
-                            registroInvitados.Comentario = "";
-                            registroInvitados.Origen_IO = 0;
-                            registroInvitados.Cpost = "I";
-                            registroInvitados.Actualizado = 0;
-                            registroInvitados.Secuencia_Dia = "1";
-                            registroInvitados.No_Aplica_Induccion = "0";
-                            registroInvitados.Subida = null;
-                            registroInvitados.salidaSubida = null;
-                            registroInvitados.Visitado = null;
-                            registroInvitados.Lector = int.Parse(Preferences.Get("LECTOR", "1"));
-
-                            db.Insert(registroInvitados);
-                            btnImprimir.IsEnabled = false;
-                            await Navigation.PopToRootAsync();
-
+                            Debug.WriteLine("Error en BtnImprimir");
+                            Analytics.TrackEvent("Error al buscar compañias seleccionadas: " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+                            throw;
                         }
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        Debug.WriteLine("Error en BtnImprimir");
-                        Analytics.TrackEvent("Error al buscar compañias seleccionadas: " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
-                        throw;
+                        DependencyService.Get<IToastMessage>().DisplayMessage("Necesita seleccionar un destino y/o a quien visita.");
                     }
                 }
                 else
                 {
-                    DependencyService.Get<IToastMessage>().DisplayMessage("Necesita seleccionar un destino y/o a quien visita.");
+                    if (pickerDestino.SelectedItem != null)
+                    {
+
+                        var registroInvitados = new Invitados();
+
+                        //Vamos a buscar la compania seleccionada 
+
+                        var TBL_COMPANIAS = db.Query<COMPANIAS>("SELECT COMPANIA_ID FROM COMPANIAS WHERE NOMBRE = '" + pickerDestino.SelectedItem.ToString() + "'");
+
+                        //Vamos a buscar la persona seleccionada
+                        registroInvitados.Compania_ID = TBL_COMPANIAS.First().COMPANIA_ID;
+                        registroInvitados.Nombres = stNombre;
+                        registroInvitados.Apellidos = stApellidos;
+                        registroInvitados.Fecha_Registro = DateTime.Now;
+                        registroInvitados.Cargo = entCedula.Text;
+                        registroInvitados.Tiene_Activo = 0;
+                        registroInvitados.Estatus_ID = 100;
+                        registroInvitados.Modulo = 1;
+                        registroInvitados.Empresa_ID = null;
+                        registroInvitados.Placa = entPlaca.Text;
+                        registroInvitados.Tipo_Visitante = "VISITANTE";
+                        registroInvitados.Es_Grupo = 0;
+                        registroInvitados.Grupo_ID = 0;
+                        registroInvitados.Puerta_Entrada = Convert.ToInt32(Preferences.Get("LOCALIDAD_VSU", "1495"));
+                        registroInvitados.Actualizada_La_Salida = 0;
+                        registroInvitados.Horas_Caducidad = 12;
+                        registroInvitados.Personas = 1;
+                        registroInvitados.In_Out = 1;
+                        registroInvitados.Origen_Entrada = "VISTA";
+                        registroInvitados.Origen_Salida = "VISTA";
+                        registroInvitados.Comentario = "";
+                        registroInvitados.Origen_IO = 0;
+                        registroInvitados.Cpost = "I";
+                        registroInvitados.Actualizado = 0;
+                        registroInvitados.Secuencia_Dia = "1";
+                        registroInvitados.No_Aplica_Induccion = "0";
+                        registroInvitados.Subida = null;
+                        registroInvitados.salidaSubida = null;
+                        registroInvitados.Visitado = null;
+                        registroInvitados.Lector = int.Parse(Preferences.Get("LECTOR", "1"));
+
+                        db.Insert(registroInvitados);
+                        btnImprimir.IsEnabled = false;
+                        await Navigation.PopToRootAsync();
+                    }
+                    else
+                    {
+                        DependencyService.Get<IToastMessage>().DisplayMessage("Necesita seleccionar un destino.");
+                    }
                 }
+
             }
-            else 
+            catch (Exception)
             {
-                if (pickerDestino.SelectedItem != null)
-                {
 
-                    var registroInvitados = new Invitados();
-
-                    //Vamos a buscar la compania seleccionada 
-
-                    var TBL_COMPANIAS = db.Query<COMPANIAS>("SELECT COMPANIA_ID FROM COMPANIAS WHERE NOMBRE = '" + pickerDestino.SelectedItem.ToString() + "'");
-
-                    //Vamos a buscar la persona seleccionada
-                    registroInvitados.Compania_ID = TBL_COMPANIAS.First().COMPANIA_ID;
-                    registroInvitados.Nombres = stNombre;
-                    registroInvitados.Apellidos = stApellidos;
-                    registroInvitados.Fecha_Registro = DateTime.Now;
-                    registroInvitados.Cargo = entCedula.Text;
-                    registroInvitados.Tiene_Activo = 0;
-                    registroInvitados.Estatus_ID = 100;
-                    registroInvitados.Modulo = 1;
-                    registroInvitados.Empresa_ID = null;
-                    registroInvitados.Placa = entPlaca.Text;
-                    registroInvitados.Tipo_Visitante = "VISITANTE";
-                    registroInvitados.Es_Grupo = 0;
-                    registroInvitados.Grupo_ID = 0;
-                    registroInvitados.Puerta_Entrada = Convert.ToInt32(Preferences.Get("LOCALIDAD_VSU", "1495"));
-                    registroInvitados.Actualizada_La_Salida = 0;
-                    registroInvitados.Horas_Caducidad = 12;
-                    registroInvitados.Personas = 1;
-                    registroInvitados.In_Out = 1;
-                    registroInvitados.Origen_Entrada = "VISTA";
-                    registroInvitados.Origen_Salida = "VISTA";
-                    registroInvitados.Comentario = "";
-                    registroInvitados.Origen_IO = 0;
-                    registroInvitados.Cpost = "I";
-                    registroInvitados.Actualizado = 0;
-                    registroInvitados.Secuencia_Dia = "1";
-                    registroInvitados.No_Aplica_Induccion = "0";
-                    registroInvitados.Subida = null;
-                    registroInvitados.salidaSubida = null;
-                    registroInvitados.Visitado = null;
-                    registroInvitados.Lector = int.Parse(Preferences.Get("LECTOR", "1"));
-
-                    db.Insert(registroInvitados);
-                    btnImprimir.IsEnabled = false;
-                    await Navigation.PopToRootAsync();
-                }
-                else
-                {
-                    DependencyService.Get<IToastMessage>().DisplayMessage("Necesita seleccionar un destino.");
-                }
+                //throw;
             }
-
         }
         //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         private void PickerVisitaA_SelectedIndexChanged(object sender, EventArgs e)// Metodo del evento Change del picker, es decir si selecciono un item del picker este lo tomara
