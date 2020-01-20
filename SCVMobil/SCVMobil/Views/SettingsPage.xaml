@@ -8,31 +8,30 @@
             Padding="0" 
             HorizontalOptions="CenterAndExpand" 
             VerticalOptions="CenterAndExpand"
-            BackgroundColor="White">            
-            <StackLayout 
+            BackgroundColor="White">
+            <ScrollView>
+                <StackLayout 
                 Padding="20"
                 BackgroundColor="White">
-                
-                <Label                    
+                    <Label                    
                     Text="Servidor"
                     FontSize="30"
                     HorizontalOptions="Center"
-                    FontAttributes="Bold"
-                    Margin="0,0,0,20"
+                    FontAttributes="Bold"                    
                     TextColor="Black"></Label>
                     <Grid
-                        Margin="0,0,0,20">                        
+                        Margin="0,0,0,20">
                         <Grid.RowDefinitions>
-                        
+
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition
                                 Width="*"></ColumnDefinition>
                             <ColumnDefinition
                                 Width="2*"></ColumnDefinition>
-                            
+
                         </Grid.ColumnDefinitions>
-                     
+
                         <Label
                             Grid.Row="0"
                             Grid.Column="0"
@@ -51,8 +50,7 @@
                             WidthRequest="190"
                             x:Name="eServerIP"/>
                     </Grid>
-                    <Grid
-                        Margin="0,0,0,20">
+                    <Grid>
                         <Grid.RowDefinitions>
 
                         </Grid.RowDefinitions>
@@ -99,7 +97,7 @@
                             Keyboard="Keyboard.Numeric"
                             x:Name="entChunkSize"
                             />
-                </Grid>
+                    </Grid>
                     <Button 
                         Margin="90,0,90,0"
                         CornerRadius="30"
@@ -116,8 +114,8 @@
                         FontAttributes="Bold"
                         HorizontalOptions="Center"
                         TextColor="Black"></Label>
-                
-                    
+
+
                     <Grid
                         Margin="0,0,0,20">
                         <Grid.RowDefinitions>
@@ -145,26 +143,26 @@
                             HorizontalTextAlignment="Start"                  
                             Keyboard="Keyboard.Numeric"
                             MaxLength="3"
-                            x:Name="eLector"/>  
+                            x:Name="eLector"/>
                     </Grid>
-                    
+
                     <StackLayout 
                         VerticalOptions="StartAndExpand">
-                    <Grid 
+                        <Grid 
                         >
-                        <Grid.RowDefinitions>
-                            <RowDefinition 
-                                Height="50" />
-                            <RowDefinition 
+                            <Grid.RowDefinitions>
+                                <RowDefinition 
                                 Height="*" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition 
+                                <RowDefinition 
+                                Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition 
                                 Width="50" />
-                            <ColumnDefinition 
+                                <ColumnDefinition 
                                 Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Label 
+                            </Grid.ColumnDefinitions>
+                            <Label 
                             Text="Auto Sync" 
                             TextColor="Black" 
                             Grid.Row="0" 
@@ -172,35 +170,30 @@
                             VerticalOptions="Center"
                             IsVisible="False"
                             FontSize="15"/>
-                        <Switch 
+                            <Switch 
                             x:Name="swAutoSync" 
                             HorizontalOptions="CenterAndExpand" 
                             Grid.Row="0" Grid.Column="1"
                             Scale=".8"                            
-                            IsVisible="False">                        
+                            IsVisible="False">
 
-                        </Switch>
+                            </Switch>
 
-                    </Grid>
-                    <Label 
+                        </Grid>
+                        <Label 
                         Margin="0,0,0,0"
                         HorizontalOptions="Center"
                         x:Name="lbVersion"
                         TextColor="Black"                        
                         FontAttributes="Bold"
                         />
-                </StackLayout>
+                    </StackLayout>
 
-                    
-                <StackLayout
-                    VerticalOptions="EndAndExpand"
-                    Margin="0,0,0,0">
-                        <StackLayout
-                            HorizontalOptions="CenterAndExpand"
-                            Margin="0,0,0,0"
+                    <StackLayout
+                            HorizontalOptions="CenterAndExpand"                           
                             Orientation="Horizontal">
-                            
-                            <Button 
+
+                        <Button 
                                 BorderColor="Accent"
                                 CornerRadius="30"
                                 BackgroundColor="#F44336"
@@ -211,7 +204,7 @@
                                 x:Name="btSync"
                                 Clicked="BtSync_Clicked"
                                />
-                            <Button 
+                        <Button 
                                 BorderColor="Accent"  
                                 CornerRadius="27"
                                 BackgroundColor="Accent"
@@ -222,7 +215,7 @@
                                 x:Name="btIni"
                                 Clicked="BtIni_Clicked"
                                  IsVisible="False"/>
-                            <Button
+                        <Button
                                 CornerRadius="30"
                                 x:Name="Guardar"
                                 Text="Guardar"
@@ -231,10 +224,12 @@
                                 FontAttributes="Bold"
                                 WidthRequest="140"
                                 Clicked="Guardar_Clicked"/>
-                        </StackLayout>
+                    </StackLayout>
+
+
                 </StackLayout>
-                
-            </StackLayout>
+            </ScrollView>
+            
            
             <!--Popup Area-->
             <ContentView 

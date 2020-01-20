@@ -20,6 +20,7 @@ using Rg.Plugins.Popup.Services;
 using System.Net.NetworkInformation;
 using SCVMobil.Models;
 using SCVMobil.Connections;
+using Microsoft.AppCenter.Analytics;
 
 namespace SCVMobil
 {
@@ -47,11 +48,10 @@ namespace SCVMobil
         {
             base.OnAppearing();
             setDefaults();
-            eServerIP.Text = Preferences.Get("SERVER_IP", "192.168.1.170");
-            
+            eServerIP.Text = Preferences.Get("SERVER_IP", "192.168.1.170");            
             eLector.Text = Preferences.Get("LECTOR", "1");
             entChunkSize.Text = Preferences.Get("CHUNK_SIZE", "50000");
-            lbVersion.Text = "Ver: " + Preferences.Get("VERSION", "0.0.0.0.0");
+            lbVersion.Text = "Ver: " + Preferences.Get("VERSION", "3.0");
             swAutoSync.IsToggled = Preferences.Get("AUTO_SYNC", "False") == "True";
             eCommitSize.Text = Preferences.Get("COMMIT_SIZE", "1000000");
            
@@ -65,7 +65,7 @@ namespace SCVMobil
         {
             if(Preferences.Get("SERVER_IP", "N/A") == "N/A")
             {
-                Preferences.Set("SERVER_IP", "192.168.1.170");
+                Preferences.Set("SERVER_IP", "192.168.1.103");//
             }
         }
 
@@ -152,6 +152,8 @@ namespace SCVMobil
                         }
                         catch (Exception ex)
                         {
+                            Analytics.TrackEvent("Error al conectarse a base de datos " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+                            Debug.WriteLine("Error en Sync");
                             if (tries >= 5)
                             {
 
@@ -230,7 +232,8 @@ namespace SCVMobil
                                 }
                                 catch (Exception et)
                                 {
-                                    Debug.WriteLine("Error descargando padron: " + et.Message);
+                                    Debug.WriteLine("Error en Sycn" + et.Message);
+                                    Analytics.TrackEvent("Error descargando padron:  " + et.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
                                     if (triesTBL >= 5)
                                     {
                                         throw new Exception("No se pudo conectar con la base de datos: " + et.Message);
@@ -379,6 +382,7 @@ namespace SCVMobil
             catch(Exception ea)
             {
                 Debug.WriteLine("Excepcion encontrada en el evento BtIni_Clicked: " + ea.Message);
+                Analytics.TrackEvent("Error al inicializar  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
         }     
 
@@ -406,9 +410,11 @@ namespace SCVMobil
             }
             catch (Exception ea)
             {
-                Debug.WriteLine("Excepcion al guardar: " + ea.Message);
-            }
-            
+                Debug.WriteLine("Error en el metodo guardar: " + ea.Message);
+               
+                Analytics.TrackEvent("Error al guardar configuracion:  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+            }            
+
         }
         
 
@@ -432,24 +438,41 @@ namespace SCVMobil
 
                         fb.Close();
                         Preferences.Set("SERVER_IP", eServerIP.Text);
-                        await PopupNavigation.PushAsync(new PopUpPing()); //popup conexion con exito//
+                        //Preferences.Set("SYNC_VSU", true);
+                        Preferences.Set("nowifi", false);
+                        Preferences.Set("ENTCEDULA", true);
+                        Preferences.Set("wifi", true);
+                        Preferences.Set("aviso", false);
+                        Preferences.Set("SERVEROFF", false); //
+
+                        await DisplayAlert("Conectado","Se ha conectado","ok");
+                        //await PopupNavigation.PushAsync(new PopUpPing()); //popup conexion con exito//
                         Debug.WriteLine("Ping exitoso a la ip: "+ eServerIP.Text);
                     }
                     catch (Exception ea)
                     {
-                        Debug.WriteLine("Exception al hacer ping: " + ea.Message);
-                        await PopupNavigation.PushAsync(new PopUpPingIncorrecto()); //popup conexion erronea//
+                        Debug.WriteLine("Error en el metodo pingbtn" + ea.Message);
+                        Analytics.TrackEvent("Exception al hacer ping:  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+                        //await PopupNavigation.PushAsync(new PopUpPingIncorrecto()); //popup conexion erronea//
                     }
                 }
                 else
                 {
-                    await PopupNavigation.PushAsync(new PopUpPingIncorrecto());//popup conexion erronea//
+                    //Preferences.Set("SYNC_VSU",false);
+                    Preferences.Set("nowifi", true);
+                    Preferences.Set("ENTCEDULA", false);
+                    Preferences.Set("wifi", false);
+                    //Preferences.Set("aviso", true);
+                    Preferences.Set("SERVEROFF", true); //
+                    await DisplayAlert("Error", "No se pudo establecer conexion", "ok");
+                    //await PopupNavigation.PushAsync(new PopUpPingIncorrecto());//popup conexion erronea//
                 }
 
             }
             catch (Exception ea)
             {
-                Debug.WriteLine("Excepcion al hacer Ping: " + ea.Message);
+                Debug.WriteLine("Error en el metodo pingbtn " + ea.Message);
+                Analytics.TrackEvent("Exception al hacer ping:  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
 
         }

@@ -5,12 +5,13 @@
              x:Class="SCVMobil.MainPage"
              Title="Inicio" 
              BackgroundColor="#FFFFFF"            
-             >
+             x:Name="mainn">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Configuración"
                          Order="Secondary"
                          Clicked="ToolbarItem_Clicked"
+                     x:Name="configbtn"
         />
 
     </ContentPage.ToolbarItems>
@@ -18,16 +19,29 @@
     <StackLayout Padding="10"
                  Orientation="Vertical"
                  VerticalOptions="Start">
-        <Image
+        <Image                 
                     x:Name="imgSync"
                     Source="wifi"
                     WidthRequest="30"
                     HorizontalOptions="End"></Image>
         <Image
-                    x:Name="imgNoSync"
+                    x:Name="imgNoSync"                     
                     Source="nowifi"
                     WidthRequest="30"
                     HorizontalOptions="End"></Image>
+        <StackLayout HorizontalOptions="CenterAndExpand"
+                     HeightRequest="2">
+            <Label Text="Sin conexion al servidor"
+                   IsVisible="False"
+                   x:Name="sinserver"
+                   FontSize="Body"
+                   FontAttributes="Bold"/>
+            <Label Text="Sin conexion"
+                   IsVisible="False"
+                   x:Name="aviso"
+                   FontSize="Body"
+                   FontAttributes="Bold"/>
+        </StackLayout>
         <Label
             
             Text="Escanear Cédula"
@@ -49,6 +63,7 @@
                 
                 <Entry
                 x:Name="entCedula"
+                    IsEnabled="True"
                 Completed="EntCedula_Completed"
                 Keyboard="Keyboard.Numeric" MaxLength="11"/>
                 

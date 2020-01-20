@@ -19,7 +19,7 @@ namespace SCVMobil.Connections
 {
     public class FireBirdData
     {
-        HttpClient _client = new HttpClient();
+        //HttpClient _client = new HttpClient();
 
         public FireBirdData()
         {
@@ -34,10 +34,15 @@ namespace SCVMobil.Connections
             {
                 string connectionString = "User ID = sysdba; Password = masterkey; Database = C:\\APP\\GAD\\registros.fdb; " +
                                           $"DataSource={Preferences.Get("SERVER_IP", "192.168.1.103")};Port=3050;Charset=NONE;Server Type=0;";
+
+                //string connectionString = "User ID=sysdba;Password=masterkey;Database=C:\\Users\\Abraham\\Desktop\\Codes\\registros\\registros.fdb;" +
+                //                           $"DataSource={Preferences.Get("SERVER_IP", "192.168.2.120")};Port=3050;Charset=NONE;Server Type=0; Timeout=5;"; //Connectionstring//
+
                 return connectionString;
             }
             else
             {
+                
                 string connectionString = "User ID=sysdba;Password=masterkey;" +
                           "Database=C:\\APP\\GAD\\datos_214.fdb;" +
                           $"DataSource={Preferences.Get("SERVER_IP", "localhost")};Port=3050;Charset=NONE;Server Type=0;";
@@ -1352,57 +1357,14 @@ namespace SCVMobil.Connections
             }
         }
 
-        public List<Time> hora()
+        
+        public string obtenerfecha()
         {
-            string query = "select EXTRACT(hour FROM current_time) FROM rdb$database";
+            string query = "select current_timestamp FROM rdb$database";
             try
             {
-
-                List<Time> tiempo = new List<Time>();                
-                FbConnection fb = new FbConnection(connectionString(true));
-                
-                fb.Open();                
-                
-                FbCommand command = new FbCommand(
-                    query,
-                    fb);
-
-                var dtResult = command.ExecuteReader();
-
-                if (dtResult.HasRows)
-                {
-                    while (dtResult.Read())
-                    {
-                        Time t = new Time();
-                        if (dtResult[0] != System.DBNull.Value)
-                        {
-                            t.fecha = dtResult[0].ToString();
-                        }
-
-
-                        tiempo.Add(t);
-                    }
-                }
-                dtResult.Close();
-                fb.Close();
-                fb.Dispose();
-                Preferences.Set("SYNC_VSU", true);
-                return tiempo;
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Error en la hora de base de datos " + e.Message);
-                return new List<Time>();
-            }
-        }  //hora//
-
-        public List<Minuto> min()
-        {
-            string query = "select EXTRACT(minute FROM current_time) FROM rdb$database";
-            try
-            {
-
-                List<Minuto> minutos = new List<Minuto>();
+                string fecha = "";
+                //List<Mes> minutos = new List<Mes>();
                 FbConnection fb = new FbConnection(connectionString(true));
 
                 fb.Open();
@@ -1410,33 +1372,21 @@ namespace SCVMobil.Connections
                     query,
                     fb);
 
-                var dtResult = command.ExecuteReader();
+                fecha = command.ExecuteScalar().ToString();
 
-                if (dtResult.HasRows)
-                {
-                    while (dtResult.Read())
-                    {
-                        Minuto m = new Minuto();
-                        if (dtResult[0] != System.DBNull.Value)
-                        {
-                            m.minuto = dtResult[0].ToString();
-                        }
-
-
-                        minutos.Add(m);
-                    }
-                }
-                dtResult.Close();
+                
                 fb.Close();
                 fb.Dispose();
-                Preferences.Set("SYNC_VSU", true);
-                return minutos;
+                //Preferences.Set("SYNC_VSU", true);
+               
+                return fecha;
             }
             catch (Exception e)
             {
-                Debug.WriteLine("Error en la hora de base de datos " + e.Message);
-                return new List<Minuto>();
+                Preferences.Set("SYNC_VSU", false);
+                Debug.WriteLine("Error en la fecha de base de datos " + e.Message);
+                return null;
             }
-        } //minuto//
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using Honeywell.AIDC.CrossPlatform;
+using Microsoft.AppCenter.Analytics;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -24,44 +25,70 @@ namespace SCVMobil
 
         public async void OpenScanner(BarcodeReader mSelectedReader)
         {
-            Debug.WriteLine("DataSetting: " + mSelectedReader.SettingKeys.DataProcessorLaunchBrowser);
-            BarcodeReader.Result result = await mSelectedReader.OpenAsync();
-
-            if (result.Code == BarcodeReader.Result.Codes.SUCCESS ||
-                result.Code == BarcodeReader.Result.Codes.READER_ALREADY_OPENED)
+            try
             {
-                Debug.WriteLine("Scanner oppened");
-                SetScannerAndSymbologySettings(mSelectedReader);
+                Debug.WriteLine("DataSetting: " + mSelectedReader.SettingKeys.DataProcessorLaunchBrowser);
+                BarcodeReader.Result result = await mSelectedReader.OpenAsync();
+
+                if (result.Code == BarcodeReader.Result.Codes.SUCCESS ||
+                    result.Code == BarcodeReader.Result.Codes.READER_ALREADY_OPENED)
+                {
+                    Debug.WriteLine("Scanner oppened");
+                    SetScannerAndSymbologySettings(mSelectedReader);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Error en el metodo openscanner");
+                Analytics.TrackEvent("Error al abrir el scanner: " + e.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+                throw;
             }
         }
 
         public async void CloseScanner(BarcodeReader mSelectedReader)
         {
-            BarcodeReader.Result result = await mSelectedReader.CloseAsync();
-
-            if (result.Code == BarcodeReader.Result.Codes.SUCCESS ||
-                result.Code == BarcodeReader.Result.Codes.NO_ACTIVE_CONNECTION)
+            try
             {
-                Debug.WriteLine("Scanner closed");
+                BarcodeReader.Result result = await mSelectedReader.CloseAsync();
+
+                if (result.Code == BarcodeReader.Result.Codes.SUCCESS ||
+                    result.Code == BarcodeReader.Result.Codes.NO_ACTIVE_CONNECTION)
+                {
+                    Debug.WriteLine("Scanner closed");
+                }
+            }
+            catch (Exception e)
+            {
+
+                 Analytics.TrackEvent("Error al cerrar el scanner: " + e.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
         }
 
         private void MBarcodeReader_BarcodeDataReady(object sender, BarcodeDataArgs e)
         {
-            Debug.WriteLine("SCAN EVENT");
-
-            //e.Data.ToString() es la data que leyo el escaner
-           
-            Device.BeginInvokeOnMainThread(() =>
+            try
             {
+                Debug.WriteLine("SCAN EVENT");
+
+                //e.Data.ToString() es la data que leyo el escaner
+
+                Device.BeginInvokeOnMainThread(() =>
+                {
                 //Vamos a poner la data que se escaneo en el campo de boleta
                 //entCedula.Text = e.Data.ToString();
                 Debug.WriteLine("Data: " + e.Data.ToString());
-                method2Call(e.Data.ToString());
+                    method2Call(e.Data.ToString());
                 //Invocamos el evento de escaneo completado.
                 //EntCedula_Completed(entCedula, new EventArgs());
             });
-            
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error en el metodo MBarcode_BarcodeDataReady");
+                Analytics.TrackEvent("Error al escanear: " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+                throw;
+            }
 
         }
 
@@ -77,41 +104,57 @@ namespace SCVMobil
                 readerName = null;
             }
 
-            if (null == readerName)
+            try
             {
-                if (mBarcodeReaders.ContainsKey("default"))
-                {
-                    reader = mBarcodeReaders["default"];
-                }
-            }
-            else
-            {
-                if (mBarcodeReaders.ContainsKey(readerName))
-                {
-                    reader = mBarcodeReaders[readerName];
-                }
-            }
-
-            if (null == reader)
-            {
-                // Create a new instance of BarcodeReader object.
-                reader = new BarcodeReader(readerName);
-
-                // Add an event handler to receive barcode data.
-                // Even though we may have multiple reader sessions, we only
-                // have one event handler. In this app, no matter which reader
-                // the data come frome it will update the same UI controls.
-                reader.BarcodeDataReady += MBarcodeReader_BarcodeDataReady;
-
-                // Add the BarcodeReader object to mBarcodeReaders collection.
                 if (null == readerName)
                 {
-                    mBarcodeReaders.Add("default", reader);
+                    if (mBarcodeReaders.ContainsKey("default"))
+                    {
+                        reader = mBarcodeReaders["default"];
+                    }
                 }
                 else
                 {
-                    mBarcodeReaders.Add(readerName, reader);
+                    if (mBarcodeReaders.ContainsKey(readerName))
+                    {
+                        reader = mBarcodeReaders[readerName];
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Analytics.TrackEvent("Error, el escaner tiene un valor : " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+                throw;
+            }
+
+            try
+            {
+                if (null == reader)
+                {
+                    // Create a new instance of BarcodeReader object.
+                    reader = new BarcodeReader(readerName);
+
+                    // Add an event handler to receive barcode data.
+                    // Even though we may have multiple reader sessions, we only
+                    // have one event handler. In this app, no matter which reader
+                    // the data come frome it will update the same UI controls.
+                    reader.BarcodeDataReady += MBarcodeReader_BarcodeDataReady;
+
+                    // Add the BarcodeReader object to mBarcodeReaders collection.
+                    if (null == readerName)
+                    {
+                        mBarcodeReaders.Add("default", reader);
+                    }
+                    else
+                    {
+                        mBarcodeReaders.Add(readerName, reader);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Analytics.TrackEvent("Error al recibir data en el escaner: " + e.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+                throw;
             }
 
             return reader;
@@ -119,29 +162,37 @@ namespace SCVMobil
 
         public async void GetScanner(bool bOpenClose)
         {
-            IList<BarcodeReaderInfo> readerList = await BarcodeReader.GetConnectedBarcodeReaders();
-            foreach (BarcodeReaderInfo reader in readerList)
+            try
             {
-                Debug.WriteLine("SCANNER FOUND: " + reader.ScannerName.ToString());
-            }
-            if (readerList.Count > 0)
-            {
-                if (bOpenClose)
+                IList<BarcodeReaderInfo> readerList = await BarcodeReader.GetConnectedBarcodeReaders();
+                foreach (BarcodeReaderInfo reader in readerList)
                 {
-                    OpenScanner(GetBarcodeReader(readerList[0].ScannerName));
-                    Debug.WriteLine("GOT SCANNER");
+                    Debug.WriteLine("SCANNER FOUND: " + reader.ScannerName.ToString());
+                }
+                if (readerList.Count > 0)
+                {
+                    if (bOpenClose)
+                    {
+                        OpenScanner(GetBarcodeReader(readerList[0].ScannerName));
+                        Debug.WriteLine("GOT SCANNER");
+                    }
+                    else
+                    {
+                        CloseScanner(GetBarcodeReader(readerList[0].ScannerName));
+                        Debug.WriteLine("CLOSED SCANNER: " + readerList[0].ScannerName);
+                    }
+
                 }
                 else
                 {
-                    CloseScanner(GetBarcodeReader(readerList[0].ScannerName));
-                    Debug.WriteLine("CLOSED SCANNER: " + readerList[0].ScannerName);
+                    OpenScanner(GetBarcodeReader("default"));
+                    Debug.WriteLine("NO SCANNER");
                 }
-
             }
-            else
+            catch (Exception e)
             {
-                OpenScanner(GetBarcodeReader("default"));
-                Debug.WriteLine("NO SCANNER");
+                Analytics.TrackEvent("Error al encontrar escaner " + e.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+                throw;
             }
         }
         private async void SetScannerAndSymbologySettings(BarcodeReader lector)
@@ -166,7 +217,8 @@ namespace SCVMobil
             catch (Exception exp)
             {
                 //await DisplayAlert("Error", "Symbology settings failed. Message: " + exp.Message, "OK");
-                Debug.WriteLine("Excepcion: " + exp);
+                Debug.WriteLine("Error en el SetScannerAndSymbologySetting: " + exp);
+                Analytics.TrackEvent("Error a " + exp.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
         }
     }

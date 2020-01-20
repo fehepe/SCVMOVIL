@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SCVMobil
+namespace SCVMobil.Models
 {
-    public class Time
+    public class Dia
     {
-        public string fecha { get; set; }
+        public string Day { get; set; }
     }
 }
