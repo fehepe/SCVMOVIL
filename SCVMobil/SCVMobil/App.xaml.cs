@@ -189,6 +189,7 @@ namespace SCVMobil
                 //db.CreateTable<Puertas>();
                 db.CreateTable<PADRON>();
                 db.CreateTable<COMPANIAS>();
+                db.CreateTable<COMPANIASLOC>();
                 db.CreateTable<PERSONAS>();
                 db.CreateTable<VW_RESERVA_VISITA>();
                 db.CreateTable<Invitados>();

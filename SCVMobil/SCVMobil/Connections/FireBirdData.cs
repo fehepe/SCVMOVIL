@@ -560,7 +560,65 @@ namespace SCVMobil.Connections
                 return null;
             }
         }
+        public List<COMPANIASLOC> ExecuteCompaniesLoc(string query)
+        {
+            try
+            {
+                List<COMPANIASLOC> CompaniesList = new List<COMPANIASLOC>();
 
+                FbConnection fb = new FbConnection(connectionString(true));
+
+                fb.Open();
+                FbCommand command = new FbCommand(
+                    query,
+                    fb);
+
+                var dtResult = command.ExecuteReader();
+
+                if (dtResult.HasRows)
+                {
+                    while (dtResult.Read())
+                    {
+                        COMPANIASLOC company = new COMPANIASLOC();
+
+                        #region Verificar que los valores no sean nulos antes de la conversion
+                        if (dtResult[0] != System.DBNull.Value)
+                        {
+                            company.COMPANIA_ID = Convert.ToInt32(dtResult[0]);
+                        }
+
+                        if (dtResult[1] != System.DBNull.Value)
+                        {
+                            company.NOMBRE = dtResult[1].ToString();
+                        }
+                        if (dtResult[2] != System.DBNull.Value)
+                        {
+                            company.PUNTO_VSU = Convert.ToInt32(dtResult[2]);
+                        }
+                        if (dtResult[3] != System.DBNull.Value)
+                        {
+                            company.ESTATUS = Convert.ToInt32(dtResult[3]);
+                        }
+                        #endregion
+
+                        CompaniesList.Add(company);
+                        Debug.WriteLine("Compania agregada, Id: " + company.COMPANIA_ID);
+                    }
+                }
+                dtResult.Close();
+                fb.Close();
+                fb.Dispose();
+
+                Preferences.Set("SYNC_VSU", true);
+                return CompaniesList;
+            }
+            catch (Exception ea)
+            {
+                Debug.WriteLine("Error en el metodo ExecuteCompanies, provocado por: " + ea.Message);
+                Preferences.Set("SYNC_VSU", false);
+                return null;
+            }
+        }
 
         // Retornar lista de Companias
         public List<COMPANIAS> ExecuteCompanies(string query)
@@ -1120,7 +1178,6 @@ namespace SCVMobil.Connections
             try
             {
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-
                 string queryCompanias = " SELECT FIRST "
                                                    + Preferences.Get("CHUNK_SIZE", "10000")
                                                    + " COMPANIA_ID, NOMBRE, PUNTO_VSU, ESTATUS  FROM COMPANIAS where COMPANIA_ID > "
@@ -1137,11 +1194,12 @@ namespace SCVMobil.Connections
                     {
                         if (ListaCompanias.Any())
                         {
+                         
                             db.InsertAll(ListaCompanias);
                             Debug.WriteLine("MAX_COMPANIA_ID: " + ListaCompanias.First().COMPANIA_ID.ToString());
                             Preferences.Set("MAX_COMPANIA_ID", ListaCompanias.First().COMPANIA_ID.ToString());
                             Debug.WriteLine("Companias Descargadas: " + DateTime.Now);
-                            string sortNames = "select nombre from companias where ESTATUS = 1 order by nombre";
+                            string sortNames = "select nombre from companias where PUNTO_VSU = 0 AND ESTATUS = 1 order by nombre";
                             var Sorting = db.Query<COMPANIAS>(sortNames);
                             foreach (COMPANIAS registro in Sorting)
                             {
@@ -1152,6 +1210,65 @@ namespace SCVMobil.Connections
                             }
                             stRegisros = stRegisros.TrimStart(',');
                             Preferences.Set("COMPANIAS_LIST", stRegisros);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        var properties = new Dictionary<string, string> {
+                                            { "Category", "Error insertando Companias" },
+                                            { "Code", "App.xaml.cs Line: 516" },
+                                            { "Lector", Preferences.Get("LECTOR", "N/A")}
+                                        };
+                        Debug.WriteLine("Excepcion insertando Companias: " + ex.ToString());
+                        Crashes.TrackError(ex, properties);
+                    }
+
+                }
+
+            }
+            catch (Exception ea)
+            {
+                Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadCompanies, Error: " + ea.Message);
+                Debug.WriteLine("Error de SQL: " + ea.Message);
+            }
+        }
+
+
+
+        public void DownloadCompaniesPorLocalidad(string querry)
+        {
+            try
+            {
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                var dbd = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+
+                
+                var ListaCompanias = ExecuteCompaniesLoc(querry);
+
+                var stlRegistros = new List<string>();
+                var stRegisros = "";
+                if (ListaCompanias != null)
+                {
+                    try
+                    {
+                        if (ListaCompanias.Any())
+                        {
+                            dbd.DeleteAll<COMPANIASLOC>();
+                            db.InsertAll(ListaCompanias);
+                            //Debug.WriteLine("MAX_COMPANIA_ID: " + ListaCompanias.First().COMPANIA_ID.ToString());
+                            //Preferences.Set("MAX_COMPANIA_ID", ListaCompanias.First().COMPANIA_ID.ToString());
+                            Debug.WriteLine("Companias Descargadas: " + DateTime.Now);
+                            string sortNames = "select nombre from COMPANIASLOC where  ESTATUS = 1 order by nombre";
+                            var Sorting = db.Query<COMPANIASLOC>(sortNames);
+                            foreach (COMPANIASLOC registro in Sorting)
+                            {
+                                //db.Insert(registro);
+                                Debug.WriteLine("EMPRESAS: " + registro.NOMBRE);
+                                stlRegistros.Add(registro.NOMBRE.ToString());
+                                stRegisros = stRegisros + "," + registro.NOMBRE.ToString();
+                            }
+                            stRegisros = stRegisros.TrimStart(',');
+                            Preferences.Set("COMPANIAS_LIST_LOC", stRegisros);
                         }
                     }
                     catch (Exception ex)

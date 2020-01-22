@@ -340,9 +340,9 @@ namespace SCVMobil
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ea)
             {
-
+                Debug.Write("Error en escaneo de cedula: " + ea.Message);
                 //throw;
             }
         }
