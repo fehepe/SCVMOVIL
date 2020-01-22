@@ -88,13 +88,12 @@ namespace SCVMobil
                 lblvisitaA.IsVisible = false;
             }
 
-            pickerDestino.ItemsSource = Preferences.Get("COMPANIAS_LIST", "").Split(',').ToList<string>();
+            pickerDestino.ItemsSource = Preferences.Get("COMPANIAS_LIST_LOC", "").Split(',').ToList<string>();
             try
             {
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                 var TB = db.Query<Invitados>("SELECT * from invitados WHERE cargo ='" + entCedula.Text + "' order by Fecha_registro desc");
-                //
-
+             
                 if (TB.Any())
                 {
                     var TBL_PERSONAS = db.Query<PERSONAS>("SELECT NOMBRES_APELLIDOS FROM PERSONAS WHERE PERSONA_ID = " + TB.First().Visitado);
@@ -121,95 +120,6 @@ namespace SCVMobil
             base.OnDisappearing();
             scan.GetScanner(false);
         }
-
-        //----------------------------------------------------------------------------------------------------------------------------------------------------------
-      /*  protected  void obtenerListaDestino()//Vamos a buscar las AREAS definidas en la base de datos
-        {
-           
-                var stlRegistros = new List<string>();
-                var stRegisros = "";
-            try
-            {
-                var querry = "SELECT COMPANIA_ID, NOMBRE  FROM COMPANIAS ORDER BY NOMBRE ";
-                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-              
-                var tr = db.Query<COMPANIAS>(querry);
-                
-                    foreach (COMPANIAS registro in tr)
-                    {
-                        //db.Insert(registro);
-                        Debug.WriteLine("EMPRESAS: " + registro.NOMBRE);
-                        stlRegistros.Add(registro.NOMBRE.ToString());
-                        stRegisros = stRegisros + "," + registro.NOMBRE.ToString();
-                    }
-                    stRegisros = stRegisros.TrimStart(',');
-                    Preferences.Set("COMPANIAS_LIST", stRegisros);
-
-                
-            }
-            catch (Exception ey)
-            {
-                Debug.WriteLine("" + ey);
-                Debug.WriteLine("With url: " + Url);
-            }
-            finally
-            {
-
-                pickerDestino.ItemsSource = stlRegistros;
-
-
-                pickerDestino.SelectedItem = Preferences.Get("COMPANIA_SELECTED", "");
-
-
-
-            }
-        }*/
-        //-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-       /* protected  void obtenerListaVisitA()//Vamos a buscar las AREAS definidas en la base de datos
-        {
-
-           
-                
-                    var stlRegistros = new List<string>();
-                    var stRegisros = "";
-            try
-            {
-
-                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-                //Creamos el query para buscar el documento.
-                var querry = "SELECT PERSONA_ID, NOMBRES_APELLIDOS FROM PERSONAS";
-
-                var tr = db.Query<PERSONAS>(querry);
-             
-                    foreach (PERSONAS registro in tr)
-
-                    {
-                       // db.Insert(registro);
-                        Debug.WriteLine("PERSONAS: " + registro.NOMBRES_APELLIDOS);
-                        stlRegistros.Add(registro.NOMBRES_APELLIDOS.ToString());
-                        stRegisros = stRegisros + "," + registro.NOMBRES_APELLIDOS.ToString();
-                    }
-                    stRegisros = stRegisros.TrimStart(',');
-                    Preferences.Set("PERSONAS_LIST", stRegisros);
-                    //pkParques.ItemsSource = stlRegistros;
-
-                
-            }
-            catch (Exception ey)
-            {
-                Debug.WriteLine("" + ey);
-                Debug.WriteLine("With url: " + Url);
-            }
-            finally
-            {
-
-                pickerVisitaA.SelectedItem = Preferences.Get("PERSONA_SELECTED", "");
-
-
-            }
-            
-        }*/
-
 
         //------------------------------------------------------------------------------------------------------------------------------------------------------------------------  
         public void refreshPage()
@@ -498,9 +408,10 @@ namespace SCVMobil
                 }
 
             }
-            catch (Exception)
+            catch (Exception ea)
             {
-
+                Debug.WriteLine("Error en BtnImprimir_Clicked " + ea.Message);
+                await DisplayAlert("Error", "Error en BtnImprimir_Clicked: " + ea.Message, "OK");
                 //throw;
             }
         }
