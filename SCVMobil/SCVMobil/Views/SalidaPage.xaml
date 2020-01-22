@@ -6,7 +6,8 @@
             
              mc:Ignorable="d"
              x:Class="SCVMobil.SalidaPage"
-             BackgroundColor="#FFFFFF">
+             BackgroundColor="#FFFFFF"
+             Title="Salida">
     
     <ContentPage.Content>
         <StackLayout

@@ -32,11 +32,14 @@ namespace SCVMobil.Connections
         {
             if (db)
             {
-                string connectionString = "User ID = sysdba; Password = masterkey; Database = C:\\APP\\GAD\\registros.fdb; " +
-                                          $"DataSource={Preferences.Get("SERVER_IP", "172.16.1.92")};Port=3050;Charset=NONE;Server Type=0;";
-
+                //string connectionString = "User ID = sysdba; Password = masterkey; Database = C:\\APP\\GAD\\registros.fdb; " +
+                //                          $"DataSource={Preferences.Get("SERVER_IP", "192.168.1.10")};Port=3050;Charset=NONE;Server Type=0;";
+           
                 //string connectionString = "User ID=sysdba;Password=masterkey;Database=C:\\Users\\Abraham\\Desktop\\Codes\\registros\\registros.fdb;" +
                 //                           $"DataSource={Preferences.Get("SERVER_IP", "192.168.2.120")};Port=3050;Charset=NONE;Server Type=0; Timeout=5;"; //Connectionstring//
+
+                string connectionString = "User ID=sysdba;Password=masterkey;Database=C:\\APP\\registros\\registros.fdb;" +
+                                          $"DataSource={Preferences.Get("SERVER_IP", "192.168.2.120")};Port=3050;Charset=NONE;Server Type=0; Timeout=5;"; //Connectionstring//
 
                 return connectionString;
             }
@@ -58,10 +61,8 @@ namespace SCVMobil.Connections
             {
                 string _dtResult = "";
                 FbConnection fb = new FbConnection(connectionString(true));
-                using (FbCommand command = new FbCommand(
-                    query,
-                    fb)) {
-
+                using (FbCommand command = new FbCommand(query,fb)) 
+                {
                     fb.Open();
                     _dtResult = command.ExecuteScalar().ToString();
                 }
@@ -825,38 +826,38 @@ namespace SCVMobil.Connections
 
                     #region Query Invitado
                     queryInv = "SELECT IN_INVIDATO_ID as anyCount FROM INSERTAR_VISITAS(" +
-                            $"{registro.Compania_ID.ToString()}, " +
-                            $"'{registro.Nombres}', " +
-                            $"'{ registro.Apellidos}', " +
-                            $"'{registro.Fecha_Registro.ToString()}', " +
-                            $"'{registro.Cargo}'," +
-                            "0," +
-                            "100," +
-                            "1," +
-                            $"{Util.CoalesceStr(registro.Empresa_ID, "null")}, " +
-                            $"{Util.CoalesceStr(placa, "null")}," +
-                            $"'{registro.Tipo_Visitante}'," +
-                            "0," +
-                            "0," +
-                            $" {Util.CoalesceStr(registro.Puerta_Entrada, "1495")}," +
-                            "0," +
-                            "12," +
-                            "1," +
-                            "1," +
-                            $"'{registro.Origen_Entrada}'," +
-                            $"'{registro.Origen_Salida}'," +
-                            "''," +
-                            "0," +
-                            "'I'," +
-                            "0," +
-                            "''," +
-                            "''," +
-                            "''," +
-                            "1," +
-                            "0," +
-                            $" {Util.CoalesceStr(registro.Visitado, "null")}" +
-                            $", {registro.Lector.ToString()}" +
-                            $", {Util.CoalesceStr(fechaSalida, "null")})";
+                          $"{registro.Compania_ID.ToString()}, " +
+                          $"'{registro.Nombres}', " +
+                          $"'{ registro.Apellidos}', " +
+                          $"'{registro.Fecha_Registro.ToString()}', " +
+                          $"'{registro.Cargo}'," +
+                          "0," +
+                          "100," +
+                          "1," +
+                          $"{Util.CoalesceStr(registro.Empresa_ID, "null")}, " +
+                          $"{Util.CoalesceStr(placa, "null")}," +
+                          $"'{registro.Tipo_Visitante}'," +
+                          "0," +
+                          "0," +
+                          $" {Util.CoalesceStr(registro.Puerta_Entrada, "1495")}," +
+                          "0," +
+                          "12," +
+                          "1," +
+                          "1," +
+                          $"'{registro.Origen_Entrada}'," +
+                          $"'{registro.Origen_Salida}'," +
+                          "''," +
+                          "0," +
+                          "'I'," +
+                          "0," +
+                          "''," +
+                          "''," +
+                          "''," +
+                          "1," +
+                          "0," +
+                          $" {Util.CoalesceStr(registro.Visitado, "null")}" +
+                          $", {registro.Lector.ToString()}" +
+                          $", {Util.CoalesceStr(fechaSalida, "null")})";
                     #endregion
 
                     var dtResult = ExecuteScalar(queryInv);
@@ -893,7 +894,7 @@ namespace SCVMobil.Connections
                 Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: " + ea.Message);
             }
         }
-
+            
 
         //// Subir Visitantes con reservaciones que no se hayan subido
         public void UploadVisitsReservation()

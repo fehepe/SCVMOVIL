@@ -92,8 +92,7 @@ namespace SCVMobil
                             fireBird.DownloadOuts();
                     }
                     else
-                    {
-                        
+                    {                        
                         
                         Preferences.Set("SYNC_VSU", false); //
                     }
