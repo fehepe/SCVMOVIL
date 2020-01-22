@@ -32,14 +32,14 @@ namespace SCVMobil.Connections
         {
             if (db)
             {
-                //string connectionString = "User ID = sysdba; Password = masterkey; Database = C:\\APP\\GAD\\registros.fdb; " +
-                //                          $"DataSource={Preferences.Get("SERVER_IP", "192.168.1.10")};Port=3050;Charset=NONE;Server Type=0;";
-           
+                string connectionString = "User ID = sysdba; Password = masterkey; Database = C:\\APP\\GAD\\registros.fdb; " +
+                                          $"DataSource={Preferences.Get("SERVER_IP", "192.168.1.103")};Port=3050;Charset=NONE;Server Type=0;";
+
                 //string connectionString = "User ID=sysdba;Password=masterkey;Database=C:\\Users\\Abraham\\Desktop\\Codes\\registros\\registros.fdb;" +
                 //                           $"DataSource={Preferences.Get("SERVER_IP", "192.168.2.120")};Port=3050;Charset=NONE;Server Type=0; Timeout=5;"; //Connectionstring//
 
-                string connectionString = "User ID=sysdba;Password=masterkey;Database=C:\\APP\\registros\\registros.fdb;" +
-                                          $"DataSource={Preferences.Get("SERVER_IP", "192.168.2.120")};Port=3050;Charset=NONE;Server Type=0; Timeout=5;"; //Connectionstring//
+                //string connectionString = "User ID=sysdba;Password=masterkey;Database=C:\\APP\\registros\\registros.fdb;" +
+                //                          $"DataSource={Preferences.Get("SERVER_IP", "192.168.2.120")};Port=3050;Charset=NONE;Server Type=0; Timeout=5;"; //Connectionstring//
 
                 return connectionString;
             }
