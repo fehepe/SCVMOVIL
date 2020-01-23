@@ -16,6 +16,7 @@ using System.Net;
 using System.Web;
 using SCVMobil.Models;
 using Microsoft.AppCenter.Analytics;
+using SCVMobil.Connections;
 
 namespace SCVMobil
 {
@@ -30,6 +31,8 @@ namespace SCVMobil
         //private Dictionary<string, BarcodeReader> mBarcodeReaders;
         Escaner scan;
         private string stNombre, stApellidos;
+        COMPANIAS cc;
+
 
         //-----------------------------------------------------------------------------------------------       
         public CompanyPage(String cedula, String nombre, String apellidos)//Constructor
@@ -69,24 +72,24 @@ namespace SCVMobil
 
             //entPlaca.Text = Preferences.Get("LETRA", "");
 
-            pickerVisitaA.ItemsSource = Preferences.Get("PERSONAS_LIST", "").Split(',').ToList<string>();
+            //pickerVisitaA.ItemsSource = Preferences.Get("PERSONAS_LIST", "").Split(',').ToList<string>();
 
-            if (!string.IsNullOrEmpty(pickerVisitaA.ItemsSource[0].ToString()) && Preferences.Get("VISITA_A_SELECTED", true))
-            {
-                FrameVisitaA.IsVisible = true;
-                FrameVisitaA2.IsVisible = true;
-                lblvisitaA.IsVisible = true;
-                pickerVisitaA.IsVisible = true;
-            }
-            else
-            {
-                Preferences.Set("VISITA_A_SELECTED", false);
-                FrameVisitaA.IsVisible = false;
-                FrameVisitaA2.IsVisible = false;
-                pickerVisitaA.IsVisible = false;
-                pickerVisitaA.ItemsSource = new List<string>();
-                lblvisitaA.IsVisible = false;
-            }
+            //if (!string.IsNullOrEmpty(pickerVisitaA.ItemsSource[0].ToString()) && Preferences.Get("VISITA_A_SELECTED", true))
+            //{
+            //    FrameVisitaA.IsVisible = true;
+            //    FrameVisitaA2.IsVisible = true;
+            //    lblvisitaA.IsVisible = true;
+            //    pickerVisitaA.IsVisible = true;
+            //}
+            //else
+            //{
+            //    Preferences.Set("VISITA_A_SELECTED", false);
+            //    FrameVisitaA.IsVisible = false;
+            //    FrameVisitaA2.IsVisible = false;
+            //    pickerVisitaA.IsVisible = false;
+            //    pickerVisitaA.ItemsSource = new List<string>();
+            //    lblvisitaA.IsVisible = false;
+            //}
 
             pickerDestino.ItemsSource = Preferences.Get("COMPANIAS_LIST_LOC", "").Split(',').ToList<string>();
             try
@@ -415,31 +418,53 @@ namespace SCVMobil
                 //throw;
             }
         }
+
         //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        private void PickerDestino_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {      
+                
+                var companiescast = (COMPANIAS)pickerDestino.SelectedItem; //Cast//
+                cc = companiescast;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error en la seleccion de compañia " + ex);
+            }
+        }
+
         private void PickerVisitaA_SelectedIndexChanged(object sender, EventArgs e)// Metodo del evento Change del picker, es decir si selecciono un item del picker este lo tomara
         {
             try
             {
-                Preferences.Set("PERSONA_SELECTED", pickerVisitaA.SelectedItem.ToString()); 
+                FireBirdData fire = new FireBirdData();                
+                var show = fire.extraerDeparatamentoId(cc); //Lista que trae las personas con los departamentos//
+                if (show.Count == 0 && Preferences.Get("VISITA_A_SELECTED", true))
+                {
+                    DisplayAlert("Mensaje","No tiene personas asignadas este departamento","ok");
+                    FrameVisitaA.IsVisible = true;
+                    FrameVisitaA2.IsVisible = true;
+                    lblvisitaA.IsVisible = true;
+                    pickerVisitaA.IsVisible = true;
+                }
+                else
+                {
+                    pickerVisitaA.ItemsSource = show;
+                    Preferences.Set("VISITA_A_SELECTED", false);
+                    FrameVisitaA.IsVisible = false;
+                    FrameVisitaA2.IsVisible = false;
+                    pickerVisitaA.IsVisible = false;                   
+                    lblvisitaA.IsVisible = false;
+                }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Exception catched while trying to set preference \"PERSONA_SELECTED\": " + ex);
+                Debug.WriteLine("Error en el picker de visitas " + ex);
             }
         }
         //------------------------------------------------------------------------------------------------------------------------------
-        private void PickerDestino_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            try
-
-            {
-                Preferences.Set("COMPANIA_SELECTED", pickerDestino.SelectedItem.ToString());
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Exception catched while trying to set preference \"COMPANIA_SELECTED\": " + ex);
-            }
-        }
+        
        
 
         //------------------------------------------------------------------------------------------------------------------------------------

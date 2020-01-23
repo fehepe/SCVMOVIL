@@ -1503,5 +1503,56 @@ namespace SCVMobil.Connections
                 return null;
             }
         }
+
+        public List<VisitasDepto> extraerDeparatamentoId(COMPANIAS cc) //Extraer personas con su departamento//
+        {
+            string query = $"select p.nombres, p.departamento_id, c.nombre from personas p inner join companias c on c.compania_id = p.departamento_id where p.departamento_id = {cc.COMPANIA_ID}";
+            try
+            {           
+                List<VisitasDepto> deptosVisits = new List<VisitasDepto>();
+
+                FbConnection fb = new FbConnection(connectionString(true));
+
+                fb.Open();
+                FbCommand command = new FbCommand(query,fb);
+
+                var dtResult = command.ExecuteReader();
+
+                if (dtResult.HasRows)
+                {
+
+                    while (dtResult.Read())
+                    {
+                        VisitasDepto visitasDepto = new VisitasDepto();
+
+                        if (dtResult[0] != System.DBNull.Value)
+                        {
+                            visitasDepto.VisitName = dtResult[0].ToString();
+                        }
+                        if (dtResult[1] != System.DBNull.Value)
+                        {
+                            visitasDepto.DeptoId = Convert.ToInt32(dtResult[1]);
+                        }
+                        if (dtResult[2] != System.DBNull.Value)
+                        {
+                            visitasDepto.DeptoName = dtResult[2].ToString();
+                        }
+                        deptosVisits.Add(visitasDepto);
+                    }
+                }    
+                    
+                fb.Close();
+                fb.Dispose();
+
+
+                return deptosVisits;
+            }
+            catch (Exception e)
+            {
+                Preferences.Set("SYNC_VSU", false);
+                Debug.WriteLine("Error en la extraccion de departamentoID " + e.Message);
+                return null;
+            }
+        }
     }
 }
