@@ -1387,7 +1387,7 @@ namespace SCVMobil.Connections
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                 var dbd = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
-
+                
                 var ListaCompanias = ExecuteCompaniesLoc(querry);
 
                 var stlRegistros = new List<string>();
@@ -1433,7 +1433,7 @@ namespace SCVMobil.Connections
             catch (Exception ea)
             {
                 Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadCompanies, Error: " + ea.Message);
-                Debug.WriteLine("Error de SQL: " + ea.Message);
+                Debug.WriteLine("Error de SQL: "+ea.Message);
             }
         }
 
