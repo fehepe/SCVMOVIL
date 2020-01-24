@@ -96,6 +96,7 @@
                     Grid.Row="3"
                     Grid.Column="1" 
                     Title="Seleccione..."
+                    ItemDisplayBinding="{Binding NOMBRE}"    
                     SelectedIndexChanged="PickerDestino_SelectedIndexChanged"/>
                 </Frame>
             </Frame>
@@ -124,6 +125,7 @@
                     Grid.Row="4"
                     Grid.Column="1"                     
                     Title="Seleccione..."
+                    ItemDisplayBinding="{Binding VisitName}"
                     SelectedIndexChanged="PickerVisitaA_SelectedIndexChanged">
                     </Picker>
                 </Frame>
