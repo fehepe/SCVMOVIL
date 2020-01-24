@@ -82,6 +82,140 @@ namespace SCVMobil.Connections
 
         }
 
+        //// Descargar Padron
+        public List<PADRON> DownloadPadron(string querry1)
+        {
+            try
+            {
+                List<PADRON> listPadron = new List<PADRON>();
+                int triesTBL = 0;
+
+                do
+                {
+                    try
+                    {
+                        FbConnection fb = new FbConnection(connectionString(false));
+
+                        fb.Open();
+                        FbCommand command = new FbCommand(
+                            querry1,
+                            fb);
+
+
+                        FbDataReader reader = command.ExecuteReader();
+
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                PADRON persona = new PADRON();
+                                persona.CEDULA = reader[0].ToString();
+                                persona.NOMBRES = reader[1].ToString();
+                                persona.APELLIDO1 = reader[2].ToString();
+                                persona.APELLIDO2 = reader[3].ToString();
+
+                                listPadron.Add(persona);
+                                //Debug.WriteLine("Agregado, NOMBRE: "+persona.NOMBRES+" "+persona.APELLIDO1 + " CEDULA: "+persona.CEDULA);
+                            }
+                        }
+                        else
+                        {
+                            Debug.WriteLine("No rows found.");
+                        }
+                        reader.Close();
+
+                        fb.Close();
+                        Debug.WriteLine($"La lista retornada contiene{listPadron.Count} elementos");
+                        return listPadron;
+                    }
+                    catch (Exception et)
+                    {
+                        Debug.WriteLine("Error en Sycn" + et.Message);
+                        Analytics.TrackEvent("Error descargando padron:  " + et.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+                       
+                        Debug.WriteLine("No se pudo conectar con la base de datos: " + et.Message);
+                        triesTBL += 1;
+                        
+                        return null;
+                        
+                    } 
+                } while (triesTBL <= 5);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error al descagar el padron, provocado por: "+ex.Message) ;
+                return null;
+            }
+        }
+
+        public int ReturnCountBoletas(int  value)
+        {
+            try
+            {
+                string querry = "select count(p.cedula) as anyCount from padron p";
+                int tries = 0;
+                //string contenido;
+                int maxRegistro = 0;
+
+                int continuar = value;
+                if (continuar <= 5)
+                {
+                    try
+                    {
+                        FbConnection fb = new FbConnection(connectionString(false));
+
+                        fb.Open();
+                        FbCommand command = new FbCommand(
+                            querry,
+                            fb);
+
+
+                        FbDataReader reader = command.ExecuteReader();
+
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                maxRegistro = Convert.ToInt32(reader[0]);
+                            }
+                        }
+                        else
+                        {
+                            Debug.WriteLine("No rows found.");
+                        }
+                        reader.Close();
+
+                        fb.Close();
+                        fb.Dispose();
+                        return maxRegistro;
+                    }
+                    catch (Exception ex)
+                    {
+                        Analytics.TrackEvent("Error al conectarse a base de datos " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+                        Debug.WriteLine("Error en Sync");
+                        var x = ex.Message;
+                        continuar += 1;
+                        if (continuar >= 5)
+                        {
+                            return 0;
+                        }
+                        else
+                        {
+                            return ReturnCountBoletas(continuar);
+                        }
+                    }
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error en el metodo CountCedulas, provocado por: "+ ex);
+                return 0;
+            }
+        }
 
         // Retornar una lista de invitados
         public List<Invitados> ExecuteGuest(string query)
@@ -1410,7 +1544,6 @@ namespace SCVMobil.Connections
                 Debug.WriteLine("Excepcion en el metodo DownloadGuests, Error: " + ea.Message);
             }
         }
-
 
         //// Descargar Salidas
         public void DownloadOuts()
