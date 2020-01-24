@@ -1235,18 +1235,21 @@ namespace SCVMobil.Connections
 
 
 
-        public void DownloadCompaniesPorLocalidad(string querry)
+        public List<COMPANIASLOC> DownloadCompaniesPorLocalidad()
         {
             try
             {
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                 var dbd = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
-                
+               string querry = "select COMPANIA_ID, NOMBRE, PUNTO_VSU, ESTATUS          " +
+                                "from COMPANIAS C                                     " +
+                                "where C.COMPANIA_ID in (select DL.id_departamento    " +
+                                "                        from DEPTO_LOCALIDAD DL      " +
+                                $"                       where DL.id_localidad = {Preferences.Get("LOCALIDAD_VSU", "")}) ";
                 var ListaCompanias = ExecuteCompaniesLoc(querry);
 
-                var stlRegistros = new List<string>();
-                var stRegisros = "";
+
                 if (ListaCompanias != null)
                 {
                     try
@@ -1258,17 +1261,14 @@ namespace SCVMobil.Connections
                             //Debug.WriteLine("MAX_COMPANIA_ID: " + ListaCompanias.First().COMPANIA_ID.ToString());
                             //Preferences.Set("MAX_COMPANIA_ID", ListaCompanias.First().COMPANIA_ID.ToString());
                             Debug.WriteLine("Companias Descargadas: " + DateTime.Now);
-                            string sortNames = "select nombre from COMPANIASLOC where  ESTATUS = 1 order by nombre";
+                            string sortNames = "select * from COMPANIASLOC where  ESTATUS = 1 order by nombre";
                             var Sorting = db.Query<COMPANIASLOC>(sortNames);
-                            foreach (COMPANIASLOC registro in Sorting)
-                            {
-                                //db.Insert(registro);
-                                Debug.WriteLine("EMPRESAS: " + registro.NOMBRE);
-                                stlRegistros.Add(registro.NOMBRE.ToString());
-                                stRegisros = stRegisros + "," + registro.NOMBRE.ToString();
-                            }
-                            stRegisros = stRegisros.TrimStart(',');
-                            Preferences.Set("COMPANIAS_LIST_LOC", stRegisros);
+
+                            return Sorting;
+                        }
+                        else
+                        {
+                            return null;
                         }
                     }
                     catch (Exception ex)
@@ -1280,8 +1280,13 @@ namespace SCVMobil.Connections
                                         };
                         Debug.WriteLine("Excepcion insertando Companias: " + ex.ToString());
                         Crashes.TrackError(ex, properties);
+                        return null;
                     }
 
+                }
+                else
+                {
+                    return null;
                 }
 
             }
@@ -1289,6 +1294,7 @@ namespace SCVMobil.Connections
             {
                 Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadCompanies, Error: " + ea.Message);
                 Debug.WriteLine("Error de SQL: "+ea.Message);
+                return null;
             }
         }
 
@@ -1504,7 +1510,7 @@ namespace SCVMobil.Connections
             }
         }
 
-        public List<VisitasDepto> extraerDeparatamentoId(COMPANIAS cc) //Extraer personas con su departamento//
+        public List<VisitasDepto> extraerDeparatamentoId(COMPANIASLOC cc) //Extraer personas con su departamento//
         {
             string query = $"select p.nombres, p.departamento_id, c.nombre from personas p inner join companias c on c.compania_id = p.departamento_id where p.departamento_id = {cc.COMPANIA_ID}";
             try

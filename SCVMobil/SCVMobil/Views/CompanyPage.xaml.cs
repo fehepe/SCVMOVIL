@@ -31,7 +31,8 @@ namespace SCVMobil
         //private Dictionary<string, BarcodeReader> mBarcodeReaders;
         Escaner scan;
         private string stNombre, stApellidos;
-        COMPANIAS cc;
+        COMPANIASLOC cc;
+        FireBirdData firebird = new FireBirdData();
 
 
         //-----------------------------------------------------------------------------------------------       
@@ -91,7 +92,7 @@ namespace SCVMobil
             //    lblvisitaA.IsVisible = false;
             //}
 
-            pickerDestino.ItemsSource = Preferences.Get("COMPANIAS_LIST_LOC", "").Split(',').ToList<string>();
+            pickerDestino.ItemsSource = firebird.DownloadCompaniesPorLocalidad();
             try
             {
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
@@ -420,13 +421,23 @@ namespace SCVMobil
         }
 
         //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        private void PickerDestino_SelectedIndexChanged(object sender, EventArgs e)
+        private async void PickerDestino_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {      
                 
-                var companiescast = (COMPANIAS)pickerDestino.SelectedItem; //Cast//
-                cc = companiescast;
+                var companiescast = (COMPANIASLOC)pickerDestino.SelectedItem; //Cast//
+                this.cc = companiescast;
+                var show = firebird.extraerDeparatamentoId(cc); //Lista que trae las personas con los departamentos//
+                if (show.Count == 0 || show == null)
+                {
+                    await DisplayAlert("Mensaje", "Esta Destino no tiene personal asignado", "Ok");
+
+                }
+                else
+                {
+                   pickerVisitaA.ItemsSource = show;
+                }
             }
             catch (Exception ex)
             {
@@ -438,9 +449,9 @@ namespace SCVMobil
         {
             try
             {
-                FireBirdData fire = new FireBirdData();                
-                var show = fire.extraerDeparatamentoId(cc); //Lista que trae las personas con los departamentos//
-                if (show.Count == 0 && Preferences.Get("VISITA_A_SELECTED", true))
+                             
+                
+                if (pickerVisitaA.ItemsSource == null)
                 {
                     DisplayAlert("Mensaje","No tiene personas asignadas este departamento","ok");
                     FrameVisitaA.IsVisible = true;
@@ -450,8 +461,7 @@ namespace SCVMobil
                 }
                 else
                 {
-                    pickerVisitaA.ItemsSource = show;
-                    Preferences.Set("VISITA_A_SELECTED", false);
+                    
                     FrameVisitaA.IsVisible = false;
                     FrameVisitaA2.IsVisible = false;
                     pickerVisitaA.IsVisible = false;                   
