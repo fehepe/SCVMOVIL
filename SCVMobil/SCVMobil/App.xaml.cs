@@ -61,21 +61,6 @@ namespace SCVMobil
                             //Implementar servicios Periodicos.
                             fireBird.PublicServices();
 
-                            // Descargar las reservas.
-                            fireBird.DownloadReservations();
-
-                            // Descargar las companies.
-                            fireBird.DownloadCompanies();
-
-                            // Descargar las personas(destinos).
-                            fireBird.DownloadPeople_Destination();
-
-                            // Descargar los Invitados.
-                            fireBird.DownloadGuests();
-
-                            // Descargar las salidas.
-                            fireBird.DownloadOuts();
-
                             // Subir visitantes.
                             fireBird.UploadVisits();
 
@@ -91,7 +76,20 @@ namespace SCVMobil
                             // Subir las salidasDesconocidas.
                             fireBird.UploadUnknownOuts();
 
-                            
+                            // Descargar las reservas.
+                            fireBird.DownloadReservations();
+
+                            // Descargar las companies.
+                            fireBird.DownloadCompanies();
+
+                            // Descargar las personas(destinos).
+                            fireBird.DownloadPeople_Destination();
+
+                            // Descargar los Invitados.
+                            fireBird.DownloadGuests();
+
+                            // Descargar las salidas.
+                            fireBird.DownloadOuts();
                     }
                     else
                     {                        

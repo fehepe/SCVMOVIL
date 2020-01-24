@@ -214,6 +214,7 @@ namespace SCVMobil
         {
             try
             {
+                var querry =  "";
                 var fireBird = new FireBirdData();
 
                 var nombreLocalidad = entPuerta.SelectedItem.ToString();
@@ -222,8 +223,12 @@ namespace SCVMobil
                 if (puertas.Any())
                 {
                     Preferences.Set("LOCALIDAD_VSU", puertas.First().COMPANIA_ID.ToString());
-                    
-                    fireBird.DownloadCompaniesPorLocalidad();
+                    querry = "select COMPANIA_ID, NOMBRE, PUNTO_VSU, ESTATUS          " +
+                                "from COMPANIAS C                                     " +
+                                "where C.COMPANIA_ID in (select DL.id_departamento    " +
+                                "                        from DEPTO_LOCALIDAD DL      " +
+                                $"                       where DL.id_localidad = {puertas.First().COMPANIA_ID.ToString()}) ";
+                    fireBird.DownloadCompaniesPorLocalidad(querry);
 
                 }
             }
