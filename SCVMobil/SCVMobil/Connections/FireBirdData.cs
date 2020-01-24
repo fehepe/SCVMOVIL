@@ -125,7 +125,7 @@ namespace SCVMobil.Connections
                         reader.Close();
 
                         fb.Close();
-                        Debug.WriteLine($"La lista retornada contiene{listPadron.Count} elementos");
+                        Debug.WriteLine($"La lista retornada contiene {listPadron.Count} elementos");
                         return listPadron;
                     }
                     catch (Exception et)

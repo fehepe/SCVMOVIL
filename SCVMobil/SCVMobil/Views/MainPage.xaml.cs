@@ -42,6 +42,8 @@ namespace SCVMobil
             aviso.IsVisible = Preferences.Get("aviso", false);
             sinserver.IsVisible = Preferences.Get("SERVEROFF", false);
             configbtn.IsEnabled = Preferences.Get("CONFIG",true);
+            DeviceDisplay.KeepScreenOn = false;
+
 
 
 

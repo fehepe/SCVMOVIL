@@ -48,6 +48,7 @@ namespace SCVMobil
         {
             base.OnAppearing();
             setDefaults();
+            DeviceDisplay.KeepScreenOn = true;
             eServerIP.Text = Preferences.Get("SERVER_IP", "192.168.1.170");            
             eLector.Text = Preferences.Get("LECTOR", "1");
             entChunkSize.Text = Preferences.Get("CHUNK_SIZE", "50000");
@@ -57,8 +58,12 @@ namespace SCVMobil
             eCommitSize.Text = Preferences.Get("COMMIT_SIZE", "1000000");
            
             //Preferences.Get("LANG_SELECTED", pickerType.SelectedItem.ToString());
+        }
 
-
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            DeviceDisplay.KeepScreenOn = false;
 
         }
 
@@ -217,6 +222,7 @@ namespace SCVMobil
                                         Device.BeginInvokeOnMainThread(() =>
                                         {
                                             lblCantidadPadron.Text = $"Cantidad de cedulas descargadas: {Preferences.Get("TOTAL_CEDULAS_DESCARGADAS",  commitedRegistros.ToString())}";
+                                            Debug.WriteLine($"Cantidad de cedulas descargadas: {Preferences.Get("TOTAL_CEDULAS_DESCARGADAS", commitedRegistros.ToString())}");
                                         });
                                             listPadron.Clear();
                                     }
@@ -226,10 +232,14 @@ namespace SCVMobil
                                     }
                                 }
 
+                                Device.BeginInvokeOnMainThread(() =>
+                                {
+                                    lblLoadingText.Text = "Downloading CEDULAS: " + loadedRegistros.ToString() + "/" + maxRegistro.ToString();
+                                });
+                                Debug.WriteLine("Downloading CEDULAS: " + loadedRegistros.ToString() + "/" + maxRegistro.ToString());
+                                loadedRegistros = loadedRegistros + iChunkSize;
                             });
 
-                            lblLoadingText.Text = "Downloading CEDULAS: " + loadedRegistros.ToString() + "/" + maxRegistro.ToString();
-                            loadedRegistros = loadedRegistros + iChunkSize;
                             await pbLoading.ProgressTo(progress, 200, Easing.Linear);
 
                         }
