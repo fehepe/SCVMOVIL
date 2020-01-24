@@ -92,9 +92,11 @@
                     Padding="1">
                     <Picker
                     x:Name="pickerDestino"
+                       
                     Grid.Row="3"
                     Grid.Column="1" 
                     Title="Seleccione..."
+                    ItemDisplayBinding="{Binding NOMBRE}"    
                     SelectedIndexChanged="PickerDestino_SelectedIndexChanged"/>
                 </Frame>
             </Frame>

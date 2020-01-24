@@ -32,14 +32,14 @@ namespace SCVMobil.Connections
         {
             if (db)
             {
-                string connectionString = "User ID = sysdba; Password = masterkey; Database = C:\\APP\\GAD\\registros.fdb; " +
-                                          $"DataSource={Preferences.Get("SERVER_IP", "192.168.1.103")};Port=3050;Charset=NONE;Server Type=0;";
-
+                //string connectionString = "User ID = sysdba; Password = masterkey; Database = C:\\APP\\GAD\\registros.fdb; " +
+                //                          $"DataSource={Preferences.Get("SERVER_IP", "192.168.1.10")};Port=3050;Charset=NONE;Server Type=0;";
+           
                 //string connectionString = "User ID=sysdba;Password=masterkey;Database=C:\\Users\\Abraham\\Desktop\\Codes\\registros\\registros.fdb;" +
                 //                           $"DataSource={Preferences.Get("SERVER_IP", "192.168.2.120")};Port=3050;Charset=NONE;Server Type=0; Timeout=5;"; //Connectionstring//
 
-                //string connectionString = "User ID=sysdba;Password=masterkey;Database=C:\\APP\\registros\\registros.fdb;" +
-                //                          $"DataSource={Preferences.Get("SERVER_IP", "192.168.2.120")};Port=3050;Charset=NONE;Server Type=0; Timeout=5;"; //Connectionstring//
+                string connectionString = "User ID=sysdba;Password=masterkey;Database=C:\\APP\\GAD\\registros.fdb;" +
+                                          $"DataSource={Preferences.Get("SERVER_IP", "192.168.2.120")};Port=3050;Charset=NONE;Server Type=0; Timeout=5;"; //Connectionstring//
 
                 return connectionString;
             }
@@ -850,6 +850,11 @@ namespace SCVMobil.Connections
                         {
                             person.NOMBRES_APELLIDOS = dtResult[1].ToString();
                         }
+                        if (dtResult[2] != System.DBNull.Value)
+                        {
+                            person.DEPARTAMENTO_ID = dtResult[2].ToString();
+                        }
+                        
                         #endregion
                         PeopleList.Add(person);
                         Debug.WriteLine("Persona agregada, Id: " + person.PERSONA_ID);
@@ -877,13 +882,19 @@ namespace SCVMobil.Connections
            
             string querySync = "SELECT FIRST 1 * FROM COMPANIAS";
 
-            string dt = ""; //Execute(querySync);
+            string dt = obtenerfecha();
 
             try
             {
-                if (dt != "")
+                if (dt != "" && !string.IsNullOrEmpty(dt))
                 {
                     Preferences.Set("SYNC_VSU", true);
+                    Preferences.Set("nowifi", false);
+                    Preferences.Set("ENTCEDULA", true);
+                    Preferences.Set("wifi", true);
+                    Preferences.Set("aviso", false);
+                    Preferences.Set("CONFIG", true);
+                    Preferences.Set("SERVEROFF", false);
                 }
             }
             catch (Exception)
@@ -1436,7 +1447,7 @@ namespace SCVMobil.Connections
 
                 var stlRegistros2 = new List<string>();
                 var stRegisros2 = "";
-                string queryPersonas = " SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " PERSONA_ID, NOMBRES_APELLIDOS FROM PERSONAS where TIPO=1 AND PERSONA_ID > " + Preferences.Get("MAX_PERSONA_ID", "0") + " ORDER BY PERSONA_ID desc";
+                string queryPersonas = " SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " PERSONA_ID, NOMBRES_APELLIDOS, DEPARTAMENTO_ID FROM PERSONAS where TIPO=1 AND PERSONA_ID > " + Preferences.Get("MAX_PERSONA_ID", "0") + " ORDER BY PERSONA_ID desc";
                 var ListaPersonas = ExecutePeople(queryPersonas);
 
 
@@ -1633,57 +1644,6 @@ namespace SCVMobil.Connections
             {
                 Preferences.Set("SYNC_VSU", false);
                 Debug.WriteLine("Error en la fecha de base de datos " + e.Message);
-                return null;
-            }
-        }
-
-        public List<VisitasDepto> extraerDeparatamentoId(COMPANIAS cc) //Extraer personas con su departamento//
-        {
-            string query = $"select p.nombres, p.departamento_id, c.nombre from personas p inner join companias c on c.compania_id = p.departamento_id where p.departamento_id = {cc.COMPANIA_ID}";
-            try
-            {           
-                List<VisitasDepto> deptosVisits = new List<VisitasDepto>();
-
-                FbConnection fb = new FbConnection(connectionString(true));
-
-                fb.Open();
-                FbCommand command = new FbCommand(query,fb);
-
-                var dtResult = command.ExecuteReader();
-
-                if (dtResult.HasRows)
-                {
-
-                    while (dtResult.Read())
-                    {
-                        VisitasDepto visitasDepto = new VisitasDepto();
-
-                        if (dtResult[0] != System.DBNull.Value)
-                        {
-                            visitasDepto.VisitName = dtResult[0].ToString();
-                        }
-                        if (dtResult[1] != System.DBNull.Value)
-                        {
-                            visitasDepto.DeptoId = Convert.ToInt32(dtResult[1]);
-                        }
-                        if (dtResult[2] != System.DBNull.Value)
-                        {
-                            visitasDepto.DeptoName = dtResult[2].ToString();
-                        }
-                        deptosVisits.Add(visitasDepto);
-                    }
-                }    
-                    
-                fb.Close();
-                fb.Dispose();
-
-
-                return deptosVisits;
-            }
-            catch (Exception e)
-            {
-                Preferences.Set("SYNC_VSU", false);
-                Debug.WriteLine("Error en la extraccion de departamentoID " + e.Message);
                 return null;
             }
         }
