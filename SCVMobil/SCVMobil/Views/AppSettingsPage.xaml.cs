@@ -147,23 +147,33 @@ namespace SCVMobil
 
             try
             {
-                var response = await App.Current.MainPage.DisplayAlert("Limpiar Base de Datos Local", "Desea que se elimine toda la informacion almacenada localmente?", "Si", "No");
-                if (response)
+                string Password = "cr52401";
+                string TryPassword = await DisplayPromptAsync("verificacion","Ingrese la contraseña maestra para continuar","Eliminar","Cancelar","Contraseña",11,null);
+                if (Password == TryPassword)
                 {
-                    Preferences.Set("MAX_RESERVA_ID", "0");
-                    Preferences.Set("MAX_COMPANIA_ID", "0");
-                    Preferences.Set("MAX_PERSONA_ID", "0");
-                    Preferences.Set("MAX_INVIDATO_ID", "0");
-                    Preferences.Set("PERSONAS_LIST", "");
-                    Preferences.Set("COMPANIAS_LIST", "");
-                    var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-                    db.DeleteAll<COMPANIAS>();
-                    db.DeleteAll<PERSONAS>();
-                    db.DeleteAll<VW_RESERVA_VISITA>();
-                    db.DeleteAll<Invitados>();
-                    db.DeleteAll<InvitadosReservas>();
-                    db.DeleteAll<SalidaOffline>();
-                    db.DeleteAll<PLACA>();
+                    var response = await App.Current.MainPage.DisplayAlert("Limpiar Base de Datos Local", "Desea que se elimine toda la informacion almacenada localmente?", "Si", "No");
+                    if (response)
+                    {
+                        Preferences.Set("MAX_RESERVA_ID", "0");
+                        Preferences.Set("MAX_COMPANIA_ID", "0");
+                        Preferences.Set("MAX_PERSONA_ID", "0");
+                        Preferences.Set("MAX_INVIDATO_ID", "0");
+                        Preferences.Set("PERSONAS_LIST", "");
+                        Preferences.Set("COMPANIAS_LIST", "");
+                        Preferences.Set("CHUNK_SIZE", "0");
+                        var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                        db.DeleteAll<COMPANIAS>();
+                        db.DeleteAll<PERSONAS>();
+                        db.DeleteAll<VW_RESERVA_VISITA>();
+                        db.DeleteAll<Invitados>();
+                        db.DeleteAll<InvitadosReservas>();
+                        db.DeleteAll<SalidaOffline>();
+                        db.DeleteAll<PLACA>();
+                    } 
+                }
+                else
+                {
+                    await DisplayAlert("Credencial incorrecta","La credencial ingresada no es valida", "OK");
                 }
             }
             catch (Exception ex)

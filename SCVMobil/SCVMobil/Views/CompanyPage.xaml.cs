@@ -44,18 +44,18 @@ namespace SCVMobil
             scan = new Escaner(entryScan);
             stNombre = nombre;
             stApellidos = apellidos;
-           
+
         }
         //-------------------------------------------------------------------------------------------------------------------
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-           //
-            
+            //
+
             scan.GetScanner(true);
 
-            if(Preferences.Get("PLACA_SELECTED", true))
+            if (Preferences.Get("PLACA_SELECTED", true))
             {
                 FramaPlaca.IsVisible = true;
                 FramePlaca2.IsVisible = true;
@@ -96,7 +96,7 @@ namespace SCVMobil
             {
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                 var TB = db.Query<Invitados>("SELECT * from invitados WHERE cargo ='" + entCedula.Text + "' order by Fecha_registro desc");
-             
+
                 if (TB.Any())
                 {
                     var TBL_PERSONAS = db.Query<PERSONAS>("SELECT NOMBRES_APELLIDOS FROM PERSONAS WHERE PERSONA_ID = " + TB.First().Visitado);
@@ -112,7 +112,7 @@ namespace SCVMobil
             }
             catch (Exception ex)
             {
-                
+
                 Debug.WriteLine("Error en onAppearing");
                 Analytics.TrackEvent("Error al mostrar Invitados: " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
@@ -146,9 +146,9 @@ namespace SCVMobil
         public void entryScan(String scanneo)// Metodo para poder Scanear
         {
             try
-            { 
-                    string Strings = scanneo;
-                    var scaneo = scanneo.Length;
+            {
+                string Strings = scanneo;
+                var scaneo = scanneo.Length;
                 if (scanneo.Contains("http"))
                 {
                     var x = Strings.IndexOf("http");
@@ -220,18 +220,19 @@ namespace SCVMobil
                 {
                     DisplayAlert("Error", "Este Marbete no es Valido", "Ok");
                 }
-                    
-                
-                
-            }catch(Exception ex)
+
+
+
+            }
+            catch (Exception ex)
             {
                 Debug.WriteLine("Error en entryScan");
                 Analytics.TrackEvent("Error al escanear: " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
-                DependencyService.Get<IToastMessage>().DisplayMessage("Ha ocurrido un error: "+ex.Message);
+                DependencyService.Get<IToastMessage>().DisplayMessage("Ha ocurrido un error: " + ex.Message);
             }
         }
-     
-        
+
+
         //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -423,8 +424,8 @@ namespace SCVMobil
         private void PickerDestino_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
-            {      
-                
+            {
+
                 var companiescast = (COMPANIAS)pickerDestino.SelectedItem; //Cast//
                 cc = companiescast;
             }
@@ -438,11 +439,11 @@ namespace SCVMobil
         {
             try
             {
-                FireBirdData fire = new FireBirdData();                
+                FireBirdData fire = new FireBirdData();
                 var show = fire.extraerDeparatamentoId(cc); //Lista que trae las personas con los departamentos//
                 if (show.Count == 0 && Preferences.Get("VISITA_A_SELECTED", true))
                 {
-                    DisplayAlert("Mensaje","No tiene personas asignadas este departamento","ok");
+                    DisplayAlert("Mensaje", "No tiene personas asignadas este departamento", "ok");
                     FrameVisitaA.IsVisible = true;
                     FrameVisitaA2.IsVisible = true;
                     lblvisitaA.IsVisible = true;
@@ -454,7 +455,7 @@ namespace SCVMobil
                     Preferences.Set("VISITA_A_SELECTED", false);
                     FrameVisitaA.IsVisible = false;
                     FrameVisitaA2.IsVisible = false;
-                    pickerVisitaA.IsVisible = false;                   
+                    pickerVisitaA.IsVisible = false;
                     lblvisitaA.IsVisible = false;
                 }
             }
@@ -464,8 +465,8 @@ namespace SCVMobil
             }
         }
         //------------------------------------------------------------------------------------------------------------------------------
-        
-       
+
+
 
         //------------------------------------------------------------------------------------------------------------------------------------
         private async void Grupo_Clicked(object sender, EventArgs e)// Evento del item del ActionBar llamado Es un grupo, hacemos varias validaciones antes de pasar a la GrupoPage

@@ -187,6 +187,14 @@
                         TextColor="Black"                        
                         FontAttributes="Bold"
                         />
+                        
+                        <Label 
+                        Margin="0,0,0,0"
+                        HorizontalOptions="Center"
+                        x:Name="lblCantidadPadron"
+                        TextColor="Black"                        
+                        FontAttributes="Bold"
+                        />
                     </StackLayout>
 
                     <StackLayout

@@ -45,7 +45,7 @@ namespace SCVMobil.Connections
             }
             else
             {
-                
+
                 string connectionString = "User ID=sysdba;Password=masterkey;" +
                           "Database=C:\\APP\\GAD\\datos_214.fdb;" +
                           $"DataSource={Preferences.Get("SERVER_IP", "localhost")};Port=3050;Charset=NONE;Server Type=0;";
@@ -61,7 +61,7 @@ namespace SCVMobil.Connections
             {
                 string _dtResult = "";
                 FbConnection fb = new FbConnection(connectionString(true));
-                using (FbCommand command = new FbCommand(query,fb)) 
+                using (FbCommand command = new FbCommand(query, fb))
                 {
                     fb.Open();
                     _dtResult = command.ExecuteScalar().ToString();
@@ -82,6 +82,140 @@ namespace SCVMobil.Connections
 
         }
 
+        //// Descargar Padron
+        public List<PADRON> DownloadPadron(string querry1)
+        {
+            try
+            {
+                List<PADRON> listPadron = new List<PADRON>();
+                int triesTBL = 0;
+
+                do
+                {
+                    try
+                    {
+                        FbConnection fb = new FbConnection(connectionString(false));
+
+                        fb.Open();
+                        FbCommand command = new FbCommand(
+                            querry1,
+                            fb);
+
+
+                        FbDataReader reader = command.ExecuteReader();
+
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                PADRON persona = new PADRON();
+                                persona.CEDULA = reader[0].ToString();
+                                persona.NOMBRES = reader[1].ToString();
+                                persona.APELLIDO1 = reader[2].ToString();
+                                persona.APELLIDO2 = reader[3].ToString();
+
+                                listPadron.Add(persona);
+                                //Debug.WriteLine("Agregado, NOMBRE: "+persona.NOMBRES+" "+persona.APELLIDO1 + " CEDULA: "+persona.CEDULA);
+                            }
+                        }
+                        else
+                        {
+                            Debug.WriteLine("No rows found.");
+                        }
+                        reader.Close();
+
+                        fb.Close();
+                        Debug.WriteLine($"La lista retornada contiene{listPadron.Count} elementos");
+                        return listPadron;
+                    }
+                    catch (Exception et)
+                    {
+                        Debug.WriteLine("Error en Sycn" + et.Message);
+                        Analytics.TrackEvent("Error descargando padron:  " + et.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+
+                        Debug.WriteLine("No se pudo conectar con la base de datos: " + et.Message);
+                        triesTBL += 1;
+
+                        return null;
+
+                    }
+                } while (triesTBL <= 5);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error al descagar el padron, provocado por: " + ex.Message);
+                return null;
+            }
+        }
+
+        public int ReturnCountBoletas(int value)
+        {
+            try
+            {
+                string querry = "select count(p.cedula) as anyCount from padron p";
+                //string contenido;
+                int maxRegistro = 0;
+
+                int continuar = value;
+                if (continuar <= 5)
+                {
+                    try
+                    {
+                        FbConnection fb = new FbConnection(connectionString(false));
+
+                        fb.Open();
+                        FbCommand command = new FbCommand(
+                            querry,
+                            fb);
+
+
+                        FbDataReader reader = command.ExecuteReader();
+
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                maxRegistro = Convert.ToInt32(reader[0]);
+                            }
+                        }
+                        else
+                        {
+                            Debug.WriteLine("No rows found.");
+                        }
+                        reader.Close();
+
+                        fb.Close();
+                        fb.Dispose();
+                        return maxRegistro;
+                    }
+                    catch (Exception ex)
+                    {
+                        Analytics.TrackEvent("Error al conectarse a base de datos " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+                        Debug.WriteLine("Error en Sync");
+                        var x = ex.Message;
+                        continuar += 1;
+                        if (continuar >= 5)
+                        {
+                            return 0;
+                        }
+                        else
+                        {
+                            continuar += 1;
+                            return ReturnCountBoletas(continuar);
+                        }
+                    }
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error en el metodo CountCedulas, provocado por: " + ex);
+                return 0;
+            }
+        }
 
         // Retornar una lista de invitados
         public List<Invitados> ExecuteGuest(string query)
@@ -470,7 +604,7 @@ namespace SCVMobil.Connections
                 Preferences.Set("SYNC_VSU", false);
                 return null;
             }
-        }        
+        }
 
 
         // Retornar lista de Reservaciones
@@ -645,9 +779,9 @@ namespace SCVMobil.Connections
                         #region Verificar que los valores no sean nulos antes de la conversion
                         if (dtResult[0] != System.DBNull.Value)
                         {
-                            company.COMPANIA_ID = Convert.ToInt32(dtResult[0]); 
+                            company.COMPANIA_ID = Convert.ToInt32(dtResult[0]);
                         }
-                        
+
                         if (dtResult[1] != System.DBNull.Value)
                         {
                             company.NOMBRE = dtResult[1].ToString();
@@ -739,8 +873,8 @@ namespace SCVMobil.Connections
 
         //// Probar que hay conexion trayendo datos
         public void tryConnection()
-        {         
-           
+        {
+
             string querySync = "SELECT FIRST 1 * FROM COMPANIAS";
 
             string dt = ""; //Execute(querySync);
@@ -757,7 +891,7 @@ namespace SCVMobil.Connections
 
                 Preferences.Set("SYNC_VSU", false);
             }
-            
+
         }
 
 
@@ -787,42 +921,42 @@ namespace SCVMobil.Connections
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
                 // Cargar los invitados con un valor null en la propiedad SUBIDA
-                    var visitasASubir = db.Query<Invitados>("SELECT * FROM Invitados where SUBIDA is null");
+                var visitasASubir = db.Query<Invitados>("SELECT * FROM Invitados where SUBIDA is null");
 
-                    // Iterar la lista de visitasASubir
-                 foreach (Invitados registro in visitasASubir)
-                 {
-                       #region Variables
-                        string visitado;
-                        string fechaSalida;
-                        string placa;
-                        string queryInv;
-                        #endregion
+                // Iterar la lista de visitasASubir
+                foreach (Invitados registro in visitasASubir)
+                {
+                    #region Variables
+                    string visitado;
+                    string fechaSalida;
+                    string placa;
+                    string queryInv;
+                    #endregion
 
-                       if (registro.Visitado is null)
-                       {
-                            visitado = "null";
-                       }
-                       else
-                       {
-                          visitado = registro.Visitado.ToString();
-                       }
-                       if (registro.Fecha_Salida is null)
-                       {
-                            fechaSalida = "null";
-                       }
-                       else
-                       {
-                            fechaSalida = $"'{registro.Fecha_Salida.ToString()}'";
-                       }
-                       if (registro.Placa is null)
-                       {
-                            placa = "null";
-                       }
-                       else
-                       {
-                           placa = $"'{registro.Placa.ToString()}'";
-                       }
+                    if (registro.Visitado is null)
+                    {
+                        visitado = "null";
+                    }
+                    else
+                    {
+                        visitado = registro.Visitado.ToString();
+                    }
+                    if (registro.Fecha_Salida is null)
+                    {
+                        fechaSalida = "null";
+                    }
+                    else
+                    {
+                        fechaSalida = $"'{registro.Fecha_Salida.ToString()}'";
+                    }
+                    if (registro.Placa is null)
+                    {
+                        placa = "null";
+                    }
+                    else
+                    {
+                        placa = $"'{registro.Placa.ToString()}'";
+                    }
 
                     #region Query Invitado
                     queryInv = "SELECT IN_INVIDATO_ID as anyCount FROM INSERTAR_VISITAS(" +
@@ -863,8 +997,8 @@ namespace SCVMobil.Connections
                     var dtResult = ExecuteScalar(queryInv);
 
 
-                    if (Preferences.Get("SYNC_VSU",false))
-                    {                      
+                    if (Preferences.Get("SYNC_VSU", false))
+                    {
 
                         if (!string.IsNullOrEmpty(dtResult))
                         {
@@ -886,15 +1020,15 @@ namespace SCVMobil.Connections
                         }
                         db.UpdateAll(visitasASubir);
                     }
-                 }           
+                }
             }
             catch (Exception ea)
             {
-                Debug.WriteLine("Excepcion en el metodo UploadVisit, error: "+ ea.Message);
+                Debug.WriteLine("Excepcion en el metodo UploadVisit, error: " + ea.Message);
                 Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: " + ea.Message);
             }
         }
-            
+
 
         //// Subir Visitantes con reservaciones que no se hayan subido
         public void UploadVisitsReservation()
@@ -1042,7 +1176,7 @@ namespace SCVMobil.Connections
             catch (Exception ea)
             {
                 Debug.WriteLine("Excepcion en el metodo UploadVerifications, error: " + ea.Message);
-                Analytics.TrackEvent("Error en el metodo UploadVerifications, error: " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A") );
+                Analytics.TrackEvent("Error en el metodo UploadVerifications, error: " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
         }
 
@@ -1076,8 +1210,8 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
-                Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + "\n Excepcion en el metodo UploadOut, Error: "+ ea.Message);
-                Debug.WriteLine("Excepcion en el metodo UploadOut, Error: "+ ea.Message);
+                Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + "\n Excepcion en el metodo UploadOut, Error: " + ea.Message);
+                Debug.WriteLine("Excepcion en el metodo UploadOut, Error: " + ea.Message);
             }
         }
 
@@ -1112,7 +1246,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
-                Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + "\n Excepcion en el metodo UploadUnknownOuts, Error: "+ ea.Message);
+                Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + "\n Excepcion en el metodo UploadUnknownOuts, Error: " + ea.Message);
                 Debug.WriteLine("Excepcion en el metodo UploadUnknownOuts, Error: " + ea.Message);
             }
         }
@@ -1194,7 +1328,7 @@ namespace SCVMobil.Connections
                     {
                         if (ListaCompanias.Any())
                         {
-                         
+
                             db.InsertAll(ListaCompanias);
                             Debug.WriteLine("MAX_COMPANIA_ID: " + ListaCompanias.First().COMPANIA_ID.ToString());
                             Preferences.Set("MAX_COMPANIA_ID", ListaCompanias.First().COMPANIA_ID.ToString());
@@ -1242,7 +1376,7 @@ namespace SCVMobil.Connections
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                 var dbd = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
-                
+
                 var ListaCompanias = ExecuteCompaniesLoc(querry);
 
                 var stlRegistros = new List<string>();
@@ -1288,7 +1422,7 @@ namespace SCVMobil.Connections
             catch (Exception ea)
             {
                 Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadCompanies, Error: " + ea.Message);
-                Debug.WriteLine("Error de SQL: "+ea.Message);
+                Debug.WriteLine("Error de SQL: " + ea.Message);
             }
         }
 
@@ -1351,7 +1485,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
-                Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadPeople_Destination, Error: "+ ea.Message);
+                Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadPeople_Destination, Error: " + ea.Message);
                 Debug.WriteLine("Excepcion en el metodo DownloadPeople_Destination, Error: " + ea.Message);
             }
         }
@@ -1410,7 +1544,6 @@ namespace SCVMobil.Connections
                 Debug.WriteLine("Excepcion en el metodo DownloadGuests, Error: " + ea.Message);
             }
         }
-
 
         //// Descargar Salidas
         public void DownloadOuts()
@@ -1472,7 +1605,7 @@ namespace SCVMobil.Connections
             }
         }
 
-        
+
         public string obtenerfecha()
         {
             string query = "select current_timestamp FROM Invitados";
@@ -1489,11 +1622,11 @@ namespace SCVMobil.Connections
 
                 fecha = command.ExecuteScalar().ToString();
 
-                
+
                 fb.Close();
                 fb.Dispose();
                 //Preferences.Set("SYNC_VSU", true);
-               
+
                 return fecha;
             }
             catch (Exception e)
@@ -1508,13 +1641,13 @@ namespace SCVMobil.Connections
         {
             string query = $"select p.nombres, p.departamento_id, c.nombre from personas p inner join companias c on c.compania_id = p.departamento_id where p.departamento_id = {cc.COMPANIA_ID}";
             try
-            {           
+            {
                 List<VisitasDepto> deptosVisits = new List<VisitasDepto>();
 
                 FbConnection fb = new FbConnection(connectionString(true));
 
                 fb.Open();
-                FbCommand command = new FbCommand(query,fb);
+                FbCommand command = new FbCommand(query, fb);
 
                 var dtResult = command.ExecuteReader();
 
@@ -1539,8 +1672,8 @@ namespace SCVMobil.Connections
                         }
                         deptosVisits.Add(visitasDepto);
                     }
-                }    
-                    
+                }
+
                 fb.Close();
                 fb.Dispose();
 
@@ -1554,5 +1687,6 @@ namespace SCVMobil.Connections
                 return null;
             }
         }
+
     }
 }
