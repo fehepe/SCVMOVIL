@@ -26,9 +26,9 @@ namespace SCVMobil
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
 
-    public class numCedulas
+    public class numBoletas
     {
-        public int countCedulas{ get; set; }
+        public int countBoletas { get; set; }
     }
 
     public partial class SettingsPage : ContentPage
@@ -47,11 +47,9 @@ namespace SCVMobil
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            DeviceDisplay.KeepScreenOn = true;
             setDefaults();
             eServerIP.Text = Preferences.Get("SERVER_IP", "192.168.1.170");            
             eLector.Text = Preferences.Get("LECTOR", "1");
-            LblCantidadPadron.Text = "Cantidad de Cedulas en el padron: " + Preferences.Get("CANTIDAD_PADRON_DESCARGADO", "0");
             entChunkSize.Text = Preferences.Get("CHUNK_SIZE", "50000");
             lbVersion.Text = "Ver: " + Preferences.Get("VERSION", "3.0");
             swAutoSync.IsToggled = Preferences.Get("AUTO_SYNC", "False") == "True";
@@ -60,13 +58,6 @@ namespace SCVMobil
             //Preferences.Get("LANG_SELECTED", pickerType.SelectedItem.ToString());
 
 
-
-        }
-
-        protected override void OnDisappearing()
-        {
-            base.OnDisappearing();
-            DeviceDisplay.KeepScreenOn = false;
 
         }
 
@@ -124,13 +115,60 @@ namespace SCVMobil
                     //TODO: Buscar cuantas cedulas se van a descargar.
 
                     querry = "select count(p.cedula) as anyCount from padron p";
+                    int tries = 0;
                     //string contenido;
-                    int maxRegistro = fireBird.ReturnCountBoletas(0);
+                    int maxRegistro = 0;
+                    while (true)
+                    {
+                        try
+                        {
+                            FbConnection fb = new FbConnection(connectionString);
+
+                             fb.Open();
+                            FbCommand command = new FbCommand(
+                                querry,
+                                fb);
+
+
+                            FbDataReader reader = command.ExecuteReader();
+
+                            if (reader.HasRows)
+                            {
+                                while (reader.Read())
+                                {
+                                    maxRegistro = Convert.ToInt32(reader[0]);
+                                }
+                            }
+                            else
+                            {
+                                Debug.WriteLine("No rows found.");
+                            }
+                            reader.Close();
+
+                            fb.Close();
+                            fb.Dispose();
+
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+                            Analytics.TrackEvent("Error al conectarse a base de datos " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+                            Debug.WriteLine("Error en Sync");
+                            if (tries >= 5)
+                            {
+
+                                throw new Exception("No se pudo conectar con la base de datos.");
+                            }
+                            var x = ex.Message;
+                            tries += 1;
+                        }
+                    }
 
                     //var maxRegistroList = JsonConvert.DeserializeObject<List<counterObj>>(contenido);
                     //var maxRegistro = maxRegistroList.First();
 
                     //Descargar CEDULAS
+
                     querry = "select p.cedula, p.nombres, p.apellido1, p.apellido2 from padron p";
 
                     if (maxRegistro > 0)
@@ -153,43 +191,77 @@ namespace SCVMobil
                                 querry1 = querry + " ROWS "
                                      + loadedRegistros.ToString() + " TO " + (loadedRegistros + iChunkSize - 1).ToString();
                             }
-
-                            await Task.Factory.StartNew(() =>
+                            string contenidoTBL;
+                            int triesTBL = 0;
+                            while (true)
                             {
-
-                                listPadron.AddRange(fireBird.DownloadPadron(querry1)); 
-                                
-                                //var listPadronTemp = JsonConvert.DeserializeObject<List<PADRON>>(contenidoTBL);
-                                //listPadron = listPadron.Concat(listPadronTemp).ToList();
-                                if (listPadron.Count >= int.Parse(Preferences.Get("COMMIT_SIZE", "1000000")) || maxRegistro - loadedRegistros < iChunkSize - 1)
+                                try
                                 {
-                                    try
-                                    {
-                                        Device.BeginInvokeOnMainThread(() =>
-                                        {
-                                            lblLoadingText.Text = "Commited " + commitedRegistros.ToString() + "/" + maxRegistro.ToString() + " CEDULAS";
-                                        });
-                                        Debug.WriteLine("Se van a insertar: " + listPadron.Count.ToString() + " En la BBDD Local");
-                                        //Task.Factory.StartNew(() =>
-                                        //{
-                                            db.InsertAll(listPadron);
-                                        //});
-                                        commitedRegistros = commitedRegistros + listPadron.Count;
-                                        Preferences.Set("CANTIDAD_PADRON_DESCARGADO", commitedRegistros.ToString());
-                                        Device.BeginInvokeOnMainThread(() =>
-                                        {
-                                            LblCantidadPadron.Text = "Cantidad de Cedulas en el padron: " + Preferences.Get("CANTIDAD_PADRON_DESCARGADO","0");
-                                        });
-                                        listPadron.Clear();
-                                    }
-                                    catch (Exception ea)
-                                    {
-                                        Debug.WriteLine("Se ha encontrado una excepcion, Error: " + ea.Message);
-                                    }
-                                }
-                            });
+                                    FbConnection fb = new FbConnection(connectionString);
 
-                            lblLoadingText.Text = "Downloading CEDULAS: " + loadedRegistros.ToString() + "/" + maxRegistro.ToString();
+                                    fb.Open();
+                                    FbCommand command = new FbCommand(
+                                        querry1,
+                                        fb);
+
+
+                                    FbDataReader reader = command.ExecuteReader();
+
+                                    if (reader.HasRows)
+                                    {
+                                        while (reader.Read())
+                                        {
+                                            PADRON persona = new PADRON();
+                                            persona.CEDULA = reader[0].ToString();
+                                            persona.NOMBRES = reader[1].ToString();
+                                            persona.APELLIDO1 = reader[2].ToString();
+                                            persona.APELLIDO2 = reader[3].ToString();
+
+                                            listPadron.Add(persona);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Debug.WriteLine("No rows found.");
+                                    }
+                                    reader.Close();
+
+                                    fb.Close();
+                                    //contenidoTBL = await _client.GetStringAsync(Url1);
+                                    break;
+                                }
+                                catch (Exception et)
+                                {
+                                    Debug.WriteLine("Error en Sycn" + et.Message);
+                                    Analytics.TrackEvent("Error descargando padron:  " + et.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+                                    if (triesTBL >= 5)
+                                    {
+                                        throw new Exception("No se pudo conectar con la base de datos: " + et.Message);
+                                    }
+                                    triesTBL += 1;
+                                }
+                            }
+                            //var listPadronTemp = JsonConvert.DeserializeObject<List<PADRON>>(contenidoTBL);
+                            //listPadron = listPadron.Concat(listPadronTemp).ToList();
+                            if (listPadron.Count >= int.Parse(Preferences.Get("COMMIT_SIZE", "1000000")))
+                            {
+                                try
+                                {
+                                    lblLoadingText.Text = "Commited " + commitedRegistros.ToString() + "/" + maxRegistro.ToString() + " BOLETAS";
+                                    Debug.WriteLine("Se van a insertar: " + listPadron.Count.ToString() + " En la BBDD Local");
+                                    await Task.Factory.StartNew(() =>
+                                    {
+                                        db.InsertAll(listPadron);
+                                    });
+                                    commitedRegistros = commitedRegistros + listPadron.Count;
+                                    listPadron.Clear();
+                                }
+                                catch(Exception ea)
+                                {
+                                    Debug.WriteLine("Se ha encontrado una excepcion, Error: " + ea.Message);
+                                }
+                            }
+                            lblLoadingText.Text = "Downloading BOLETAS: " + loadedRegistros.ToString() + "/" + maxRegistro.ToString();
                             loadedRegistros = loadedRegistros + iChunkSize;
                             await pbLoading.ProgressTo(progress, 200, Easing.Linear);
 
@@ -200,7 +272,6 @@ namespace SCVMobil
                         pbLoading.IsVisible = false;
                         aiLoading.IsVisible = true;
                         aiLoading.IsRunning = true;
-
                         Debug.WriteLine("Se van a insertar: " + listPadron.Count.ToString() + " En la BBDD Local");
                         await Task.Factory.StartNew(() =>
                         {
@@ -217,14 +288,14 @@ namespace SCVMobil
                 }
                 catch (Exception ey)
                 {
-                    Debug.WriteLine("Error sincronizando: " + ey.Message);
+                    Debug.WriteLine("Error syncronisando: " + ey.Message);
                     popupLoadingView.IsVisible = false;
                     try
                     {
                         var options = new NotificationOptions()
                         {
-                            Title = "Error sincronizando",
-                            Description = "Hubo un error en la sincronización, intente nuevamente",
+                            Title = "Error syncronisando",
+                            Description = "Hubo un error en la syncronización, intente nuevamente",
                             IsClickable = false // Set to true if you want the result Clicked to come back (if the user clicks it)
                         };
                         var notification = DependencyService.Get<IToastNotificator>();
@@ -232,7 +303,7 @@ namespace SCVMobil
                     }
                     catch (Exception eo)
                     {
-                        Debug.WriteLine("Error en notificación: " + eo.Message);
+                        Debug.WriteLine("Error en notificacion: " + eo.Message);
                     }
 
                 }
@@ -326,8 +397,6 @@ namespace SCVMobil
                 var x = Preferences.Get("COMMIT_SIZE", "1000000");
                 Preferences.Set("AUTO_SYNC", swAutoSync.ToString());
                 Preferences.Set("LECTOR", eLector.Text);
-                Preferences.Set("CHUNK_SIZE", entChunkSize.Text);
-
                 if (eLector.Text == "338")
                 {
                     Preferences.Set("DEV", "True");
@@ -336,8 +405,8 @@ namespace SCVMobil
                 {
                     Preferences.Set("DEV", "False");
                 }
-                await DisplayAlert("", "Datos Guardados exitosamente", "continuar");
-               // await PopupNavigation.PushAsync(new PopUpGuardarConfig()); //PopUp para guardar la configuracion//
+
+                await PopupNavigation.PushAsync(new PopUpGuardarConfig()); //PopUp para guardar la configuracion//
             }
             catch (Exception ea)
             {
@@ -375,6 +444,7 @@ namespace SCVMobil
                         Preferences.Set("wifi", true);
                         Preferences.Set("aviso", false);
                         Preferences.Set("SERVEROFF", false); //
+
                         await DisplayAlert("Conectado","Se ha conectado","ok");
                         //await PopupNavigation.PushAsync(new PopUpPing()); //popup conexion con exito//
                         Debug.WriteLine("Ping exitoso a la ip: "+ eServerIP.Text);

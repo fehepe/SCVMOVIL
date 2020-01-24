@@ -147,35 +147,23 @@ namespace SCVMobil
 
             try
             {
-                string Password = "cr52401";
-                string DeletePassword = await DisplayPromptAsync("Verificación","Ingrese su credencial para eliminar","Eliminar","Cancelar","Contraseña",11,null);
-
-
-                if (Password == DeletePassword)
+                var response = await App.Current.MainPage.DisplayAlert("Limpiar Base de Datos Local", "Desea que se elimine toda la informacion almacenada localmente?", "Si", "No");
+                if (response)
                 {
-                    var response = await App.Current.MainPage.DisplayAlert("Limpiar Base de Datos Local", "Desea que se elimine toda la informacion almacenada localmente?", "Si", "No");
-                    if (response)
-                    {
-                        Preferences.Set("MAX_RESERVA_ID", "0");
-                        Preferences.Set("MAX_COMPANIA_ID", "0");
-                        Preferences.Set("MAX_PERSONA_ID", "0");
-                        Preferences.Set("MAX_INVIDATO_ID", "0");
-                        Preferences.Set("PERSONAS_LIST", "");
-                        Preferences.Set("COMPANIAS_LIST", "");
-                        Preferences.Set("CANTIDAD_PADRON_DESCARGADO", "0");
-                        var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-                        db.DeleteAll<COMPANIAS>();
-                        db.DeleteAll<PERSONAS>();
-                        db.DeleteAll<VW_RESERVA_VISITA>();
-                        db.DeleteAll<Invitados>();
-                        db.DeleteAll<InvitadosReservas>();
-                        db.DeleteAll<SalidaOffline>();
-                        db.DeleteAll<PLACA>();
-                    } 
-                }
-                else
-                {
-                    await DisplayAlert("", "La contraseña es invalida", "continuar");
+                    Preferences.Set("MAX_RESERVA_ID", "0");
+                    Preferences.Set("MAX_COMPANIA_ID", "0");
+                    Preferences.Set("MAX_PERSONA_ID", "0");
+                    Preferences.Set("MAX_INVIDATO_ID", "0");
+                    Preferences.Set("PERSONAS_LIST", "");
+                    Preferences.Set("COMPANIAS_LIST", "");
+                    var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                    db.DeleteAll<COMPANIAS>();
+                    db.DeleteAll<PERSONAS>();
+                    db.DeleteAll<VW_RESERVA_VISITA>();
+                    db.DeleteAll<Invitados>();
+                    db.DeleteAll<InvitadosReservas>();
+                    db.DeleteAll<SalidaOffline>();
+                    db.DeleteAll<PLACA>();
                 }
             }
             catch (Exception ex)

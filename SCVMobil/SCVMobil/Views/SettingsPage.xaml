@@ -187,13 +187,6 @@
                         TextColor="Black"                        
                         FontAttributes="Bold"
                         />
-                        <Label
-                            Margin="0,15,0,0"
-                            HorizontalOptions="Center"
-                            x:Name="LblCantidadPadron"
-                            Text="Cantidad de Cedulas en el padron: "
-                            TextColor="Black"
-                            FontAttributes="Bold"/>
                     </StackLayout>
 
                     <StackLayout
@@ -206,7 +199,7 @@
                                 BackgroundColor="#F44336"
                                 TextColor="White"
                                 WidthRequest="140"
-                                Text="Padron"
+                                Text="Sync"
                                 FontAttributes="Bold"
                                 x:Name="btSync"
                                 Clicked="BtSync_Clicked"

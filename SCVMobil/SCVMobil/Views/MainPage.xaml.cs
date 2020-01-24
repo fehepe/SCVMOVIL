@@ -23,6 +23,7 @@ namespace SCVMobil
         
         
         //---------------------------------------------------------------------------
+
         public MainPage()//Constructor
         {
             
@@ -105,7 +106,6 @@ namespace SCVMobil
             //    Preferences.Set("IS_SET", true);
             //}
             // OnGetList();
-            DeviceDisplay.KeepScreenOn = true;
             Debug.WriteLine("Appeared");
             refreshPage();
             scanner.GetScanner(true);
@@ -265,7 +265,7 @@ namespace SCVMobil
                             if (registroVerifInv.Any())
                             {
 
-                                querry = $"SELECT * FROM PADRON WHERE CEDULA = '{inString}'";
+                                querry = "SELECT * FROM PADRON WHERE CEDULA = '" + inString + "'";
                                 var registro = db.Query<PADRON>(querry);
                                 entCedula.Text = registro.First().CEDULA;
                                 entNombres.Text = registro.First().NOMBRES;
