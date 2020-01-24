@@ -10,12 +10,8 @@ namespace SCVMobil.Models
         [PrimaryKey]
         public int PERSONA_ID { get; set; }
         public string NOMBRES_APELLIDOS { get; set; }
+        public string DEPARTAMENTO_ID { get; set; }
 
-        public PERSONAS(int PERSONA_ID, string NOMBRES_APELLIDOS)
-        {
-            this.PERSONA_ID = PERSONA_ID;
-            this.NOMBRES_APELLIDOS = NOMBRES_APELLIDOS;
-        }
 
         public PERSONAS()//Constructor en blanco necesario para hacer querrys
         {

@@ -431,9 +431,49 @@ namespace SCVMobil
         private void PickerDestino_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
-
             {
                 Preferences.Set("COMPANIA_SELECTED", pickerDestino.SelectedItem.ToString());
+               
+                try
+                {
+                    var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                    var TB = db.Query<COMPANIAS>("SELECT * from COMPANIAS WHERE NOMBRE ='" + Preferences.Get("COMPANIA_SELECTED","") + "'");
+                    var listaPersonas = new List<string>();
+
+                    if (TB.Any())
+                    {
+                        //pickerVisitaA.ItemsSource = ;
+                        var compania_id = TB.First().COMPANIA_ID;
+                        var TBL_PERSONAS = db.Query<PERSONAS>("SELECT NOMBRES_APELLIDOS FROM PERSONAS WHERE DEPARTAMENTO_ID = '" + compania_id+"'");
+
+                        if (TBL_PERSONAS.Any())
+                        {
+                            
+                            foreach (var personas in TBL_PERSONAS)
+                            {
+                                listaPersonas.Add(personas.NOMBRES_APELLIDOS);
+                            }
+                            pickerVisitaA.ItemsSource = listaPersonas;
+                        }
+                        else
+                        {
+                            listaPersonas.Add("Este destino no tiene personas asignadas.");
+                            pickerVisitaA.ItemsSource = listaPersonas;
+                        }
+                        
+                    }
+                    else
+                    {
+                        pickerDestino.SelectedIndex = -1;
+                        pickerVisitaA.SelectedIndex = -1;
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    Debug.WriteLine("Error en onAppearing");
+                    Analytics.TrackEvent("Error al mostrar Invitados: " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+                }
             }
             catch (Exception ex)
             {

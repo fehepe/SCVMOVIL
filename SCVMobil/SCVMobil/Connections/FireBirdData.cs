@@ -38,7 +38,7 @@ namespace SCVMobil.Connections
                 //string connectionString = "User ID=sysdba;Password=masterkey;Database=C:\\Users\\Abraham\\Desktop\\Codes\\registros\\registros.fdb;" +
                 //                           $"DataSource={Preferences.Get("SERVER_IP", "192.168.2.120")};Port=3050;Charset=NONE;Server Type=0; Timeout=5;"; //Connectionstring//
 
-                string connectionString = "User ID=sysdba;Password=masterkey;Database=C:\\APP\\registros\\registros.fdb;" +
+                string connectionString = "User ID=sysdba;Password=masterkey;Database=C:\\APP\\GAD\\registros.fdb;" +
                                           $"DataSource={Preferences.Get("SERVER_IP", "192.168.2.120")};Port=3050;Charset=NONE;Server Type=0; Timeout=5;"; //Connectionstring//
 
                 return connectionString;
@@ -716,6 +716,11 @@ namespace SCVMobil.Connections
                         {
                             person.NOMBRES_APELLIDOS = dtResult[1].ToString();
                         }
+                        if (dtResult[2] != System.DBNull.Value)
+                        {
+                            person.DEPARTAMENTO_ID = dtResult[2].ToString();
+                        }
+                        
                         #endregion
                         PeopleList.Add(person);
                         Debug.WriteLine("Persona agregada, Id: " + person.PERSONA_ID);
@@ -743,13 +748,19 @@ namespace SCVMobil.Connections
            
             string querySync = "SELECT FIRST 1 * FROM COMPANIAS";
 
-            string dt = ""; //Execute(querySync);
+            string dt = obtenerfecha();
 
             try
             {
-                if (dt != "")
+                if (dt != "" && !string.IsNullOrEmpty(dt))
                 {
                     Preferences.Set("SYNC_VSU", true);
+                    Preferences.Set("nowifi", false);
+                    Preferences.Set("ENTCEDULA", true);
+                    Preferences.Set("wifi", true);
+                    Preferences.Set("aviso", false);
+                    Preferences.Set("CONFIG", true);
+                    Preferences.Set("SERVEROFF", false);
                 }
             }
             catch (Exception)
@@ -1302,7 +1313,7 @@ namespace SCVMobil.Connections
 
                 var stlRegistros2 = new List<string>();
                 var stRegisros2 = "";
-                string queryPersonas = " SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " PERSONA_ID, NOMBRES_APELLIDOS FROM PERSONAS where TIPO=1 AND PERSONA_ID > " + Preferences.Get("MAX_PERSONA_ID", "0") + " ORDER BY PERSONA_ID desc";
+                string queryPersonas = " SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " PERSONA_ID, NOMBRES_APELLIDOS, DEPARTAMENTO_ID FROM PERSONAS where TIPO=1 AND PERSONA_ID > " + Preferences.Get("MAX_PERSONA_ID", "0") + " ORDER BY PERSONA_ID desc";
                 var ListaPersonas = ExecutePeople(queryPersonas);
 
 
