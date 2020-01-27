@@ -21,13 +21,14 @@ namespace SCVMobil.Connections
     {
         //HttpClient _client = new HttpClient();
 
+        //// Constructor
         public FireBirdData()
         {
 
         }
 
 
-        // Retornar el Connection String
+        //// Retornar el Connection String
         public string connectionString(bool db)
         {
             if (db)
@@ -54,7 +55,7 @@ namespace SCVMobil.Connections
         }
 
 
-        // Ejecutar query Scalar luego de abrir una conexion con la base de datos
+        //// Ejecutar query Scalar luego de abrir una conexion con la base de datos
         public string ExecuteScalar(string query)
         {
             try
@@ -148,7 +149,8 @@ namespace SCVMobil.Connections
             }
         }
 
-        public int ReturnCountBoletas(int value)
+
+        public int ReturnCountCedulas(int value)
         {
             try
             {
@@ -201,7 +203,7 @@ namespace SCVMobil.Connections
                         else
                         {
                             continuar += 1;
-                            return ReturnCountBoletas(continuar);
+                            return ReturnCountCedulas(continuar);
                         }
                     }
                 }
@@ -389,10 +391,14 @@ namespace SCVMobil.Connections
                         {
                             invitado.Lector = Convert.ToInt32(dtResult[35]);
                         }
+                        if(dtResult[36] != System.DBNull.Value)
+                        {
+                            invitado.Codigo_carnet = Convert.ToString(dtResult[36]);
+                        }
                         #endregion
 
                         GuestsList.Add(invitado);
-                        Debug.WriteLine("Usuario agregado, Id: " + invitado.INVITADO_ID);
+                        Debug.WriteLine("Usuario agregado, Id: " + invitado.INVIDATO_ID);
                     }
                 }
                 dtResult.Close();
@@ -815,7 +821,68 @@ namespace SCVMobil.Connections
             }
         }
 
+        public List<DEPTO_LOCALIDAD> executeDepto_Localidad(string query)
+        {
+            try
+            {
+                List<DEPTO_LOCALIDAD> lista = new List<DEPTO_LOCALIDAD>();
 
+                FbConnection fb = new FbConnection(connectionString(true));
+
+                fb.Open();
+                FbCommand command = new FbCommand(
+                    query,
+                    fb);
+
+                var dtResult = command.ExecuteReader();
+
+                if (dtResult.HasRows)
+                {
+                    while (dtResult.Read())
+                    {
+                        DEPTO_LOCALIDAD depto_localidad = new DEPTO_LOCALIDAD();
+
+                        #region Verificar que los valores no sean nulos antes de la conversion                        
+                        if (dtResult[0] != System.DBNull.Value)
+                        {
+                            depto_localidad.ID_DEPTO_LOCALIDAD = Convert.ToInt32(dtResult[0]);
+                        }
+                        if (dtResult[1] != System.DBNull.Value)
+                        {
+                            depto_localidad.ID_DEPARTAMENTO = Convert.ToInt32(dtResult[1]);
+                        }
+                        if (dtResult[2] != System.DBNull.Value)
+                        {
+                            depto_localidad.DEPTO_NOMBRE = Convert.ToString(dtResult[2]);
+                        }
+                        if (dtResult[3] != System.DBNull.Value)
+                        {
+                            depto_localidad.ID_LOCALIDAD = Convert.ToInt32(dtResult[3]);
+                        }
+                        if (dtResult[4] != System.DBNull.Value)
+                        {
+                            depto_localidad.LOCALIDAD_NOMBRE = Convert.ToString(dtResult[4]);
+                        }
+                        #endregion
+
+                        lista.Add(depto_localidad);
+                        Debug.WriteLine("DEPTO_LICALIDAD agregada, Id: " + depto_localidad.ID_DEPTO_LOCALIDAD);
+                    }
+                }
+                dtResult.Close();
+                fb.Close();
+                fb.Dispose();
+
+                Preferences.Set("SYNC_VSU", true);
+                return lista;
+            }
+            catch (Exception ea)
+            {
+                Debug.WriteLine("Error en el metodo ExecuteDEPTO_LOCALIDAD, provocado por: " + ea.Message);
+                Preferences.Set("SYNC_VSU", false);
+                return null;
+            }
+        }
         // Retornar lista de Personas
         public List<PERSONAS> ExecutePeople(string query)
         {
@@ -849,6 +916,10 @@ namespace SCVMobil.Connections
                         if (dtResult[1] != System.DBNull.Value)
                         {
                             person.NOMBRES_APELLIDOS = dtResult[1].ToString();
+                        }
+                        if (dtResult[2] != System.DBNull.Value)
+                        {
+                            person.DEPARTAMENTO_ID = Convert.ToInt32(dtResult[2]);
                         }
                         #endregion
                         PeopleList.Add(person);
@@ -932,6 +1003,7 @@ namespace SCVMobil.Connections
                     string fechaSalida;
                     string placa;
                     string queryInv;
+                    string codigo_carnet;
                     #endregion
 
                     if (registro.Visitado is null)
@@ -957,6 +1029,14 @@ namespace SCVMobil.Connections
                     else
                     {
                         placa = $"'{registro.Placa.ToString()}'";
+                    }
+                    if (string.IsNullOrWhiteSpace(registro.Codigo_carnet))
+                    {
+                        codigo_carnet = "null";
+                    }
+                    else
+                    {
+                        codigo_carnet = registro.Codigo_carnet.ToString().ToUpper();
                     }
 
                     #region Query Invitado
@@ -992,7 +1072,8 @@ namespace SCVMobil.Connections
                           "0," +
                           $" {Util.CoalesceStr(registro.Visitado, "null")}" +
                           $", {registro.Lector.ToString()}" +
-                          $", {Util.CoalesceStr(fechaSalida, "null")})";
+                          $", {Util.CoalesceStr(fechaSalida, "null")}, " +
+                          $" '{Util.CoalesceStr(codigo_carnet, "null")}')";
                     #endregion
 
                     var dtResult = ExecuteScalar(queryInv);
@@ -1049,6 +1130,7 @@ namespace SCVMobil.Connections
                     string visitado2;
                     string fechaSalida2;
                     string placa2;
+                    string Codigo_carnet;
 
                     if (registro2.Visitado is null)
                     {
@@ -1073,6 +1155,14 @@ namespace SCVMobil.Connections
                     else
                     {
                         placa2 = "'" + registro2.Placa.ToString() + "'";
+                    }
+                    if (string.IsNullOrWhiteSpace(registro2.Codigo_carnet))
+                    {
+                        Codigo_carnet = "null";
+                    }
+                    else
+                    {
+                        Codigo_carnet = registro2.Codigo_carnet.ToString().ToUpper();
                     }
 
                     #region string de la variable queryInv
@@ -1108,7 +1198,8 @@ namespace SCVMobil.Connections
                         "0, " +
                         $"{visitado2}, " +
                         $"{registro2.Lector.ToString()}, " +
-                        $"{fechaSalida2})";
+                        $"{fechaSalida2}, " +
+                        $"'{Util.CoalesceStr(Codigo_carnet, "null")}')";
                     #endregion
 
                     var content = ExecuteScalar(queryInv2);
@@ -1374,8 +1465,65 @@ namespace SCVMobil.Connections
             }
         }
 
+        //// Cargar Departamentos
+        public void DownloadDeptoLocalidad()
+        {
+            try
+            {
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                string query = " SELECT * "
+                                                   + " FROM VW_DEPTO_LOCALIDAD where ID_DEPTO_LOCALIDAD > "
+                                                   + Preferences.Get("MAX_DEPTO_LOCALIDAD", "0")
+                                                   + " ORDER BY ID_DEPTO_LOCALIDAD desc";
 
+                var Lista_DEPTO_LOCALIDAD = executeDepto_Localidad(query);
 
+                var stlRegistros = new List<string>();
+                var stRegisros = "";
+                if (Lista_DEPTO_LOCALIDAD != null)
+                {
+                    try
+                    {
+                        if (Lista_DEPTO_LOCALIDAD.Any())
+                        {
+
+                            db.InsertAll(Lista_DEPTO_LOCALIDAD);
+                            Debug.WriteLine("MAX_COMPANIA_ID: " + Lista_DEPTO_LOCALIDAD.First().ID_DEPTO_LOCALIDAD.ToString());
+                            Preferences.Set("MAX_COMPANIA_ID", Lista_DEPTO_LOCALIDAD.First().ID_DEPTO_LOCALIDAD.ToString());
+                            Debug.WriteLine("Departamento Localidad Descargadas: " + DateTime.Now);
+                            //string sortNames = "select nombre from companias where PUNTO_VSU = 0 AND ESTATUS = 1 order by nombre";
+                            //var Sorting = db.Query<DEPTO_LOCALIDAD>(sortNames);
+                            //foreach (DEPTO_LOCALIDAD registro in Sorting)
+                            //{
+                            //    //db.Insert(registro);
+                            //    Debug.WriteLine("DEPTO_LOCALIDAD: " + registro.DEPTO_NOMBRE);
+                            //    stlRegistros.Add(registro.NOMBRE.ToString());
+                            //    stRegisros = stRegisros + "," + registro.NOMBRE.ToString();
+                            //}
+                            //stRegisros = stRegisros.TrimStart(',');
+                            //Preferences.Set("COMPANIAS_LIST", stRegisros);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        var properties = new Dictionary<string, string> {
+                                            { "Category", "Error insertando DEPTO_LOCALIDAD" },
+                                            { "Code", "App.xaml.cs Line: 516" },
+                                            { "Lector", Preferences.Get("LECTOR", "N/A")}
+                                        };
+                        Debug.WriteLine("Excepcion insertando DEPTO_LOCALIDAD: " + ex.ToString());
+                        Crashes.TrackError(ex, properties);
+                    }
+
+                }
+
+            }
+            catch (Exception ea)
+            {
+                Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo Download_DEPTO_LOCALIDAD, Error: " + ea.Message);
+                Debug.WriteLine("Error de SQL: " + ea.Message);
+            }
+        }
         public void DownloadCompaniesPorLocalidad(string querry)
         {
             try
@@ -1443,7 +1591,10 @@ namespace SCVMobil.Connections
 
                 var stlRegistros2 = new List<string>();
                 var stRegisros2 = "";
-                string queryPersonas = " SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " PERSONA_ID, NOMBRES_APELLIDOS FROM PERSONAS where TIPO=1 AND PERSONA_ID > " + Preferences.Get("MAX_PERSONA_ID", "0") + " ORDER BY PERSONA_ID desc";
+                string queryPersonas = "SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " PERSONA_ID, NOMBRES_APELLIDOS, DEPARTAMENTO_ID " +
+                                       "FROM PERSONAS " +
+                                       "where TIPO=1 AND PERSONA_ID > " + Preferences.Get("MAX_PERSONA_ID", "0") + 
+                                       " ORDER BY PERSONA_ID desc";
                 var ListaPersonas = ExecutePeople(queryPersonas);
 
 
@@ -1510,7 +1661,7 @@ namespace SCVMobil.Connections
                             ", I1.EMPRESA_ID, I1.PLACA, I1.TIPO_VISITANTE, I1.ES_GRUPO, I1.GRUPO_ID, I1.PUERTA_ENTRADA, I1.ACTUALIZADA_LA_SALIDA" +
                             ", COALESCE(I1.HORAS_CADUCIDAD,0) AS HORAS_CADUCIDAD, I1.PERSONAS, I1.IN_OUT, I1.ORIGEN_ENTRADA, I1.ORIGEN_SALIDA, I1.COMENTARIO, COALESCE(I1.ORIGEN_IO,0) AS ORIGEN_IO, I1.ACTUALIZADO" +
                             ", I1.CPOST, I1.TEXTO1_ENTRADA, I1.TEXTO2_ENTRADA, I1.TEXTO3_ENTRADA, I1.SECUENCIA_DIA, I1.NO_APLICA_INDUCCION, I1.VISITADO" +
-                            ", COALESCE(I1.LECTOR, 0) AS LECTOR FROM INVITADOS I1 INNER JOIN(SELECT MAX(I2.INVIDATO_ID) AS INVIDATO_ID FROM INVITADOS I2" +
+                            ", COALESCE(I1.LECTOR, 0) AS LECTOR, I1.CODIGO_CARNET FROM INVITADOS I1 INNER JOIN(SELECT MAX(I2.INVIDATO_ID) AS INVIDATO_ID FROM INVITADOS I2" +
                             $" WHERE INVIDATO_ID > {Preferences.Get("MAX_INVIDATO_ID", "0")} AND COALESCE(LECTOR, 0) <> {Preferences.Get("LECTOR", "1")} " +
                             "GROUP BY I2.CARGO) I3 ON I1.invidato_id = I3.INVIDATO_ID ORDER BY I1.INVIDATO_ID DESC";
 
@@ -1612,7 +1763,7 @@ namespace SCVMobil.Connections
             }
         }
 
-
+        //// obtener la fecha del servidor
         public string obtenerfecha()
         {
             string query = "select current_timestamp FROM Invitados";
@@ -1644,6 +1795,7 @@ namespace SCVMobil.Connections
             }
         }
 
+        //// Descargar el padron al dispositivo
         public void DownloadPadron()
         {
 

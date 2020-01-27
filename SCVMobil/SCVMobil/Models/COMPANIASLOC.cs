@@ -14,16 +14,6 @@ namespace SCVMobil.Models
         public int? ESTATUS { get; set; }
 
 
-
-        public COMPANIASLOC(int COMPANIA_ID, string NOMBRE, int PUNTO_VSU, int ESTATUS)
-        {
-            this.COMPANIA_ID = COMPANIA_ID;
-            this.NOMBRE = NOMBRE;
-            this.PUNTO_VSU = PUNTO_VSU;
-            this.ESTATUS = ESTATUS;
-
-        }
-
         public COMPANIASLOC()//Constructor en blanco necesario para hacer querrys
         {
 

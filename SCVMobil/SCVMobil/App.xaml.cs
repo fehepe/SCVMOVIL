@@ -118,10 +118,8 @@ namespace SCVMobil
                             // Descargar las salidas.
                             fireBird.DownloadOuts();
 
-
-
-
-
+                            // Descargar DEPTO_LOCALIDAD
+                            fireBird.DownloadDeptoLocalidad();
 
                             // Subir visitantes.
                             fireBird.UploadVisits();
@@ -221,6 +219,7 @@ namespace SCVMobil
                 db.CreateTable<InvitadosReservas>();
                 db.CreateTable<SalidaOffline>();
                 db.CreateTable<PLACA>();
+                db.CreateTable<DEPTO_LOCALIDAD>();
 
                 //Crear los indices de la tabla
                 Task.Factory.StartNew(() =>

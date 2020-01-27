@@ -61,6 +61,7 @@
                         x:Name="entPuerta"
                         Grid.Row="2"
                         Grid.Column="1"
+                        ItemDisplayBinding="{Binding NOMBRE}"
                         SelectedIndexChanged="entPuerta_SelectedIndexChanged"                        
                         />
                     <Label
