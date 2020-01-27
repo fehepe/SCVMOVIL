@@ -32,6 +32,9 @@ namespace SCVMobil
         Escaner scan;
         private string stNombre, stApellidos;
         COMPANIAS cc;
+        DEPTO_LOCALIDAD depto_localidad;
+        PERSONAS persona;
+
 
 
         //-----------------------------------------------------------------------------------------------       
@@ -51,7 +54,6 @@ namespace SCVMobil
         {
             base.OnAppearing();
             //
-
             scan.GetScanner(true);
 
             if (Preferences.Get("PLACA_SELECTED", true))
@@ -71,9 +73,9 @@ namespace SCVMobil
 
             //entPlaca.Text = Preferences.Get("LETRA", "");
 
-            pickerVisitaA.ItemsSource = Preferences.Get("PERSONAS_LIST", "").Split(',').ToList<string>();
+            AsignarDepartamentos();
 
-            if (!string.IsNullOrEmpty(pickerVisitaA.ItemsSource[0].ToString()) && Preferences.Get("VISITA_A_SELECTED", true))
+            if (pickerDestino.ItemsSource.Count > 0 && Preferences.Get("VISITA_A_SELECTED", true))
             {
                 FrameVisitaA.IsVisible = true;
                 FrameVisitaA2.IsVisible = true;
@@ -90,7 +92,7 @@ namespace SCVMobil
                 lblvisitaA.IsVisible = false;
             }
             var x = Preferences.Get("COMPANIAS_LIST", "");
-            pickerDestino.ItemsSource = Preferences.Get("COMPANIAS_LIST", "").Split(',').ToList<string>();
+            //pickerDestino.ItemsSource = Preferences.Get("COMPANIAS_LIST", "").Split(',').ToList<string>();
             try
             {
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
@@ -251,23 +253,21 @@ namespace SCVMobil
                         //Vamos a buscar la compania seleccionada 
                         try
                         {
-                            var TBL_COMPANIAS = db.Query<COMPANIAS>("SELECT COMPANIA_ID FROM COMPANIAS WHERE NOMBRE = '" + pickerDestino.SelectedItem.ToString() + "'");
 
                             //Vamos a buscar la persona seleccionada
 
                             if (pickerVisitaA.SelectedIndex != -1)
                             {
-                                var TBL_PERSONAS = db.Query<PERSONAS>("SELECT PERSONA_ID FROM PERSONAS WHERE NOMBRES_APELLIDOS = '" + pickerVisitaA.SelectedItem.ToString() + "'");
                                 int? visitaA;
-                                if (TBL_PERSONAS.Any())
+                                if (persona.PERSONA_ID != null)
                                 {
-                                    visitaA = TBL_PERSONAS.First().PERSONA_ID;
+                                    visitaA = persona.PERSONA_ID;
                                 }
                                 else
                                 {
                                     visitaA = null;
                                 }
-                                registroInvitados.Compania_ID = TBL_COMPANIAS.First().COMPANIA_ID;
+                                registroInvitados.Compania_ID = Preferences.Get("DESTINO_SELECTED",0);
                                 registroInvitados.Nombres = stNombre;
                                 registroInvitados.Apellidos = stApellidos;
                                 registroInvitados.Fecha_Registro = DateTime.Now;
@@ -311,7 +311,7 @@ namespace SCVMobil
                             {
 
 
-                                registroInvitados.Compania_ID = TBL_COMPANIAS.First().COMPANIA_ID;
+                                registroInvitados.Compania_ID = Preferences.Get("DESTINO_SELECTED", 0);
                                 registroInvitados.Nombres = stNombre;
                                 registroInvitados.Apellidos = stApellidos;
                                 registroInvitados.Fecha_Registro = DateTime.Now;
@@ -372,12 +372,10 @@ namespace SCVMobil
 
                         var registroInvitados = new Invitados();
 
-                        //Vamos a buscar la compania seleccionada 
 
-                        var TBL_COMPANIAS = db.Query<COMPANIAS>("SELECT COMPANIA_ID FROM COMPANIAS WHERE NOMBRE = '" + pickerDestino.SelectedItem.ToString() + "'");
 
                         //Vamos a buscar la persona seleccionada
-                        registroInvitados.Compania_ID = TBL_COMPANIAS.First().COMPANIA_ID;
+                        registroInvitados.Compania_ID = Preferences.Get("DESTINO_SELECTED",0);
                         registroInvitados.Nombres = stNombre;
                         registroInvitados.Apellidos = stApellidos;
                         registroInvitados.Fecha_Registro = DateTime.Now;
@@ -436,7 +434,29 @@ namespace SCVMobil
         {
             try
             {
-                Preferences.Set("PERSONA_SELECTED", pickerVisitaA.SelectedItem.ToString());
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                var selected = pickerDestino.SelectedItem as DEPTO_LOCALIDAD;
+                this.depto_localidad = selected;
+                Preferences.Set("DESTINO_SELECTED", selected.ID_DEPARTAMENTO);
+                //pickerVisitaA.ItemsSource = Preferences.Get("PERSONAS_LIST", "").Split(',').ToList<string>();
+                var Request = db.Query<PERSONAS>($"SELECT * FROM PERSONAS WHERE DEPARTAMENTO_ID = {selected.ID_DEPARTAMENTO}");
+
+                if (!Request.Any())
+                {
+                    FrameVisitaA.IsVisible = false;
+                    FrameVisitaA2.IsVisible = false;
+                    pickerVisitaA.IsVisible = false;
+                    pickerVisitaA.ItemsSource = new List<string>();
+                    lblvisitaA.IsVisible = false;
+                }
+                else
+                {
+                    FrameVisitaA.IsVisible = true;
+                    FrameVisitaA2.IsVisible = true;
+                    pickerVisitaA.IsVisible = true;
+                    lblvisitaA.IsVisible = true;
+                    AsignarDestinos(Request);
+                }
             }
             catch (Exception ex)
             {
@@ -447,9 +467,11 @@ namespace SCVMobil
         private void PickerVisitaA_SelectedIndexChanged(object sender, EventArgs e)// Metodo del evento Change del picker, es decir si selecciono un item del picker este lo tomara
         {
             try
-
             {
-                Preferences.Set("COMPANIA_SELECTED", pickerDestino.SelectedItem.ToString());
+               var selected = pickerVisitaA.SelectedItem as PERSONAS;
+               //Preferences.Set("PERSONA_SELECTED", selected.NOMBRES_APELLIDOS.ToString());
+               //Preferences.Set("ID_PERSONA_SELECTED", selected.PERSONA_ID.ToString());
+               this.persona = selected;
             }
             catch (Exception ex)
             {
@@ -463,7 +485,6 @@ namespace SCVMobil
         }
 
         //------------------------------------------------------------------------------------------------------------------------------
-
 
 
         //------------------------------------------------------------------------------------------------------------------------------------
@@ -519,6 +540,37 @@ namespace SCVMobil
             using (var datos = new DataAccess())
             {
                 await Navigation.PushAsync(new GrupoPage(pickerDestino.SelectedItem.ToString(), pickerVisitaA.SelectedItem.ToString(), entCedula.Text, entNombre.Text));// Enviamos todo la informacion al GrupoPage
+            }
+        }
+
+        private void AsignarDepartamentos()
+        {
+            try
+            {
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                var query = $"SELECT * FROM DEPTO_LOCALIDAD WHERE ID_LOCALIDAD = {Preferences.Get("LOCALIDAD_VSU", "0")}";
+                var Departamentos = db.Query<DEPTO_LOCALIDAD>(query);
+                pickerDestino.ItemsSource = Departamentos;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Excepcion en el metodo AsignarDepartamentos: "+ex.Message);
+            } 
+        }
+
+        private void AsignarDestinos(List<PERSONAS>lista)
+        {
+            try
+            {
+                var Personas = lista;
+                if (Personas.Any())
+                {
+                    pickerVisitaA.ItemsSource = Personas; 
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Excepcion en el metodo AsignarDestino: "+ex.Message);
             }
         }
     }

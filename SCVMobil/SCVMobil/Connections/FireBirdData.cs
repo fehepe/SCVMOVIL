@@ -821,7 +821,68 @@ namespace SCVMobil.Connections
             }
         }
 
+        public List<DEPTO_LOCALIDAD> executeDepto_Localidad(string query)
+        {
+            try
+            {
+                List<DEPTO_LOCALIDAD> lista = new List<DEPTO_LOCALIDAD>();
 
+                FbConnection fb = new FbConnection(connectionString(true));
+
+                fb.Open();
+                FbCommand command = new FbCommand(
+                    query,
+                    fb);
+
+                var dtResult = command.ExecuteReader();
+
+                if (dtResult.HasRows)
+                {
+                    while (dtResult.Read())
+                    {
+                        DEPTO_LOCALIDAD depto_localidad = new DEPTO_LOCALIDAD();
+
+                        #region Verificar que los valores no sean nulos antes de la conversion                        
+                        if (dtResult[0] != System.DBNull.Value)
+                        {
+                            depto_localidad.ID_DEPTO_LOCALIDAD = Convert.ToInt32(dtResult[0]);
+                        }
+                        if (dtResult[1] != System.DBNull.Value)
+                        {
+                            depto_localidad.ID_DEPARTAMENTO = Convert.ToInt32(dtResult[1]);
+                        }
+                        if (dtResult[2] != System.DBNull.Value)
+                        {
+                            depto_localidad.DEPTO_NOMBRE = Convert.ToString(dtResult[2]);
+                        }
+                        if (dtResult[3] != System.DBNull.Value)
+                        {
+                            depto_localidad.ID_LOCALIDAD = Convert.ToInt32(dtResult[3]);
+                        }
+                        if (dtResult[4] != System.DBNull.Value)
+                        {
+                            depto_localidad.LOCALIDAD_NOMBRE = Convert.ToString(dtResult[4]);
+                        }
+                        #endregion
+
+                        lista.Add(depto_localidad);
+                        Debug.WriteLine("DEPTO_LICALIDAD agregada, Id: " + depto_localidad.ID_DEPTO_LOCALIDAD);
+                    }
+                }
+                dtResult.Close();
+                fb.Close();
+                fb.Dispose();
+
+                Preferences.Set("SYNC_VSU", true);
+                return lista;
+            }
+            catch (Exception ea)
+            {
+                Debug.WriteLine("Error en el metodo ExecuteDEPTO_LOCALIDAD, provocado por: " + ea.Message);
+                Preferences.Set("SYNC_VSU", false);
+                return null;
+            }
+        }
         // Retornar lista de Personas
         public List<PERSONAS> ExecutePeople(string query)
         {
@@ -855,6 +916,10 @@ namespace SCVMobil.Connections
                         if (dtResult[1] != System.DBNull.Value)
                         {
                             person.NOMBRES_APELLIDOS = dtResult[1].ToString();
+                        }
+                        if (dtResult[2] != System.DBNull.Value)
+                        {
+                            person.DEPARTAMENTO_ID = Convert.ToInt32(dtResult[2]);
                         }
                         #endregion
                         PeopleList.Add(person);
@@ -1400,8 +1465,65 @@ namespace SCVMobil.Connections
             }
         }
 
+        //// Cargar Departamentos
+        public void DownloadDeptoLocalidad()
+        {
+            try
+            {
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                string query = " SELECT * "
+                                                   + " FROM VW_DEPTO_LOCALIDAD where ID_DEPTO_LOCALIDAD > "
+                                                   + Preferences.Get("MAX_DEPTO_LOCALIDAD", "0")
+                                                   + " ORDER BY ID_DEPTO_LOCALIDAD desc";
 
+                var Lista_DEPTO_LOCALIDAD = executeDepto_Localidad(query);
 
+                var stlRegistros = new List<string>();
+                var stRegisros = "";
+                if (Lista_DEPTO_LOCALIDAD != null)
+                {
+                    try
+                    {
+                        if (Lista_DEPTO_LOCALIDAD.Any())
+                        {
+
+                            db.InsertAll(Lista_DEPTO_LOCALIDAD);
+                            Debug.WriteLine("MAX_COMPANIA_ID: " + Lista_DEPTO_LOCALIDAD.First().ID_DEPTO_LOCALIDAD.ToString());
+                            Preferences.Set("MAX_COMPANIA_ID", Lista_DEPTO_LOCALIDAD.First().ID_DEPTO_LOCALIDAD.ToString());
+                            Debug.WriteLine("Departamento Localidad Descargadas: " + DateTime.Now);
+                            //string sortNames = "select nombre from companias where PUNTO_VSU = 0 AND ESTATUS = 1 order by nombre";
+                            //var Sorting = db.Query<DEPTO_LOCALIDAD>(sortNames);
+                            //foreach (DEPTO_LOCALIDAD registro in Sorting)
+                            //{
+                            //    //db.Insert(registro);
+                            //    Debug.WriteLine("DEPTO_LOCALIDAD: " + registro.DEPTO_NOMBRE);
+                            //    stlRegistros.Add(registro.NOMBRE.ToString());
+                            //    stRegisros = stRegisros + "," + registro.NOMBRE.ToString();
+                            //}
+                            //stRegisros = stRegisros.TrimStart(',');
+                            //Preferences.Set("COMPANIAS_LIST", stRegisros);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        var properties = new Dictionary<string, string> {
+                                            { "Category", "Error insertando DEPTO_LOCALIDAD" },
+                                            { "Code", "App.xaml.cs Line: 516" },
+                                            { "Lector", Preferences.Get("LECTOR", "N/A")}
+                                        };
+                        Debug.WriteLine("Excepcion insertando DEPTO_LOCALIDAD: " + ex.ToString());
+                        Crashes.TrackError(ex, properties);
+                    }
+
+                }
+
+            }
+            catch (Exception ea)
+            {
+                Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo Download_DEPTO_LOCALIDAD, Error: " + ea.Message);
+                Debug.WriteLine("Error de SQL: " + ea.Message);
+            }
+        }
         public void DownloadCompaniesPorLocalidad(string querry)
         {
             try
@@ -1469,7 +1591,10 @@ namespace SCVMobil.Connections
 
                 var stlRegistros2 = new List<string>();
                 var stRegisros2 = "";
-                string queryPersonas = " SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " PERSONA_ID, NOMBRES_APELLIDOS FROM PERSONAS where TIPO=1 AND PERSONA_ID > " + Preferences.Get("MAX_PERSONA_ID", "0") + " ORDER BY PERSONA_ID desc";
+                string queryPersonas = "SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " PERSONA_ID, NOMBRES_APELLIDOS, DEPARTAMENTO_ID " +
+                                       "FROM PERSONAS " +
+                                       "where TIPO=1 AND PERSONA_ID > " + Preferences.Get("MAX_PERSONA_ID", "0") + 
+                                       " ORDER BY PERSONA_ID desc";
                 var ListaPersonas = ExecutePeople(queryPersonas);
 
 
@@ -1638,7 +1763,7 @@ namespace SCVMobil.Connections
             }
         }
 
-
+        //// obtener la fecha del servidor
         public string obtenerfecha()
         {
             string query = "select current_timestamp FROM Invitados";
@@ -1670,6 +1795,7 @@ namespace SCVMobil.Connections
             }
         }
 
+        //// Descargar el padron al dispositivo
         public void DownloadPadron()
         {
 

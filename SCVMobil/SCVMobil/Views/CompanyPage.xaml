@@ -8,14 +8,15 @@
              x:Class="SCVMobil.CompanyPage"
               BackgroundColor="#FFFFFF">
 
-    <ContentPage.ToolbarItems>
+    <!--<ContentPage.ToolbarItems>
         <ToolbarItem 
             x:Name="grupo"
             Text="Es un Grupo" 
             Order="Primary" 
-            Clicked="Grupo_Clicked"     
-           ></ToolbarItem>
-    </ContentPage.ToolbarItems>
+            Clicked="Grupo_Clicked">
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>-->
+    
     <ScrollView>
         <StackLayout Padding="20"
                      VerticalOptions="Center">
@@ -93,6 +94,7 @@
                     <Picker
                     x:Name="pickerDestino"
                     Grid.Row="3"
+                    ItemDisplayBinding="{Binding DEPTO_NOMBRE}"    
                     Grid.Column="1" 
                     Title="Seleccione..."
                     SelectedIndexChanged="PickerDestino_SelectedIndexChanged"/>
@@ -121,7 +123,8 @@
                     <Picker
                     x:Name="pickerVisitaA"
                     Grid.Row="4"
-                    Grid.Column="1"                     
+                    Grid.Column="1"          
+                    ItemDisplayBinding="{Binding NOMBRES_APELLIDOS}"
                     Title="Seleccione..."
                     SelectedIndexChanged="PickerVisitaA_SelectedIndexChanged">
                     </Picker>

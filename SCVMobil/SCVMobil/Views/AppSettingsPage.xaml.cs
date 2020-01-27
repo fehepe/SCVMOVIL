@@ -36,7 +36,7 @@ namespace SCVMobil
             setdefaults();
             Localidad_VSU();
             visitaA.IsToggled = Preferences.Get("VISITA_A_SELECTED", true);
-
+            entPuerta.SelectedIndex = Preferences.Get("PUERTA_SELECTED_INDEX", 0);
             placa.IsToggled= Preferences.Get("PLACA_SELECTED", true);
             TiempoVerif.SelectedItem = Preferences.Get("TIEMPOS", "1");
         }
@@ -63,10 +63,9 @@ namespace SCVMobil
             
             
         }
+
         private void Localidad_VSU()
         {
-
-
             try
             {
                 var scompania_id = Preferences.Get("LOCALIDAD_VSU", "1");
@@ -75,17 +74,8 @@ namespace SCVMobil
                 List<string> listpuertas = new List<string>();
                 if (puertas.Any())
                 {
-                    entPuerta.IsVisible = true;
-                    foreach (var item in puertas)
-                    {
-                        listpuertas.Add(item.NOMBRE);
-                    }
-                    entPuerta.ItemsSource = listpuertas;
-                    
-                        entPuerta.SelectedItem = (puertas.Where(x => x.COMPANIA_ID == Convert.ToInt32(scompania_id)).First().NOMBRE);
-                    
-
-
+                    entPuerta.ItemsSource = puertas;
+                    entPuerta.SelectedItem = Preferences.Get("PUERTA_SELECTED_INDEX", 0);
                 }
                 else
                 {
@@ -98,8 +88,6 @@ namespace SCVMobil
                 Analytics.TrackEvent("Error al mostrar compañias: " + e.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
                 
             }
-
-           
         }
 
 
@@ -160,6 +148,9 @@ namespace SCVMobil
                         Preferences.Set("PERSONAS_LIST", "");
                         Preferences.Set("COMPANIAS_LIST", "");
                         Preferences.Set("CHUNK_SIZE", "50000");
+                        Preferences.Set("MAX_DEPTO_LOCALIDAD", "0");
+                        Preferences.Set("DESTINO_SELECTED", 0);
+
                         var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                         db.DeleteAll<COMPANIAS>();
                         db.DeleteAll<PERSONAS>();
@@ -168,6 +159,7 @@ namespace SCVMobil
                         db.DeleteAll<InvitadosReservas>();
                         db.DeleteAll<SalidaOffline>();
                         db.DeleteAll<PLACA>();
+                        db.DeleteAll<DEPTO_LOCALIDAD>();
                     } 
                 }
                 else
@@ -211,23 +203,11 @@ namespace SCVMobil
         {
             try
             {
-                var querry =  "";
                 var fireBird = new FireBirdData();
-
-                var nombreLocalidad = entPuerta.SelectedItem.ToString();
+                var selected = entPuerta.SelectedItem as COMPANIAS;
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-                var puertas = db.Query<COMPANIAS>($"SELECT * FROM COMPANIAS where NOMBRE = '{nombreLocalidad}'");
-                if (puertas.Any())
-                {
-                    Preferences.Set("LOCALIDAD_VSU", puertas.First().COMPANIA_ID.ToString());
-                    //querry = "select COMPANIA_ID, NOMBRE, PUNTO_VSU, ESTATUS          " +
-                    //            "from COMPANIAS C                                     " +
-                    //            "where C.COMPANIA_ID in (select DL.id_departamento    " +
-                    //            "                        from DEPTO_LOCALIDAD DL      " +
-                    //            $"                       where DL.id_localidad = {puertas.First().COMPANIA_ID.ToString()}) ";
-                    //fireBird.DownloadCompaniesPorLocalidad(querry);
-
-                }
+                Preferences.Set("LOCALIDAD_VSU", selected.COMPANIA_ID.ToString());
+                Preferences.Set("PUERTA_SELECTED_INDEX", selected.COMPANIA_ID);
             }
             catch (Exception ex)
             {
