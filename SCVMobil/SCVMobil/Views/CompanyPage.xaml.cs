@@ -252,13 +252,13 @@ namespace SCVMobil
                         //Vamos a buscar la compania seleccionada 
                         try
                         {
-                            var TBL_COMPANIAS = db.Query<COMPANIAS>("SELECT COMPANIA_ID FROM COMPANIAS WHERE NOMBRE = '" + pickerDestino.SelectedItem.ToString() + "'");
+                            var TBL_COMPANIAS = db.Query<COMPANIAS>($"SELECT COMPANIA_ID FROM COMPANIAS WHERE NOMBRE = '{pickerDestino.SelectedItem.ToString()}'");
 
                             //Vamos a buscar la persona seleccionada
 
                             if (pickerVisitaA.SelectedIndex != -1)
                             {
-                                var TBL_PERSONAS = db.Query<PERSONAS>("SELECT PERSONA_ID FROM PERSONAS WHERE NOMBRES_APELLIDOS = '" + pickerVisitaA.SelectedItem.ToString() + "'");
+                                var TBL_PERSONAS = db.Query<PERSONAS>($"SELECT PERSONA_ID FROM PERSONAS WHERE NOMBRES_APELLIDOS = '{pickerVisitaA.SelectedItem.ToString()}'");
                                 int? visitaA;
                                 if (TBL_PERSONAS.Any())
                                 {
@@ -347,9 +347,9 @@ namespace SCVMobil
                         }
                         catch (Exception ex)
                         {
-                            Debug.WriteLine("Error en BtnImprimir");
+                            Debug.WriteLine("Error en BtnImprimir: "+ex.Message);
                             Analytics.TrackEvent("Error al buscar compañias seleccionadas: " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
-                            throw;
+                            //throw;
                         }
                     }
                     else
@@ -366,7 +366,7 @@ namespace SCVMobil
 
                         //Vamos a buscar la compania seleccionada 
 
-                        var TBL_COMPANIAS = db.Query<COMPANIAS>("SELECT COMPANIA_ID FROM COMPANIAS WHERE NOMBRE = '" + pickerDestino.SelectedItem.ToString() + "'");
+                        var TBL_COMPANIAS = db.Query<COMPANIAS>($"SELECT COMPANIA_ID FROM COMPANIAS WHERE NOMBRE = '{pickerDestino.SelectedItem.ToString()}'");
 
                         //Vamos a buscar la persona seleccionada
                         registroInvitados.Compania_ID = TBL_COMPANIAS.First().COMPANIA_ID;
