@@ -36,7 +36,6 @@ namespace SCVMobil
 
         //-----------------------------------------------------------------------------------------------       
         public CompanyPage(String cedula, String nombre, String apellidos)//Constructor
-
         {
             InitializeComponent();
             entCedula.Text = cedula;
@@ -90,7 +89,7 @@ namespace SCVMobil
                 pickerVisitaA.ItemsSource = new List<string>();
                 lblvisitaA.IsVisible = false;
             }
-
+            var x = Preferences.Get("COMPANIAS_LIST", "");
             pickerDestino.ItemsSource = Preferences.Get("COMPANIAS_LIST", "").Split(',').ToList<string>();
             try
             {
@@ -298,8 +297,13 @@ namespace SCVMobil
                                 registroInvitados.salidaSubida = null;
                                 registroInvitados.Visitado = visitaA;
                                 registroInvitados.Lector = int.Parse(Preferences.Get("LECTOR", "1"));
+                                if (!string.IsNullOrWhiteSpace(entCodigoCarnet.Text))
+                                {
+                                    registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper(); 
+                                }
 
                                 db.Insert(registroInvitados);
+
                                 btnImprimir.IsEnabled = false;
                                 await Navigation.PopToRootAsync();
                             }
@@ -338,6 +342,10 @@ namespace SCVMobil
                                 registroInvitados.salidaSubida = null;
                                 registroInvitados.Visitado = null;
                                 registroInvitados.Lector = int.Parse(Preferences.Get("LECTOR", "1"));
+                                if (!string.IsNullOrWhiteSpace(entCodigoCarnet.Text))
+                                {
+                                    registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper();
+                                }
 
                                 db.Insert(registroInvitados);
                                 btnImprimir.IsEnabled = false;
@@ -399,6 +407,10 @@ namespace SCVMobil
                         registroInvitados.salidaSubida = null;
                         registroInvitados.Visitado = null;
                         registroInvitados.Lector = int.Parse(Preferences.Get("LECTOR", "1"));
+                        if (!string.IsNullOrWhiteSpace(entCodigoCarnet.Text))
+                        {
+                            registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper();
+                        }
 
                         db.Insert(registroInvitados);
                         btnImprimir.IsEnabled = false;
@@ -444,6 +456,12 @@ namespace SCVMobil
                 Debug.WriteLine("Exception catched while trying to set preference \"COMPANIA_SELECTED\": " + ex);
             }
         }
+
+        private void entCodigoCarnet_Completed(object sender, EventArgs e)
+        {
+            entPlaca.Focus();
+        }
+
         //------------------------------------------------------------------------------------------------------------------------------
 
 

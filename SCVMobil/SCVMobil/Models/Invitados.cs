@@ -51,6 +51,7 @@ namespace SCVMobil
         public string No_Aplica_Induccion { get; set; }
         public int? Visitado { get; set; }
         public int Lector { get; set; }
+        public string Codigo_carnet { get; set; }
 
         public Invitados()
         {

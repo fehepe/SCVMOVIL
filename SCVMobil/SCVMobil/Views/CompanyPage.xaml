@@ -16,7 +16,7 @@
             Clicked="Grupo_Clicked"     
            ></ToolbarItem>
     </ContentPage.ToolbarItems>
-    <ContentPage.Content>
+    <ScrollView>
         <StackLayout Padding="20"
                      VerticalOptions="Center">
             <Label
@@ -127,9 +127,38 @@
                     </Picker>
                 </Frame>
             </Frame>
+
+            <Label
+                    Grid.Row="5"
+                    Grid.Column="0" 
+                TextColor="#000000"
+                   FontSize="18"
+                    FontAttributes="Bold"
+                    x:Name="lblCodigoCarnet"
+                    Text="Codigo Carnet"
+                    VerticalOptions="Center">
+            </Label>
+            <Frame 
+                CornerRadius="15" 
+                BorderColor="#757575" 
+                Padding="5">
+                <Frame 
+                    CornerRadius="10" 
+                    BackgroundColor="White" 
+                    Padding="1">
+                    <Entry
+                    x:Name="entCodigoCarnet"
+                    Grid.Row="5"
+                    Grid.Column="1" 
+                    MaxLength="11"
+                    Completed="entCodigoCarnet_Completed">
+                    </Entry>
+                </Frame>
+            </Frame>
+            
             <Label
                     x:Name="lbPlaca"
-                    Grid.Row="5"
+                    Grid.Row="6"
                     Grid.Column="0" 
                 TextColor="#000000"
                     FontSize="18"
@@ -149,7 +178,7 @@
                     Padding="1">
                     <Entry
                     x:Name="entPlaca"
-                    Grid.Row="5"
+                    Grid.Row="6"
                     Grid.Column="1"
                     Completed="EntPlaca_Completed">
                     </Entry>
@@ -168,5 +197,5 @@
                 FontAttributes="Bold"
                 TextColor="White"/>
         </StackLayout>
-    </ContentPage.Content>
+    </ScrollView>
 </ContentPage>
