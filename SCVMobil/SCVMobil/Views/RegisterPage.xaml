@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="SCVMobil.RegisterPage"
+             Title="Registro"
+             BackgroundColor="#FFFFFF">
+    <ContentPage.Content>
+        <StackLayout
+            VerticalOptions="Center"
+            Padding="40"
+            >
+            <Label
+                FontAttributes="Bold"
+                TextColor="Black"
+                HorizontalOptions="Start"
+                Text="Cédula"
+                FontSize="20">
+            </Label>
+            <Frame 
+                CornerRadius="15" 
+                BorderColor="#757575" 
+                Padding="5">
+                <Frame 
+                    CornerRadius="10" 
+                    BackgroundColor="White" 
+                    Padding="1">
+                    <Entry  
+                        HorizontalTextAlignment="Center"
+                        x:Name="EntryCedula"
+                     Placeholder="000-000000-0"
+                     Keyboard="Keyboard.Numeric" ></Entry>
+                </Frame>
+            </Frame>
+            <Label 
+                Margin="0,20,0,0"
+                FontAttributes="Bold"
+                TextColor="Black"
+                HorizontalOptions="Start"
+                Text="Nombre" 
+               FontSize="20">
+            </Label>
+            <Frame CornerRadius="15" 
+                BorderColor="#757575"
+                Padding="5">
+                <Frame
+                    CornerRadius="10" 
+                    BackgroundColor="White" 
+                    Padding="1">
+                    <Entry 
+                HorizontalTextAlignment="Center"
+                x:Name="EntryNombre"
+                Placeholder="Rodrigo">
+                    </Entry>
+                </Frame>
+            </Frame>
+            <Label 
+                 Margin="0,20,0,0"
+                FontAttributes="Bold"
+                TextColor="Black"
+                HorizontalOptions="Start"
+                Text="Apellido" 
+                FontSize="20">
+            </Label>
+            <Frame CornerRadius="15" 
+                BorderColor="#757575"
+                Padding="5">
+                <Frame CornerRadius="10" 
+                    BackgroundColor="White" 
+                    Padding="1" >
+                    <Entry 
+                HorizontalTextAlignment="Center"
+                x:Name="EntryApellido"
+                Placeholder="Alfonso"
+                      >
+
+                    </Entry>
+                </Frame>
+            </Frame>
+            <Button  
+                x:Name="Agregar"
+                Clicked="Agregar_Clicked_1"
+                Text="Agregar"
+                BackgroundColor="#F44336" 
+                VerticalOptions="CenterAndExpand"
+                HeightRequest="40"
+                CornerRadius="20"
+                WidthRequest="190"
+                Margin="30,40,30,0"
+                FontSize="17"
+                FontAttributes="Bold"
+                TextColor="White">
+            </Button>
+        </StackLayout>
+
+    </ContentPage.Content>
+</ContentPage>

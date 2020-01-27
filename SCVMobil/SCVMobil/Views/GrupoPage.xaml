@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             Title="GRUPOS"
+             x:Class="SCVMobil.GrupoPage"
+              BackgroundColor="#FFFFFF">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem 
+            Text="Imprimir" 
+            Order="Primary" 
+            Clicked="ToolbarItem_Clicked"
+           ></ToolbarItem>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        
+        
+            <StackLayout
+            Padding="20">
+                
+                <StackLayout
+                Orientation="Horizontal">
+                    <Label
+                    TextColor="Black"
+                    FontSize="20"
+                    FontAttributes="Bold"
+                    Text="Destino :"
+                  >
+                    </Label>
+                    <Label
+                    TextColor="Black"
+                    FontSize="20"
+                     x:Name="empresa"
+                    Text="Gad Intermec"
+                   />
+                </StackLayout>
+
+                <StackLayout
+                Orientation="Horizontal"
+                >
+                    <Label
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    TextColor="Black"
+                    FontSize="20"
+                        x:Name="VisitaALabel"
+                    FontAttributes="Bold"
+                    Text="Visita a :"
+                  >
+                    </Label>
+                    <Label
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    TextColor="Black"
+                    FontSize="20"
+                    x:Name="visitaA"
+                    Text="Mironchy">
+                    </Label>
+
+                </StackLayout>
+                <!-- POP UP AREA-->
+                <ContentView 
+            x:Name="ppCedulaNoExiste" 
+            BackgroundColor="#C0808080" 
+            Padding="10, 0" IsVisible="False" 
+            AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
+            AbsoluteLayout.LayoutFlags="All">
+                    <Frame 
+                x:Name="fmCedula" 
+                VerticalOptions="CenterAndExpand" 
+                BorderColor="Black" 
+                HorizontalOptions="Center"
+                HeightRequest="230" WidthRequest="345" 
+                BackgroundColor="Red" Padding="10">
+                        <StackLayout>
+                            <Label Text="-- Documento No Existe --" TextColor="White" 
+                           HorizontalTextAlignment="Center"
+                           HorizontalOptions="Center"
+                           VerticalOptions="CenterAndExpand"
+                           FontSize="35"></Label>
+                            <Label Text="Ingrese los Datos y presione Agregar"
+                           HorizontalTextAlignment="Center"
+                           TextColor="White"
+                           FontSize="25"></Label>
+                            <Grid>
+                                <Button 
+                            x:Name="btOKCedulaNoExiste" 
+                            Text="OK" Grid.Column="0" 
+                            Clicked="BtOKCedulaNoExiste_Clicked"></Button>
+                            </Grid>
+                        </StackLayout>
+                    </Frame>
+                </ContentView>
+
+                <StackLayout>
+                    <Label TextColor="Black"
+                           FontSize="15"
+                           HorizontalTextAlignment="Center"
+                           Text="Escanee o ingrese la próxima cédula">
+                    </Label>
+                    
+                    
+                    <Frame CornerRadius="15" 
+                           BorderColor="#757575"
+                           Padding="5"
+                           x:Name="Frame1">
+                        <Frame CornerRadius="10" 
+                               BackgroundColor="White" 
+                               x:Name="Frame2"
+                               Padding="1" >
+                            <Entry x:Name="cedula"
+                                   Keyboard="Keyboard.Numeric"
+                                   HorizontalTextAlignment="Center"
+                                   Completed="Cedula_Completed"
+                                   MaxLength="11"/>
+                        </Frame>
+                    </Frame>
+
+                    
+                    <Frame CornerRadius="15" 
+                           BorderColor="#757575"
+                           Padding="5"
+                           x:Name="FrameName1">
+                        <Frame CornerRadius="10" 
+                               BackgroundColor="White" 
+                               Padding="1"
+                               x:Name="FrameName2">
+                            <Entry x:Name="Nombres"
+                                   HorizontalTextAlignment="Center"
+                                   Placeholder="Nombre y Apellido"/>
+                        </Frame>
+                    </Frame>
+
+                <ScrollView>
+                    <ListView x:Name="listaGrupo"                              
+                                  ItemSelected="ListaGrupo_ItemSelected">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <StackLayout>
+                                        <Label Text="{Binding Nombres}" FontAttributes="Bold" TextColor="Black"></Label>
+                                        <Label Text="{Binding Cedula}" TextColor="Black"></Label>
+                                    </StackLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </ScrollView>
+            </StackLayout>
+
+            </StackLayout>
+        
+    </ContentPage.Content>
+</ContentPage>

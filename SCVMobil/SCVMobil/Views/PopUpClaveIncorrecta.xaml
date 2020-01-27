@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<popup:PopupPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             mc:Ignorable="d"
+             x:Class="SCVMobil.PopUpClaveIncorrecta">
+    <StackLayout Margin="14" Padding="20" Spacing="10" BackgroundColor="White"  VerticalOptions="Center">
+        <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Padding="0,0,0,10">
+            <Label FontAttributes="Bold" 
+                   FontSize="30" 
+                   TextColor="Black" 
+                   HorizontalTextAlignment="Center" 
+                   Text="Contraseña incorrecta"/>
+        </StackLayout>
+        <StackLayout HorizontalOptions="Center">
+            <Label FontSize="20" 
+                   TextColor="Black" 
+                   HorizontalTextAlignment="Center" 
+                   Text="Inténtelo nuevamente"/>
+        </StackLayout>
+        <StackLayout Margin="12" Padding="20" Spacing="20"  >
+            <Button BackgroundColor="#F44336"
+                x:Name="claveincorrecta"
+                FontSize="20"
+                FontAttributes="Bold"
+                CornerRadius="20"
+                TextColor="White"
+                Text="Ok"
+                Clicked="claveincorrecta_Clicked"/>
+        </StackLayout>
+    </StackLayout>
+</popup:PopupPage>

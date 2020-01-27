@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:SCVMobil"                 
+             x:Class="SCVMobil.MainPage"
+             Title="Inicio" 
+             BackgroundColor="#FFFFFF"            
+             x:Name="mainn">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Configuración"
+                         Order="Secondary"
+                         Clicked="ToolbarItem_Clicked"
+                     x:Name="configbtn"
+        />
+
+    </ContentPage.ToolbarItems>
+    
+    <StackLayout Padding="10"
+                 Orientation="Vertical"
+                 VerticalOptions="Start">
+        <Image                 
+                    x:Name="imgSync"
+                    Source="wifi"
+                    WidthRequest="30"
+                    HorizontalOptions="End"></Image>
+        <Image
+                    x:Name="imgNoSync"                     
+                    Source="nowifi"
+                    WidthRequest="30"
+                    HorizontalOptions="End"></Image>
+        <StackLayout HorizontalOptions="CenterAndExpand"
+                     HeightRequest="2">
+            <Label 
+                   IsVisible="False"
+                   x:Name="sinserver"
+                   FontSize="Body"
+                   FontAttributes="Bold"/>
+            
+        </StackLayout>
+        <Label
+            
+            Text="Escanear Cédula"
+            FontSize="20"            
+            TextColor="Black"
+            FontAttributes="Bold"
+            HorizontalTextAlignment="Center"
+            Margin="0,180,0,0"
+        />
+        
+        <Frame
+            CornerRadius="15"
+            BorderColor="#757575"            
+            Padding="5">
+            
+            <Frame
+              CornerRadius="15"             
+              Padding="1">
+                
+                <Entry
+                x:Name="entCedula"
+                    IsEnabled="True"
+                Completed="EntCedula_Completed"
+                Keyboard="Keyboard.Numeric" MaxLength="11"/>
+                
+            </Frame>
+            
+        </Frame>
+        
+        <Label
+            Text="Nombre:"
+            FontSize="20"
+            TextColor="Black"
+            FontAttributes="Bold"
+             x:Name="lblNombres"
+            HorizontalTextAlignment="Center"
+            Margin="0,20,0,0"
+            IsVisible="False"
+        />
+        
+        <Label FontSize="20"
+               TextColor="Blue"
+               FontAttributes="Bold"
+               HorizontalTextAlignment="Center"
+               Margin="0,20,0,0"
+               x:Name="entNombres"
+               IsVisible="False"
+        />
+
+        <Label Text="Apellido:"
+               FontSize="20"
+               TextColor="Black"
+               FontAttributes="Bold"
+               x:Name="lblApellidos"
+               HorizontalTextAlignment="Center"
+               Margin="0,20,0,0"
+               IsVisible="False">
+
+        </Label>
+        
+        <Label
+            FontSize="20"
+            TextColor="Blue"
+            FontAttributes="Bold"
+            HorizontalTextAlignment="Center"
+            Margin="0,20,0,20"
+            x:Name="entApellidos"
+            IsVisible="False"
+        />
+
+        <Label Text="Version:"
+               FontSize="Small"
+               HorizontalOptions="Center"     
+               VerticalOptions="End"
+               IsVisible="False">
+        </Label>
+
+
+        <Label VerticalOptions="End"
+               HorizontalOptions="Start"
+               Margin="0,140,0,0"
+               Text="Desarrollado por:"
+               TextColor="Black"
+        />
+        
+        <Image VerticalOptions="End"
+               HorizontalOptions="Start"
+               Source="GAD_Logo"
+               WidthRequest="100"
+               HeightRequest="100"
+        />
+
+    </StackLayout>     
+</ContentPage>   
+

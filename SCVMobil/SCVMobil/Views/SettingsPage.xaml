@@ -1,0 +1,290 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SCVMobil.SettingsPage"
+             Title="Configuración Avanzada">
+    <ContentPage.Content>
+        <AbsoluteLayout 
+            Padding="0" 
+            HorizontalOptions="CenterAndExpand" 
+            VerticalOptions="CenterAndExpand"
+            BackgroundColor="White">
+            <ScrollView>
+                <StackLayout 
+                Padding="20"
+                BackgroundColor="White">
+                    <Label                    
+                    Text="Servidor"
+                    FontSize="30"
+                    HorizontalOptions="Center"
+                    FontAttributes="Bold"                    
+                    TextColor="Black"></Label>
+                    <Grid
+                        Margin="0,0,0,20">
+                        <Grid.RowDefinitions>
+
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                Width="*"></ColumnDefinition>
+                            <ColumnDefinition
+                                Width="2*"></ColumnDefinition>
+
+                        </Grid.ColumnDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="IP: " 
+                            FontSize="15" 
+                            VerticalTextAlignment="Center"
+                            TextColor="Black"/>
+                        <Entry 
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Text="255.255.255.255" 
+                            TextColor="Black"     
+                            FontSize="15"
+                            HorizontalTextAlignment="Center"
+                            MaxLength="15"                       
+                            WidthRequest="190"
+                            x:Name="eServerIP"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.RowDefinitions>
+
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                    Width="*"></ColumnDefinition>
+                            <ColumnDefinition
+                                    Width="2*"></ColumnDefinition>
+                            <ColumnDefinition
+                                    Width=".7*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label 
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            VerticalTextAlignment="Center"
+                            Text="Commit Size" 
+                            FontSize="15" 
+                            TextColor="Black"/>
+                        <Entry 
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            HorizontalTextAlignment="Center"
+                            WidthRequest="90"
+                            Text="1500000" 
+                            FontSize="15"
+                            TextColor="Black"                             
+                            Keyboard="Keyboard.Numeric"
+                            x:Name="eCommitSize"
+                            MaxLength="7"/>
+                        <Label 
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            VerticalTextAlignment="Center"
+                            Text="Chunk Size" 
+                            FontSize="15" 
+                            TextColor="Black"/>
+                        <Entry 
+                            Grid.Row="0"
+                            Grid.Column="3"
+                            FontSize="15"
+                            HorizontalTextAlignment="Center"
+                            Text="30" 
+                            TextColor="Black"
+                            Keyboard="Keyboard.Numeric"
+                            x:Name="entChunkSize"
+                            />
+                    </Grid>
+                    <Button 
+                        Margin="90,0,90,0"
+                        CornerRadius="30"
+                        x:Name="pinbutton"
+                        Text="Ping"                                                
+                        BackgroundColor="#F44336"                            
+                        TextColor="White"    
+                        FontAttributes="Bold"
+                        Clicked="pinbutton_Clicked"/>
+                    <Label
+                        Margin="0,10,0,0"
+                        Text="Lector"
+                        FontSize="30"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        TextColor="Black"></Label>
+
+
+                    <Grid
+                        Margin="0,0,0,20">
+                        <Grid.RowDefinitions>
+
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                    Width="*"></ColumnDefinition>
+                            <ColumnDefinition
+                                    Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label 
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="No." 
+                            VerticalTextAlignment="Center"
+                            FontSize="15" 
+                            TextColor="Black"/>
+                        <Entry 
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Text="30" 
+                            WidthRequest="50"
+                            TextColor="Black"
+                            HorizontalTextAlignment="Start"                  
+                            Keyboard="Keyboard.Numeric"
+                            MaxLength="3"
+                            x:Name="eLector"/>
+                    </Grid>
+
+                    <StackLayout 
+                        VerticalOptions="StartAndExpand">
+                        <Grid 
+                        >
+                            <Grid.RowDefinitions>
+                                <RowDefinition 
+                                Height="*" />
+                                <RowDefinition 
+                                Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition 
+                                Width="50" />
+                                <ColumnDefinition 
+                                Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Label 
+                            Text="Auto Sync" 
+                            TextColor="Black" 
+                            Grid.Row="0" 
+                            Grid.Column="0"
+                            VerticalOptions="Center"
+                            IsVisible="False"
+                            FontSize="15"/>
+                            <Switch 
+                            x:Name="swAutoSync" 
+                            HorizontalOptions="CenterAndExpand" 
+                            Grid.Row="0" Grid.Column="1"
+                            Scale=".8"                            
+                            IsVisible="False">
+
+                            </Switch>
+
+                        </Grid>
+                        <Label 
+                        Margin="0,0,0,0"
+                        HorizontalOptions="Center"
+                        x:Name="lbVersion"
+                        TextColor="Black"                        
+                        FontAttributes="Bold"
+                        />
+                        
+                        <Label 
+                        Margin="0,0,0,0"
+                        HorizontalOptions="Center"
+                        x:Name="lblCantidadPadron"
+                        TextColor="Black"                        
+                        FontAttributes="Bold"
+                        />
+                    </StackLayout>
+
+                    <StackLayout
+                            HorizontalOptions="CenterAndExpand"                           
+                            Orientation="Horizontal">
+
+                        <Button 
+                                BorderColor="Accent"
+                                CornerRadius="30"
+                                BackgroundColor="#F44336"
+                                TextColor="White"
+                                WidthRequest="140"
+                                Text="Padron
+"
+                                FontAttributes="Bold"
+                                x:Name="btSync"
+                                Clicked="BtSync_Clicked"
+                               />
+                        <Button 
+                                BorderColor="Accent"  
+                                CornerRadius="27"
+                                BackgroundColor="Accent"
+                                TextColor="White"
+                                WidthRequest="140"
+                                FontAttributes="Bold"
+                                Text="Inicializar"
+                                x:Name="btIni"
+                                Clicked="BtIni_Clicked"
+                                 IsVisible="False"/>
+                        <Button
+                                CornerRadius="30"
+                                x:Name="Guardar"
+                                Text="Guardar"
+                                BackgroundColor="#F44336"                            
+                                TextColor="White"
+                                FontAttributes="Bold"
+                                WidthRequest="140"
+                                Clicked="Guardar_Clicked"/>
+                    </StackLayout>
+
+
+                </StackLayout>
+            </ScrollView>
+            
+           
+            <!--Popup Area-->
+            <ContentView 
+                x:Name="popupLoadingView" 
+                BackgroundColor="#C0808080" 
+                Padding="10, 0" IsVisible="False" 
+                AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
+                AbsoluteLayout.LayoutFlags="All">
+                <StackLayout 
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center">
+                    <StackLayout 
+                        Orientation="Vertical" 
+                        HeightRequest="150" 
+                        WidthRequest="200" 
+                        BackgroundColor="White" 
+                        Padding="10">
+                       
+                        <Label 
+                            TextColor="Black" 
+                            Text="Cargando Padron" 
+                            FontSize="20" 
+                            HorizontalOptions="Center"/>
+                        <ActivityIndicator 
+                            x:Name="aiLoading"  
+                            Color="#0000FF" 
+                            IsRunning="False" 
+                            IsVisible="False" 
+                            VerticalOptions="CenterAndExpand"/>
+                        <ProgressBar 
+                            x:Name="pbLoading" 
+                            IsVisible="True" 
+                            ProgressColor="#0000FF" 
+                            VerticalOptions="CenterAndExpand" 
+                            Progress="0.0"/>
+                        <Label 
+                            x:Name="lblLoadingText" 
+                            TextColor="Black" 
+                            HorizontalOptions="Center" 
+                            VerticalTextAlignment="Center" 
+                            Text="Loading..."/>
+                    </StackLayout>
+                </StackLayout>
+            </ContentView>
+            
+        </AbsoluteLayout>
+        
+    </ContentPage.Content>
+</ContentPage>
