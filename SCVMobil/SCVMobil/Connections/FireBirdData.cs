@@ -874,22 +874,23 @@ namespace SCVMobil.Connections
         //// Probar que hay conexion trayendo datos
         public void tryConnection()
         {
-
-            string querySync = "SELECT FIRST 1 * FROM COMPANIAS";
-
-            string dt = ""; //Execute(querySync);
+            string dt = obtenerfecha();
 
             try
             {
-                if (dt != "")
+                if (!string.IsNullOrEmpty(dt))
                 {
                     Preferences.Set("SYNC_VSU", true);
+                }
+                else
+                {
+                    Preferences.Set("SYNC_VSU", false);
                 }
             }
             catch (Exception)
             {
-
                 Preferences.Set("SYNC_VSU", false);
+
             }
 
         }
@@ -1162,6 +1163,10 @@ namespace SCVMobil.Connections
 
                     if (!string.IsNullOrEmpty(content))
                     {
+                        if (true)
+                        {
+
+                        }
                         registro.verificacionSubida = true;
                         Debug.WriteLine("Verificacion subida: ID" + registro.INVIDATO_ID.ToString() + " " + registro.Fecha_Verificacion.ToString());
                     }
@@ -1187,6 +1192,7 @@ namespace SCVMobil.Connections
             {
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                 var salidasASubir = db.Query<Invitados>("SELECT * FROM Invitados where SALIDASUBIDA is null and FECHA_SALIDA is not null and SUBIDA is not null");
+                var salidas = db.Query<Invitados>("SELECT * FROM Invitados");
 
                 foreach (Invitados registro in salidasASubir)
                 {
@@ -1300,6 +1306,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
+
                 Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadReservations, Error: " + ea.Message);
                 Debug.WriteLine("Excepcion en el metodo DownloadReservations, Error: " + ea.Message);
             }
@@ -1635,6 +1642,11 @@ namespace SCVMobil.Connections
                 Debug.WriteLine("Error en la fecha de base de datos " + e.Message);
                 return null;
             }
+        }
+
+        public void DownloadPadron()
+        {
+
         }
 
         public List<VisitasDepto> extraerDeparatamentoId(COMPANIAS cc) //Extraer personas con su departamento//

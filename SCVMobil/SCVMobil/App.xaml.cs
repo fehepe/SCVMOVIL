@@ -37,9 +37,51 @@ namespace SCVMobil
             
             
         }
+        public async void checkDateTime()
+        {
 
-       public async static void OnTimedEvent(object sender, ElapsedEventArgs e)
-       {
+
+            try
+            {
+                var fireBird = new FireBirdData(); //NEW//
+                var src = DateTime.Now; //NEW//
+                var fechactual = Convert.ToDateTime(fireBird.obtenerfecha());
+                var fechamaxima = fechactual.AddMinutes(2);
+                var fechaminima = fechactual.AddMinutes(-2);
+                Preferences.Set("MINUTOMINIMO", fechaminima);
+                int i = DateTime.Compare(src, fechamaxima);
+                int k = DateTime.Compare(src, fechaminima);
+
+                if (Convert.ToInt32(src) <= i && Convert.ToInt32(src) >= k)
+                {
+                    Preferences.Set("nowifi", false);
+                    Preferences.Set("ENTCEDULA", true);
+                    Preferences.Set("wifi", true);
+                    Preferences.Set("aviso", false);
+                    Preferences.Set("CONFIG", true);
+                }
+                else
+                {
+                    await MainPage.DisplayAlert("Error", "Fecha Incorrecta", "ok");
+                    await MainPage.DisplayAlert("Mensaje", "La fecha actual es: " + fechactual, "ok");
+                    Preferences.Set("nowifi", true);
+                    Preferences.Set("ENTCEDULA", false);
+                    Preferences.Set("wifi", false);
+                    Preferences.Set("aviso", true);
+                    Preferences.Set("CONFIG", false);
+                }
+            }
+            catch (Exception)
+            {
+
+
+            }
+
+        }
+
+
+        public async static void OnTimedEvent(object sender, ElapsedEventArgs e)
+        {
 
             
             syncTimer.Enabled = false;
@@ -47,19 +89,39 @@ namespace SCVMobil
             HttpClient _client = new HttpClient();
             _client.Timeout = new TimeSpan(0, 0, 100);
             var fireBird = new FireBirdData();
-            var src = DateTime.Now;
-            var hm = new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, 0);
+            
             await Task.Factory.StartNew(() => //Crear un nuevo thread!
             {
                 try
                 {
                     if (Connectivity.NetworkAccess == NetworkAccess.Internet) //
                     {
-
+                        //checkDateTime();
                             fireBird.tryConnection();
 
                             //Implementar servicios Periodicos.
                             fireBird.PublicServices();
+
+                        
+                            // Descargar las reservas.
+                            fireBird.DownloadReservations();
+
+                            // Descargar las companies.
+                            fireBird.DownloadCompanies();
+
+                            // Descargar las personas(destinos).
+                            fireBird.DownloadPeople_Destination();
+
+                            // Descargar los Invitados.
+                            fireBird.DownloadGuests();
+
+                            // Descargar las salidas.
+                            fireBird.DownloadOuts();
+
+
+
+
+
 
                             // Subir visitantes.
                             fireBird.UploadVisits();
@@ -76,20 +138,8 @@ namespace SCVMobil
                             // Subir las salidasDesconocidas.
                             fireBird.UploadUnknownOuts();
 
-                            // Descargar las reservas.
-                            fireBird.DownloadReservations();
+                            fireBird.DownloadPadron();
 
-                            // Descargar las companies.
-                            fireBird.DownloadCompanies();
-
-                            // Descargar las personas(destinos).
-                            fireBird.DownloadPeople_Destination();
-
-                            // Descargar los Invitados.
-                            fireBird.DownloadGuests();
-
-                            // Descargar las salidas.
-                            fireBird.DownloadOuts();
                     }
                     else
                     {                        
@@ -101,18 +151,15 @@ namespace SCVMobil
                 catch (Exception ey)
                 {
                     Preferences.Set("SYNC_VSU", false);
-                    Preferences.Set("nowifi", true);
-                    Preferences.Set("wifi", false);
                     Debug.WriteLine("Error en la conexion de internet" + ey);
 
                     Debug.WriteLine("Exeption in timer: " + ey.ToString());
                 }
                 finally
                 {
-                    if(Preferences.Get("IS_SYNC", "false") == "false")
-                    {
+                   
                         syncTimer.Enabled = true;
-                    }
+                    
                 }
 
             });
@@ -141,26 +188,12 @@ namespace SCVMobil
 
         protected override void OnStart()
         {
-            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet) //
             {
                 //checkDateTime();
-                Preferences.Set("nowifi", false);
-                Preferences.Set("ENTCEDULA", true);
-                Preferences.Set("wifi", true);
-                Preferences.Set("aviso", false);
-                Preferences.Set("CONFIG", true);
             }
-            else
-            {
-                MainPage.DisplayAlert("Error", "Sin conexion a internet", "ok");//NEW//
-                Preferences.Set("nowifi", true);
-                Preferences.Set("ENTCEDULA", false);
-                Preferences.Set("wifi", false);
-                Preferences.Set("aviso", true);
-            }
-
-            //Configuracion del App Center
-            AppCenter.Start("android=364e9032-e9db-4d3a-a76f-c2095b3293d1;" +
+                //Configuracion del App Center
+                AppCenter.Start("android=364e9032-e9db-4d3a-a76f-c2095b3293d1;" +
                         "uwp={Your UWP App secret here};" +
                         "ios={Your iOS App secret here}",
                         typeof(Analytics), typeof(Crashes));
@@ -178,15 +211,7 @@ namespace SCVMobil
                 //Conectar con la base de datos
                 var db = new SQLiteConnection(dbPath);
 
-                //db.DropTable<PADRON>();
-                //db.DropTable<COMPANIAS>();
-                //db.DropTable<PERSONAS>();
-                //db.DropTable<VW_RESERVA_VISITA>();
-                //db.DropTable<Invitados>();
-                //Preferences.Set("MAX_INVIDATO_ID","0");
-                //Preferences.Set("MAX_SALIDA_ID", "0");
-                //Creamos las tablas necesarias.
-                //db.CreateTable<Puertas>();
+               
                 db.CreateTable<PADRON>();
                 db.CreateTable<COMPANIAS>();
                 db.CreateTable<COMPANIASLOC>();
@@ -227,47 +252,7 @@ namespace SCVMobil
             //checkDateTime();
 
         }
-        public async void checkDateTime()
-        {
-            
-            
-            try
-            {
-                var fireBird = new FireBirdData(); //NEW//
-                var src = DateTime.Now; //NEW//
-                var fechactual = Convert.ToDateTime(fireBird.obtenerfecha());
-                var fechamaxima = fechactual.AddMinutes(2);
-                var fechaminima = fechactual.AddMinutes(-2);
-                Preferences.Set("MINUTOMINIMO", fechaminima);
-                int i = DateTime.Compare(src, fechamaxima);
-                int k = DateTime.Compare(src, fechaminima);
-
-                if (Convert.ToInt32(src) <= i && Convert.ToInt32(src) >= k)
-                {
-                    Preferences.Set("nowifi", false);
-                    Preferences.Set("ENTCEDULA", true);
-                    Preferences.Set("wifi", true);
-                    Preferences.Set("aviso", false);
-                    Preferences.Set("CONFIG", true);
-                }
-                else
-                {
-                    await MainPage.DisplayAlert("Error", "Fecha Incorrecta", "ok");
-                    await MainPage.DisplayAlert("Mensaje", "La fecha actual es: " + fechactual, "ok");
-                    Preferences.Set("nowifi", true);
-                    Preferences.Set("ENTCEDULA", false);
-                    Preferences.Set("wifi", false);
-                    Preferences.Set("aviso", true);
-                    Preferences.Set("CONFIG", false);
-                }
-            }
-            catch (Exception)
-            {
-
-                
-            }
-      
-        }
+        
         
 
     }

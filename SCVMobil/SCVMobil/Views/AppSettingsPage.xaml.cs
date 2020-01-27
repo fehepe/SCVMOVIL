@@ -81,10 +81,9 @@ namespace SCVMobil
                         listpuertas.Add(item.NOMBRE);
                     }
                     entPuerta.ItemsSource = listpuertas;
-                    if (scompania_id != "1")
-                    {
+                    
                         entPuerta.SelectedItem = (puertas.Where(x => x.COMPANIA_ID == Convert.ToInt32(scompania_id)).First().NOMBRE);
-                    }
+                    
 
 
                 }
@@ -160,7 +159,7 @@ namespace SCVMobil
                         Preferences.Set("MAX_INVIDATO_ID", "0");
                         Preferences.Set("PERSONAS_LIST", "");
                         Preferences.Set("COMPANIAS_LIST", "");
-                        Preferences.Set("CHUNK_SIZE", "0");
+                        Preferences.Set("CHUNK_SIZE", "50000");
                         var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                         db.DeleteAll<COMPANIAS>();
                         db.DeleteAll<PERSONAS>();
@@ -221,12 +220,12 @@ namespace SCVMobil
                 if (puertas.Any())
                 {
                     Preferences.Set("LOCALIDAD_VSU", puertas.First().COMPANIA_ID.ToString());
-                    querry = "select COMPANIA_ID, NOMBRE, PUNTO_VSU, ESTATUS          " +
-                                "from COMPANIAS C                                     " +
-                                "where C.COMPANIA_ID in (select DL.id_departamento    " +
-                                "                        from DEPTO_LOCALIDAD DL      " +
-                                $"                       where DL.id_localidad = {puertas.First().COMPANIA_ID.ToString()}) ";
-                    fireBird.DownloadCompaniesPorLocalidad(querry);
+                    //querry = "select COMPANIA_ID, NOMBRE, PUNTO_VSU, ESTATUS          " +
+                    //            "from COMPANIAS C                                     " +
+                    //            "where C.COMPANIA_ID in (select DL.id_departamento    " +
+                    //            "                        from DEPTO_LOCALIDAD DL      " +
+                    //            $"                       where DL.id_localidad = {puertas.First().COMPANIA_ID.ToString()}) ";
+                    //fireBird.DownloadCompaniesPorLocalidad(querry);
 
                 }
             }

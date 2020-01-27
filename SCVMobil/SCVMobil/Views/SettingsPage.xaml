@@ -207,7 +207,8 @@
                                 BackgroundColor="#F44336"
                                 TextColor="White"
                                 WidthRequest="140"
-                                Text="Sync"
+                                Text="Padron
+"
                                 FontAttributes="Bold"
                                 x:Name="btSync"
                                 Clicked="BtSync_Clicked"

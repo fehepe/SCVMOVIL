@@ -27,7 +27,7 @@ namespace SCVMobil
         public MainPage()//Constructor
         {
             
-            Device.StartTimer(TimeSpan.FromSeconds(1), () =>
+            Device.StartTimer(TimeSpan.FromSeconds(5), () =>
             {
                 
                     Device.BeginInvokeOnMainThread(() => refreshPage());
@@ -38,10 +38,7 @@ namespace SCVMobil
           
             InitializeComponent();
             scanner = new Escaner(cedulaScanned);
-            entCedula.IsEnabled = Preferences.Get("ENTCEDULA", true);
-            aviso.IsVisible = Preferences.Get("aviso", false);
-            sinserver.IsVisible = Preferences.Get("SERVEROFF", false);
-            configbtn.IsEnabled = Preferences.Get("CONFIG",true);
+            
             DeviceDisplay.KeepScreenOn = false;
 
 
@@ -65,28 +62,17 @@ namespace SCVMobil
             try
             {
                 
+
                 if (Preferences.Get("SYNC_VSU", false))
                 {                  
-                    imgNoSync.IsVisible = Preferences.Get("nowifi", true);
-                    imgSync.IsVisible = Preferences.Get("wifi", false);
-                    entCedula.IsEnabled = Preferences.Get("ENTCEDULA", false);                 
-                    aviso.IsVisible = Preferences.Get("aviso", false);
-                    sinserver.IsVisible = Preferences.Get("SERVEROFF", false); //
-                    configbtn.IsEnabled = Preferences.Get("CONFIG", false);
-                    //entCedula.IsEnabled = false; //
-                    //aviso.IsVisible = true;
-
+                    imgNoSync.IsVisible = false;
+                    imgSync.IsVisible = true;
+                      
                 }
                 else
                 {
-                    
-                    imgNoSync.IsVisible = Preferences.Get("nowifi", false);
-                    imgSync.IsVisible = Preferences.Get("wifi", true);
-                    entCedula.IsEnabled = Preferences.Get("ENTCEDULA", true);
-                    aviso.IsVisible = Preferences.Get("aviso", true);
-                    sinserver.IsVisible = Preferences.Get("SERVEROFF", true); //
-                    configbtn.IsEnabled = Preferences.Get("CONFIG", true);
-                    //aviso.IsVisible = false;
+                    imgNoSync.IsVisible = true;
+                    imgSync.IsVisible = false;
 
                 }
             }
@@ -96,18 +82,12 @@ namespace SCVMobil
                 throw;
             }
         }
-
        
         //-----------------------------------------------------------------------------------------
         protected override void OnAppearing() //Cuando aparezca la pagina, refrescamos.
         {
 
-            //if (Navigation.NavigationStack.Count >= 2 && !Preferences.Get("IS_SET", false))
-            //{
-            //    Application.Current.MainPage.Navigation.RemovePage(Navigation.NavigationStack.First());
-            //    Preferences.Set("IS_SET", true);
-            //}
-            // OnGetList();
+           
             Debug.WriteLine("Appeared");
             refreshPage();
             scanner.GetScanner(true);
@@ -168,6 +148,7 @@ namespace SCVMobil
 
             try
             {
+
                 if (inString != "")
                 {
                     if (inString.Length == 11 || inString.StartsWith("ID"))
