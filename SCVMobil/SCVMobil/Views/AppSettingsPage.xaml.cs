@@ -19,7 +19,6 @@ namespace SCVMobil
     {
 
         List<int> num = new List<int>();
-        FireBirdData fire = new FireBirdData();
         public AppSettingsPage()
         {
             InitializeComponent();
@@ -222,12 +221,6 @@ namespace SCVMobil
         private void TiempoVerif_SelectedIndexChanged(object sender, EventArgs e)
         {
              Preferences.Set("TIEMPOS", TiempoVerif.SelectedItem.ToString());                        
-
-        }
-
-        private void verif_Clicked(object sender, EventArgs e)
-        {
-           
 
         }
     }
