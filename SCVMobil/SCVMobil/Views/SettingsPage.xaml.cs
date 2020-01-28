@@ -56,7 +56,7 @@ namespace SCVMobil
             var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
             string totalCed = db.ExecuteScalar<string>("select count(*) from padron");
-
+            db.Dispose();
             lblCantidadPadron.Text = $"Cantidad de cedulas guardadas: "+ totalCed;
             swAutoSync.IsToggled = Preferences.Get("AUTO_SYNC", "False") == "True";
             eCommitSize.Text = Preferences.Get("COMMIT_SIZE", "1000000");
@@ -93,6 +93,7 @@ namespace SCVMobil
                 Debug.WriteLine("Timer Stopped");
                 App.syncTimer.Stop();
                 App.syncTimer.Enabled = false;
+                        var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                 Preferences.Set("IS_SYNC", "true");
                 if (Connectivity.NetworkAccess == NetworkAccess.Internet)
                 {
@@ -109,7 +110,6 @@ namespace SCVMobil
                         var querry1 = "";
 
                         //Vamos a buscar el directorio de la base de datos
-                        var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
                         //Buscamos el Chunk Size
                         var iChunkSize = int.Parse(Preferences.Get("CHUNK_SIZE", "10000"));
@@ -295,6 +295,7 @@ namespace SCVMobil
                     }
                     finally
                     {
+                        db.Dispose();
 
                         popupLoadingView.IsVisible = false;
                         try
@@ -368,6 +369,7 @@ namespace SCVMobil
                     var notification = DependencyService.Get<IToastNotificator>();
                     var result = notification.Notify(options);
                     db.Close();
+                    db.Dispose();
                 });
             }
             catch(Exception ea)
@@ -478,66 +480,25 @@ namespace SCVMobil
                 string querry = "SELECT PV.documento AS CEDULA, PV.nombres, PV.apellidos,pv.padron_visitante_id " +
                                 "FROM padron_visitantes PV " +
                                 "WHERE CHAR_LENGTH(PV.documento) = 11 AND pv.padron_visitante_id > " + Preferences.Get("MAX_PERSONA_PADRON_ID", "0") +
-                                " ORDER BY pv.padron_visitante_id  ";
+                                " ORDER BY pv.padron_visitante_id desc ";
                
                
                 var listPadronVisita = fireBirdData.DownloadPadron(querry, true);
                 if (listPadronVisita.Count > 0)
                 {
-                    popupLoadingView.IsVisible = true;
-                    aiLoading.IsVisible = true;
-                    aiLoading.IsRunning = true;
-                    pbLoading.IsVisible = false;
+                   
+                    db.InsertAll(listPadronVisita);
+                    Preferences.Set("MAX_PERSONA_PADRON_ID", listPadronVisita.First().ID_PADRON.ToString());
+                    
 
-                    lblLoadingText.Text = "Loading...";
-                    await Task.Factory.StartNew(() =>
-                    {
-                        try
-                        {
-                            foreach (var persona in listPadronVisita)
-                            {
-                                try
-                                {
-                                    db.Insert(persona);
-                                    Preferences.Set("MAX_PERSONA_PADRON_ID", persona.ID_PADRON.ToString());
-                                }
-                                catch (SQLiteException ea)
-                                {
-                                    Debug.WriteLine("SQLITE CATCHED EXCEPTION: " + ea.Message);
-                                    if (ea.Message.Contains("Unique") || ea.Message.Contains("Contrains"))
-                                    {
-                                        continue;
-                                    }
-                                    else
-                                    {
-                                        throw ea;
-
-                                    }
-
-                                }
-                                Debug.WriteLine("MAX_PERSONA_PADRON_ID: " + listPadronVisita.Last().ID_PADRON.ToString());
-                               
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Debug.WriteLine("Excepcion al insertar en padron: "+ex.Message);
-                        }
-
-                        Device.BeginInvokeOnMainThread(() =>
-                        {
-                            popupLoadingView.IsVisible = false;
-                            aiLoading.IsVisible = false;
-                            aiLoading.IsRunning = false;
-                        });
-
-                    });
+                    
                 }
-
+                OnAppearing();
 
             }
             catch (Exception ea)
             {
+                await DisplayAlert("Error",ea.Message,"OK");
                 Debug.WriteLine("Error en el metodo ActualizarPadron " + ea.Message);
                 Analytics.TrackEvent("Exception al hacer ActualizarPadron:  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
 

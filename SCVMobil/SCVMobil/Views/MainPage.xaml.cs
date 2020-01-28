@@ -146,6 +146,7 @@ namespace SCVMobil
         public async void entrada(String inString)
         {
 
+                        var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
             try
             {
 
@@ -153,7 +154,6 @@ namespace SCVMobil
                 {
                     if (inString.Length == 11 || inString.StartsWith("ID"))
                     {
-                        var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                         //Vamos a ver si es un ID de salida.
                         if (inString.StartsWith("ID"))
                         {
@@ -327,6 +327,11 @@ namespace SCVMobil
             {
                 Debug.Write("Error en escaneo de cedula: " + ea.Message);
                 //throw;
+            }
+            finally
+            {
+                db.Close();
+                db.Dispose();
             }
         }
     
