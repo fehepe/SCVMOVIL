@@ -209,7 +209,7 @@ namespace SCVMobil
 
                                 await Task.Factory.StartNew(() =>
                                 {
-                                    listPadron.AddRange(fireBird.DownloadPadron(querry1));
+                                    listPadron.AddRange(fireBird.DownloadPadron(querry1,false));
 
                                 //var listPadronTemp = JsonConvert.DeserializeObject<List<PADRON>>(contenidoTBL);
                                 //listPadron = listPadron.Concat(listPadronTemp).ToList();
@@ -459,6 +459,24 @@ namespace SCVMobil
                 Analytics.TrackEvent("Exception al hacer ping:  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
 
+        }
+
+        private void btnPadron_Clicked(object sender, EventArgs e)
+        {
+
+        }
+
+        private List<PADRON> ActualizarPadron()
+        {
+
+            FireBirdData fireBirdData = new FireBirdData();
+
+            
+
+
+
+
+            return null;
         }
     }
 }
