@@ -999,9 +999,10 @@ namespace SCVMobil.Connections
         //// Subir Visitantes que NO se han subido
         public void UploadVisits()
         {
+            var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
             try
             {
-                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                
 
                 // Cargar los invitados con un valor null en la propiedad SUBIDA
                 var visitasASubir = db.Query<Invitados>("SELECT * FROM Invitados where SUBIDA is null");
@@ -1120,14 +1121,20 @@ namespace SCVMobil.Connections
                 Debug.WriteLine("Excepcion en el metodo UploadVisit, error: " + ea.Message);
                 Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: " + ea.Message);
             }
+            finally
+            {
+                db.Close();
+                db.Dispose();
+            }
         }
 
         //// Subir Visitantes con reservaciones que no se hayan subido
         public void UploadVisitsReservation()
         {
+            var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
             try
             {
-                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                
 
                 // Cargar Invitados con reservas a visitasASubir2
                 var visitasASubir2 = db.Query<InvitadosReservas>("SELECT * FROM InvitadosReservas where SUBIDA is null");
@@ -1242,14 +1249,19 @@ namespace SCVMobil.Connections
                 Debug.WriteLine("Excepcion en el metodo UploadVisitsReservation, error: " + ea.Message);
                 Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo UploadVisitsReservation, error: " + ea.Message);
             }
+            finally
+            {
+                db.Close();
+                db.Dispose();
+            }
         }
 
         //// Subir Verificaciones 
         public void UploadVerifications()
         {
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
             try
             {
-                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
                 var verificarASubir = db.Query<Invitados>("SELECT * FROM Invitados where VERIFICACIONSUBIDA is null and Fecha_Verificacion is not null and SUBIDA is not null");
                 foreach (Invitados registro in verificarASubir)
@@ -1283,14 +1295,19 @@ namespace SCVMobil.Connections
                 Debug.WriteLine("Excepcion en el metodo UploadVerifications, error: " + ea.Message);
                 Analytics.TrackEvent("Error en el metodo UploadVerifications, error: " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
+            finally
+            {
+                db.Close();
+                db.Dispose();
+            }
         }
 
         //// Subir Salidas
         public void UploadOut()
         {
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
             try
             {
-                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                 var salidasASubir = db.Query<Invitados>("SELECT * FROM Invitados where SALIDASUBIDA is null and FECHA_SALIDA is not null and SUBIDA is not null");
                 var salidas = db.Query<Invitados>("SELECT * FROM Invitados");
                
@@ -1319,14 +1336,19 @@ namespace SCVMobil.Connections
                 Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + "\n Excepcion en el metodo UploadOut, Error: " + ea.Message);
                 Debug.WriteLine("Excepcion en el metodo UploadOut, Error: " + ea.Message);
             }
+            finally
+            {
+                db.Close();
+                db.Dispose();
+            }
         }
 
         //// Subir Salidas desconocidas
         public void UploadUnknownOuts()
         {
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
             try
             {
-                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                 var salidasOFF = db.Query<SalidaOffline>("SELECT * FROM SalidaOffline where SUBIDA is null");
 
                 foreach (SalidaOffline registros in salidasOFF)
@@ -1355,14 +1377,19 @@ namespace SCVMobil.Connections
                 Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + "\n Excepcion en el metodo UploadUnknownOuts, Error: " + ea.Message);
                 Debug.WriteLine("Excepcion en el metodo UploadUnknownOuts, Error: " + ea.Message);
             }
+            finally
+            {
+                db.Close();
+                db.Dispose();
+            }
         }
 
         //// Cargar Reservaciones
         public void DownloadReservations()
         {
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
             try
             {
-                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
                 #region string que contiene el Query
                 string query = "SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " VISITA_ID,VISITAS_VISITA_A_ID, VISITAS_DOCUMENTO" +
@@ -1409,14 +1436,19 @@ namespace SCVMobil.Connections
                 Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadReservations, Error: " + ea.Message);
                 Debug.WriteLine("Excepcion en el metodo DownloadReservations, Error: " + ea.Message);
             }
+            finally
+            {
+                db.Close();
+                db.Dispose();
+            }
         }
 
         //// Cargar Companies
         public void DownloadCompanies()
         {
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
             try
             {
-                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                 string queryCompanias = " SELECT FIRST "
                                                    + Preferences.Get("CHUNK_SIZE", "10000")
                                                    + " COMPANIA_ID, NOMBRE, PUNTO_VSU, ESTATUS  FROM COMPANIAS where COMPANIA_ID > "
@@ -1470,14 +1502,19 @@ namespace SCVMobil.Connections
                 Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadCompanies, Error: " + ea.Message);
                 Debug.WriteLine("Error de SQL: " + ea.Message);
             }
+            finally
+            {
+                db.Close();
+                db.Dispose();
+            }
         }
 
         //// Cargar Departamentos
         public void DownloadDeptoLocalidad()
         {
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
             try
             {
-                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                 string query = " SELECT * "
                                     + " FROM VW_DEPTO_LOCALIDAD where ID_DEPTO_LOCALIDAD > "
                             + Preferences.Get("MAX_DEPTO_LOCALIDAD", "0")
@@ -1530,15 +1567,20 @@ namespace SCVMobil.Connections
                 Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo Download_DEPTO_LOCALIDAD, Error: " + ea.Message);
                 Debug.WriteLine("Error de SQL: " + ea.Message);
             }
+            finally
+            {
+                db.Close();
+                db.Dispose();
+            }
         }
 
         //// Descargar Companias por localidad
         public void DownloadCompaniesPorLocalidad(string querry)
         {
-            try
-            {
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                 var dbd = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+            try
+            {
 
 
                 var ListaCompanias = ExecuteCompaniesLoc(querry);
@@ -1588,14 +1630,21 @@ namespace SCVMobil.Connections
                 Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadCompanies, Error: " + ea.Message);
                 Debug.WriteLine("Error de SQL: " + ea.Message);
             }
+            finally
+            {
+                db.Close();
+                db.Dispose();
+                dbd.Close();
+                dbd.Dispose();
+            }
         }
 
         //// Cargar Personas(Destinos)
         public void DownloadPeople_Destination()
         {
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
             try
             {
-                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
                 var stlRegistros2 = new List<string>();
                 var stRegisros2 = "";
@@ -1654,14 +1703,19 @@ namespace SCVMobil.Connections
                 Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadPeople_Destination, Error: " + ea.Message);
                 Debug.WriteLine("Excepcion en el metodo DownloadPeople_Destination, Error: " + ea.Message);
             }
+            finally
+            {
+                db.Close();
+                db.Dispose();
+            }
         }
 
         //// Descargar Invitados
         public void DownloadGuests()
         {
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
             try
             {
-                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
                 string queryDownInv = $"SELECT FIRST {Preferences.Get("CHUNK_SIZE", "10000")} I1.INVIDATO_ID, 1 AS SUBIDA, IIF(I1.FECHA_SALIDA IS NULL, 0, 1) AS SALIDASUBIDA, I1.COMPANIA_ID" +
                             ", I1.NOMBRES, I1.APELLIDOS, I1.FECHA_REGISTRO, I1.FECHA_SALIDA, I1.TIPO, I1.CARGO, I1.TIENE_ACTIVO, I1.ESTATUS_ID, I1.MODULO" +
@@ -1708,14 +1762,19 @@ namespace SCVMobil.Connections
                 Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadGuests, Error: " + ea.Message);
                 Debug.WriteLine("Excepcion en el metodo DownloadGuests, Error: " + ea.Message);
             }
+            finally
+            {
+                db.Close();
+                db.Dispose();
+            }
         }
 
         //// Descargar Salidas
         public void DownloadOuts()
         {
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
             try
             {
-                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                 var maxInvidatoIdLocal = db.Query<counterObj>("SELECT MAX(INVIDATO_ID) as anycount FROM Invitados");
 
                 var queryDownSal = "SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " INVIDATO_ID, 1 as SUBIDA, 1 as SALIDASUBIDA, COMPANIA_ID, NOMBRES, APELLIDOS, " +
@@ -1767,6 +1826,11 @@ namespace SCVMobil.Connections
             {
                 Analytics.TrackEvent("Excepcion en el metodo DownloadOuts, Error: " + ea.Message);
                 Debug.WriteLine("Excepcion en el metodo DownloadOuts, Error: " + ea.Message);
+            }
+            finally
+            {
+                db.Close();
+                db.Dispose();
             }
         }
 
