@@ -460,23 +460,5 @@ namespace SCVMobil
             }
 
         }
-
-        private void Actualizarpadron_Clicked(object sender, EventArgs e)
-        {                    
-            var s = fireBird.extraerPersonas();
-            foreach (var item in s)
-            {
-                if (s.Count != 0)
-                {
-                    var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-                    db.Insert(item);
-                }
-                else
-                {
-                    DisplayAlert("Mensaje", "Padron actualizado", "ok");
-                }
-            }
-            
-        }
     }
 }

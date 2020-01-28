@@ -40,7 +40,7 @@ namespace SCVMobil.Connections
                 //                           $"DataSource={Preferences.Get("SERVER_IP", "192.168.2.120")};Port=3050;Charset=NONE;Server Type=0; Timeout=5;"; //Connectionstring//
 
                 //string connectionString = "User ID=sysdba;Password=masterkey;Database=C:\\APP\\registros\\registros.fdb;" +
-                //                          $"DataSource={Preferences.Get("SERVER_IP", "192.168.1.78")};Port=3050;Charset=NONE;Server Type=0; Timeout=5;"; //Connectionstring//
+                //                          $"DataSource={Preferences.Get("SERVER_IP", "192.168.2.120")};Port=3050;Charset=NONE;Server Type=0; Timeout=5;"; //Connectionstring//
 
                 return connectionString;
             }
@@ -1853,7 +1853,7 @@ namespace SCVMobil.Connections
         }
         public List<VerifiInvitados> extraerPersonas()
         {
-            string query = "select Distinct Documento, nombres, apellidos from  padron_visitantes";
+            string query = "select Distinct cargo, nombres, apellidos from invitados";
             try
             {
                 List<VerifiInvitados> Verificacionlist = new List<VerifiInvitados>();
@@ -1864,7 +1864,7 @@ namespace SCVMobil.Connections
                 FbCommand command = new FbCommand(query, fb);
 
                 var dtResult = command.ExecuteReader();
-                
+
                 if (dtResult.HasRows)
                 {
 
@@ -1897,7 +1897,7 @@ namespace SCVMobil.Connections
             catch (Exception e)
             {
                 Preferences.Set("SYNC_VSU", false);
-                Debug.WriteLine("Error en la extraccion metodos de personas" + e.Message);
+                Debug.WriteLine("Error en la extraccion de departamentoID " + e.Message);
                 return null;
             }
         }
