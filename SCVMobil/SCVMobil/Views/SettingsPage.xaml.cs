@@ -209,7 +209,7 @@ namespace SCVMobil
 
                                 await Task.Factory.StartNew(() =>
                                 {
-                                    listPadron.AddRange(fireBird.DownloadPadron(querry1,false));
+                                    listPadron.AddRange(fireBird.DownloadPadron(querry1));
 
                                 //var listPadronTemp = JsonConvert.DeserializeObject<List<PADRON>>(contenidoTBL);
                                 //listPadron = listPadron.Concat(listPadronTemp).ToList();
@@ -461,22 +461,25 @@ namespace SCVMobil
 
         }
 
-        private void btnPadron_Clicked(object sender, EventArgs e)
+        private void verif_Clicked(object sender, EventArgs e)
         {
-
-        }
-
-        private List<PADRON> ActualizarPadron()
-        {
-
-            FireBirdData fireBirdData = new FireBirdData();
-
-            
-
-
-
-
-            return null;
+            var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+            var x = db.Query<Invitados>("select Cargo, Nombres, Apellidos from Invitados");
+            var y = fireBird.extraerPersonas();
+            foreach (var item in x)
+            {
+                foreach (var item2 in y)
+                {
+                    if (item.Nombres != item2.Nombre && item.Apellidos != item2.Apellido || item.Cargo != item2.Cedula)
+                    {
+                        db.Query<Invitados>($"insert into Invitados(Cargo, Nombres, Apellidos)values('{item2.Cedula}','{item2.Nombre}','{item2.Apellido}');");
+                    }
+                    else
+                    {
+                        DisplayAlert("Mensaje", "Padron actualizado", "ok");
+                    }
+                }
+            }
         }
     }
 }

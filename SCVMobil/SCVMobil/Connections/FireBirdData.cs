@@ -84,7 +84,7 @@ namespace SCVMobil.Connections
         }
 
         //// Descargar Padron
-        public List<PADRON> DownloadPadron(string querry,bool tipo)
+        public List<PADRON> DownloadPadron(string querry1)
         {
             try
             {
@@ -95,38 +95,26 @@ namespace SCVMobil.Connections
                 {
                     try
                     {
-                        FbConnection fb = new FbConnection(connectionString(tipo));
+                        FbConnection fb = new FbConnection(connectionString(false));
 
                         fb.Open();
                         FbCommand command = new FbCommand(
-                            querry,
+                            querry1,
                             fb);
 
 
-                        FbDataReader dtResult = command.ExecuteReader();
+                        FbDataReader reader = command.ExecuteReader();
 
-                        if (dtResult.HasRows)
+                        if (reader.HasRows)
                         {
-                            while (dtResult.Read())
+                            while (reader.Read())
                             {
                                 PADRON persona = new PADRON();
+                                persona.CEDULA = reader[0].ToString();
+                                persona.NOMBRES = reader[1].ToString();
+                                persona.APELLIDO1 = reader[2].ToString();
+                                persona.APELLIDO2 = reader[3].ToString();
 
-                                if (dtResult[0] != System.DBNull.Value)
-                                {
-                                    persona.CEDULA = dtResult[0].ToString();
-                                }
-                                if (dtResult[1] != System.DBNull.Value)
-                                {
-                                    persona.NOMBRES = dtResult[1].ToString();
-                                }
-                                if (dtResult[2] != System.DBNull.Value)
-                                {
-                                    persona.APELLIDO1 = dtResult[2].ToString();
-                                }
-                                if (dtResult[3] != System.DBNull.Value)
-                                {
-                                    persona.APELLIDO2 = dtResult[3].ToString();
-                                }
                                 listPadron.Add(persona);
                                 //Debug.WriteLine("Agregado, NOMBRE: "+persona.NOMBRES+" "+persona.APELLIDO1 + " CEDULA: "+persona.CEDULA);
                             }
@@ -135,7 +123,7 @@ namespace SCVMobil.Connections
                         {
                             Debug.WriteLine("No rows found.");
                         }
-                        dtResult.Close();
+                        reader.Close();
 
                         fb.Close();
                         Debug.WriteLine($"La lista retornada contiene {listPadron.Count} elementos");
