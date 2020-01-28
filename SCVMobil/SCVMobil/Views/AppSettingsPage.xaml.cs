@@ -84,6 +84,7 @@ namespace SCVMobil
             }
             catch (Exception e)
             {
+                DisplayAlert("Error", e.Message, "OK");
                 Debug.WriteLine("Error en el metodo LOCALIDAD _VSU");
                 Analytics.TrackEvent("Error al mostrar compañias: " + e.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
                 
@@ -99,6 +100,7 @@ namespace SCVMobil
             }
             catch (Exception ex)
             {
+                DisplayAlert("Error", ex.Message, "OK");
                 Debug.WriteLine("Exception catched while trying to set preference \"VISITA_A_SELECTED\": " + ex);
             }
         }
@@ -113,6 +115,7 @@ namespace SCVMobil
             }
             catch (Exception ex)
             {
+                DisplayAlert("Error", ex.Message, "OK");
                 Debug.WriteLine("Exception catched while trying to set preference \"ULTIMA_VISITA_A_SELECTED\": " + ex);
             }
         }
@@ -125,6 +128,7 @@ namespace SCVMobil
             }
             catch (Exception ex)
             {
+                DisplayAlert("Error", ex.Message, "OK");
                 Debug.WriteLine("Exception catched while trying to set preference \"PLACA_SELECTED\": " + ex);
             }
         }
@@ -173,6 +177,7 @@ namespace SCVMobil
             }
             catch (Exception ex)
             {
+                await DisplayAlert("Error", ex.Message, "OK");
                 Debug.WriteLine("Error en BtnClearDB");
                 Analytics.TrackEvent("Error al limpiar base de datos " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
                
@@ -215,6 +220,7 @@ namespace SCVMobil
             }
             catch (Exception ex)
             {
+                DisplayAlert("Error", ex.Message, "OK");
                 Debug.WriteLine("Error en entPuerta_SelectedIndexChanged");
                 Analytics.TrackEvent("Error al mostrar compañias: " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }

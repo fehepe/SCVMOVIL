@@ -113,6 +113,7 @@ namespace SCVMobil
             }
             catch (Exception ex)
             {
+                DisplayAlert("Error", ex.Message, "OK");
                 Debug.WriteLine("ERROR: " + ex.ToString());
             }
         }
@@ -198,6 +199,7 @@ namespace SCVMobil
                                 }
                                 catch (Exception ex)
                                 {
+                                    DisplayAlert("Error", ex.Message, "OK");
                                     DisplayAlert("Error", "Ha ocurrido un error", "Ok");
                                 }
                             }
@@ -225,6 +227,7 @@ namespace SCVMobil
             }
             catch (Exception ex)
             {
+                DisplayAlert("Error", ex.Message, "OK");
                 Debug.WriteLine("Error en entryScan");
                 Analytics.TrackEvent("Error al escanear: " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
                 DependencyService.Get<IToastMessage>().DisplayMessage("Ha ocurrido un error: " + ex.Message);
@@ -354,6 +357,7 @@ namespace SCVMobil
                         }
                         catch (Exception ex)
                         {
+                            await DisplayAlert("Error", ex.Message, "OK");
                             Debug.WriteLine("Error en BtnImprimir: "+ex.Message);
                             Analytics.TrackEvent("Error al buscar compañias seleccionadas: " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
                             //throw;
@@ -421,6 +425,7 @@ namespace SCVMobil
             }
             catch (Exception ea)
             {
+                await DisplayAlert("Error", ea.Message, "OK");
                 Debug.WriteLine("Error en BtnImprimir_Clicked " + ea.Message);
                 await DisplayAlert("Error", "Error en BtnImprimir_Clicked: " + ea.Message, "OK");
                 //throw;
@@ -458,6 +463,7 @@ namespace SCVMobil
             }
             catch (Exception ex)
             {
+                DisplayAlert("Error", ex.Message, "OK");
                 Debug.WriteLine("Exception catched while trying to set preference \"PERSONA_SELECTED\": " + ex);
             }
         }
@@ -552,6 +558,7 @@ namespace SCVMobil
             }
             catch (Exception ex)
             {
+                DisplayAlert("Error", ex.Message, "OK");
                 Debug.WriteLine("Excepcion en el metodo AsignarDepartamentos: "+ex.Message);
             } 
         }
@@ -568,6 +575,7 @@ namespace SCVMobil
             }
             catch (Exception ex)
             {
+                DisplayAlert("Error", ex.Message, "OK");
                 Debug.WriteLine("Excepcion en el metodo AsignarDestino: "+ex.Message);
             }
         }

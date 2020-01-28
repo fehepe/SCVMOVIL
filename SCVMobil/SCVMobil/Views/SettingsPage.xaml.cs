@@ -167,6 +167,7 @@ namespace SCVMobil
                             }
                             catch (Exception ex)
                             {
+                                await DisplayAlert("Error", ex.Message, "OK");
                                 Analytics.TrackEvent("Error al conectarse a base de datos " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
                                 Debug.WriteLine("Error en Sync");
                                 if (tries >= 5)
@@ -209,7 +210,7 @@ namespace SCVMobil
 
                                 await Task.Factory.StartNew(() =>
                                 {
-                                    listPadron.AddRange(fireBird.DownloadPadron(querry1));
+                                    listPadron.AddRange(fireBird.DownloadPadron(querry1,false));
 
                                     //var listPadronTemp = JsonConvert.DeserializeObject<List<PADRON>>(contenidoTBL);
                                     //listPadron = listPadron.Concat(listPadronTemp).ToList();
@@ -237,6 +238,7 @@ namespace SCVMobil
                                         }
                                         catch (Exception ea)
                                         {
+                                            DisplayAlert("Error", ea.Message, "OK");
                                             Debug.WriteLine("Se ha encontrado una excepcion, Error: " + ea.Message);
                                         }
                                     }
@@ -274,6 +276,7 @@ namespace SCVMobil
                     }
                     catch (Exception ey)
                     {
+                        await DisplayAlert("Error", ey.Message, "OK");
                         Debug.WriteLine("Error syncronisando: " + ey.Message);
                         popupLoadingView.IsVisible = false;
                         try
@@ -289,6 +292,7 @@ namespace SCVMobil
                         }
                         catch (Exception eo)
                         {
+                            await DisplayAlert("Error", eo.Message, "OK");
                             Debug.WriteLine("Error en notificacion: " + eo.Message);
                         }
 
@@ -304,6 +308,7 @@ namespace SCVMobil
                         }
                         catch (Exception eu)
                         {
+                            await DisplayAlert("Error", eu.Message, "OK");
                             Debug.WriteLine("Error devolviendo el time out: " + eu.Message);
                         }
                         Debug.WriteLine("Setting timeout to 100 seconds");
@@ -374,6 +379,7 @@ namespace SCVMobil
             }
             catch(Exception ea)
             {
+                await DisplayAlert("Error", ea.Message, "OK");
                 Debug.WriteLine("Excepcion encontrada en el evento BtIni_Clicked: " + ea.Message);
                 Analytics.TrackEvent("Error al inicializar  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
@@ -405,8 +411,8 @@ namespace SCVMobil
             }
             catch (Exception ea)
             {
+                await DisplayAlert("Error", ea.Message, "OK");
                 Debug.WriteLine("Error en el metodo guardar: " + ea.Message);
-               
                 Analytics.TrackEvent("Error al guardar configuracion:  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }            
 
@@ -441,6 +447,7 @@ namespace SCVMobil
                     }
                     catch (Exception ea)
                     {
+                        await DisplayAlert("Error", ea.Message, "OK");
                         Debug.WriteLine("Error en el metodo pingbtn" + ea.Message);
                         Analytics.TrackEvent("Exception al hacer ping:  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
                         //await PopupNavigation.PushAsync(new PopUpPingIncorrecto()); //popup conexion erronea//
@@ -457,6 +464,7 @@ namespace SCVMobil
             }
             catch (Exception ea)
             {
+                await DisplayAlert("Error", ea.Message, "OK");
                 Debug.WriteLine("Error en el metodo pingbtn " + ea.Message);
                 Analytics.TrackEvent("Exception al hacer ping:  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }

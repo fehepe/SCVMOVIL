@@ -75,6 +75,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
+                App.Current.MainPage.DisplayAlert("Error", ea.Message, "OK");
                 Debug.WriteLine("Error en el metodo ExecuteScalar, generado por: " + ea.Message);
                 Preferences.Set("SYNC_VSU", false);
                 return null;
@@ -83,7 +84,7 @@ namespace SCVMobil.Connections
         }
 
         //// Descargar Padron
-        public List<PADRON> DownloadPadron(string querry1)
+        public List<PADRON> DownloadPadron(string querry1, bool tipo)
         {
             try
             {
@@ -94,7 +95,7 @@ namespace SCVMobil.Connections
                 {
                     try
                     {
-                        FbConnection fb = new FbConnection(connectionString(false));
+                        FbConnection fb = new FbConnection(connectionString(tipo));
 
                         fb.Open();
                         FbCommand command = new FbCommand(
@@ -102,18 +103,14 @@ namespace SCVMobil.Connections
                             fb);
 
 
-                        FbDataReader reader = command.ExecuteReader();
+                        FbDataReader dtResult = command.ExecuteReader();
 
-                        if (reader.HasRows)
+                        if (dtResult.HasRows)
                         {
-                            while (reader.Read())
+                            while (dtResult.Read())
                             {
-                                PADRON persona = new PADRON();
-                                persona.CEDULA = reader[0].ToString();
-                                persona.NOMBRES = reader[1].ToString();
-                                persona.APELLIDO1 = reader[2].ToString();
-                                persona.APELLIDO2 = reader[3].ToString();
 
+                                PADRON persona = new PADRON();
                                 if (dtResult[0] != System.DBNull.Value)
                                 {
                                     persona.CEDULA = dtResult[0].ToString();
@@ -139,7 +136,7 @@ namespace SCVMobil.Connections
                         {
                             Debug.WriteLine("No rows found.");
                         }
-                        reader.Close();
+                        dtResult.Close();
 
                         fb.Close();
                         Debug.WriteLine($"La lista retornada contiene {listPadron.Count} elementos");
@@ -147,6 +144,7 @@ namespace SCVMobil.Connections
                     }
                     catch (Exception et)
                     {
+                        App.Current.MainPage.DisplayAlert("Error", et.Message, "OK");
                         Debug.WriteLine("Error en Sycn" + et.Message);
                         Analytics.TrackEvent("Error descargando padron:  " + et.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
 
@@ -160,6 +158,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ex)
             {
+                App.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
                 Debug.WriteLine("Error al descagar el padron, provocado por: " + ex.Message);
                 return null;
             }
@@ -207,6 +206,7 @@ namespace SCVMobil.Connections
                     }
                     catch (Exception ex)
                     {
+                        App.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
                         Analytics.TrackEvent("Error al conectarse a base de datos " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
                         Debug.WriteLine("Error en Sync");
                         var x = ex.Message;
@@ -229,6 +229,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ex)
             {
+                App.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
                 Debug.WriteLine("Error en el metodo CountCedulas, provocado por: " + ex);
                 return 0;
             }
@@ -424,6 +425,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
+                App.Current.MainPage.DisplayAlert("Error", ea.Message, "OK");
                 Debug.WriteLine("Error en el metodo ExecuteGuest, provocado por: " + ea.Message);
                 Preferences.Set("SYNC_VSU", false);
                 return null;
@@ -620,6 +622,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
+                App.Current.MainPage.DisplayAlert("Error", ea.Message, "OK");
                 Debug.WriteLine("Error en el metodo ExecuteGuestOuts, provocado por: " + ea.Message);
                 Preferences.Set("SYNC_VSU", false);
                 return null;
@@ -708,6 +711,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
+                App.Current.MainPage.DisplayAlert("Error", ea.Message, "OK");
                 Debug.WriteLine("Error en el metodo ExecuteReservations, provocado por: " + ea.Message);
                 Preferences.Set("SYNC_VSU", false);
                 return null;
@@ -768,6 +772,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
+                App.Current.MainPage.DisplayAlert("Error", ea.Message, "OK");
                 Debug.WriteLine("Error en el metodo ExecuteCompanies, provocado por: " + ea.Message);
                 Preferences.Set("SYNC_VSU", false);
                 return null;
@@ -829,6 +834,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
+                App.Current.MainPage.DisplayAlert("Error", ea.Message, "OK");
                 Debug.WriteLine("Error en el metodo ExecuteCompanies, provocado por: " + ea.Message);
                 Preferences.Set("SYNC_VSU", false);
                 return null;
@@ -892,6 +898,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
+                App.Current.MainPage.DisplayAlert("Error", ea.Message, "OK");
                 Debug.WriteLine("Error en el metodo ExecuteDEPTO_LOCALIDAD, provocado por: " + ea.Message);
                 Preferences.Set("SYNC_VSU", false);
                 return null;
@@ -949,6 +956,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
+                App.Current.MainPage.DisplayAlert("Error", ea.Message, "OK");
                 Debug.WriteLine("Error en el metodo ExecutePeople, provocado por: " + ea.Message);
                 Preferences.Set("SYNC_VSU", false);
                 return null;
@@ -971,8 +979,9 @@ namespace SCVMobil.Connections
                     Preferences.Set("SYNC_VSU", false);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                App.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
                 Preferences.Set("SYNC_VSU", false);
 
             }
@@ -992,6 +1001,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
+                App.Current.MainPage.DisplayAlert("Error", ea.Message, "OK");
                 Debug.WriteLine("Error en el metodo PublicServices, provocado por: " + ea.Message);
             }
         }
@@ -1118,6 +1128,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
+                App.Current.MainPage.DisplayAlert("Error", ea.Message, "OK");
                 Debug.WriteLine("Excepcion en el metodo UploadVisit, error: " + ea.Message);
                 Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: " + ea.Message);
             }
@@ -1246,6 +1257,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
+                App.Current.MainPage.DisplayAlert("Error", ea.Message, "OK");
                 Debug.WriteLine("Excepcion en el metodo UploadVisitsReservation, error: " + ea.Message);
                 Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo UploadVisitsReservation, error: " + ea.Message);
             }
@@ -1292,6 +1304,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
+                App.Current.MainPage.DisplayAlert("Error", ea.Message, "OK");
                 Debug.WriteLine("Excepcion en el metodo UploadVerifications, error: " + ea.Message);
                 Analytics.TrackEvent("Error en el metodo UploadVerifications, error: " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
@@ -1333,6 +1346,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
+                App.Current.MainPage.DisplayAlert("Error", ea.Message, "OK");
                 Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + "\n Excepcion en el metodo UploadOut, Error: " + ea.Message);
                 Debug.WriteLine("Excepcion en el metodo UploadOut, Error: " + ea.Message);
             }
@@ -1374,6 +1388,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
+                App.Current.MainPage.DisplayAlert("Error", ea.Message, "OK");
                 Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + "\n Excepcion en el metodo UploadUnknownOuts, Error: " + ea.Message);
                 Debug.WriteLine("Excepcion en el metodo UploadUnknownOuts, Error: " + ea.Message);
             }
@@ -1415,6 +1430,7 @@ namespace SCVMobil.Connections
                     }
                     catch (Exception ex)
                     {
+                        App.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
                         var properties = new Dictionary<string, string> {
                                             { "Category", "Error insertando reservas" },
                                             { "Code", "App.xaml.cs Line: 472" },
@@ -1432,7 +1448,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
-
+                App.Current.MainPage.DisplayAlert("Error", ea.Message, "OK");
                 Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadReservations, Error: " + ea.Message);
                 Debug.WriteLine("Excepcion en el metodo DownloadReservations, Error: " + ea.Message);
             }
@@ -1485,6 +1501,7 @@ namespace SCVMobil.Connections
                     }
                     catch (Exception ex)
                     {
+                        App.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
                         var properties = new Dictionary<string, string> {
                                             { "Category", "Error insertando Companias" },
                                             { "Code", "App.xaml.cs Line: 516" },
@@ -1499,6 +1516,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
+                App.Current.MainPage.DisplayAlert("Error", ea.Message, "OK");
                 Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadCompanies, Error: " + ea.Message);
                 Debug.WriteLine("Error de SQL: " + ea.Message);
             }
@@ -1550,6 +1568,7 @@ namespace SCVMobil.Connections
                     }
                     catch (Exception ex)
                     {
+                        App.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
                         var properties = new Dictionary<string, string> {
                                             { "Category", "Error insertando DEPTO_LOCALIDAD" },
                                             { "Code", "App.xaml.cs Line: 516" },
@@ -1564,6 +1583,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
+                App.Current.MainPage.DisplayAlert("Error", ea.Message, "OK");
                 Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo Download_DEPTO_LOCALIDAD, Error: " + ea.Message);
                 Debug.WriteLine("Error de SQL: " + ea.Message);
             }
@@ -1613,6 +1633,7 @@ namespace SCVMobil.Connections
                     }
                     catch (Exception ex)
                     {
+                        App.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
                         var properties = new Dictionary<string, string> {
                                             { "Category", "Error insertando Companias" },
                                             { "Code", "App.xaml.cs Line: 516" },
@@ -1627,6 +1648,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
+                App.Current.MainPage.DisplayAlert("Error", ea.Message, "OK");
                 Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadCompanies, Error: " + ea.Message);
                 Debug.WriteLine("Error de SQL: " + ea.Message);
             }
@@ -1687,6 +1709,7 @@ namespace SCVMobil.Connections
                     }
                     catch (Exception ex)
                     {
+                        App.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
                         var properties = new Dictionary<string, string> {
                                             { "Category", "Error insertando Personas" },
                                             { "Code", "App.xaml.cs Line: 243" },
@@ -1700,6 +1723,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
+                App.Current.MainPage.DisplayAlert("Error", ea.Message, "OK");
                 Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadPeople_Destination, Error: " + ea.Message);
                 Debug.WriteLine("Excepcion en el metodo DownloadPeople_Destination, Error: " + ea.Message);
             }
@@ -1746,6 +1770,7 @@ namespace SCVMobil.Connections
                     }
                     catch (Exception ex)
                     {
+                        App.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
                         var properties = new Dictionary<string, string> {
                                             { "Category", "Error insertando reservas" },
                                             { "Code", "App.xaml.cs Line: 631" },
@@ -1759,6 +1784,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
+                App.Current.MainPage.DisplayAlert("Error", ea.Message, "OK");
                 Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadGuests, Error: " + ea.Message);
                 Debug.WriteLine("Excepcion en el metodo DownloadGuests, Error: " + ea.Message);
             }
@@ -1811,6 +1837,7 @@ namespace SCVMobil.Connections
                     }
                     catch (Exception ex)
                     {
+                        App.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
                         var properties = new Dictionary<string, string> {
                                             { "Category", "Error descargando Salidas" },
                                             { "Code", "App.xaml.cs Line: 683" },
@@ -1824,6 +1851,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
+                App.Current.MainPage.DisplayAlert("Error", ea.Message, "OK");
                 Analytics.TrackEvent("Excepcion en el metodo DownloadOuts, Error: " + ea.Message);
                 Debug.WriteLine("Excepcion en el metodo DownloadOuts, Error: " + ea.Message);
             }
@@ -1860,6 +1888,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception e)
             {
+                App.Current.MainPage.DisplayAlert("Error", e.Message, "OK");
                 Preferences.Set("SYNC_VSU", false);
                 Debug.WriteLine("Error en la fecha de base de datos " + e.Message);
                 return null;
@@ -1918,6 +1947,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception e)
             {
+                App.Current.MainPage.DisplayAlert("Error", e.Message, "OK");
                 Preferences.Set("SYNC_VSU", false);
                 Debug.WriteLine("Error en la extraccion de departamentoID " + e.Message);
                 return null;
@@ -1963,11 +1993,12 @@ namespace SCVMobil.Connections
                 fb.Close();
                 fb.Dispose();
 
-
+                
                 return Verificacionlist;
             }
             catch (Exception e)
             {
+                App.Current.MainPage.DisplayAlert("Error", e.Message, "OK");
                 Preferences.Set("SYNC_VSU", false);
                 Debug.WriteLine("Error en la extraccion de departamentoID " + e.Message);
                 return null;
