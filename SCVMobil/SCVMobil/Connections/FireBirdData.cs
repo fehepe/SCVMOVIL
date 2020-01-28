@@ -1851,6 +1851,58 @@ namespace SCVMobil.Connections
                 return null;
             }
         }
+        public List<VerifiInvitados> extraerPersonas()
+        {
+            string query = "select Distinct cargo, nombres, apellidos from invitados";
+            try
+            {
+                List<VerifiInvitados> Verificacionlist = new List<VerifiInvitados>();
+
+                FbConnection fb = new FbConnection(connectionString(true));
+
+                fb.Open();
+                FbCommand command = new FbCommand(query, fb);
+
+                var dtResult = command.ExecuteReader();
+
+                if (dtResult.HasRows)
+                {
+
+                    while (dtResult.Read())
+                    {
+                        VerifiInvitados verificacion = new VerifiInvitados();
+
+                        if (dtResult[0] != System.DBNull.Value)
+                        {
+                            verificacion.Cedula = dtResult[0].ToString();
+                        }
+                        if (dtResult[1] != System.DBNull.Value)
+                        {
+                            verificacion.Nombre = dtResult[1].ToString();
+                        }
+                        if (dtResult[2] != System.DBNull.Value)
+                        {
+                            verificacion.Apellido = dtResult[2].ToString();
+                        }
+                        Verificacionlist.Add(verificacion);
+                    }
+                }
+
+                fb.Close();
+                fb.Dispose();
+
+
+                return Verificacionlist;
+            }
+            catch (Exception e)
+            {
+                Preferences.Set("SYNC_VSU", false);
+                Debug.WriteLine("Error en la extraccion de departamentoID " + e.Message);
+                return null;
+            }
+        }
 
     }
+
+    
 }
