@@ -162,6 +162,10 @@ namespace SCVMobil
                         db.DeleteAll<DEPTO_LOCALIDAD>();
                     } 
                 }
+                if(string.IsNullOrWhiteSpace(TryPassword))
+                {
+                    await DisplayAlert("Error de contraseña","No ha ingresado ninguna contraseña","continuar");
+                }
                 else
                 {
                     await DisplayAlert("Credencial incorrecta","La credencial ingresada no es valida", "OK");
