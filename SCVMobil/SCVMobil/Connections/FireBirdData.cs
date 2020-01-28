@@ -33,7 +33,7 @@ namespace SCVMobil.Connections
         {
             if (db)
             {
-                string connectionString = "User ID = sysdba; Password = masterkey; Database = C:\\APP\\GAD\\registros.fdb; " +
+                string connectionString = "User ID = sysdba; Password=masterkey;Database = C:\\APP\\GAD\\registros.fdb; " +
                                           $"DataSource={Preferences.Get("SERVER_IP", "192.168.1.103")};Port=3050;Charset=NONE;Server Type=0;";
 
                 //string connectionString = "User ID=sysdba;Password=masterkey;Database=C:\\Users\\Abraham\\Desktop\\Codes\\registros\\registros.fdb;" +
@@ -1852,5 +1852,55 @@ namespace SCVMobil.Connections
             }
         }
 
+        public List<VerfiInvitados> extraerPersonas()
+        {
+            string query = "select Distinct cargo, nombres, apellidos from invitados";
+            try
+            {
+                List<VerfiInvitados> Verificacionlist = new List<VerfiInvitados>();
+
+                FbConnection fb = new FbConnection(connectionString(true));
+
+                fb.Open();
+                FbCommand command = new FbCommand(query, fb);
+
+                var dtResult = command.ExecuteReader();
+
+                if (dtResult.HasRows)
+                {
+
+                    while (dtResult.Read())
+                    {
+                        VerfiInvitados verificacion = new VerfiInvitados();
+
+                        if (dtResult[0] != System.DBNull.Value)
+                        {
+                            verificacion.Cedula = dtResult[0].ToString();
+                        }
+                        if (dtResult[1] != System.DBNull.Value)
+                        {
+                            verificacion.Nombre = dtResult[1].ToString();
+                        }
+                        if (dtResult[2] != System.DBNull.Value)
+                        {
+                            verificacion.Apellido = dtResult[2].ToString();
+                        }
+                        Verificacionlist.Add(verificacion);
+                    }
+                }
+
+                fb.Close();
+                fb.Dispose();
+
+
+                return Verificacionlist;
+            } 
+            catch (Exception e)
+            {
+                Preferences.Set("SYNC_VSU", false);
+                Debug.WriteLine("Error en la extraccion de departamentoID " + e.Message);
+                return null;
+            }
+        }
     }
 }

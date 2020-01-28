@@ -1,97 +1,92 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SCVMobil.AppSettingsPage"
-             Title="Configuración de SCV"
-             BackgroundColor="#FFFFFF"             
-             NavigationPage.HasBackButton="True">
+<ContentPage
+    x:Class="SCVMobil.AppSettingsPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Configuración de SCV"
+    BackgroundColor="#FFFFFF"
+    NavigationPage.HasBackButton="True">
     <ContentPage.Content>
-      
+
         <StackLayout Padding="40">
-            <StackLayout
-                VerticalOptions="CenterAndExpand"
-                Margin="0,0,0,0">
-                <Grid
-                    RowSpacing="50"
-                    Margin="0,0">
+            <StackLayout Margin="0,0,0,0" VerticalOptions="CenterAndExpand">
+                <Grid Margin="0,0" RowSpacing="50">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Label
                         Grid.Row="0"
                         Grid.Column="0"
-                        FontSize="25"                     
                         FontAttributes="Bold"
-                        Text="Placa"
-                        VerticalOptions="Center"
-                        TextColor="Black">
-                    </Label>
-                    <Switch
-                        Grid.Row="0"
-                        Grid.Column="1" 
-                        x:Name="placa"
-                        Toggled="Placa_Toggled"
-                        OnColor="#F44336"
-                        ThumbColor="#757575"/>
-                    <Label                        
-                        Grid.Row="1"
-                        Grid.Column="0" 
                         FontSize="25"
-                        FontAttributes="Bold"
+                        Text="Placa"
                         TextColor="Black"
-                        Text="Visita a"
-                        VerticalOptions="Center"/>
+                        VerticalOptions="Center" />
                     <Switch
+                        x:Name="placa"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        OnColor="#F44336"
+                        ThumbColor="#757575"
+                        Toggled="Placa_Toggled" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        FontAttributes="Bold"
+                        FontSize="25"
+                        Text="Visita a"
+                        TextColor="Black"
+                        VerticalOptions="Center" />
+                    <Switch
+                        x:Name="visitaA"
                         Grid.Row="1"
                         Grid.Column="1"
-                        x:Name="visitaA"
-                        Toggled="VisitaA_Toggled"
-                         OnColor="#F44336"
-                        ThumbColor="#757575"/>
+                        OnColor="#F44336"
+                        ThumbColor="#757575"
+                        Toggled="VisitaA_Toggled" />
                     <Label
                         Grid.Row="2"
                         Grid.Column="0"
-                         TextColor="Black"
-                        FontSize="25"
                         FontAttributes="Bold"
+                        FontSize="25"
                         Text="Puerta"
-                        VerticalOptions="Center"/>
-                    <Picker                        
+                        TextColor="Black"
+                        VerticalOptions="Center" />
+                    <Picker
                         x:Name="entPuerta"
                         Grid.Row="2"
                         Grid.Column="1"
                         ItemDisplayBinding="{Binding NOMBRE}"
-                        SelectedIndexChanged="entPuerta_SelectedIndexChanged"                        
-                        />
+                        SelectedIndexChanged="entPuerta_SelectedIndexChanged" />
                     <Label
                         Grid.Row="3"
                         Grid.Column="0"
-                        FontSize="20"
-                        TextColor="Black"
                         FontAttributes="Bold"
+                        FontSize="20"
                         Text="Modo Verificacion"
-                        VerticalOptions="Center"/>
+                        TextColor="Black"
+                        VerticalOptions="Center" />
                     <Switch
+                        x:Name="verificacion"
                         Grid.Row="3"
                         Grid.Column="1"
-                        Toggled="verificacion_Toggled"
-                        x:Name="verificacion"
                         OnColor="#F44336"
                         ThumbColor="#757575"
-                        />
+                        Toggled="verificacion_Toggled" />
                     <Label
+                        x:Name="lblTiempo"
                         Grid.Row="4"
                         Grid.Column="0"
-                        FontSize="20"
-                        TextColor="Black"
                         FontAttributes="Bold"
-                        x:Name="lblTiempo"
+                        FontSize="20"
                         Text="Tiempo de verificacion"
-                        VerticalOptions="Center"/>
-                    <Picker x:Name="TiempoVerif"                           
+                        TextColor="Black"
+                        VerticalOptions="Center" />
+                    <Picker
+                        x:Name="TiempoVerif"
                         Grid.Row="4"
-                        Grid.Column="1"                        
+                        Grid.Column="1"
                         SelectedIndexChanged="TiempoVerif_SelectedIndexChanged">
                         <Picker.Items>
                             <x:String>1</x:String>
@@ -102,42 +97,34 @@
                         </Picker.Items>
 
                     </Picker>
-                
-                    
+
+
                 </Grid>
             </StackLayout>
-            <StackLayout
-                VerticalOptions="EndAndExpand">
-                
-               
-                <StackLayout
-                    HorizontalOptions="CenterAndExpand"
-                        Margin="0,0,0,-20"
-                        Orientation="Horizontal"
-                    >
-                    <Button 
-                        BorderColor="White"
-                        x:Name="btConfigAvan" 
-                        Text="Config. Avanzada" 
-                        Clicked="BtConfigAvan_Clicked"
-                        FontAttributes="Bold"
+            <StackLayout VerticalOptions="EndAndExpand">
+                <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Horizontal">
+                    <Button
+                        x:Name="btConfigAvan"
+                        Margin="0,0,0,0"
                         BackgroundColor="#F44336"
-                        TextColor="White"                
-                        CornerRadius="27"                       
-                        WidthRequest="140"
-                        Margin="0,0,0,0"/>
-                    <Button 
-                        BorderColor="White"                    
-                        x:Name="btnClearDB" 
-                        Text="Limpiar DB" 
+                        BorderColor="White"
+                        Clicked="BtConfigAvan_Clicked"
+                        CornerRadius="27"
+                        FontAttributes="Bold"
+                        Text="Config. Avanzada"
+                        TextColor="White"
+                        WidthRequest="140" />
+                    <Button
+                        x:Name="btnClearDB"
+                        BackgroundColor="#F44336"
+                        BorderColor="White"
                         Clicked="BtnClearDB_Clicked"
                         CornerRadius="27"
-                        BackgroundColor="#F44336"
-                        TextColor="White"
                         FontAttributes="Bold"
-                        WidthRequest="140"/>
+                        Text="Limpiar DB"
+                        TextColor="White"
+                        WidthRequest="140" />
                 </StackLayout>
-                
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>
