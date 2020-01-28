@@ -46,7 +46,6 @@ namespace SCVMobil
             scan = new Escaner(entryScan);
             stNombre = nombre;
             stApellidos = apellidos;
-
         }
         //-------------------------------------------------------------------------------------------------------------------
 

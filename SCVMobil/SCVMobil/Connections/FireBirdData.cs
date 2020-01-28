@@ -54,7 +54,6 @@ namespace SCVMobil.Connections
             }
         }
 
-
         //// Ejecutar query Scalar luego de abrir una conexion con la base de datos
         public string ExecuteScalar(string query)
         {
@@ -162,7 +161,6 @@ namespace SCVMobil.Connections
             }
         }
 
-
         public int ReturnCountCedulas(int value)
         {
             try
@@ -232,7 +230,7 @@ namespace SCVMobil.Connections
             }
         }
 
-        // Retornar una lista de invitados
+        //// Retornar una lista de invitados
         public List<Invitados> ExecuteGuest(string query)
         {
             try
@@ -428,8 +426,7 @@ namespace SCVMobil.Connections
             }
         }
 
-
-        // Retornar una lista de invitados
+        //// Retornar una lista de invitados
         public List<Invitados> ExecuteGuestOuts(string query)
         {
             try
@@ -625,8 +622,7 @@ namespace SCVMobil.Connections
             }
         }
 
-
-        // Retornar lista de Reservaciones
+        //// Retornar lista de Reservaciones
         public List<VW_RESERVA_VISITA> ExecuteReservations(string query)
         {
             try
@@ -713,6 +709,7 @@ namespace SCVMobil.Connections
                 return null;
             }
         }
+
         public List<COMPANIASLOC> ExecuteCompaniesLoc(string query)
         {
             try
@@ -773,7 +770,7 @@ namespace SCVMobil.Connections
             }
         }
 
-        // Retornar lista de Companias
+        //// Retornar lista de Companias
         public List<COMPANIAS> ExecuteCompanies(string query)
         {
             try
@@ -879,7 +876,7 @@ namespace SCVMobil.Connections
                         #endregion
 
                         lista.Add(depto_localidad);
-                        Debug.WriteLine("DEPTO_LICALIDAD agregada, Id: " + depto_localidad.ID_DEPTO_LOCALIDAD);
+                        Debug.WriteLine("DEPTO_LOCALIDAD agregada, Id: " + depto_localidad.ID_DEPTO_LOCALIDAD);
                     }
                 }
                 dtResult.Close();
@@ -896,7 +893,7 @@ namespace SCVMobil.Connections
                 return null;
             }
         }
-        // Retornar lista de Personas
+        //// Retornar lista de Personas
         public List<PERSONAS> ExecutePeople(string query)
         {
             try
@@ -954,7 +951,6 @@ namespace SCVMobil.Connections
             }
         }
 
-
         //// Probar que hay conexion trayendo datos
         public void tryConnection()
         {
@@ -979,7 +975,6 @@ namespace SCVMobil.Connections
 
         }
 
-
         //// Proveer informacion relativo a la region
         public void PublicServices()
         {
@@ -996,7 +991,6 @@ namespace SCVMobil.Connections
                 Debug.WriteLine("Error en el metodo PublicServices, provocado por: " + ea.Message);
             }
         }
-
 
         //// Subir Visitantes que NO se han subido
         public void UploadVisits()
@@ -1124,7 +1118,6 @@ namespace SCVMobil.Connections
             }
         }
 
-
         //// Subir Visitantes con reservaciones que no se hayan subido
         public void UploadVisitsReservation()
         {
@@ -1247,7 +1240,6 @@ namespace SCVMobil.Connections
             }
         }
 
-
         //// Subir Verificaciones 
         public void UploadVerifications()
         {
@@ -1361,7 +1353,6 @@ namespace SCVMobil.Connections
             }
         }
 
-
         //// Cargar Reservaciones
         public void DownloadReservations()
         {
@@ -1415,7 +1406,6 @@ namespace SCVMobil.Connections
                 Debug.WriteLine("Excepcion en el metodo DownloadReservations, Error: " + ea.Message);
             }
         }
-
 
         //// Cargar Companies
         public void DownloadCompanies()
@@ -1485,9 +1475,9 @@ namespace SCVMobil.Connections
             {
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                 string query = " SELECT * "
-                                                   + " FROM VW_DEPTO_LOCALIDAD where ID_DEPTO_LOCALIDAD > "
-                                                   + Preferences.Get("MAX_DEPTO_LOCALIDAD", "0")
-                                                   + " ORDER BY ID_DEPTO_LOCALIDAD desc";
+                                    + " FROM VW_DEPTO_LOCALIDAD where ID_DEPTO_LOCALIDAD > "
+                            + Preferences.Get("MAX_DEPTO_LOCALIDAD", "0")
+                            + " ORDER BY ID_DEPTO_LOCALIDAD desc";
 
                 var Lista_DEPTO_LOCALIDAD = executeDepto_Localidad(query);
 
@@ -1501,8 +1491,8 @@ namespace SCVMobil.Connections
                         {
 
                             db.InsertAll(Lista_DEPTO_LOCALIDAD);
-                            Debug.WriteLine("MAX_COMPANIA_ID: " + Lista_DEPTO_LOCALIDAD.First().ID_DEPTO_LOCALIDAD.ToString());
-                            Preferences.Set("MAX_COMPANIA_ID", Lista_DEPTO_LOCALIDAD.First().ID_DEPTO_LOCALIDAD.ToString());
+                            Debug.WriteLine("MAX_DEPTO_LOCALIDAD: " + Lista_DEPTO_LOCALIDAD.First().ID_DEPTO_LOCALIDAD.ToString());
+                            Preferences.Set("MAX_DEPTO_LOCALIDAD", Lista_DEPTO_LOCALIDAD.First().ID_DEPTO_LOCALIDAD.ToString());
                             Debug.WriteLine("Departamento Localidad Descargadas: " + DateTime.Now);
                             //string sortNames = "select nombre from companias where PUNTO_VSU = 0 AND ESTATUS = 1 order by nombre";
                             //var Sorting = db.Query<DEPTO_LOCALIDAD>(sortNames);
@@ -1537,6 +1527,8 @@ namespace SCVMobil.Connections
                 Debug.WriteLine("Error de SQL: " + ea.Message);
             }
         }
+
+        //// Descargar Companias por localidad
         public void DownloadCompaniesPorLocalidad(string querry)
         {
             try
@@ -1593,7 +1585,6 @@ namespace SCVMobil.Connections
                 Debug.WriteLine("Error de SQL: " + ea.Message);
             }
         }
-
 
         //// Cargar Personas(Destinos)
         public void DownloadPeople_Destination()
@@ -1660,7 +1651,6 @@ namespace SCVMobil.Connections
                 Debug.WriteLine("Excepcion en el metodo DownloadPeople_Destination, Error: " + ea.Message);
             }
         }
-
 
         //// Descargar Invitados
         public void DownloadGuests()
@@ -1814,6 +1804,7 @@ namespace SCVMobil.Connections
 
         }
 
+        //// Extraer Departamento por ID
         public List<VisitasDepto> extraerDeparatamentoId(COMPANIAS cc) //Extraer personas con su departamento//
         {
             string query = $"select p.nombres, p.departamento_id, c.nombre from personas p inner join companias c on c.compania_id = p.departamento_id where p.departamento_id = {cc.COMPANIA_ID}";
@@ -1865,8 +1856,6 @@ namespace SCVMobil.Connections
             }
         }
 
-       
-       
 
     }
 }
