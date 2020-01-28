@@ -123,9 +123,10 @@ namespace SCVMobil.Connections
                                 {
                                     persona.APELLIDO1 = dtResult[2].ToString();
                                 }
+                                
                                 if (dtResult[3] != System.DBNull.Value)
                                 {
-                                    persona.APELLIDO2 = dtResult[3].ToString();
+                                    persona.ID_PADRON = dtResult[3].ToString();
                                 }
                                 listPadron.Add(persona);
                                 //Debug.WriteLine("Agregado, NOMBRE: "+persona.NOMBRES+" "+persona.APELLIDO1 + " CEDULA: "+persona.CEDULA);
@@ -1296,7 +1297,7 @@ namespace SCVMobil.Connections
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                 var salidasASubir = db.Query<Invitados>("SELECT * FROM Invitados where SALIDASUBIDA is null and FECHA_SALIDA is not null and SUBIDA is not null");
                 var salidas = db.Query<Invitados>("SELECT * FROM Invitados");
-
+               
                 foreach (Invitados registro in salidasASubir)
                 {
                     var querrySal = "SELECT * FROM SP_DAR_SALIDA(" + registro.INVIDATO_ID.ToString() + ", '" + registro.Fecha_Salida.ToString() + "', " +
@@ -1863,6 +1864,9 @@ namespace SCVMobil.Connections
                 return null;
             }
         }
+
+       
+       
 
     }
 }
