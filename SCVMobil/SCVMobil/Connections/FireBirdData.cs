@@ -6,12 +6,14 @@ using SCVMobil.Models;
 using SQLite;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms.PlatformConfiguration;
 
@@ -19,6 +21,8 @@ namespace SCVMobil.Connections
 {
     public class FireBirdData
     {
+        private static readonly object DbLock = new object();
+
         //HttpClient _client = new HttpClient();
 
         //// Constructor
@@ -29,19 +33,14 @@ namespace SCVMobil.Connections
 
 
         //// Retornar el Connection String
-        public string connectionString(bool db)
+        public  string connectionString(bool db)
         {
             if (db)
             {
                 string connectionString = "User ID = sysdba; Password = masterkey; Database = C:\\APP\\GAD\\registros.fdb; " +
                                           $"DataSource={Preferences.Get("SERVER_IP", "192.168.1.103")};Port=3050;Charset=NONE;Server Type=0;";
 
-                //string connectionString = "User ID=sysdba;Password=masterkey;Database=C:\\Users\\Abraham\\Desktop\\Codes\\registros\\registros.fdb;" +
-                //                           $"DataSource={Preferences.Get("SERVER_IP", "192.168.2.120")};Port=3050;Charset=NONE;Server Type=0; Timeout=5;"; //Connectionstring//
-
-                //string connectionString = "User ID=sysdba;Password=masterkey;Database=C:\\APP\\registros\\registros.fdb;" +
-                //                          $"DataSource={Preferences.Get("SERVER_IP", "192.168.2.120")};Port=3050;Charset=NONE;Server Type=0; Timeout=5;"; //Connectionstring//
-
+             
                 return connectionString;
             }
             else
@@ -53,7 +52,7 @@ namespace SCVMobil.Connections
                 return connectionString;
             }
         }
-
+      
         //// Ejecutar query Scalar luego de abrir una conexion con la base de datos
         public string ExecuteScalar(string query)
         {
@@ -1383,7 +1382,7 @@ namespace SCVMobil.Connections
         //// Cargar Reservaciones
         public void DownloadReservations()
         {
-                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+            SQLiteConnection db = null;
             try
             {
 
@@ -1403,6 +1402,7 @@ namespace SCVMobil.Connections
                     {
                         if (ListaReservaciones.Any())
                         {
+                            db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                             db.InsertAll(ListaReservaciones);
                             Debug.WriteLine("MAX_RESERVA_ID: " + ListaReservaciones.First().VISITA_ID.ToString());
                             Preferences.Set("MAX_RESERVA_ID", ListaReservaciones.First().VISITA_ID.ToString());
@@ -1434,15 +1434,19 @@ namespace SCVMobil.Connections
             }
             finally
             {
-                db.Close();
-                db.Dispose();
+                if (db != null)
+                {
+                    db.Close();
+                    db.Dispose();
+                }
+                
             }
         }
 
         //// Cargar Companies
         public void DownloadCompanies()
         {
-                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+            SQLiteConnection db = null;
             try
             {
                 string queryCompanias = " SELECT FIRST "
@@ -1461,7 +1465,7 @@ namespace SCVMobil.Connections
                     {
                         if (ListaCompanias.Any())
                         {
-
+                            db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                             db.InsertAll(ListaCompanias);
                             Debug.WriteLine("MAX_COMPANIA_ID: " + ListaCompanias.First().COMPANIA_ID.ToString());
                             Preferences.Set("MAX_COMPANIA_ID", ListaCompanias.First().COMPANIA_ID.ToString());
@@ -1500,15 +1504,19 @@ namespace SCVMobil.Connections
             }
             finally
             {
-                db.Close();
-                db.Dispose();
+                if (db != null)
+                {
+                    db.Close();
+                    db.Dispose();
+                }
+                
             }
         }
 
         //// Cargar Departamentos
         public void DownloadDeptoLocalidad()
         {
-                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+            SQLiteConnection db = null;
             try
             {
                 string query = " SELECT * "
@@ -1526,7 +1534,7 @@ namespace SCVMobil.Connections
                     {
                         if (Lista_DEPTO_LOCALIDAD.Any())
                         {
-
+                            db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                             db.InsertAll(Lista_DEPTO_LOCALIDAD);
                             Debug.WriteLine("MAX_DEPTO_LOCALIDAD: " + Lista_DEPTO_LOCALIDAD.First().ID_DEPTO_LOCALIDAD.ToString());
                             Preferences.Set("MAX_DEPTO_LOCALIDAD", Lista_DEPTO_LOCALIDAD.First().ID_DEPTO_LOCALIDAD.ToString());
@@ -1565,16 +1573,20 @@ namespace SCVMobil.Connections
             }
             finally
             {
-                db.Close();
-                db.Dispose();
+                if (db != null)
+                {
+                    db.Close();
+                    db.Dispose();
+                }
+               
             }
         }
 
         //// Descargar Companias por localidad
         public void DownloadCompaniesPorLocalidad(string querry)
         {
-                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-                var dbd = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+            SQLiteConnection db = null;
+            SQLiteConnection dbd = null;
             try
             {
 
@@ -1589,6 +1601,8 @@ namespace SCVMobil.Connections
                     {
                         if (ListaCompanias.Any())
                         {
+                            db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                            dbd = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                             dbd.DeleteAll<COMPANIASLOC>();
                             db.InsertAll(ListaCompanias);
                             //Debug.WriteLine("MAX_COMPANIA_ID: " + ListaCompanias.First().COMPANIA_ID.ToString());
@@ -1628,17 +1642,25 @@ namespace SCVMobil.Connections
             }
             finally
             {
-                db.Close();
-                db.Dispose();
-                dbd.Close();
-                dbd.Dispose();
+                if (db != null)
+                {
+                    db.Close();
+                    db.Dispose();
+                }
+
+                if (dbd != null)
+                {
+                    dbd.Close();
+                    dbd.Dispose();
+                }
+                
             }
         }
 
         //// Cargar Personas(Destinos)
         public void DownloadPeople_Destination()
         {
-                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+            SQLiteConnection db = null;
             try
             {
 
@@ -1658,6 +1680,7 @@ namespace SCVMobil.Connections
                     {
                         if (ListaPersonas.Any())
                         {
+                            db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                             db.InsertAll(ListaPersonas);
                             Debug.WriteLine("MAX_PERSONA_ID: " + ListaPersonas.First().PERSONA_ID.ToString());
                             Preferences.Set("MAX_PERSONA_ID", ListaPersonas.First().PERSONA_ID.ToString());
@@ -1701,15 +1724,18 @@ namespace SCVMobil.Connections
             }
             finally
             {
-                db.Close();
-                db.Dispose();
+                if (db != null)
+                {
+                    db.Close();
+                    db.Dispose();
+                }
             }
         }
 
         //// Descargar Invitados
         public void DownloadGuests()
         {
-                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+            SQLiteConnection db = null;
             try
             {
 
@@ -1733,6 +1759,7 @@ namespace SCVMobil.Connections
                     {
                         if (contentDownInv.Any())
                         {
+                            db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                             Debug.WriteLine("Se va a descargar: " + contentDownInv.Count().ToString() + " Visitas");
                             db.InsertAll(contentDownInv);
                             Debug.WriteLine("MAX_INVIDATO_ID: " + contentDownInv.First().INVIDATO_ID.ToString());
@@ -1760,15 +1787,19 @@ namespace SCVMobil.Connections
             }
             finally
             {
-                db.Close();
-                db.Dispose();
+                if (db != null)
+                {
+                    db.Close();
+                    db.Dispose();
+                }
+                
             }
         }
 
         //// Descargar Salidas
         public void DownloadOuts()
         {
-                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+            SQLiteConnection db = null;
             try
             {
                 var maxInvidatoIdLocal = db.Query<counterObj>("SELECT MAX(INVIDATO_ID) as anycount FROM Invitados");
@@ -1790,6 +1821,7 @@ namespace SCVMobil.Connections
                     {
                         if (listSalidas.Any())
                         {
+                            db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                             foreach (Invitados registro in listSalidas)
                             {
                                 var invitadoId = db.Query<counterObj>("SELECT INVITADO_ID as anycount FROM Invitados WHERE INVIDATO_ID = " + registro.INVIDATO_ID.ToString());
@@ -1825,8 +1857,11 @@ namespace SCVMobil.Connections
             }
             finally
             {
-                db.Close();
-                db.Dispose();
+                if (db != null)
+                {
+                    db.Close();
+                    db.Dispose();
+                }
             }
         }
 
@@ -1862,11 +1897,7 @@ namespace SCVMobil.Connections
             }
         }
 
-        //// Descargar el padron al dispositivo
-        public void DownloadPadron()
-        {
-
-        }
+   
 
         //// Extraer Departamento por ID
         public List<VisitasDepto> extraerDeparatamentoId(COMPANIAS cc) //Extraer personas con su departamento//

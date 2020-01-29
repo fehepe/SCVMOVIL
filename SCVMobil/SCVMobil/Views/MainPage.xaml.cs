@@ -86,8 +86,6 @@ namespace SCVMobil
         //-----------------------------------------------------------------------------------------
         protected override void OnAppearing() //Cuando aparezca la pagina, refrescamos.
         {
-
-           
             Debug.WriteLine("Appeared");
             refreshPage();
             scanner.GetScanner(true);

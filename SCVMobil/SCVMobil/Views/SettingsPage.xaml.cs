@@ -36,7 +36,7 @@ namespace SCVMobil
         // This handles the Web data request
         private HttpClient _client = new HttpClient();
         private HttpClient _client2 = new HttpClient();
-        private FireBirdData fireBird  = new FireBirdData();
+        private FireBirdData fireBird;
 
         public SettingsPage()
         {
@@ -99,6 +99,7 @@ namespace SCVMobil
                 {
                     try
                     {
+                        fireBird = new FireBirdData();
                         //Mostramos el popup
                         popupLoadingView.IsVisible = true;
 

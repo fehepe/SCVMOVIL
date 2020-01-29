@@ -136,7 +136,7 @@ namespace SCVMobil
                             // Subir las salidasDesconocidas.
                             fireBird.UploadUnknownOuts();
 
-                            fireBird.DownloadPadron();
+                            
 
                     }
                     else
