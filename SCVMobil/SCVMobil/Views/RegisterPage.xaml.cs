@@ -43,9 +43,7 @@ namespace SCVMobil
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                 try
                 {
-                    db.
-                        
-                        (padronRegistro);
+                    db.Insert(padronRegistro);
                     await PopupNavigation.PushAsync(new PopUpDatosCorrectos());
                     Navigation.PushAsync(new CompanyPage(EntryCedula.Text, EntryNombre.Text, EntryApellido.Text));
                     EntryApellido.Text = "";

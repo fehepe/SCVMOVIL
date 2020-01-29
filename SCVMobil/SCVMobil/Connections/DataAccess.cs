@@ -23,8 +23,7 @@ namespace SCVMobil
            
 
         }
-        public void 
-            Visita(Visitas visita)
+        public void InsertVisita(Visitas visita)
         {
             connection.Insert(visita);
         }
