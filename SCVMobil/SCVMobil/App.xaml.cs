@@ -97,46 +97,48 @@ namespace SCVMobil
                     if (Connectivity.NetworkAccess == NetworkAccess.Internet) //
                     {
                         //checkDateTime();
-                            fireBird.tryConnection();
+                        fireBird.tryConnection();
 
-                            //Implementar servicios Periodicos.
-                            fireBird.PublicServices();
+                        //Implementar servicios Periodicos.
+                        fireBird.PublicServices();
 
                         
-                            // Descargar las reservas.
-                            fireBird.DownloadReservations();
+                        // Descargar las reservas.
+                        fireBird.DownloadReservations();
 
-                            // Descargar las companies.
-                            fireBird.DownloadCompanies();
+                        // Descargar las companies.
+                        fireBird.DownloadCompanies();
 
-                            // Descargar las personas(destinos).
-                            fireBird.DownloadPeople_Destination();
+                        // Descargar Verificaciones
+                        fireBird.DownloadVerifications();
 
-                            // Descargar los Invitados.
-                            fireBird.DownloadGuests();
+                        // Descargar las personas(destinos).
+                        fireBird.DownloadPeople_Destination();
 
-                            // Descargar las salidas.
-                            fireBird.DownloadOuts();
+                        // Descargar los Invitados.
+                        fireBird.DownloadGuests();
 
-                            // Descargar DEPTO_LOCALIDAD
-                            fireBird.DownloadDeptoLocalidad();
+                        // Descargar las salidas.
+                        fireBird.DownloadOuts();
 
-                            // Subir visitantes.
-                            fireBird.UploadVisits();
+                        // Descargar DEPTO_LOCALIDAD
+                        fireBird.DownloadDeptoLocalidad();
 
-                            // Cargar Visitantes con reservas.
-                            fireBird.UploadVisitsReservation();
+                        // Subir visitantes.
+                        fireBird.UploadVisits();
 
-                            // Subir las Verificacion.
-                            fireBird.UploadVerifications();
+                        // Cargar Visitantes con reservas.
+                        fireBird.UploadVisitsReservation();
 
-                            // Subir las salidas.
-                            fireBird.UploadOut();
+                        // Subir las Verificacion.
+                        fireBird.UploadVerifications();
 
-                            // Subir las salidasDesconocidas.
-                            fireBird.UploadUnknownOuts();
+                        // Subir las salidas.
+                        fireBird.UploadOut();
 
-                            fireBird.DownloadPadron();
+                        // Subir las salidasDesconocidas.
+                        fireBird.UploadUnknownOuts();
+
 
                     }
                     else

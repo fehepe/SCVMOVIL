@@ -19,14 +19,11 @@ namespace SCVMobil.Connections
 {
     public class FireBirdData
     {
-        //HttpClient _client = new HttpClient();
-
         //// Constructor
         public FireBirdData()
         {
 
         }
-
 
         //// Retornar el Connection String
         public string connectionString(bool db)
@@ -35,12 +32,6 @@ namespace SCVMobil.Connections
             {
                 string connectionString = "User ID = sysdba; Password = masterkey; Database = C:\\APP\\GAD\\registros.fdb; " +
                                           $"DataSource={Preferences.Get("SERVER_IP", "192.168.1.103")};Port=3050;Charset=NONE;Server Type=0;";
-
-                //string connectionString = "User ID=sysdba;Password=masterkey;Database=C:\\Users\\Abraham\\Desktop\\Codes\\registros\\registros.fdb;" +
-                //                           $"DataSource={Preferences.Get("SERVER_IP", "192.168.2.120")};Port=3050;Charset=NONE;Server Type=0; Timeout=5;"; //Connectionstring//
-
-                //string connectionString = "User ID=sysdba;Password=masterkey;Database=C:\\APP\\registros\\registros.fdb;" +
-                //                          $"DataSource={Preferences.Get("SERVER_IP", "192.168.2.120")};Port=3050;Charset=NONE;Server Type=0; Timeout=5;"; //Connectionstring//
 
                 return connectionString;
             }
@@ -148,6 +139,7 @@ namespace SCVMobil.Connections
             }
         }
 
+        ////
         public int ReturnCountCedulas(int value)
         {
             try
@@ -697,6 +689,7 @@ namespace SCVMobil.Connections
             }
         }
 
+        ////
         public List<COMPANIASLOC> ExecuteCompaniesLoc(string query)
         {
             try
@@ -818,6 +811,7 @@ namespace SCVMobil.Connections
             }
         }
 
+        //// 
         public List<DEPTO_LOCALIDAD> executeDepto_Localidad(string query)
         {
             try
@@ -880,6 +874,7 @@ namespace SCVMobil.Connections
                 return null;
             }
         }
+
         //// Retornar lista de Personas
         public List<PERSONAS> ExecutePeople(string query)
         {
@@ -1468,30 +1463,16 @@ namespace SCVMobil.Connections
 
                 var Lista_DEPTO_LOCALIDAD = executeDepto_Localidad(query);
 
-                var stlRegistros = new List<string>();
-                var stRegisros = "";
                 if (Lista_DEPTO_LOCALIDAD != null)
                 {
                     try
                     {
                         if (Lista_DEPTO_LOCALIDAD.Any())
                         {
-
                             db.InsertAll(Lista_DEPTO_LOCALIDAD);
                             Debug.WriteLine("MAX_DEPTO_LOCALIDAD: " + Lista_DEPTO_LOCALIDAD.First().ID_DEPTO_LOCALIDAD.ToString());
                             Preferences.Set("MAX_DEPTO_LOCALIDAD", Lista_DEPTO_LOCALIDAD.First().ID_DEPTO_LOCALIDAD.ToString());
                             Debug.WriteLine("Departamento Localidad Descargadas: " + DateTime.Now);
-                            //string sortNames = "select nombre from companias where PUNTO_VSU = 0 AND ESTATUS = 1 order by nombre";
-                            //var Sorting = db.Query<DEPTO_LOCALIDAD>(sortNames);
-                            //foreach (DEPTO_LOCALIDAD registro in Sorting)
-                            //{
-                            //    //db.Insert(registro);
-                            //    Debug.WriteLine("DEPTO_LOCALIDAD: " + registro.DEPTO_NOMBRE);
-                            //    stlRegistros.Add(registro.NOMBRE.ToString());
-                            //    stRegisros = stRegisros + "," + registro.NOMBRE.ToString();
-                            //}
-                            //stRegisros = stRegisros.TrimStart(',');
-                            //Preferences.Set("COMPANIAS_LIST", stRegisros);
                         }
                     }
                     catch (Exception ex)
@@ -1636,6 +1617,19 @@ namespace SCVMobil.Connections
             {
                 Analytics.TrackEvent("Escaner: " + Preferences.Get("LECTOR", "N/A") + " Excepcion en el metodo DownloadPeople_Destination, Error: " + ea.Message);
                 Debug.WriteLine("Excepcion en el metodo DownloadPeople_Destination, Error: " + ea.Message);
+            }
+        }
+
+        //// Descargar Verificaciones
+        public void DownloadVerifications() 
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Excepcion en el metodo DownloadVerifications: "+ex.Message);
             }
         }
 
@@ -1785,11 +1779,6 @@ namespace SCVMobil.Connections
             }
         }
 
-        //// Descargar el padron al dispositivo
-        public void DownloadPadron()
-        {
-
-        }
 
         //// Extraer Departamento por ID
         public List<VisitasDepto> extraerDeparatamentoId(COMPANIAS cc) //Extraer personas con su departamento//
