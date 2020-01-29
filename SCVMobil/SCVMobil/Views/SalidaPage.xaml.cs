@@ -44,7 +44,7 @@ namespace SCVMobil
             }
             catch (Exception ee)
             {
-                
+                await DisplayAlert("Error", ee.Message, "OK");
                 Analytics.TrackEvent("Error al dar salida " + ee.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
                 throw;
             }

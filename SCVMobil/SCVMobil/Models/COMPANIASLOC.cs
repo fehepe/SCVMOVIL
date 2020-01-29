@@ -1,11 +1,11 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using SQLite;
 
 namespace SCVMobil.Models
 {
-    public class COMPANIAS
+    public class COMPANIASLOC
     {
         [PrimaryKey]
         public int COMPANIA_ID { get; set; }
@@ -13,7 +13,8 @@ namespace SCVMobil.Models
         public int? PUNTO_VSU { get; set; }
         public int? ESTATUS { get; set; }
 
-        public COMPANIAS()//Constructor en blanco necesario para hacer querrys
+
+        public COMPANIASLOC()//Constructor en blanco necesario para hacer querrys
         {
 
         }

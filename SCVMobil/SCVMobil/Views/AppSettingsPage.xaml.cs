@@ -10,6 +10,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using SCVMobil.Models;
 using Microsoft.AppCenter.Analytics;
+using SCVMobil.Connections;
 
 namespace SCVMobil
 {
@@ -21,7 +22,9 @@ namespace SCVMobil
         public AppSettingsPage()
         {
             InitializeComponent();
+            
         }
+        
 
         private void BtConfigAvan_Clicked(object sender, EventArgs e)
         {
@@ -33,7 +36,7 @@ namespace SCVMobil
             setdefaults();
             Localidad_VSU();
             visitaA.IsToggled = Preferences.Get("VISITA_A_SELECTED", true);
-
+            entPuerta.SelectedIndex = Preferences.Get("PUERTA_SELECTED_INDEX", 0);
             placa.IsToggled= Preferences.Get("PLACA_SELECTED", true);
             TiempoVerif.SelectedItem = Preferences.Get("TIEMPOS", "1");
         }
@@ -60,10 +63,9 @@ namespace SCVMobil
             
             
         }
+
         private void Localidad_VSU()
         {
-
-
             try
             {
                 var scompania_id = Preferences.Get("LOCALIDAD_VSU", "1");
@@ -72,18 +74,8 @@ namespace SCVMobil
                 List<string> listpuertas = new List<string>();
                 if (puertas.Any())
                 {
-                    entPuerta.IsVisible = true;
-                    foreach (var item in puertas)
-                    {
-                        listpuertas.Add(item.NOMBRE);
-                    }
-                    entPuerta.ItemsSource = listpuertas;
-                    if (scompania_id != "1")
-                    {
-                        entPuerta.SelectedItem = (puertas.Where(x => x.COMPANIA_ID == Convert.ToInt32(scompania_id)).First().NOMBRE);
-                    }
-
-
+                    entPuerta.ItemsSource = puertas;
+                    entPuerta.SelectedItem = Preferences.Get("PUERTA_SELECTED_INDEX", 0);
                 }
                 else
                 {
@@ -92,12 +84,11 @@ namespace SCVMobil
             }
             catch (Exception e)
             {
+                DisplayAlert("Error", e.Message, "OK");
                 Debug.WriteLine("Error en el metodo LOCALIDAD _VSU");
                 Analytics.TrackEvent("Error al mostrar compañias: " + e.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
-                throw;
+                
             }
-
-           
         }
 
 
@@ -109,6 +100,7 @@ namespace SCVMobil
             }
             catch (Exception ex)
             {
+                DisplayAlert("Error", ex.Message, "OK");
                 Debug.WriteLine("Exception catched while trying to set preference \"VISITA_A_SELECTED\": " + ex);
             }
         }
@@ -123,6 +115,7 @@ namespace SCVMobil
             }
             catch (Exception ex)
             {
+                DisplayAlert("Error", ex.Message, "OK");
                 Debug.WriteLine("Exception catched while trying to set preference \"ULTIMA_VISITA_A_SELECTED\": " + ex);
             }
         }
@@ -135,6 +128,7 @@ namespace SCVMobil
             }
             catch (Exception ex)
             {
+                DisplayAlert("Error", ex.Message, "OK");
                 Debug.WriteLine("Exception catched while trying to set preference \"PLACA_SELECTED\": " + ex);
             }
         }
@@ -144,30 +138,49 @@ namespace SCVMobil
 
             try
             {
-                var response = await App.Current.MainPage.DisplayAlert("Limpiar Base de Datos Local", "Desea que se elimine toda la informacion almacenada localmente?", "Si", "No");
-                if (response)
+                string Password = "cr52401";
+                string TryPassword = await DisplayPromptAsync("verificacion","Ingrese la contraseña maestra para continuar","Eliminar","Cancelar","Contraseña",11,null);
+                if (Password == TryPassword)
                 {
-                    Preferences.Set("MAX_RESERVA_ID", "0");
-                    Preferences.Set("MAX_COMPANIA_ID", "0");
-                    Preferences.Set("MAX_PERSONA_ID", "0");
-                    Preferences.Set("MAX_INVIDATO_ID", "0");
-                    Preferences.Set("PERSONAS_LIST", "");
-                    Preferences.Set("COMPANIAS_LIST", "");
-                    var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-                    db.DeleteAll<COMPANIAS>();
-                    db.DeleteAll<PERSONAS>();
-                    db.DeleteAll<VW_RESERVA_VISITA>();
-                    db.DeleteAll<Invitados>();
-                    db.DeleteAll<InvitadosReservas>();
-                    db.DeleteAll<SalidaOffline>();
-                    db.DeleteAll<PLACA>();
+                    var response = await App.Current.MainPage.DisplayAlert("Limpiar Base de Datos Local", "Desea que se elimine toda la informacion almacenada localmente?", "Si", "No");
+                    if (response)
+                    {
+
+                        var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                        db.DeleteAll<COMPANIAS>();
+                        db.DeleteAll<PERSONAS>();
+                        db.DeleteAll<VW_RESERVA_VISITA>();
+                        db.DeleteAll<Invitados>();
+                        db.DeleteAll<InvitadosReservas>();
+                        db.DeleteAll<SalidaOffline>();
+                        db.DeleteAll<PLACA>();
+                        db.DeleteAll<DEPTO_LOCALIDAD>();
+                        
+                        Preferences.Set("MAX_RESERVA_ID", "0");
+                        Preferences.Set("MAX_COMPANIA_ID", "0");
+                        Preferences.Set("MAX_PERSONA_ID", "0");
+                        Preferences.Set("MAX_INVIDATO_ID", "0");
+                        Preferences.Set("PERSONAS_LIST", "");
+                        Preferences.Set("COMPANIAS_LIST", "");
+                        Preferences.Set("CHUNK_SIZE", "50000");
+                        Preferences.Set("MAX_DEPTO_LOCALIDAD", "0");
+                        Preferences.Set("DESTINO_SELECTED", 0);
+                    } 
+                }else if (string.IsNullOrWhiteSpace(TryPassword))
+                {
+                    Debug.WriteLine("Ha ingresado ninguna contraseña", "continuar");
+                }
+                else
+                {
+                    await DisplayAlert("Credencial incorrecta","La credencial ingresada no es valida", "OK");
                 }
             }
             catch (Exception ex)
             {
+                await DisplayAlert("Error", ex.Message, "OK");
                 Debug.WriteLine("Error en BtnClearDB");
                 Analytics.TrackEvent("Error al limpiar base de datos " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
-                throw;
+               
             }
 
             
@@ -199,16 +212,15 @@ namespace SCVMobil
         {
             try
             {
-                var nombreLocalidad = entPuerta.SelectedItem.ToString();
+                var fireBird = new FireBirdData();
+                var selected = entPuerta.SelectedItem as COMPANIAS;
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-                var puertas = db.Query<COMPANIAS>($"SELECT * FROM COMPANIAS where NOMBRE = '{nombreLocalidad}'");
-                if (puertas.Any())
-                {
-                    Preferences.Set("LOCALIDAD_VSU", puertas.First().COMPANIA_ID.ToString());
-                }
+                Preferences.Set("LOCALIDAD_VSU", selected.COMPANIA_ID.ToString());
+                Preferences.Set("PUERTA_SELECTED_INDEX", selected.COMPANIA_ID);
             }
             catch (Exception ex)
             {
+                DisplayAlert("Error", ex.Message, "OK");
                 Debug.WriteLine("Error en entPuerta_SelectedIndexChanged");
                 Analytics.TrackEvent("Error al mostrar compañias: " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }

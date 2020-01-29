@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="SCVMobil.Views.LicensePage"
+             BackgroundColor="#FFFFEFF">
+    <ContentPage.Content>
+        <StackLayout VerticalOptions="Center"
+                     Padding="50">
+            <Label
+                HorizontalTextAlignment="Center"
+                Text="Serial:"
+                TextColor="Black"
+                FontAttributes="Bold"
+                FontSize="20"/>
+            <Label
+                x:Name="LblSerialNumber"
+                FontSize="20"
+                HorizontalTextAlignment="Center"
+                TextColor="Black"
+                Margin="0,0,0,10"/>
+            <Label
+            Text="Licencia SCVMovil"
+            FontSize="20"            
+            TextColor="Black"
+            FontAttributes="Bold"
+            HorizontalTextAlignment="Center"/>
+
+            <Frame
+                CornerRadius="15"
+                BorderColor="#757575"            
+                Padding="5">
+
+                <Frame
+                    CornerRadius="15"             
+                    Padding="1">
+
+                    <Entry
+                        x:Name="EntLicense"
+                        MaxLength="20">
+                    </Entry>
+                    
+                </Frame>
+            </Frame>
+
+            <Button
+                x:Name="BtnIngresar"
+                Text="Activar"
+                FontSize="20"
+                BackgroundColor="#F44336" 
+                VerticalOptions="Center"
+                CornerRadius="20" 
+                FontAttributes="Bold"
+                HeightRequest="50"
+                Clicked="BtnIngresar_Clicked"
+                TextColor="White"
+                Margin="0,30,0,0">
+                
+            </Button>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

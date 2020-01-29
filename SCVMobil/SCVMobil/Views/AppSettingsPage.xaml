@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SCVMobil.AppSettingsPage"
              Title="Configuración de SCV"
-              BackgroundColor="#FFFFFF"
-             >
+             BackgroundColor="#FFFFFF"             
+             NavigationPage.HasBackButton="True">
     <ContentPage.Content>
       
         <StackLayout Padding="40">
@@ -61,6 +61,7 @@
                         x:Name="entPuerta"
                         Grid.Row="2"
                         Grid.Column="1"
+                        ItemDisplayBinding="{Binding NOMBRE}"
                         SelectedIndexChanged="entPuerta_SelectedIndexChanged"                        
                         />
                     <Label
