@@ -66,6 +66,7 @@ namespace SCVMobil
                 }
                 catch (Exception ey)
                 {
+                    await DisplayAlert("Error", ey.Message, "OK");
                     var properties = new Dictionary<string, string> {
                         { "Category", "Error insertando en la base de datos." },
                         { "Code", "MainPage.xaml.cs Line: 313" },

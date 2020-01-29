@@ -78,6 +78,7 @@ namespace SCVMobil
             }
             catch (Exception ea)
             {
+                await DisplayAlert("Error", ea.Message, "OK");
                 Debug.WriteLine("Error en Nombres_Completed, motivo: "+ ea.Message);
                 Analytics.TrackEvent("Error al ingresar nombre seleccionadas: " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
@@ -103,6 +104,7 @@ namespace SCVMobil
             }
             catch (Exception ea)
             {
+                DisplayAlert("Error", ea.Message, "OK");
                 Debug.WriteLine("Ha ocurrido una excepcion en el OnDisappearing, motivo: " + ea.Message);
                 Analytics.TrackEvent("Error al apagar el scanner: " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
@@ -129,6 +131,7 @@ namespace SCVMobil
             }
             catch (Exception ea)
             {
+                DisplayAlert("Error", ea.Message, "OK");
                 Debug.WriteLine("Ha ocurrido una excepcion en el metodo cedulaScanned, motivo: " + ea.Message);
                 Analytics.TrackEvent("Error escanear cedula: " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
@@ -166,6 +169,7 @@ namespace SCVMobil
             }
             catch (Exception ea)
             {
+                DisplayAlert("Error", ea.Message, "OK");
                 Debug.WriteLine("Ha ocurrido una excepcion, en el metodo OnAppeared, motivo: " + ea.Message);
                 Analytics.TrackEvent("Error al refrescar pagina: " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
@@ -277,6 +281,7 @@ namespace SCVMobil
             }
             catch (Exception ex)
             {
+                await DisplayAlert("Error", ex.Message, "OK");
                 Debug.WriteLine("Error en ToolBarItem");
                 Analytics.TrackEvent("Error al buscar visitas: " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
                 throw;
@@ -446,6 +451,7 @@ namespace SCVMobil
                                 }
                                 catch (Exception ey)
                                 {
+                                    await DisplayAlert("Error", ey.Message, "OK");
                                     await Navigation.PushAsync(new RegistroPage(inString, false));
                                     //Documento no econtrado
                                     {
@@ -487,6 +493,7 @@ namespace SCVMobil
             }
             catch (Exception ea)
             {
+                await DisplayAlert("Error", ea.Message, "OK");
                 Debug.WriteLine("Ha ocurrido una excepcion en el metodo entrada, motivo: " + ea.Message);
                 Analytics.TrackEvent("Error al verificar si es un id de salida " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }

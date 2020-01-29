@@ -102,6 +102,7 @@ namespace SCVMobil
             }
             catch (Exception ey)
             {
+                await DisplayAlert("Error", ey.Message, "OK");
                 Debug.WriteLine("Error en btnImprimir");
                 Analytics.TrackEvent("Error al insertar registros de invitados  " + ey.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             

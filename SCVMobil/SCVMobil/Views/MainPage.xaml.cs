@@ -78,7 +78,7 @@ namespace SCVMobil
             }
             catch (Exception e)
             {
-                DisplayAlert("Error" + e.Message + "ok");
+                DisplayAlert("Error", e.Message, "OK");
                 Debug.WriteLine("Error en el refresh" + e);
                 throw;
             }
@@ -295,8 +295,8 @@ namespace SCVMobil
                                         { "Category", "Documento NO EXISTE?" },
                                         { "Code", "MainPage.xaml.cs Line: 179" },
                                         { "Lector", Preferences.Get("LECTOR", "0")}
-                                    };
-                                        await DisplayAlert("Error" + ey.Message + "ok");
+                                        };
+                                        await DisplayAlert("Error", ey.Message, "OK");
                                         Crashes.TrackError(ey, properties);
                                         await PopupNavigation.PushAsync(new PopUpCedulaNoexiste());  //Invocacion del PopUp para mostrar mesaje de error// 
                                         await Navigation.PushAsync(new RegistroPage(entCedula.Text, true));
@@ -328,7 +328,7 @@ namespace SCVMobil
             }
             catch (Exception ea)
             {
-                await DisplayAlert("Error" + ea.Message + "ok");
+                await DisplayAlert("Error", ea.Message, "OK");
                 Debug.Write("Error en escaneo de cedula: " + ea.Message);
                 //throw;
             }
