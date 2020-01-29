@@ -194,7 +194,9 @@ namespace SCVMobil
                                     var registroSal = db.Query<SalidaOffline>(querrySal);
                                     if (!registroSal.Any())
                                     {
-                                        //Hacer el insert a la base de datos local para subirlo mas tarde
+                                        //Hacer el 
+                                    
+                                    a la base de datos local para subirlo mas tarde
                                         var SalOF = new SalidaOffline();
                                         SalOF.INVIDATO_ID = int.Parse(inString.Replace("ID", ""));
                                         SalOF.Fecha_Salida = DateTime.Now;
