@@ -89,7 +89,7 @@ namespace SCVMobil
             string TryPassword = await DisplayPromptAsync("verificacion", "Ingrese la contraseña maestra para continuar", "Aceptar", "Cancelar", "Contraseña", 11, null);
             if (Password == TryPassword)
             {
-            
+                Preferences.Set("BUSY", false);
                 Debug.WriteLine("Timer Stopped");
                 App.syncTimer.Stop();
                 App.syncTimer.Enabled = false;
@@ -312,6 +312,7 @@ namespace SCVMobil
                         //Preferences.Set("IS_SYNC", "false");
                         App.syncTimer.Enabled = true;
                         App.syncTimer.Start();
+                        Preferences.Set("BUSY", true);
                     }
                     //"select b.boleta_id, b.boleta, b.fecha_lectura, null as SUBIDA from boletas b where b.fecha_lectura is NULL"
                 }
@@ -473,8 +474,8 @@ namespace SCVMobil
         {
             try
             {
+                Preferences.Set("BUSY", false);
                 
-
                 FireBirdData fireBirdData = new FireBirdData();
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                
@@ -487,12 +488,25 @@ namespace SCVMobil
                 var listPadronVisita = fireBirdData.DownloadPadron(querry, true);
                 if (listPadronVisita.Count > 0)
                 {
-                   
-                    db.InsertAll(listPadronVisita);
-                    Preferences.Set("MAX_PERSONA_PADRON_ID", listPadronVisita.First().ID_PADRON.ToString());
-                    
+                    foreach (var padron in listPadronVisita)
+                    {
+                        var persona = db.Query<PADRON>("SELECT * FROM PADRON WHERE CEDULA = '"+padron.CEDULA+"'");
+                        if (persona.Any())
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            db.Insert(padron);
+                        }
+                        
 
-                    
+                    }
+                    //db.InsertAll(listPadronVisita);
+                    Preferences.Set("MAX_PERSONA_PADRON_ID", listPadronVisita.First().ID_PADRON.ToString());
+
+
+
                 }
                 OnAppearing();
 
@@ -503,6 +517,10 @@ namespace SCVMobil
                 Debug.WriteLine("Error en el metodo ActualizarPadron " + ea.Message);
                 Analytics.TrackEvent("Exception al hacer ActualizarPadron:  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
 
+            }
+            finally
+            {
+                Preferences.Set("BUSY", true);
             }
 
 
