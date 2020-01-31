@@ -9,7 +9,6 @@ namespace SCVMobil
     {
 
         [PrimaryKey]
-
         public int? INVIDATO_ID { get; set; }
         public bool? Subida { get; set; }
         public bool? salidaSubida { get; set; }

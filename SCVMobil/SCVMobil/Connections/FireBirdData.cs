@@ -1089,7 +1089,7 @@ namespace SCVMobil.Connections
 
                 // Cargar los invitados con un valor null en la propiedad SUBIDA
                 var visitasASubir = db.Query<Invitados>("SELECT * FROM Invitados where SUBIDA is null");
-
+                
                 // Iterar la lista de visitasASubir
                 foreach (Invitados registro in visitasASubir)
                 {
@@ -1195,7 +1195,7 @@ namespace SCVMobil.Connections
                                 registro.salidaSubida = null;
                             }
                         }
-                        db.UpdateAll(visitasASubir);
+                        db.Update(registro);
                     }
                 }
             }
