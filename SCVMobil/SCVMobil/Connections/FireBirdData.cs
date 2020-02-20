@@ -21,7 +21,7 @@ namespace SCVMobil.Connections
 {
     public class FireBirdData
     {
-        private static readonly object DbLock = new object();
+        //private static readonly object DbLock = new object();
 
         //HttpClient _client = new HttpClient();
 
@@ -1285,8 +1285,8 @@ namespace SCVMobil.Connections
                         "12, " +
                         "1, " +
                         "1, " +
-                        "'MANUAL', " +
-                        "'MANUAL', " +
+                        "'VISTA', " +
+                        "'VISTA', " +
                         "'PPOOII', " +
                         "0, " +
                         "'I', " +

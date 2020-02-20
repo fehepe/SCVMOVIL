@@ -28,6 +28,7 @@ namespace SCVMobil
         //Este metodo sirve para dar salida a una cedula que ya esta dentro
         private async void BtnSalida_Clicked(object sender, EventArgs e)
         {
+            Preferences.Get("BUSY", false);
             try
             {
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));

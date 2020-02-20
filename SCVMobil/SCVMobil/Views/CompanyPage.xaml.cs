@@ -241,7 +241,7 @@ namespace SCVMobil
             {
                 Preferences.Set("BUSY", false);
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-
+                
                 if (pickerVisitaA.IsVisible)
                 {
                     if (pickerDestino.SelectedItem != null || pickerVisitaA.SelectedItem != null)

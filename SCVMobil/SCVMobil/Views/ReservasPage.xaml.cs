@@ -85,8 +85,8 @@ namespace SCVMobil
                 registroInvitados.Horas_Caducidad = 12;
                 registroInvitados.Personas = 1;
                 registroInvitados.In_Out = 1;
-                registroInvitados.Origen_Entrada = "MANUAL";
-                registroInvitados.Origen_Salida = "MANUAL";
+                registroInvitados.Origen_Entrada = "VISTA";
+                registroInvitados.Origen_Salida = "VISTA";
                 registroInvitados.Comentario = "";
                 registroInvitados.Origen_IO = 0;
                 registroInvitados.Cpost = "I";
