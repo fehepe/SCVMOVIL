@@ -242,7 +242,7 @@ namespace SCVMobil
         {
             try
             {
-
+                Preferences.Set("BUSY", false);
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
                 if (pickerVisitaA.IsVisible)
@@ -430,6 +430,12 @@ namespace SCVMobil
                 await DisplayAlert("Error", "Error en BtnImprimir_Clicked: " + ea.Message, "OK");
                 //throw;
             }
+            finally
+            {
+                Preferences.Set("BUSY", true);
+            }
+
+
         }
 
         //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

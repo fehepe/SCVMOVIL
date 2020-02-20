@@ -87,8 +87,6 @@ namespace SCVMobil
         //-----------------------------------------------------------------------------------------
         protected override void OnAppearing() //Cuando aparezca la pagina, refrescamos.
         {
-
-           
             Debug.WriteLine("Appeared");
             refreshPage();
             scanner.GetScanner(true);
@@ -146,8 +144,8 @@ namespace SCVMobil
         [Obsolete]
         public async void entrada(String inString)
         {
-
-                        var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+            Preferences.Set("BUSY", false);
+            var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
             try
             {
 
@@ -334,6 +332,7 @@ namespace SCVMobil
             }
             finally
             {
+                Preferences.Set("BUSY", true);
                 db.Close();
                 db.Dispose();
             }
