@@ -1178,8 +1178,8 @@ namespace SCVMobil.Connections
                         "12, " +
                         "1, " +
                         "1, " +
-                        "'MANUAL', " +
-                        "'MANUAL', " +
+                        "'VISTA', " +
+                        "'VISTA', " +
                         "'PPOOII', " +
                         "0, " +
                         "'I', " +
