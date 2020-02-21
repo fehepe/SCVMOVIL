@@ -9,8 +9,8 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Configuración"
-                         Order="Secondary"
-                         Clicked="ToolbarItem_Clicked"
+                     Order="Secondary"
+                     Clicked="ToolbarItem_Clicked"
                      x:Name="configbtn"
         />
 
@@ -20,15 +20,15 @@
                  Orientation="Vertical"
                  VerticalOptions="Start">
         <Image                 
-                    x:Name="imgSync"
-                    Source="wifi"
-                    WidthRequest="30"
-                    HorizontalOptions="End"></Image>
+                x:Name="imgSync"
+                Source="wifi"
+                WidthRequest="30"
+                HorizontalOptions="End"></Image>
         <Image
-                    x:Name="imgNoSync"                     
-                    Source="nowifi"
-                    WidthRequest="30"
-                    HorizontalOptions="End"></Image>
+                x:Name="imgNoSync"                     
+                Source="nowifi"
+                WidthRequest="30"
+                HorizontalOptions="End"></Image>
         <StackLayout HorizontalOptions="CenterAndExpand"
                      HeightRequest="2">
             <Label 
@@ -57,12 +57,11 @@
               CornerRadius="15"             
               Padding="1">
                 
-                <Entry
+            <Entry
                 x:Name="entCedula"
-                    IsEnabled="True"
+                IsEnabled="True"
                 Completed="EntCedula_Completed"
                 Keyboard="Keyboard.Numeric" MaxLength="11"/>
-                
             </Frame>
             
         </Frame>

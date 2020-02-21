@@ -213,17 +213,7 @@
                                 x:Name="btSync"
                                 Clicked="BtSync_Clicked"
                                />
-                        <Button 
-                                BorderColor="Accent"  
-                                CornerRadius="27"
-                                BackgroundColor="Accent"
-                                TextColor="White"
-                                WidthRequest="140"
-                                FontAttributes="Bold"
-                                Text="Inicializar"
-                                x:Name="btIni"
-                                Clicked="BtIni_Clicked"
-                                 IsVisible="False"/>
+                        
                         <Button
                                 CornerRadius="30"
                                 x:Name="Guardar"
@@ -234,7 +224,18 @@
                                 WidthRequest="140"
                                 Clicked="Guardar_Clicked"/>
                     </StackLayout>
-
+                    <Button 
+                        BorderColor="Accent"
+                        Margin="75,25,75,0"
+                        CornerRadius="27"
+                        BackgroundColor="#F44336"
+                        TextColor="White"
+                        WidthRequest="140"
+                        FontAttributes="Bold"
+                        Text="Actualizar Padron"
+                        x:Name="btnPadron"
+                        Clicked="btnPadron_Clicked"
+                        IsVisible="True"/>
 
                 </StackLayout>
             </ScrollView>
