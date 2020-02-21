@@ -33,10 +33,11 @@ namespace SCVMobil
             {
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                 var querryupdate = "UPDATE Invitados SET Origen_Entrada = 'VISTA' WHERE CARGO = '" + cedula + "'AND FECHA_SALIDA is null";//
+                var u = db.Query<Invitados>(querryupdate);//
                 var querry = "SELECT * FROM Invitados WHERE CARGO = '" + cedula + "' AND FECHA_SALIDA is null";
                 var registroInv = db.Query<Invitados>(querry);
                 registroInv.First().Fecha_Salida = DateTime.Now;
-                registroInv.First().salidaSubida = null;               
+                registroInv.First().salidaSubida = null;
                 db.UpdateAll(registroInv);
                 DependencyService.Get<IToastMessage>().DisplayMessage("Se ha dado salida correctamente.");
                 await Navigation.PopToRootAsync();
