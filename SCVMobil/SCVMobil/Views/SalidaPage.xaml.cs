@@ -32,9 +32,9 @@ namespace SCVMobil
             try
             {
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-                var querryupdate = "UPDATE Invitados SET Origen_Entrada = 'VISTA' WHERE CARGO = '" + cedula + "'AND FECHA_SALIDA is null";//
+                var querryupdate = $"UPDATE Invitados SET Origen_Entrada = 'VISTA' WHERE CARGO = '{cedula}'AND FECHA_SALIDA is null";//
                 var u = db.Query<Invitados>(querryupdate);//
-                var querry = "SELECT * FROM Invitados WHERE CARGO = '" + cedula + "' AND FECHA_SALIDA is null";
+                var querry = $"SELECT * FROM Invitados WHERE CARGO = '{cedula}' AND FECHA_SALIDA is null";
                 var registroInv = db.Query<Invitados>(querry);
                 registroInv.First().Fecha_Salida = DateTime.Now;
                 registroInv.First().salidaSubida = null;
