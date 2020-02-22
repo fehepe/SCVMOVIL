@@ -1086,117 +1086,83 @@ namespace SCVMobil.Connections
             try
             {
                 
-
                 // Cargar los invitados con un valor null en la propiedad SUBIDA
-                var visitasASubir = db.Query<Invitados>("SELECT * FROM Invitados where SUBIDA is null");
-                
+                var visitasASubir = db.Query<Invitados>("SELECT * FROM Invitados where Subida is null");
+
                 // Iterar la lista de visitasASubir
-                foreach (Invitados registro in visitasASubir)
+                if (visitasASubir.Any())
                 {
-                    #region Variables
-                    string visitado;
-                    string fechaSalida;
-                    string placa;
-                    string queryInv;
-                    string codigo_carnet;
-                    #endregion
-
-                    if (registro.Visitado is null)
-                    {
-                        visitado = "null";
-                    }
-                    else
-                    {
-                        visitado = registro.Visitado.ToString();
-                    }
-                    if (registro.Fecha_Salida is null)
-                    {
-                        fechaSalida = "null";
-                    }
-                    else
-                    {
-                        fechaSalida = $"'{registro.Fecha_Salida.ToString()}'";
-                    }
-                    if (registro.Placa is null)
-                    {
-                        placa = "null";
-                    }
-                    else
-                    {
-                        placa = $"'{registro.Placa.ToString()}'";
-                    }
-                    if (string.IsNullOrWhiteSpace(registro.Codigo_carnet))
-                    {
-                        codigo_carnet = "null";
-                    }
-                    else
-                    {
-                        codigo_carnet = registro.Codigo_carnet.ToString().ToUpper();
-                    }
-
-                    #region Query Invitado
-                    queryInv = "SELECT IN_INVIDATO_ID as anyCount FROM INSERTAR_VISITAS(" +
-                          $"{registro.Compania_ID.ToString()}, " +
-                          $"'{registro.Nombres}', " +
-                          $"'{ registro.Apellidos}', " +
-                          $"'{registro.Fecha_Registro.ToString()}', " +
-                          $"'{registro.Cargo}'," +
-                          "0," +
-                          "100," +
-                          "1," +
-                          $"{Util.CoalesceStr(registro.Empresa_ID, "null")}, " +
-                          $"{Util.CoalesceStr(placa, "null")}," +
-                          $"'{registro.Tipo_Visitante}'," +
-                          "0," +
-                          "0," +
-                          $" {Util.CoalesceStr(registro.Puerta_Entrada, "1495")}," +
-                          "0," +
-                          "12," +
-                          "1," +
-                          "1," +
-                          $"'{registro.Origen_Entrada}'," +
-                          $"'{registro.Origen_Salida}'," +
-                          "''," +
-                          "0," +
-                          "'I'," +
-                          "0," +
-                          "''," +
-                          "''," +
-                          "''," +
-                          "1," +
-                          "0," +
-                          $" {Util.CoalesceStr(registro.Visitado, "null")}" +
-                          $", {registro.Lector.ToString()}" +
-                          $", {Util.CoalesceStr(fechaSalida, "null")}, " +
-                          $" '{Util.CoalesceStr(codigo_carnet, "null")}')";
-                    #endregion
-
-                    var dtResult = ExecuteScalar(queryInv);
-
-
-                    if (Preferences.Get("SYNC_VSU", false))
+                    foreach (Invitados registro in visitasASubir)
                     {
 
-                        if (!string.IsNullOrEmpty(dtResult))
+                        #region Query Invitado
+                        string queryInv = "SELECT IN_INVIDATO_ID as anyCount FROM INSERTAR_VISITAS(" +
+                              $"{registro.Compania_ID.ToString()}, " +
+                              $"'{registro.Nombres}', " +
+                              $"'{ registro.Apellidos}', " +
+                              $"'{registro.Fecha_Registro.ToString()}', " +
+                              $"'{registro.Cargo}'," +
+                              "0," +
+                              "100," +
+                              "1," +
+                              $"{(string.IsNullOrWhiteSpace(registro.Empresa_ID.ToString()) ? "null" : registro.Empresa_ID.ToString())}, " +
+                              $"{(string.IsNullOrWhiteSpace(registro.Placa.ToString()) ? "null" : registro.Placa.ToString())}," +
+                              $"'{registro.Tipo_Visitante}'," +
+                              "0," +
+                              "0," +
+                              $" {(string.IsNullOrWhiteSpace(registro.Puerta_Entrada.ToString()) ? "1495" : registro.Puerta_Entrada.ToString())}," +
+                              "0," +
+                              "12," +
+                              "1," +
+                              "1," +
+                              "null," +
+                              "null," +
+                              "''," +
+                              "2," +
+                              "'I'," +
+                              "0," +
+                              "''," +
+                              "''," +
+                              "''," +
+                              "1," +
+                              "0," +
+                              $" {(string.IsNullOrWhiteSpace(registro.Visitado.ToString()) ? "null" : registro.Visitado.ToString())}" +
+                              $", {registro.Lector.ToString()}" +
+                              $", {(string.IsNullOrWhiteSpace(registro.Fecha_Salida.ToString()) ? "null" : registro.Fecha_Salida.ToString())}, " +
+                              $" '{(string.IsNullOrWhiteSpace(registro.Codigo_carnet.ToString()) ? "null" : registro.Codigo_carnet.ToString())}')";
+                        #endregion
+
+                        var dtResult = ExecuteScalar(queryInv);
+
+
+                        if (Preferences.Get("SYNC_VSU", false))
                         {
-                            registro.INVIDATO_ID = Convert.ToInt32(dtResult);
-                            registro.Subida = true;
-                            if (!(registro.Fecha_Salida is null))
+
+                            if (!string.IsNullOrEmpty(dtResult))
                             {
-                                registro.salidaSubida = true;
+                                registro.Subida = true;
+                                if (!(registro.Fecha_Salida is null))
+                                {
+                                    registro.salidaSubida = true;
+                                }
+                                db.Update(registro);
+                                string _query = $"UPDATE INVITADO SET INVIDATO_ID = {Convert.ToInt32(dtResult)} WHERE INVIDATO_ID = {registro.INVIDATO_ID}";
+                                db.Query<Invitados>(_query);
+
+                                Debug.WriteLine("Invitado subido: " + registro.INVIDATO_ID.ToString());
                             }
-                            Debug.WriteLine("Invitado subido: " + registro.INVIDATO_ID.ToString());
-                        }
-                        else
-                        {
-                            registro.Subida = null;
-                            if (!(registro.Fecha_Salida is null))
+                            else
                             {
-                                registro.salidaSubida = null;
+                                registro.Subida = null;
+                                if (!(registro.Fecha_Salida is null))
+                                {
+                                    registro.salidaSubida = null;
+                                }
+                                db.Update(registro);
                             }
+                            var visitasASubir2 = db.Query<Invitados>("SELECT * FROM Invitados where SUBIDA IS NULL");
                         }
-                        db.Update(registro);
-                    }
+                    } 
                 }
             }
             catch (Exception ea)
@@ -1285,10 +1251,10 @@ namespace SCVMobil.Connections
                         "12, " +
                         "1, " +
                         "1, " +
-                        "'VISTA', " +
-                        "'VISTA', " +
+                        "'null', " +
+                        "'null', " +
                         "'PPOOII', " +
-                        "0, " +
+                        "2, " +
                         "'I', " +
                         "0, " +
                         "'', " +
@@ -1392,14 +1358,13 @@ namespace SCVMobil.Connections
             try
             {
                 var salidasASubir = db.Query<Invitados>("SELECT * FROM Invitados where SALIDASUBIDA is null and FECHA_SALIDA is not null and SUBIDA is not null");
-                var salidas = db.Query<Invitados>("SELECT * FROM Invitados");
+                //var salidas = db.Query<Invitados>("SELECT * FROM Invitados");
                
                 foreach (Invitados registro in salidasASubir)
                 {
-                    var querrySal = "SELECT * FROM SP_DAR_SALIDA(" + registro.INVIDATO_ID.ToString() + ", '" + registro.Fecha_Salida.ToString() + "', " +
-                    Preferences.Get("LECTOR", "1") + ")";
+                    var querrySal = $"SELECT * FROM SP_DAR_SALIDA({registro.INVIDATO_ID.ToString()}, '{registro.Fecha_Salida.ToString()}', {Preferences.Get("LECTOR", "1")})";
 
-                    var content = ExecuteScalar(querrySal);
+                    var content = ExecuteScalar(querrySal); 
                     Debug.WriteLine("Waiting for: " + querrySal);
 
                     if (!string.IsNullOrEmpty(content))
@@ -1432,7 +1397,7 @@ namespace SCVMobil.Connections
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
             try
             {
-                var salidasOFF = db.Query<SalidaOffline>("SELECT * FROM SalidaOffline where SUBIDA is null");
+                var salidasOFF = db.Query<SalidaOffline>("SELECT * FROM SalidaOffline where SUBIDA is not null");// Voy a cambiar a IS NOT NULL
 
                 foreach (SalidaOffline registros in salidasOFF)
                 {

@@ -171,6 +171,7 @@ namespace SCVMobil
                                         registroVer.First().Fecha_Verificacion = DateTime.Now;
                                         registroVer.First().Puerta_Registro = Convert.ToInt32(Preferences.Get("PUERTA", "1459").ToString());
                                         registroVer.First().verificacionSubida = null;
+                                      
                                         db.UpdateAll(registroVer);
                                         DependencyService.Get<IToastMessage>().DisplayMessage("Se ha verificado correctamente.");
                                         await Navigation.PushAsync(new Verificacion(registroVer.First()));
@@ -204,6 +205,7 @@ namespace SCVMobil
                                     registroVer.First().verificacionSubida = null;
                                     registroVer.First().Fecha_Salida = DateTime.Now;
                                     registroVer.First().salidaSubida = null;
+                                   
                                     db.UpdateAll(registroVer);
                                     DependencyService.Get<IToastMessage>().DisplayMessage("Se ha dado salida correctamente.");
                                 }
