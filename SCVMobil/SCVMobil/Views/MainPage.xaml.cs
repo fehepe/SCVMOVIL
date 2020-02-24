@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using SCVMobil.Models;
 using Rg.Plugins.Popup.Services;
 using SCVMobil.Connections;
+using SCVMobil.Views;
 
 namespace SCVMobil
 {
@@ -205,7 +206,7 @@ namespace SCVMobil
                                     registroVer.First().verificacionSubida = null;
                                     registroVer.First().Fecha_Salida = DateTime.Now;
                                     registroVer.First().salidaSubida = null;
-                                   
+                                    await Navigation.PushAsync(new VisitInfo(registroVer.First().Nombres, registroVer.First().Cargo, registroVer.First().Cpost, registroVer.First().Fecha_Registro.ToString(), registroVer.First().Fecha_Verificacion.ToString()));
                                     db.UpdateAll(registroVer);
                                     DependencyService.Get<IToastMessage>().DisplayMessage("Se ha dado salida correctamente.");
                                 }
