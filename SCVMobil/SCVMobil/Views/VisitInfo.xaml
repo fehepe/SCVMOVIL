@@ -36,7 +36,7 @@
                     FontSize="20"
                     HorizontalTextAlignment="Start"
                     Text=""
-                    TextColor="Black" />
+                    TextColor="Red" />
                 <Label
                     FontAttributes="Bold"
                     FontSize="20"
@@ -48,7 +48,7 @@
                     FontSize="20"
                     HorizontalTextAlignment="Start"
                     Text=""
-                    TextColor="Black" />
+                    TextColor="Red" />
                 <Label
                     FontAttributes="Bold"
                     FontSize="20"
@@ -60,7 +60,7 @@
                     FontSize="20"
                     HorizontalTextAlignment="Start"
                     Text=""
-                    TextColor="Black" />
+                    TextColor="Red" />
                 <Label
                     FontAttributes="Bold"
                     FontSize="20"
@@ -72,19 +72,7 @@
                     FontSize="20"
                     HorizontalTextAlignment="Start"
                     Text=""
-                    TextColor="Black" />
-                <Label
-                    FontAttributes="Bold"
-                    FontSize="20"
-                    HorizontalTextAlignment="Start"
-                    Text="Fecha de verificacion:"
-                    TextColor="Black" />
-                <Label
-                    x:Name="Fechavertxt"
-                    FontSize="20"
-                    HorizontalTextAlignment="Start"
-                    Text=""
-                    TextColor="Black" />
+                    TextColor="Red" />
             </StackLayout>
 
             <StackLayout>
@@ -93,7 +81,7 @@
                     BackgroundColor="#F44336"
                     Clicked="Okbtn_Clicked"
                     CornerRadius="25"
-                    Text="Ok"
+                    Text="Correcto"
                     TextColor="White" />
             </StackLayout>
         </StackLayout>

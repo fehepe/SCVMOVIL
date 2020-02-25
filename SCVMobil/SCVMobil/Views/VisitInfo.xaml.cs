@@ -1,4 +1,5 @@
 ﻿using Rg.Plugins.Popup.Pages;
+using SCVMobil.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,20 +14,20 @@ namespace SCVMobil.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class VisitInfo : PopupPage
     {
-        public VisitInfo(string nombre, string documento, string destino, string fechaentrada, string fechaverificacion )
+        public VisitInfo(Invitados invitados, string company)
         {
             InitializeComponent();
-            Nombretxt.Text = nombre;
-            Cedulatxt.Text = documento;
-            Destinotxt.Text = destino;
-            Fechaenttxt.Text = fechaentrada;
-            Fechavertxt.Text = fechaverificacion;
+            Nombretxt.Text = invitados.Nombres + " " +  invitados.Apellidos;
+            Cedulatxt.Text = invitados.Cargo;
+            Destinotxt.Text = company;
+            Fechaenttxt.Text = invitados.Fecha_Registro.ToString();
+            
             
         }
 
-        private async void Okbtn_Clicked(object sender, EventArgs e)
+        private void Okbtn_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PopToRootAsync();
+            this.IsVisible = false;
         }
     }
 }

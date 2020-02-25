@@ -1,4 +1,7 @@
 ﻿using Microsoft.AppCenter.Analytics;
+using Rg.Plugins.Popup.Services;
+using SCVMobil.Models;
+using SCVMobil.Views;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -26,6 +29,7 @@ namespace SCVMobil
         }
 
         //Este metodo sirve para dar salida a una cedula que ya esta dentro
+        [Obsolete]
         private async void BtnSalida_Clicked(object sender, EventArgs e)
         {
 
@@ -34,12 +38,14 @@ namespace SCVMobil
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));                
                 var querry = "SELECT * FROM Invitados WHERE CARGO = '" + cedula + "' AND FECHA_SALIDA is null";
                 var registroInv = db.Query<Invitados>(querry);
+               // var Request = db.Query<COMPANIAS>($"select * from companias where compania_id = {registroInv.First().Compania_ID}");
                 registroInv.First().Fecha_Salida = DateTime.Now;
-                registroInv.First().salidaSubida = null;               
+                registroInv.First().salidaSubida = null;
+                //await PopupNavigation.PushAsync(new VisitInfo(registroInv.First().Nombres, registroInv.First().Cargo, Request.First().NOMBRE, registroInv.First().Fecha_Registro.ToString(), registroInv.First().Fecha_Salida.ToString()));
                 db.UpdateAll(registroInv);                
                 DependencyService.Get<IToastMessage>().DisplayMessage("Se ha dado salida correctamente.");
                 await Navigation.PopToRootAsync();
-                //await Navigation.PushAsync(new CompanyPage(cedula, nombres, apellido));
+                
                 btnSalida.IsEnabled = false;
 
             }

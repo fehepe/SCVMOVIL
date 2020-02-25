@@ -172,10 +172,11 @@ namespace SCVMobil
                                         registroVer.First().Fecha_Verificacion = DateTime.Now;
                                         registroVer.First().Puerta_Registro = Convert.ToInt32(Preferences.Get("PUERTA", "1459").ToString());
                                         registroVer.First().verificacionSubida = null;
-                                      
+                                        var Request = db.Query<COMPANIAS>($"select * from companias where compania_id = {registroVer.First().Compania_ID}");
+                                        await PopupNavigation.PushAsync(new VisitInfo(registroVer.First(), Request.First().NOMBRE));
                                         db.UpdateAll(registroVer);
                                         DependencyService.Get<IToastMessage>().DisplayMessage("Se ha verificado correctamente.");
-                                        await Navigation.PushAsync(new Verificacion(registroVer.First()));
+                                        //await Navigation.PushAsync(new Verificacion(registroVer.First()));
                                     }
                                     else
                                     {
@@ -205,8 +206,9 @@ namespace SCVMobil
                                     registroVer.First().Puerta_Registro = Convert.ToInt32(Preferences.Get("PUERTA", "1459").ToString());
                                     registroVer.First().verificacionSubida = null;
                                     registroVer.First().Fecha_Salida = DateTime.Now;
-                                    registroVer.First().salidaSubida = null;
-                                    await Navigation.PushAsync(new VisitInfo(registroVer.First().Nombres, registroVer.First().Cargo, registroVer.First().Cpost, registroVer.First().Fecha_Registro.ToString(), registroVer.First().Fecha_Verificacion.ToString()));
+                                    registroVer.First().salidaSubida = null;                                    
+                                    //var Request = db.Query<COMPANIAS>($"select * from companias where compania_id = {registroVer.First().Compania_ID}");
+                                    //await Navigation.PushAsync(new VisitInfo(registroVer.First().Nombres, registroVer.First().Cargo, Request.First().NOMBRE, registroVer.First().Fecha_Registro.ToString(), registroVer.First().Fecha_Verificacion.ToString()));
                                     db.UpdateAll(registroVer);
                                     DependencyService.Get<IToastMessage>().DisplayMessage("Se ha dado salida correctamente.");
                                 }
