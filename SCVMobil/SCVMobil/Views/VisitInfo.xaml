@@ -11,7 +11,7 @@
 
         <StackLayout
             Margin="14"
-            Padding="20"
+            Padding="50"
             BackgroundColor="White"
             Spacing="10"
             VerticalOptions="Center">
