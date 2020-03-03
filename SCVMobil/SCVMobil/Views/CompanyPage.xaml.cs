@@ -131,7 +131,7 @@ namespace SCVMobil
         //-----------------------------------------------------------------------------
         private void EntPlaca_Completed(object sender, EventArgs e)
         {
-            // Preferences.Set("PAGE_ACTIVE", "CompanyPage");
+           
         }
 
 
@@ -139,10 +139,10 @@ namespace SCVMobil
 
         private void EntCedula_Completed(object sender, EventArgs e)
         {
-
+            
         }
         //----------------------------------------------------------------------------------------------------------
-        public void entryScan(String scanneo)// Metodo para poder Scanear
+        public async void entryScan(String scanneo)// Metodo para poder Scanear
         {
             try
             {
@@ -169,7 +169,7 @@ namespace SCVMobil
                         {
                             if (scanneo.Contains("FOLIO"))// Este es una parte del string de la placas de del ano 2017-2018
                             {
-                                DisplayAlert("Error", "Este Marbete no es Valido", "Ok");
+                                await DisplayAlert("Error", "Este Marbete no es Valido", "Ok");
                             }
                             else
                             {
@@ -198,7 +198,7 @@ namespace SCVMobil
                                 }
                                 catch (Exception ex)
                                 {
-                                    DisplayAlert("Error", "Ha ocurrido un error", "Ok");
+                                    await DisplayAlert("Error", "Ha ocurrido un error", "Ok");
                                 }
                             }
                         }
@@ -206,7 +206,7 @@ namespace SCVMobil
                         {
                             if (scanneo.Contains("FOLIO"))// Este es una parte del string de la placas de del ano 2017-2018
                             {
-                                DisplayAlert("Error", "Este Marbete no es Valido", "Ok");
+                                await DisplayAlert("Error", "Este Marbete no es Valido", "Ok");
                             }
                             else
                             {
@@ -217,7 +217,7 @@ namespace SCVMobil
                 }
                 else
                 {
-                    DisplayAlert("Error", "Este Marbete no es Valido", "Ok");
+                   await DisplayAlert("Error", "Este Marbete no es Valido", "Ok");
                 }
 
 
@@ -230,8 +230,7 @@ namespace SCVMobil
                 DependencyService.Get<IToastMessage>().DisplayMessage("Ha ocurrido un error: " + ex.Message);
             }
         }
-
-
+        
         //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
