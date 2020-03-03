@@ -131,7 +131,7 @@ namespace SCVMobil
         //-----------------------------------------------------------------------------
         private void EntPlaca_Completed(object sender, EventArgs e)
         {
-           
+            Placaentry();
         }
 
 
@@ -230,9 +230,96 @@ namespace SCVMobil
                 DependencyService.Get<IToastMessage>().DisplayMessage("Ha ocurrido un error: " + ex.Message);
             }
         }
-        
-        //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+        //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        public async void Placaentry()
+        {
+            try
+            {
+                string Strings = entPlaca.Text;
+                var scaneo = entPlaca.Text.Length;
+                if (entPlaca.Text.Contains("http"))
+                {
+                    var x = Strings.IndexOf("http");
+                    Strings = Strings.Substring(x, 44);
+                    entPlaca.Text = Strings;
+                    Uri uri = new Uri(Strings);
+                    string p = HttpUtility.ParseQueryString(uri.Query).Get("dm");//Obteniendo el paramentro dm que es el codigo unico de cada persona con marbete
+                    Debug.WriteLine("Data: " + p);
+
+                    var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                    var TB = db.Query<PLACA>("SELECT PLACA_CODE from PLACA WHERE codigo ='" + p + "'");// Buscando en la base de datos placa la placa que concuerde con ese codigo sin importar que persona este ingresando
+                    if (TB.Any())
+                    {
+                        entPlaca.Text = TB.First().PLACA_CODE;
+                    }
+                    else
+                    {
+                        if (Connectivity.NetworkAccess == NetworkAccess.Internet)// En caso de que no encuentre a ninguna placa y haya conexion a internet buscara en la pagina de la DGII
+                        {
+                            if (entPlaca.Text.Contains("FOLIO"))// Este es una parte del string de la placas de del ano 2017-2018
+                            {
+                                await DisplayAlert("Error", "Este Marbete no es Valido", "Ok");
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    WebClient webClient = new WebClient();
+                                    string page = webClient.DownloadString(entPlaca.Text);
+
+                                    HtmlAgilityPack.HtmlDocument docu = new HtmlAgilityPack.HtmlDocument();
+                                    docu.LoadHtml(page);
+
+                                    List<List<string>> table = docu.DocumentNode.SelectSingleNode("//table[@class='data_table']")
+                                                .Descendants("tr")
+                                                .Skip(1)
+                                                .Where(tr => tr.Elements("td").Count() > 1)
+                                                .Select(tr => tr.Elements("td").Select(td => td.InnerText.Trim()).ToList())
+                                                .ToList();
+                                    var placa = table[5][1].ToString();
+                                    entPlaca.Text = placa;
+                                    Debug.WriteLine("Data: " + p);
+                                    var registroPlaca = new PLACA();
+                                    registroPlaca.CODIGO = p;
+                                    registroPlaca.PLACA_CODE = placa;
+                                    db.Insert(registroPlaca);
+                                    Console.WriteLine("Insertando: " + registroPlaca);
+                                }
+                                catch (Exception ex)
+                                {
+                                    await DisplayAlert("Error", "Ha ocurrido un error", "Ok");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (entPlaca.Text.Contains("FOLIO"))// Este es una parte del string de la placas de del ano 2017-2018
+                            {
+                                await DisplayAlert("Error", "Este Marbete no es Valido", "Ok");
+                            }
+                            else
+                            {
+                                DependencyService.Get<IToastMessage>().DisplayMessage("No posee internet digite manualmente.");
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    await DisplayAlert("Error", "Este Marbete no es Valido", "Ok");
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error en entryScan");
+                Analytics.TrackEvent("Error al escanear: " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+                DependencyService.Get<IToastMessage>().DisplayMessage("Ha ocurrido un error: " + ex.Message);
+            }
+        }
 
         private async void BtnImprimir_Clicked(object sender, EventArgs e)//Metodo del boton de Imprimir
         {
