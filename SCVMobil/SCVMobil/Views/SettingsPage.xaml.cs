@@ -121,6 +121,7 @@ namespace SCVMobil
                         Debug.WriteLine("Setting timeout to 20 min");
 
                         string querry = "";
+                        fireBird = new FireBirdData();
                         string connectionString = fireBird.connectionString(false);
 
 
@@ -418,13 +419,13 @@ namespace SCVMobil
         private async void pinbutton_Clicked(object sender, EventArgs e)
         {
             try
-            {              
+            {
+                fireBird = new FireBirdData();
                 Ping Pings = new Ping();
                 int timeout = 50;
 
                 if (Pings.Send(eServerIP.Text, timeout).Status == IPStatus.Success)
                 {
-
                     try
                     {
                         string connectionString = fireBird.connectionString(true);
@@ -432,10 +433,8 @@ namespace SCVMobil
                         FbConnection fb = new FbConnection(connectionString);
                         fb.Open();
 
-
                         fb.Close();
                         Preferences.Set("SERVER_IP", eServerIP.Text);
-                       
 
                         await DisplayAlert("Conectado","Se ha conectado","ok");
                         //await PopupNavigation.PushAsync(new PopUpPing()); //popup conexion con exito//
@@ -499,14 +498,9 @@ namespace SCVMobil
                         {
                             db.Insert(padron);
                         }
-                        
-
                     }
                     //db.InsertAll(listPadronVisita);
                     Preferences.Set("MAX_PERSONA_PADRON_ID", listPadronVisita.First().ID_PADRON.ToString());
-
-
-
                 }
                 OnAppearing();
 
@@ -516,14 +510,11 @@ namespace SCVMobil
                 await DisplayAlert("Error",ea.Message,"OK");
                 Debug.WriteLine("Error en el metodo ActualizarPadron " + ea.Message);
                 Analytics.TrackEvent("Exception al hacer ActualizarPadron:  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
-
             }
             finally
             {
                 Preferences.Set("BUSY", true);
             }
-
-
         }
     }
 }

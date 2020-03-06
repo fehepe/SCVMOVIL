@@ -18,7 +18,7 @@ using Xamarin.Essentials;
 
 namespace SCVMobil.Droid
 {
-    [Activity(Label = "SCVMobil", Icon = "@drawable/visitor", Theme = "@style/MyTheme.Splash", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "SCVMovil", Icon = "@drawable/visitor", Theme = "@style/MyTheme.Splash", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
 
 
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
