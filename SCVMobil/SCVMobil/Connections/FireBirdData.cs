@@ -139,8 +139,8 @@ namespace SCVMobil.Connections
             }
         }
 
-        ////
-        public int ReturnCountCedulas(int value)
+        //// Retornar el numero de cedulas totales a descargar
+        private int ReturnCountCedulas(int value)
         {
             try
             {
@@ -210,7 +210,7 @@ namespace SCVMobil.Connections
         }
 
         //// Retornar una lista de invitados
-        public List<Invitados> ExecuteGuest(string query)
+        private List<Invitados> ExecuteGuest(string query)
         {
             try
             {
@@ -406,7 +406,7 @@ namespace SCVMobil.Connections
         }
 
         //// Retornar una lista de invitados
-        public List<Invitados> ExecuteGuestOuts(string query)
+        private List<Invitados> ExecuteGuestOuts(string query)
         {
             try
             {
@@ -602,7 +602,7 @@ namespace SCVMobil.Connections
         }
 
         //// Retornar lista de Reservaciones
-        public List<VW_RESERVA_VISITA> ExecuteReservations(string query)
+        private List<VW_RESERVA_VISITA> ExecuteReservations(string query)
         {
             try
             {
@@ -690,7 +690,7 @@ namespace SCVMobil.Connections
         }
 
         ////
-        public List<COMPANIASLOC> ExecuteCompaniesLoc(string query)
+        private List<COMPANIASLOC> ExecuteCompaniesLoc(string query)
         {
             try
             {
@@ -751,7 +751,7 @@ namespace SCVMobil.Connections
         }
 
         //// Retornar lista de Companias
-        public List<COMPANIAS> ExecuteCompanies(string query)
+        private List<COMPANIAS> ExecuteCompanies(string query)
         {
             try
             {
@@ -1620,19 +1620,6 @@ namespace SCVMobil.Connections
             }
         }
 
-        //// Descargar Verificaciones
-        public void DownloadVerifications() 
-        {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Excepcion en el metodo DownloadVerifications: "+ex.Message);
-            }
-        }
-
         //// Descargar Invitados
         public void DownloadGuests()
         {
@@ -1779,7 +1766,6 @@ namespace SCVMobil.Connections
             }
         }
 
-
         //// Extraer Departamento por ID
         public List<VisitasDepto> extraerDeparatamentoId(COMPANIAS cc) //Extraer personas con su departamento//
         {
@@ -1831,7 +1817,6 @@ namespace SCVMobil.Connections
                 return null;
             }
         }
-
 
     }
 }

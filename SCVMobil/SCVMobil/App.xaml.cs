@@ -110,7 +110,7 @@ namespace SCVMobil
                         fireBird.DownloadCompanies();
 
                         // Descargar Verificaciones
-                        fireBird.DownloadVerifications();
+                       // fireBird.DownloadVerifications();
 
                         // Descargar las personas(destinos).
                         fireBird.DownloadPeople_Destination();
