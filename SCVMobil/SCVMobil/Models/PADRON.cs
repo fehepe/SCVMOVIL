@@ -15,6 +15,7 @@ namespace SCVMobil.Models
         public string APELLIDO1 { get; set; }
 
         public string APELLIDO2 { get; set; }
+        public string ID_PADRON { get; set; }
 
         public PADRON(string sCedula, string sNombres, string sApellido1, string sApellido2) //Constructor para la tabla
         {

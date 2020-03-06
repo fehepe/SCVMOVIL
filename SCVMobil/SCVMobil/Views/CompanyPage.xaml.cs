@@ -131,7 +131,7 @@ namespace SCVMobil
         //-----------------------------------------------------------------------------
         private void EntPlaca_Completed(object sender, EventArgs e)
         {
-            // Preferences.Set("PAGE_ACTIVE", "CompanyPage");
+           
         }
 
 
@@ -139,10 +139,10 @@ namespace SCVMobil
 
         private void EntCedula_Completed(object sender, EventArgs e)
         {
-
+            
         }
         //----------------------------------------------------------------------------------------------------------
-        public void entryScan(String scanneo)// Metodo para poder Scanear
+        public async void entryScan(String scanneo)// Metodo para poder Scanear
         {
             try
             {
@@ -169,7 +169,7 @@ namespace SCVMobil
                         {
                             if (scanneo.Contains("FOLIO"))// Este es una parte del string de la placas de del ano 2017-2018
                             {
-                                DisplayAlert("Error", "Este Marbete no es Valido", "Ok");
+                                await DisplayAlert("Error", "Este Marbete no es Valido", "Ok");
                             }
                             else
                             {
@@ -198,7 +198,7 @@ namespace SCVMobil
                                 }
                                 catch (Exception ex)
                                 {
-                                    DisplayAlert("Error", "Ha ocurrido un error", "Ok");
+                                    await DisplayAlert("Error", "Ha ocurrido un error", "Ok");
                                 }
                             }
                         }
@@ -206,7 +206,7 @@ namespace SCVMobil
                         {
                             if (scanneo.Contains("FOLIO"))// Este es una parte del string de la placas de del ano 2017-2018
                             {
-                                DisplayAlert("Error", "Este Marbete no es Valido", "Ok");
+                                await DisplayAlert("Error", "Este Marbete no es Valido", "Ok");
                             }
                             else
                             {
@@ -217,7 +217,7 @@ namespace SCVMobil
                 }
                 else
                 {
-                    DisplayAlert("Error", "Este Marbete no es Valido", "Ok");
+                   await DisplayAlert("Error", "Este Marbete no es Valido", "Ok");
                 }
 
 
@@ -230,8 +230,7 @@ namespace SCVMobil
                 DependencyService.Get<IToastMessage>().DisplayMessage("Ha ocurrido un error: " + ex.Message);
             }
         }
-
-
+        
         //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -239,7 +238,7 @@ namespace SCVMobil
         {
             try
             {
-
+                Preferences.Set("BUSY", false);
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
                 if (pickerVisitaA.IsVisible)
@@ -284,8 +283,8 @@ namespace SCVMobil
                                 registroInvitados.Horas_Caducidad = 12;
                                 registroInvitados.Personas = 1;
                                 registroInvitados.In_Out = 1;
-                                registroInvitados.Origen_Entrada = "VISTA";
-                                registroInvitados.Origen_Salida = "VISTA";
+                                registroInvitados.Origen_Entrada = "MANUAL";
+                                registroInvitados.Origen_Salida = "MANUAL";
                                 registroInvitados.Comentario = "";
                                 registroInvitados.Origen_IO = 0;
                                 registroInvitados.Cpost = "I";
@@ -329,8 +328,8 @@ namespace SCVMobil
                                 registroInvitados.Horas_Caducidad = 12;
                                 registroInvitados.Personas = 1;
                                 registroInvitados.In_Out = 1;
-                                registroInvitados.Origen_Entrada = "VISTA";
-                                registroInvitados.Origen_Salida = "VISTA";
+                                registroInvitados.Origen_Entrada = "MANUAL";
+                                registroInvitados.Origen_Salida = "MANUAL";
                                 registroInvitados.Comentario = "";
                                 registroInvitados.Origen_IO = 0;
                                 registroInvitados.Cpost = "I";
@@ -391,8 +390,8 @@ namespace SCVMobil
                         registroInvitados.Horas_Caducidad = 12;
                         registroInvitados.Personas = 1;
                         registroInvitados.In_Out = 1;
-                        registroInvitados.Origen_Entrada = "VISTA";
-                        registroInvitados.Origen_Salida = "VISTA";
+                        registroInvitados.Origen_Entrada = "MANUAL";
+                        registroInvitados.Origen_Salida = "MANUAL";
                         registroInvitados.Comentario = "";
                         registroInvitados.Origen_IO = 0;
                         registroInvitados.Cpost = "I";
@@ -425,6 +424,12 @@ namespace SCVMobil
                 await DisplayAlert("Error", "Error en BtnImprimir_Clicked: " + ea.Message, "OK");
                 //throw;
             }
+            finally
+            {
+                Preferences.Set("BUSY", true);
+            }
+
+
         }
 
         //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

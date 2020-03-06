@@ -83,18 +83,21 @@ namespace SCVMobil
         public async static void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
 
-            
-            syncTimer.Enabled = false;
-            Debug.WriteLine("New Timer Running");
-            HttpClient _client = new HttpClient();
-            _client.Timeout = new TimeSpan(0, 0, 100);
-            var fireBird = new FireBirdData();
-            
-            await Task.Factory.StartNew(() => //Crear un nuevo thread!
+            if (Preferences.Get("BUSY", true))
             {
-                try
+
+
+                syncTimer.Enabled = false;
+                Debug.WriteLine("New Timer Running");
+                HttpClient _client = new HttpClient();
+                _client.Timeout = new TimeSpan(0, 0, 100);
+                var fireBird = new FireBirdData();
+
+                await Task.Factory.StartNew(() => //Crear un nuevo thread!
                 {
-                    if (Connectivity.NetworkAccess == NetworkAccess.Internet) //
+                    try
+                    {
+                        if (Connectivity.NetworkAccess == NetworkAccess.Internet) //
                     {
                         //checkDateTime();
                         fireBird.tryConnection();
@@ -102,15 +105,12 @@ namespace SCVMobil
                         //Implementar servicios Periodicos.
                         fireBird.PublicServices();
 
-                        
+
                         // Descargar las reservas.
                         fireBird.DownloadReservations();
 
                         // Descargar las companies.
                         fireBird.DownloadCompanies();
-
-                        // Descargar Verificaciones
-                       // fireBird.DownloadVerifications();
 
                         // Descargar las personas(destinos).
                         fireBird.DownloadPeople_Destination();
@@ -119,7 +119,7 @@ namespace SCVMobil
                         fireBird.DownloadGuests();
 
                         // Descargar las salidas.
-                        fireBird.DownloadOuts();
+                        //fireBird.DownloadOuts();
 
                         // Descargar DEPTO_LOCALIDAD
                         fireBird.DownloadDeptoLocalidad();
@@ -140,29 +140,32 @@ namespace SCVMobil
                         fireBird.UploadUnknownOuts();
 
 
-                    }
-                    else
-                    {                        
-                        
-                        Preferences.Set("SYNC_VSU", false); //
-                    }
-                    
-                }
-                catch (Exception ey)
-                {
-                    Preferences.Set("SYNC_VSU", false);
-                    Debug.WriteLine("Error en la conexion de internet" + ey);
 
-                    Debug.WriteLine("Exeption in timer: " + ey.ToString());
-                }
-                finally
-                {
-                   
+                        }
+                        else
+                        {
+
+                            Preferences.Set("SYNC_VSU", false); //
+                    }
+
+                    }
+                    catch (Exception ey)
+                    {
+                        Preferences.Set("SYNC_VSU", false);
+                        Debug.WriteLine("Error en la conexion de internet" + ey);
+
+                        Debug.WriteLine("Exeption in timer: " + ey.ToString());
+                    }
+                    finally
+                    {
+
                         syncTimer.Enabled = true;
-                    
-                }
 
-            });
+                    }
+
+                });
+
+            }
        }
 
         public App()
@@ -206,7 +209,7 @@ namespace SCVMobil
                 Preferences.Set("DB_PATH", dbPath);
 
                 //Setiamos la Version
-                Preferences.Set("VERSION", "1.28.5.19.1");
+                Preferences.Set("VERSION", "3.0.0.1.1");
 
                 //Conectar con la base de datos
                 var db = new SQLiteConnection(dbPath);

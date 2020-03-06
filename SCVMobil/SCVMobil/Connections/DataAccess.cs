@@ -20,25 +20,36 @@ namespace SCVMobil
             connection = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
             connection.CreateTable<Visitas>();
-           
+
+            connection.Close();
+            connection.Dispose();
+          
 
         }
         public void InsertVisita(Visitas visita)
         {
             connection.Insert(visita);
+            connection.Close();
+            connection.Dispose();
         }
         public void UpdateVisita(Visitas visita)
         {
             connection.Update(visita);
+            connection.Close();
+            connection.Dispose();
         }
         public void DeleteVisita(Visitas visita)
         {
             connection.Delete(visita);
+            connection.Close();
+            connection.Dispose();
         }
         public Visitas GetVisita(string Cedula)
         {
             return connection.Table<Visitas>()
                 .FirstOrDefault(c => c.Cedula == Cedula);
+            connection.Close();
+            connection.Dispose();
         }
 
         public void DeleteAllVISITAS()
@@ -46,24 +57,34 @@ namespace SCVMobil
 
 
             connection.DeleteAll<Visitas>();
+            connection.Close();
+            connection.Dispose();
 
         }
         public List<Visitas> GetVisitas()
         {
             return connection.Table<Visitas>().ToList();
+            connection.Close();
+            connection.Dispose();
         }
 
         public void InsertReserva(VW_RESERVA_VISITA reserva)
         {
             connection.Insert(reserva);
+            connection.Close();
+            connection.Dispose();
         }
         public void UpdateReserva(VW_RESERVA_VISITA reserva)
         {
             connection.Update(reserva);
+            connection.Close();
+            connection.Dispose();
         }
         public void DeleteReserva(VW_RESERVA_VISITA reserva)
         {
             connection.Delete(reserva);
+            connection.Close();
+            connection.Dispose();
         }
         public VW_RESERVA_VISITA GetReserva(string Cedula)
         {

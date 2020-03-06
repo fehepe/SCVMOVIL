@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using SCVMobil.Models;
 using Rg.Plugins.Popup.Services;
 using SCVMobil.Connections;
+using SCVMobil.Views;
 
 namespace SCVMobil
 {
@@ -86,8 +87,6 @@ namespace SCVMobil
         //-----------------------------------------------------------------------------------------
         protected override void OnAppearing() //Cuando aparezca la pagina, refrescamos.
         {
-
-           
             Debug.WriteLine("Appeared");
             refreshPage();
             scanner.GetScanner(true);
@@ -145,7 +144,8 @@ namespace SCVMobil
         [Obsolete]
         public async void entrada(String inString)
         {
-
+            Preferences.Set("BUSY", false);
+            var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
             try
             {
 
@@ -153,7 +153,6 @@ namespace SCVMobil
                 {
                     if (inString.Length == 11 || inString.StartsWith("ID"))
                     {
-                        var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                         //Vamos a ver si es un ID de salida.
                         if (inString.StartsWith("ID"))
                         {
@@ -173,9 +172,11 @@ namespace SCVMobil
                                         registroVer.First().Fecha_Verificacion = DateTime.Now;
                                         registroVer.First().Puerta_Registro = Convert.ToInt32(Preferences.Get("PUERTA", "1459").ToString());
                                         registroVer.First().verificacionSubida = null;
+                                        var Request = db.Query<COMPANIAS>($"select * from companias where compania_id = {registroVer.First().Compania_ID}");
+                                        await PopupNavigation.PushAsync(new VisitInfo(registroVer.First(), Request.First().NOMBRE));
                                         db.UpdateAll(registroVer);
                                         DependencyService.Get<IToastMessage>().DisplayMessage("Se ha verificado correctamente.");
-                                        await Navigation.PushAsync(new Verificacion(registroVer.First()));
+                                        //await Navigation.PushAsync(new Verificacion(registroVer.First()));
                                     }
                                     else
                                     {
@@ -205,7 +206,9 @@ namespace SCVMobil
                                     registroVer.First().Puerta_Registro = Convert.ToInt32(Preferences.Get("PUERTA", "1459").ToString());
                                     registroVer.First().verificacionSubida = null;
                                     registroVer.First().Fecha_Salida = DateTime.Now;
-                                    registroVer.First().salidaSubida = null;
+                                    registroVer.First().salidaSubida = null;                                    
+                                    //var Request = db.Query<COMPANIAS>($"select * from companias where compania_id = {registroVer.First().Compania_ID}");
+                                    //await Navigation.PushAsync(new VisitInfo(registroVer.First().Nombres, registroVer.First().Cargo, Request.First().NOMBRE, registroVer.First().Fecha_Registro.ToString(), registroVer.First().Fecha_Verificacion.ToString()));
                                     db.UpdateAll(registroVer);
                                     DependencyService.Get<IToastMessage>().DisplayMessage("Se ha dado salida correctamente.");
                                 }
@@ -327,6 +330,12 @@ namespace SCVMobil
             {
                 Debug.Write("Error en escaneo de cedula: " + ea.Message);
                 //throw;
+            }
+            finally
+            {
+                Preferences.Set("BUSY", true);
+                db.Close();
+                db.Dispose();
             }
         }
     

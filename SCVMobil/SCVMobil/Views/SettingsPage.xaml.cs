@@ -36,7 +36,7 @@ namespace SCVMobil
         // This handles the Web data request
         private HttpClient _client = new HttpClient();
         private HttpClient _client2 = new HttpClient();
-        private FireBirdData fireBird  = new FireBirdData();
+        private FireBirdData fireBird;
 
         public SettingsPage()
         {
@@ -56,7 +56,7 @@ namespace SCVMobil
             var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
             string totalCed = db.ExecuteScalar<string>("select count(*) from padron");
-
+            db.Dispose();
             lblCantidadPadron.Text = $"Cantidad de cedulas guardadas: "+ totalCed;
             swAutoSync.IsToggled = Preferences.Get("AUTO_SYNC", "False") == "True";
             eCommitSize.Text = Preferences.Get("COMMIT_SIZE", "1000000");
@@ -89,15 +89,17 @@ namespace SCVMobil
             string TryPassword = await DisplayPromptAsync("verificacion", "Ingrese la contraseña maestra para continuar", "Aceptar", "Cancelar", "Contraseña", 11, null);
             if (Password == TryPassword)
             {
-            
+                Preferences.Set("BUSY", false);
                 Debug.WriteLine("Timer Stopped");
                 App.syncTimer.Stop();
                 App.syncTimer.Enabled = false;
+                        var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                 Preferences.Set("IS_SYNC", "true");
                 if (Connectivity.NetworkAccess == NetworkAccess.Internet)
                 {
                     try
                     {
+                        fireBird = new FireBirdData();
                         //Mostramos el popup
                         popupLoadingView.IsVisible = true;
 
@@ -109,7 +111,6 @@ namespace SCVMobil
                         var querry1 = "";
 
                         //Vamos a buscar el directorio de la base de datos
-                        var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
                         //Buscamos el Chunk Size
                         var iChunkSize = int.Parse(Preferences.Get("CHUNK_SIZE", "10000"));
@@ -209,11 +210,11 @@ namespace SCVMobil
 
                                 await Task.Factory.StartNew(() =>
                                 {
-                                    listPadron.AddRange(fireBird.DownloadPadron(querry1));
+                                    listPadron.AddRange(fireBird.DownloadPadron(querry1,false));
 
-                                //var listPadronTemp = JsonConvert.DeserializeObject<List<PADRON>>(contenidoTBL);
-                                //listPadron = listPadron.Concat(listPadronTemp).ToList();
-                                if (listPadron.Count >= int.Parse(Preferences.Get("COMMIT_SIZE", "1000000")) || maxRegistro - loadedRegistros < iChunkSize - 1)
+                                    //var listPadronTemp = JsonConvert.DeserializeObject<List<PADRON>>(contenidoTBL);
+                                    //listPadron = listPadron.Concat(listPadronTemp).ToList();
+                                    if (listPadron.Count >= int.Parse(Preferences.Get("COMMIT_SIZE", "1000000")) || maxRegistro - loadedRegistros < iChunkSize - 1)
                                     {
                                         try
                                         {
@@ -295,6 +296,7 @@ namespace SCVMobil
                     }
                     finally
                     {
+                        db.Dispose();
 
                         popupLoadingView.IsVisible = false;
                         try
@@ -310,6 +312,7 @@ namespace SCVMobil
                         //Preferences.Set("IS_SYNC", "false");
                         App.syncTimer.Enabled = true;
                         App.syncTimer.Start();
+                        Preferences.Set("BUSY", true);
                     }
                     //"select b.boleta_id, b.boleta, b.fecha_lectura, null as SUBIDA from boletas b where b.fecha_lectura is NULL"
                 }
@@ -368,6 +371,7 @@ namespace SCVMobil
                     var notification = DependencyService.Get<IToastNotificator>();
                     var result = notification.Notify(options);
                     db.Close();
+                    db.Dispose();
                 });
             }
             catch(Exception ea)
@@ -458,6 +462,67 @@ namespace SCVMobil
                 Debug.WriteLine("Error en el metodo pingbtn " + ea.Message);
                 Analytics.TrackEvent("Exception al hacer ping:  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
+
+        }
+
+        private void btnPadron_Clicked(object sender, EventArgs e)
+        {
+            ActualizarPadron();
+        }
+
+        private async void ActualizarPadron()
+        {
+            try
+            {
+                Preferences.Set("BUSY", false);
+                
+                FireBirdData fireBirdData = new FireBirdData();
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+               
+                string querry = "SELECT PV.documento AS CEDULA, PV.nombres, PV.apellidos,pv.padron_visitante_id " +
+                                "FROM padron_visitantes PV " +
+                                "WHERE CHAR_LENGTH(PV.documento) = 11 AND pv.padron_visitante_id > " + Preferences.Get("MAX_PERSONA_PADRON_ID", "0") +
+                                " ORDER BY pv.padron_visitante_id desc ";
+               
+               
+                var listPadronVisita = fireBirdData.DownloadPadron(querry, true);
+                if (listPadronVisita.Count > 0)
+                {
+                    foreach (var padron in listPadronVisita)
+                    {
+                        var persona = db.Query<PADRON>("SELECT * FROM PADRON WHERE CEDULA = '"+padron.CEDULA+"'");
+                        if (persona.Any())
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            db.Insert(padron);
+                        }
+                        
+
+                    }
+                    //db.InsertAll(listPadronVisita);
+                    Preferences.Set("MAX_PERSONA_PADRON_ID", listPadronVisita.First().ID_PADRON.ToString());
+
+
+
+                }
+                OnAppearing();
+
+            }
+            catch (Exception ea)
+            {
+                await DisplayAlert("Error",ea.Message,"OK");
+                Debug.WriteLine("Error en el metodo ActualizarPadron " + ea.Message);
+                Analytics.TrackEvent("Exception al hacer ActualizarPadron:  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+
+            }
+            finally
+            {
+                Preferences.Set("BUSY", true);
+            }
+
 
         }
     }

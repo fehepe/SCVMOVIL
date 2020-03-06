@@ -18,7 +18,7 @@ namespace SCVMobil
     public partial class AppSettingsPage : ContentPage
     {
 
-        List<int> num = new List<int>();
+        public List<COMPANIAS> puertas;
         public AppSettingsPage()
         {
             InitializeComponent();
@@ -36,7 +36,7 @@ namespace SCVMobil
             setdefaults();
             Localidad_VSU();
             visitaA.IsToggled = Preferences.Get("VISITA_A_SELECTED", true);
-            entPuerta.SelectedIndex = Preferences.Get("PUERTA_SELECTED_INDEX", 0);
+            
             placa.IsToggled= Preferences.Get("PLACA_SELECTED", true);
             TiempoVerif.SelectedItem = Preferences.Get("TIEMPOS", "1");
         }
@@ -71,11 +71,12 @@ namespace SCVMobil
                 var scompania_id = Preferences.Get("LOCALIDAD_VSU", "1");
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                 var puertas = db.Query<COMPANIAS>("SELECT * FROM COMPANIAS where PUNTO_VSU = 1");
-                List<string> listpuertas = new List<string>();
+                
                 if (puertas.Any())
                 {
-                    entPuerta.ItemsSource = puertas;
-                    entPuerta.SelectedItem = Preferences.Get("PUERTA_SELECTED_INDEX", 0);
+                    entPuerta.ItemsSource = puertas ;
+                    entPuerta.SelectedItem = (puertas.Where(x => x.COMPANIA_ID == Convert.ToInt32(scompania_id)).First().NOMBRE); ;
+                    entPuerta.SelectedIndex = Preferences.Get("PUERTA_SELECTED_INDEX", 0);    //Preferences.Get("PUERTA_SELECTED_INDEX", 0);
                 }
                 else
                 {
@@ -211,7 +212,7 @@ namespace SCVMobil
                 var selected = entPuerta.SelectedItem as COMPANIAS;
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                 Preferences.Set("LOCALIDAD_VSU", selected.COMPANIA_ID.ToString());
-                Preferences.Set("PUERTA_SELECTED_INDEX", selected.COMPANIA_ID);
+                Preferences.Set("PUERTA_SELECTED_INDEX", entPuerta.SelectedIndex);
             }
             catch (Exception ex)
             {

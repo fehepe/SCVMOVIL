@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<popup:PopupPage
+    x:Class="SCVMobil.Views.VisitInfo"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    mc:Ignorable="d">
+    <ContentPage.Content>
+
+        <StackLayout
+            Margin="14"
+            Padding="50"
+            BackgroundColor="White"
+            Spacing="10"
+            VerticalOptions="Center">
+            <Label
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalTextAlignment="Center"
+                Text="Informacion de visita"
+                TextColor="Black" />
+            <StackLayout
+                Padding="0,0,0,10"
+                HorizontalOptions="StartAndExpand"
+                VerticalOptions="Center">
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="20"
+                    HorizontalTextAlignment="Start"
+                    Text="Nombre:"
+                    TextColor="Black" />
+                <Label
+                    x:Name="Nombretxt"
+                    FontSize="20"
+                    HorizontalTextAlignment="Start"
+                    Text=""
+                    TextColor="Red" />
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="20"
+                    HorizontalTextAlignment="Start"
+                    Text="Cedula:"
+                    TextColor="Black" />
+                <Label
+                    x:Name="Cedulatxt"
+                    FontSize="20"
+                    HorizontalTextAlignment="Start"
+                    Text=""
+                    TextColor="Red" />
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="20"
+                    HorizontalTextAlignment="Start"
+                    Text="Destino:"
+                    TextColor="Black" />
+                <Label
+                    x:Name="Destinotxt"
+                    FontSize="20"
+                    HorizontalTextAlignment="Start"
+                    Text=""
+                    TextColor="Red" />
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="20"
+                    HorizontalTextAlignment="Start"
+                    Text="Fecha de entrada:"
+                    TextColor="Black" />
+                <Label
+                    x:Name="Fechaenttxt"
+                    FontSize="20"
+                    HorizontalTextAlignment="Start"
+                    Text=""
+                    TextColor="Red" />
+            </StackLayout>
+
+            <StackLayout>
+                <Button
+                    x:Name="Okbtn"
+                    BackgroundColor="#F44336"
+                    Clicked="Okbtn_Clicked"
+                    CornerRadius="25"
+                    Text="Correcto"
+                    TextColor="White" />
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</popup:PopupPage>
