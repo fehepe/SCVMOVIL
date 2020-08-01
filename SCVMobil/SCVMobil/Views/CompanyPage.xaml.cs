@@ -17,6 +17,10 @@ using System.Web;
 using SCVMobil.Models;
 using Microsoft.AppCenter.Analytics;
 using SCVMobil.Connections;
+using System.Data;
+using Plugin.BluetoothLE;
+using System.Reactive.Linq;
+using XF.Bluetooth.Printer.Plugin.Abstractions;
 
 namespace SCVMobil
 {
@@ -36,6 +40,50 @@ namespace SCVMobil
         PERSONAS persona;
 
 
+        private readonly PRINT _blueToothService;
+        private readonly IPrint prints;
+
+        private IList<string> _deviceList;
+        public IList<string> DeviceList
+        {
+            get
+            {
+                if (_deviceList == null)
+                    _deviceList = new ObservableCollection<string>();
+                return _deviceList;
+            }
+            set
+            {
+                _deviceList = value;
+            }
+        }
+
+        private string _printMessage;
+        public string PrintMessage
+        {
+            get
+            {
+                return _printMessage;
+            }
+            set
+            {
+                _printMessage = value;
+            }
+        }
+
+        private string _selectedDevice;
+        public string SelectedDevice
+        {
+            get
+            {
+                return _selectedDevice;
+            }
+            set
+            {
+                _selectedDevice = value;
+            }
+        }
+
 
         //-----------------------------------------------------------------------------------------------       
         public CompanyPage(String cedula, String nombre, String apellidos)//Constructor
@@ -46,7 +94,18 @@ namespace SCVMobil
             scan = new Escaner(entryScan);
             stNombre = nombre;
             stApellidos = apellidos;
+            _blueToothService = DependencyService.Get<PRINT>();
+            prints = DependencyService.Get<IPrint>();
+            //BindDeviceList();
         }
+
+        //public void BindDeviceList()
+        //{
+        //    var list = _blueToothService.GetDeviceList();
+        //    DeviceList.Clear();
+        //    foreach (var item in list)
+        //        DeviceList.Add(item);
+        //}
         //-------------------------------------------------------------------------------------------------------------------
 
         protected override void OnAppearing()
@@ -406,9 +465,14 @@ namespace SCVMobil
                         {
                             registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper();
                         }
+                        
+                        //await _blueToothService.Print(_blueToothService.GetBluetoothDeviceName(), registroInvitados,buffer);
+                        
+                        await prints.PrintText("Hola", "MPA52186");
+
 
                         db.Insert(registroInvitados);
-                        btnImprimir.IsEnabled = false;
+                        //btnImprimir.IsEnabled = false;
                         await Navigation.PopToRootAsync();
                     }
                     else
