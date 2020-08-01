@@ -50,21 +50,22 @@ namespace SCVMobil.Droid
                     {
                         await _socket.ConnectAsync();
 
-                        byte[] buffer = System.Text.Encoding.UTF8.GetBytes("EZ" +
-                          "{AHEAD:20}" +
-                          "{PRINT, STOP 300:" +
-                          $"@10,15:MF204,HMULT2,VMULT3|holaaa|" +
-                          "@75,15:MF204||" +
-                          "@100,15:MF204|Size: 3 Libras|" +
-                          $"@100,150:MF185,HMULT2,VMULT4|holiii|" +
-                          "@125,15:MF204|Codigo:12454548|" +
-                          "@150,15:MF204||" +
-                          "@180,20:UPC-A,WIDE 2, HIGH 8|00000000001|" +
-                          "@180,230:MF204||" +
-                          "@205,280:MF204|Tarjeta:No |" +
-                          "@225,50:MF204|0000000000001|" +
-                          "@230,210:MF204|07/29/20      Tax:|" +
-                          "}");
+                        //byte[] buffer = System.Text.Encoding.UTF8.GetBytes("EZ" +
+                        //  "{AHEAD:20}" +
+                        //  "{PRINT, STOP 300:" +
+                        //  $"@10,15:MF204,HMULT2,VMULT3|holaaa|" +
+                        //  "@75,15:MF204||" +
+                        //  "@100,15:MF204|Size: 3 Libras|" +
+                        //  $"@100,150:MF185,HMULT2,VMULT4|holiii|" +
+                        //  "@125,15:MF204|Codigo:12454548|" +
+                        //  "@150,15:MF204||" +
+                        //  "@180,20:UPC-A,WIDE 2, HIGH 8|00000000001|" +
+                        //  "@180,230:MF204||" +
+                        //  "@205,280:MF204|Tarjeta:No |" +
+                        //  "@225,50:MF204|0000000000001|" +
+                        //  "@230,210:MF204|07/29/20      Tax:|" +
+                        //  "}");
+                        byte[] buffer = System.Text.Encoding.UTF8.GetBytes(input);
                         await Task.Delay(3000);
                         // Write data to the device
                         await _socket.OutputStream.WriteAsync(buffer, 0, buffer.Length);

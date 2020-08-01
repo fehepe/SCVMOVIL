@@ -465,10 +465,24 @@ namespace SCVMobil
                         {
                             registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper();
                         }
-                        
-                        //await _blueToothService.Print(_blueToothService.GetBluetoothDeviceName(), registroInvitados,buffer);
-                        
-                        await prints.PrintText("Hola", "MPA52186");
+
+                        //await _blueToothService.Print("MPA52186",registroInvitados);
+                       string text = "EZ" +
+                          "{AHEAD:20}" +
+                          "{PRINT, STOP 300:" +
+                          $"@10,15:MF204,HMULT2,VMULT3|{registroInvitados.Compania_ID}|" +
+                          "@75,15:MF204||" +
+                          $"@100,15:MF204|{registroInvitados.Nombres}|" +
+                          $"@100,150:MF185,HMULT2,VMULT4|{registroInvitados.Apellidos}|" +
+                          $"@125,15:MF204|{registroInvitados.Placa}|" +
+                          "@150,15:MF204||" +
+                          "@180,20:UPC-A,WIDE 2, HIGH 8|00000000001|" +
+                          "@180,230:MF204||" +
+                          "@205,280:MF204|Tarjeta:No |" +
+                          "@225,50:MF204|0000000000001|" +
+                          "@230,210:MF204|07/29/20      Tax:|" +
+                          "}";
+                        await prints.PrintText($"{text}", "MPA52186");
 
 
                         db.Insert(registroInvitados);
