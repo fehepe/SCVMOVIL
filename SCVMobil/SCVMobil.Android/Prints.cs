@@ -19,6 +19,41 @@ namespace SCVMobil.Droid
 {
     public class Prints : IPrint
     {
+        //public List<string> DevicesConnected()
+        //{
+        //    List<string> devicesName = new List<string>();
+
+        //    using (BluetoothAdapter bluetoothAdapter = BluetoothAdapter.DefaultAdapter)
+        //    {
+        //        if (bluetoothAdapter == null)
+        //        {
+        //            throw new Exception("No default adapter");
+        //        }
+
+        //        if (!bluetoothAdapter.IsEnabled)
+        //        {
+        //            throw new Exception("Bluetooth not enabled");
+        //        }
+
+        //        List<BluetoothDevice> device = (from bd in bluetoothAdapter.BondedDevices
+        //                                        where bd.Name != null
+        //                                        select bd).ToList();
+
+        //        foreach (var item in device)
+        //        {
+        //            devicesName.Add(item.Name);
+        //        }
+        //    }
+        //    if (devicesName.Any())
+        //    {
+        //        return devicesName;
+        //    }
+        //    else
+        //    {
+        //        return null;
+        //    }
+        //}
+
         public async Task PrintText(string input, string printerName)
         {
             using (BluetoothAdapter bluetoothAdapter = BluetoothAdapter.DefaultAdapter)
@@ -37,6 +72,7 @@ namespace SCVMobil.Droid
                     //StartActivityForResult(enableIntent, REQUEST_ENABLE_BT);
                     // Otherwise, setup the chat session
                 }
+
 
                 BluetoothDevice device = (from bd in bluetoothAdapter.BondedDevices
                                           where bd.Name == printerName
@@ -81,5 +117,7 @@ namespace SCVMobil.Droid
 
 
         }
+
+        
     }
 }

@@ -485,22 +485,25 @@ namespace SCVMobil
                
                
                 var listPadronVisita = fireBirdData.DownloadPadron(querry, true);
-                if (listPadronVisita.Count > 0)
+                if (listPadronVisita.Any())
                 {
-                    foreach (var padron in listPadronVisita)
+                    if (listPadronVisita.Count > 0)
                     {
-                        var persona = db.Query<PADRON>("SELECT * FROM PADRON WHERE CEDULA = '"+padron.CEDULA+"'");
-                        if (persona.Any())
+                        foreach (var padron in listPadronVisita)
                         {
-                            continue;
+                            var persona = db.Query<PADRON>("SELECT * FROM PADRON WHERE CEDULA = '"+padron.CEDULA+"'");
+                            if (persona.Any())
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                db.Insert(padron);
+                            }
                         }
-                        else
-                        {
-                            db.Insert(padron);
-                        }
+                        //db.InsertAll(listPadronVisita);
+                        Preferences.Set("MAX_PERSONA_PADRON_ID", listPadronVisita.First().ID_PADRON.ToString());
                     }
-                    //db.InsertAll(listPadronVisita);
-                    Preferences.Set("MAX_PERSONA_PADRON_ID", listPadronVisita.First().ID_PADRON.ToString());
                 }
                 OnAppearing();
 

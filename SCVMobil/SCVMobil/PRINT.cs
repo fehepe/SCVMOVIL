@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using XF.Bluetooth.Printer.Plugin.Abstractions;
 
 namespace SCVMobil
 {
-    public interface PRINT
+    public interface PRINT: IPrint
     {      
-        Task Print(string deviceName, Invitados invitados);        
+        List<string> DevicesConnected();
     }
 }

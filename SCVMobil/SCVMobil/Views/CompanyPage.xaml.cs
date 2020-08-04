@@ -21,6 +21,7 @@ using System.Data;
 using Plugin.BluetoothLE;
 using System.Reactive.Linq;
 using XF.Bluetooth.Printer.Plugin.Abstractions;
+using XLabs.Platform.Device;
 
 namespace SCVMobil
 {
@@ -41,7 +42,9 @@ namespace SCVMobil
 
 
         private readonly PRINT _blueToothService;
+       // private readonly PRINT prints;
         private readonly IPrint prints;
+        private readonly BleScanType bleScan;
 
         private IList<string> _deviceList;
         public IList<string> DeviceList
@@ -96,6 +99,7 @@ namespace SCVMobil
             stApellidos = apellidos;
             _blueToothService = DependencyService.Get<PRINT>();
             prints = DependencyService.Get<IPrint>();
+           
             //BindDeviceList();
         }
 
@@ -299,20 +303,18 @@ namespace SCVMobil
             {
                 Preferences.Set("BUSY", false);
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                var registroInvitados = new Invitados();
+                string text = string.Empty;
 
                 if (pickerVisitaA.IsVisible)
                 {
                     if (pickerDestino.SelectedItem != null || pickerVisitaA.SelectedItem != null)
                     {
-                        var registroInvitados = new Invitados();
 
                         //Vamos a buscar la compania seleccionada 
                         try
                         {
-
-
                             //Vamos a buscar la persona seleccionada
-
                             if (pickerVisitaA.SelectedIndex != -1)
                             {
                                 int? visitaA;
@@ -358,11 +360,40 @@ namespace SCVMobil
                                 {
                                     registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper(); 
                                 }
+                                //text = "^XA" +
+                                //         "^FX" +
+                                //         "^CF0,55" +
+                                //         "^FO70,50^FDGAD^FS" +
+                                //         $"^FO70,120^FDHOLA^FS" +
+                                //         $"^FO70,170^FDVisita a:^FS" +
+                                //         $"^FO260,170^FDHOLA^FS" +
+                                //         $"^FO70,230^FDRECEPCION^FS" +
+                                //         $"^FO70,300^FDHOLA^FS" +
+                                //         $"^FO360,300^FDHOLA^FS" +
+                                //         "XZ";
+                                text = "EZ" +
+                                  "{AHEAD:20}" +
+                                  "{PRINT, STOP 300:" +
+                                  $"@10,15:MF204,HMULT2,VMULT3|{registroInvitados.Compania_ID}|" +
+                                  "@75,15:MF204||" +
+                                  $"@100,15:MF204|{registroInvitados.Nombres}|" +
+                                  $"@100,150:MF185,HMULT2,VMULT4|{registroInvitados.Apellidos}|" +
+                                  $"@125,15:MF204|{registroInvitados.Placa}|" +
+                                  "@150,15:MF204||" +
+                                  "@180,20:UPC-A,WIDE 2, HIGH 8|00000000001|" +
+                                  "@180,230:MF204||" +
+                                  "@205,280:MF204|Tarjeta:No |" +
+                                  "@225,50:MF204|0000000000001|" +
+                                  "@230,210:MF204|07/29/20      Tax:|" +
+                                  "}";
+
 
                                 db.Insert(registroInvitados);
-
-                                btnImprimir.IsEnabled = false;
+                                //await prints.PrintText($"{text}", "MPA52186");
+                                await prints.PrintText($"{text}", "RP4-18145B4DE7");
                                 await Navigation.PopToRootAsync();
+
+
                             }
                             else
                             {
@@ -403,9 +434,36 @@ namespace SCVMobil
                                 {
                                     registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper();
                                 }
+                                //text = "^XA" +
+                                //    "^FX" +
+                                //    "^CF0,55" +
+                                //    "^FO70,50^FDGAD^FS" +
+                                //    $"^FO70,120^FDHOLA^FS" +
+                                //    $"^FO70,170^FDVisita a:^FS" +
+                                //    $"^FO260,170^FDHOLA^FS" +
+                                //    $"^FO70,230^FDRECEPCION^FS" +
+                                //    $"^FO70,300^FDHOLA^FS" +
+                                //    $"^FO360,300^FDHOLA^FS" +
+                                //    "XZ";
 
+                                text = "EZ" +
+                                   "{AHEAD:20}" +
+                                   "{PRINT, STOP 300:" +
+                                   $"@10,15:MF204,HMULT2,VMULT3|{registroInvitados.Compania_ID}|" +
+                                   "@75,15:MF204||" +
+                                   $"@100,15:MF204|{registroInvitados.Nombres}|" +
+                                   $"@100,150:MF185,HMULT2,VMULT4|{registroInvitados.Apellidos}|" +
+                                   $"@125,15:MF204|{registroInvitados.Placa}|" +
+                                   "@150,15:MF204||" +
+                                   "@180,20:UPC-A,WIDE 2, HIGH 8|00000000001|" +
+                                   "@180,230:MF204||" +
+                                   "@205,280:MF204|Tarjeta:No |" +
+                                   "@225,50:MF204|0000000000001|" +
+                                   "@230,210:MF204|07/29/20      Tax:|" +
+                                   "}";
                                 db.Insert(registroInvitados);
-                                btnImprimir.IsEnabled = false;
+                                //await prints.PrintText($"{text}", "MPA52186");
+                                await prints.PrintText($"{text}", "RP4-18145B4DE7");
                                 await Navigation.PopToRootAsync();
 
                             }
@@ -426,9 +484,6 @@ namespace SCVMobil
                 {
                     if (pickerDestino.SelectedItem != null)
                     {
-
-                        var registroInvitados = new Invitados();
-
 
                         //Vamos a buscar la persona seleccionada
                         registroInvitados.Compania_ID = Preferences.Get("DESTINO_SELECTED",0);
@@ -467,33 +522,54 @@ namespace SCVMobil
                         }
 
                         //await _blueToothService.Print("MPA52186",registroInvitados);
-                       string text = "EZ" +
-                          "{AHEAD:20}" +
-                          "{PRINT, STOP 300:" +
-                          $"@10,15:MF204,HMULT2,VMULT3|{registroInvitados.Compania_ID}|" +
-                          "@75,15:MF204||" +
-                          $"@100,15:MF204|{registroInvitados.Nombres}|" +
-                          $"@100,150:MF185,HMULT2,VMULT4|{registroInvitados.Apellidos}|" +
-                          $"@125,15:MF204|{registroInvitados.Placa}|" +
-                          "@150,15:MF204||" +
-                          "@180,20:UPC-A,WIDE 2, HIGH 8|00000000001|" +
-                          "@180,230:MF204||" +
-                          "@205,280:MF204|Tarjeta:No |" +
-                          "@225,50:MF204|0000000000001|" +
-                          "@230,210:MF204|07/29/20      Tax:|" +
-                          "}";
-                        await prints.PrintText($"{text}", "MPA52186");
+                        //text = "^XA" +
+                        //            "^FX" +
+                        //            "^CF0,55" +
+                        //            "^FO70,50^FDGAD^FS" +
+                        //            $"^FO70,120^FDHOLA^FS" +
+                        //            $"^FO70,170^FDVisita a:^FS" +
+                        //            $"^FO260,170^FDHOLA^FS" +
+                        //            $"^FO70,230^FDRECEPCION^FS" +
+                        //            $"^FO70,300^FDHSAD^FS" +
+                        //            $"^FO360,300^FDSAD^FS" +
+                        //            "XZ";
 
+                        text = "EZ" +
+                           "{AHEAD:20}" +
+                           "{PRINT, STOP 300:" +
+                           $"@10,15:MF204,HMULT2,VMULT3|{registroInvitados.Compania_ID}|" +
+                           "@75,15:MF204||" +
+                           $"@100,15:MF204|{registroInvitados.Nombres}|" +
+                           $"@100,150:MF185,HMULT2,VMULT4|{registroInvitados.Apellidos}|" +
+                           $"@125,15:MF204|{registroInvitados.Placa}|" +
+                           "@150,15:MF204||" +
+                           "@180,20:UPC-A,WIDE 2, HIGH 8|00000000001|" +
+                           "@180,230:MF204||" +
+                           "@205,280:MF204|Tarjeta:No |" +
+                           "@225,50:MF204|0000000000001|" +
+                           "@230,210:MF204|07/29/20      Tax:|" +
+                           "}";
 
+                        await prints.PrintText($"{text}", "RP4-18145B4DE7"); 
+                        //await prints.PrintText($"{text}", "MPA52186");
                         db.Insert(registroInvitados);
-                        //btnImprimir.IsEnabled = false;
                         await Navigation.PopToRootAsync();
+                        //btnImprimir.IsEnabled = false;
                     }
                     else
                     {
                         DependencyService.Get<IToastMessage>().DisplayMessage("Necesita seleccionar un destino.");
                     }
                 }
+
+                //var devices = prints.DevicesConnected();
+
+
+               // await prints.PrintText($"{text}", "RP4-18145B4DE7");
+
+                //btnImprimir.IsEnabled = false;
+
+                //await Navigation.PopToRootAsync();
 
             }
             catch (Exception ea)

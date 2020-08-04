@@ -110,7 +110,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AndroidBlueToothService.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Message_Droid.cs" />
     <Compile Include="OcultarTeclado.cs" />
