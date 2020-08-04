@@ -371,21 +371,30 @@ namespace SCVMobil
                                 //         $"^FO70,300^FDHOLA^FS" +
                                 //         $"^FO360,300^FDHOLA^FS" +
                                 //         "XZ";
+                                //text = "EZ" +
+                                //  "{AHEAD:20}" +
+                                //  "{PRINT, STOP 300:" +
+                                //  $"@10,15:MF204,HMULT2,VMULT3|{registroInvitados.Nombres + registroInvitados.Apellidos}|" +
+                                //  "@75,15:MF204||" +
+                                //  $"@100,15:MF204|{registroInvitados.Codigo_carnet}|" +
+                                //  $"@100,150:MF185,HMULT2,VMULT4|{registroInvitados.Visitado}|" +
+                                //  $"@125,15:MF204|{registroInvitados.Placa}|" +
+                                //  "@150,15:MF204||" +
+                                //  $"@180,20:UPC-A,WIDE 2, HIGH 8|{registroInvitados.Placa}|" +
+                                //  "@180,230:MF204||" +
+                                //  "@205,280:MF204|Tarjeta:No |" +
+                                //  "@225,50:MF204|0000000000001|" +
+                                //  "@230,210:MF204|07/29/20      Tax:|" +
+                                //  "}";
                                 text = "EZ" +
-                                  "{AHEAD:20}" +
-                                  "{PRINT, STOP 300:" +
-                                  $"@10,15:MF204,HMULT2,VMULT3|{registroInvitados.Compania_ID}|" +
-                                  "@75,15:MF204||" +
-                                  $"@100,15:MF204|{registroInvitados.Nombres}|" +
-                                  $"@100,150:MF185,HMULT2,VMULT4|{registroInvitados.Apellidos}|" +
-                                  $"@125,15:MF204|{registroInvitados.Placa}|" +
-                                  "@150,15:MF204||" +
-                                  "@180,20:UPC-A,WIDE 2, HIGH 8|00000000001|" +
-                                  "@180,230:MF204||" +
-                                  "@205,280:MF204|Tarjeta:No |" +
-                                  "@225,50:MF204|0000000000001|" +
-                                  "@230,210:MF204|07/29/20      Tax:|" +
-                                  "}";
+                           "{AHEAD:10}" +
+                           "{PRINT, STOP 800:" +
+                           "@10,15:MF204,HMULT2,VMULT3|      GAD|" +
+                           $"@90,15:MF185,HMULT2,VMULT3|   {registroInvitados.Nombres + " " + registroInvitados.Apellidos}| " +
+                           $"@150,15:MF185,HMULT2,VMULT3|   Visita a: {registroInvitados.Puerta_Entrada}  |" +
+                           "@250,150:BC128,WIDE 4, HIGH 8|00000000001|" +
+                           $"@290,100:MF185,HMULT1,VMULT2|         {registroInvitados.Cargo}|" +
+                           $"@350,105:MF204,HMULT1,VMULT2|  {registroInvitados.Fecha_Registro} |";
 
 
                                 db.Insert(registroInvitados);
@@ -446,21 +455,40 @@ namespace SCVMobil
                                 //    $"^FO360,300^FDHOLA^FS" +
                                 //    "XZ";
 
+                                //text = "EZ" +
+                                //  "{AHEAD:20}" +
+                                //  "{PRINT, STOP 300:" +
+                                //  $"@10,15:MF204,HMULT2,VMULT3|{registroInvitados.Nombres + registroInvitados.Apellidos}|" +
+                                //  "@75,15:MF204||" +
+                                //  $"@100,15:MF204|{registroInvitados.Codigo_carnet}|" +
+                                //  $"@100,150:MF185,HMULT2,VMULT4|{registroInvitados.Visitado}|" +
+                                //  $"@125,15:MF204|{registroInvitados.Placa}|" +
+                                //  "@150,15:MF204||" +
+                                //  $"@180,20:UPC-A,WIDE 2, HIGH 8|{registroInvitados.Placa}|" +
+                                //  "@180,230:MF204||" +
+                                //  "@205,280:MF204|Tarjeta:No |" +
+                                //  "@225,50:MF204|0000000000001|" +
+                                //  "@230,210:MF204|07/29/20      Tax:|" +
+                                //  "}";
+                           //     text = "EZ" +
+                           //"{AHEAD:10}" +
+                           //"{PRINT, STOP 800:" +
+                           //"@10,15:MF204,HMULT2,VMULT3|      GAD|" +
+                           //"@90,15:MF185,HMULT2,VMULT3|   Jhon Arian Disla| " +
+                           //"@150,15:MF185,HMULT2,VMULT3|   Visita a: Manuel Perez  |" +
+                           //"@250,150:UPC-A,WIDE 4, HIGH 8|00000000001|" +
+                           //"@290,100:MF185,HMULT1,VMULT2|         00000000001|" +
+                           //"@350,105:MF204,HMULT1,VMULT2|  07/29/20      1:30pm |";
+
                                 text = "EZ" +
-                                   "{AHEAD:20}" +
-                                   "{PRINT, STOP 300:" +
-                                   $"@10,15:MF204,HMULT2,VMULT3|{registroInvitados.Compania_ID}|" +
-                                   "@75,15:MF204||" +
-                                   $"@100,15:MF204|{registroInvitados.Nombres}|" +
-                                   $"@100,150:MF185,HMULT2,VMULT4|{registroInvitados.Apellidos}|" +
-                                   $"@125,15:MF204|{registroInvitados.Placa}|" +
-                                   "@150,15:MF204||" +
-                                   "@180,20:UPC-A,WIDE 2, HIGH 8|00000000001|" +
-                                   "@180,230:MF204||" +
-                                   "@205,280:MF204|Tarjeta:No |" +
-                                   "@225,50:MF204|0000000000001|" +
-                                   "@230,210:MF204|07/29/20      Tax:|" +
-                                   "}";
+                          "{AHEAD:10}" +
+                          "{PRINT, STOP 800:" +
+                          "@10,15:MF204,HMULT2,VMULT3|      GAD|" +
+                          $"@90,15:MF185,HMULT2,VMULT3|   {registroInvitados.Nombres + " " + registroInvitados.Apellidos}| " +
+                          $"@150,15:MF185,HMULT2,VMULT3|   Visita a: {registroInvitados.Puerta_Entrada}  |" +
+                          "@250,150:BC128,WIDE 4, HIGH 8|00000000001|" +
+                          $"@290,100:MF185,HMULT1,VMULT2|         {registroInvitados.Cargo}|" +
+                          $"@350,105:MF204,HMULT1,VMULT2|  {registroInvitados.Fecha_Registro} |";
                                 db.Insert(registroInvitados);
                                 //await prints.PrintText($"{text}", "MPA52186");
                                 await prints.PrintText($"{text}", "RP4-18145B4DE7");
@@ -534,22 +562,25 @@ namespace SCVMobil
                         //            $"^FO360,300^FDSAD^FS" +
                         //            "XZ";
 
-                        text = "EZ" +
-                           "{AHEAD:20}" +
-                           "{PRINT, STOP 300:" +
-                           $"@10,15:MF204,HMULT2,VMULT3|{registroInvitados.Compania_ID}|" +
-                           "@75,15:MF204||" +
-                           $"@100,15:MF204|{registroInvitados.Nombres}|" +
-                           $"@100,150:MF185,HMULT2,VMULT4|{registroInvitados.Apellidos}|" +
-                           $"@125,15:MF204|{registroInvitados.Placa}|" +
-                           "@150,15:MF204||" +
-                           "@180,20:UPC-A,WIDE 2, HIGH 8|00000000001|" +
-                           "@180,230:MF204||" +
-                           "@205,280:MF204|Tarjeta:No |" +
-                           "@225,50:MF204|0000000000001|" +
-                           "@230,210:MF204|07/29/20      Tax:|" +
-                           "}";
+                        //text = "EZ" +
+                        //    "{AHEAD:10}" +
+                        //    "{PRINT, STOP 800:" +
+                        //    "@10,15:MF204,HMULT2,VMULT3|      GAD|" +
+                        //    "@90,15:MF185,HMULT2,VMULT3|   Jhon Arian Disla| " +
+                        //    "@150,15:MF185,HMULT2,VMULT3|   Visita a: Manuel Perez  |" +
+                        //    "@250,150:UPC-A,WIDE 4, HIGH 8|00000000001|" +
+                        //    "@290,100:MF185,HMULT1,VMULT2|         00000000001|" +
+                        //    "@350,105:MF204,HMULT1,VMULT2|  07/29/20      1:30pm |";
 
+                        text = "EZ" +
+                          "{AHEAD:10}" +
+                          "{PRINT, STOP 800:" +
+                          "@10,15:MF204,HMULT2,VMULT3|      GAD|" +
+                          $"@90,15:MF185,HMULT2,VMULT3|   {registroInvitados.Nombres + " " + registroInvitados.Apellidos}| " +
+                          $"@150,15:MF185,HMULT2,VMULT3|   Visita a: {registroInvitados.Puerta_Entrada}  |" +
+                          "@250,150:BC128,WIDE 4, HIGH 8|00000000001|" +
+                          $"@290,100:MF185,HMULT1,VMULT2|         {registroInvitados.Cargo}|" +
+                          $"@350,105:MF204,HMULT1,VMULT2|  {registroInvitados.Fecha_Registro} |";
                         await prints.PrintText($"{text}", "RP4-18145B4DE7"); 
                         //await prints.PrintText($"{text}", "MPA52186");
                         db.Insert(registroInvitados);
