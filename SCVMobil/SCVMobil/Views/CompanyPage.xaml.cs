@@ -360,7 +360,7 @@ namespace SCVMobil
                                 {
                                     registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper(); 
                                 }
-                                //text = "^XA" +
+                                /*text = "^XA" +
                                 //         "^FX" +
                                 //         "^CF0,55" +
                                 //         "^FO70,50^FDGAD^FS" +
@@ -385,19 +385,22 @@ namespace SCVMobil
                                 //  "@205,280:MF204|Tarjeta:No |" +
                                 //  "@225,50:MF204|0000000000001|" +
                                 //  "@230,210:MF204|07/29/20      Tax:|" +
-                                //  "}";
+                                //  "}";*/
+                                var inserted = db.Insert(registroInvitados);
+                                var x = db.ExecuteScalar<Invitados>($"Select INVIDATO_ID from Invitados where Cargo = '{registroInvitados.Cargo}'");
+                                
+                                
                                 text = "EZ" +
-                           "{AHEAD:10}" +
-                           "{PRINT, STOP 800:" +
-                           "@10,15:MF204,HMULT2,VMULT3|      GAD|" +
-                           $"@90,15:MF185,HMULT2,VMULT3|   {registroInvitados.Nombres + " " + registroInvitados.Apellidos}| " +
-                           $"@150,15:MF185,HMULT2,VMULT3|   Visita a: {registroInvitados.Puerta_Entrada}  |" +
-                           "@250,150:BC128,WIDE 4, HIGH 8|00000000001|" +
-                           $"@290,100:MF185,HMULT1,VMULT2|         {registroInvitados.Cargo}|" +
-                           $"@350,105:MF204,HMULT1,VMULT2|  {registroInvitados.Fecha_Registro} |";
+                                   "{AHEAD:10}" +
+                                   "{PRINT, STOP 800:" +
+                                   "@10,15:MF204,HMULT2,VMULT3|      GAD|" +
+                                   $"@90,15:MF185,HMULT2,VMULT3|   {registroInvitados.Nombres + " " + registroInvitados.Apellidos}| " +
+                                   $"@150,15:MF185,HMULT2,VMULT3|   Visita a: {(this.persona != null ? this.persona.NOMBRES_APELLIDOS : "N/A")}  |" +
+                                   "@250,150:BC128,WIDE 4, HIGH 8|00000000001|" +
+                                   $"@290,100:MF185,HMULT1,VMULT2|         {registroInvitados.Cargo}|" +
+                                   $"@350,105:MF204,HMULT1,VMULT2|  {registroInvitados.Fecha_Registro} |";
 
 
-                                db.Insert(registroInvitados);
                                 //await prints.PrintText($"{text}", "MPA52186");
                                 await prints.PrintText($"{text}", "RP4-18145B4DE7");
                                 await Navigation.PopToRootAsync();
@@ -470,26 +473,28 @@ namespace SCVMobil
                                 //  "@225,50:MF204|0000000000001|" +
                                 //  "@230,210:MF204|07/29/20      Tax:|" +
                                 //  "}";
-                           //     text = "EZ" +
-                           //"{AHEAD:10}" +
-                           //"{PRINT, STOP 800:" +
-                           //"@10,15:MF204,HMULT2,VMULT3|      GAD|" +
-                           //"@90,15:MF185,HMULT2,VMULT3|   Jhon Arian Disla| " +
-                           //"@150,15:MF185,HMULT2,VMULT3|   Visita a: Manuel Perez  |" +
-                           //"@250,150:UPC-A,WIDE 4, HIGH 8|00000000001|" +
-                           //"@290,100:MF185,HMULT1,VMULT2|         00000000001|" +
-                           //"@350,105:MF204,HMULT1,VMULT2|  07/29/20      1:30pm |";
+                                //     text = "EZ" +
+                                //"{AHEAD:10}" +
+                                //"{PRINT, STOP 800:" +
+                                //"@10,15:MF204,HMULT2,VMULT3|      GAD|" +
+                                //"@90,15:MF185,HMULT2,VMULT3|   Jhon Arian Disla| " +
+                                //"@150,15:MF185,HMULT2,VMULT3|   Visita a: Manuel Perez  |" +
+                                //"@250,150:UPC-A,WIDE 4, HIGH 8|00000000001|" +
+                                //"@290,100:MF185,HMULT1,VMULT2|         00000000001|" +
+                                //"@350,105:MF204,HMULT1,VMULT2|  07/29/20      1:30pm |";
+
+                                var inserted = db.Insert(registroInvitados);
+                                var x = db.ExecuteScalar<Invitados>($"Select INVIDATO_ID from Invitados where Cargo = '{registroInvitados.Cargo}'");
 
                                 text = "EZ" +
-                          "{AHEAD:10}" +
-                          "{PRINT, STOP 800:" +
-                          "@10,15:MF204,HMULT2,VMULT3|      GAD|" +
-                          $"@90,15:MF185,HMULT2,VMULT3|   {registroInvitados.Nombres + " " + registroInvitados.Apellidos}| " +
-                          $"@150,15:MF185,HMULT2,VMULT3|   Visita a: {registroInvitados.Puerta_Entrada}  |" +
-                          "@250,150:BC128,WIDE 4, HIGH 8|00000000001|" +
-                          $"@290,100:MF185,HMULT1,VMULT2|         {registroInvitados.Cargo}|" +
-                          $"@350,105:MF204,HMULT1,VMULT2|  {registroInvitados.Fecha_Registro} |";
-                                db.Insert(registroInvitados);
+                                  "{AHEAD:10}" +
+                                  "{PRINT, STOP 800:" +
+                                  "@10,15:MF204,HMULT2,VMULT3|      GAD|" +
+                                  $"@90,15:MF185,HMULT2,VMULT3|   {registroInvitados.Nombres + " " + registroInvitados.Apellidos}| " +
+                                  $"@150,15:MF185,HMULT2,VMULT3|   Visita a: {(this.persona != null ? this.persona.NOMBRES_APELLIDOS : "N/A")}  |" +
+                                  "@250,150:BC128,WIDE 4, HIGH 8|00000000001|" +
+                                  $"@290,100:MF185,HMULT1,VMULT2|         {registroInvitados.Cargo}|" +
+                                  $"@350,105:MF204,HMULT1,VMULT2|  {registroInvitados.Fecha_Registro} |";
                                 //await prints.PrintText($"{text}", "MPA52186");
                                 await prints.PrintText($"{text}", "RP4-18145B4DE7");
                                 await Navigation.PopToRootAsync();
@@ -571,19 +576,21 @@ namespace SCVMobil
                         //    "@250,150:UPC-A,WIDE 4, HIGH 8|00000000001|" +
                         //    "@290,100:MF185,HMULT1,VMULT2|         00000000001|" +
                         //    "@350,105:MF204,HMULT1,VMULT2|  07/29/20      1:30pm |";
+                        var inserted = db.Insert(registroInvitados);
+                        var x = db.ExecuteScalar<Invitados>($"Select INVIDATO_ID from Invitados where Cargo = '{registroInvitados.Cargo}'");
+
 
                         text = "EZ" +
                           "{AHEAD:10}" +
                           "{PRINT, STOP 800:" +
                           "@10,15:MF204,HMULT2,VMULT3|      GAD|" +
                           $"@90,15:MF185,HMULT2,VMULT3|   {registroInvitados.Nombres + " " + registroInvitados.Apellidos}| " +
-                          $"@150,15:MF185,HMULT2,VMULT3|   Visita a: {registroInvitados.Puerta_Entrada}  |" +
+                          $"@150,15:MF185,HMULT2,VMULT3|   Visita a: {(this.persona != null?this.persona.NOMBRES_APELLIDOS:"N/A")}  |" +
                           "@250,150:BC128,WIDE 4, HIGH 8|00000000001|" +
                           $"@290,100:MF185,HMULT1,VMULT2|         {registroInvitados.Cargo}|" +
                           $"@350,105:MF204,HMULT1,VMULT2|  {registroInvitados.Fecha_Registro} |";
                         await prints.PrintText($"{text}", "RP4-18145B4DE7"); 
                         //await prints.PrintText($"{text}", "MPA52186");
-                        db.Insert(registroInvitados);
                         await Navigation.PopToRootAsync();
                         //btnImprimir.IsEnabled = false;
                     }
@@ -596,11 +603,12 @@ namespace SCVMobil
                 //var devices = prints.DevicesConnected();
 
 
-               // await prints.PrintText($"{text}", "RP4-18145B4DE7");
+                // await prints.PrintText($"{text}", "RP4-18145B4DE7");
 
                 //btnImprimir.IsEnabled = false;
 
                 //await Navigation.PopToRootAsync();
+                this.persona = null;
 
             }
             catch (Exception ea)
