@@ -50,6 +50,7 @@ namespace SCVMobil
         public int? Visitado { get; set; }
         public int Lector { get; set; }
         public string Codigo_carnet { get; set; }
+        public string CODIGO_BARRA { get; set; }
 
         public Invitados()
         {
