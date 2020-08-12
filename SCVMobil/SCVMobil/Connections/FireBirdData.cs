@@ -43,7 +43,6 @@ namespace SCVMobil.Connections
             }
             else
             {
-
                 string connectionString = "User ID=sysdba;Password=masterkey;" +
                           "Database=C:\\APP\\GAD\\datos_214.fdb;" +
                           $"DataSource={Preferences.Get("SERVER_IP", "localhost")};Port=3050;Charset=NONE;Server Type=0;";
