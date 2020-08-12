@@ -32,6 +32,7 @@ namespace SCVMobil
         //----------------------------------------------------------------------------------------------
         //Variables
         private HttpClient _client = new HttpClient();
+        public FireBirdData fireBird = new FireBirdData(); //NEW//
         //private string Url = "";
         //private Dictionary<string, BarcodeReader> mBarcodeReaders;
         Escaner scan;
@@ -186,25 +187,25 @@ namespace SCVMobil
             scan.GetScanner(false);
         }
 
-        //------------------------------------------------------------------------------------------------------------------------------------------------------------------------  
+        //-----------------------------------------------------------------------------
         public void refreshPage()
         {
 
         }
+
         //-----------------------------------------------------------------------------
         private void EntPlaca_Completed(object sender, EventArgs e)
         {
            
         }
 
-
-        //--------------------------------------------------------------------------------    
-
+        //------------------------------------------------------------------------------
         private void EntCedula_Completed(object sender, EventArgs e)
         {
             
         }
-        //----------------------------------------------------------------------------------------------------------
+
+        //------------------------------------------------------------------------------
         public async void entryScan(String scanneo)// Metodo para poder Scanear
         {
             try
@@ -293,10 +294,8 @@ namespace SCVMobil
                 DependencyService.Get<IToastMessage>().DisplayMessage("Ha ocurrido un error: " + ex.Message);
             }
         }
-        
-        //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
+        //------------------------------------------------------------------------------
         private async void BtnImprimir_Clicked(object sender, EventArgs e)//Metodo del boton de Imprimir
         {
             try
@@ -360,49 +359,40 @@ namespace SCVMobil
                                 {
                                     registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper(); 
                                 }
-                                /*text = "^XA" +
-                                //         "^FX" +
-                                //         "^CF0,55" +
-                                //         "^FO70,50^FDGAD^FS" +
-                                //         $"^FO70,120^FDHOLA^FS" +
-                                //         $"^FO70,170^FDVisita a:^FS" +
-                                //         $"^FO260,170^FDHOLA^FS" +
-                                //         $"^FO70,230^FDRECEPCION^FS" +
-                                //         $"^FO70,300^FDHOLA^FS" +
-                                //         $"^FO360,300^FDHOLA^FS" +
-                                //         "XZ";
-                                //text = "EZ" +
-                                //  "{AHEAD:20}" +
-                                //  "{PRINT, STOP 300:" +
-                                //  $"@10,15:MF204,HMULT2,VMULT3|{registroInvitados.Nombres + registroInvitados.Apellidos}|" +
-                                //  "@75,15:MF204||" +
-                                //  $"@100,15:MF204|{registroInvitados.Codigo_carnet}|" +
-                                //  $"@100,150:MF185,HMULT2,VMULT4|{registroInvitados.Visitado}|" +
-                                //  $"@125,15:MF204|{registroInvitados.Placa}|" +
-                                //  "@150,15:MF204||" +
-                                //  $"@180,20:UPC-A,WIDE 2, HIGH 8|{registroInvitados.Placa}|" +
-                                //  "@180,230:MF204||" +
-                                //  "@205,280:MF204|Tarjeta:No |" +
-                                //  "@225,50:MF204|0000000000001|" +
-                                //  "@230,210:MF204|07/29/20      Tax:|" +
-                                //  "}";*/
-                                var inserted = db.Insert(registroInvitados);
-                                var x = db.ExecuteScalar<Invitados>($"Select INVIDATO_ID from Invitados where Cargo = '{registroInvitados.Cargo}'");
-                                
-                                
-                                text = "EZ" +
-                                   "{AHEAD:10}" +
-                                   "{PRINT, STOP 800:" +
-                                   "@10,15:MF204,HMULT2,VMULT3|      GAD|" +
-                                   $"@90,15:MF185,HMULT2,VMULT3|   {registroInvitados.Nombres + " " + registroInvitados.Apellidos}| " +
-                                   $"@150,15:MF185,HMULT2,VMULT3|   Visita a: {(this.persona != null ? this.persona.NOMBRES_APELLIDOS : "N/A")}  |" +
-                                   "@250,150:BC128,WIDE 4, HIGH 8|00000000001|" +
-                                   $"@290,100:MF185,HMULT1,VMULT2|         {registroInvitados.Cargo}|" +
-                                   $"@350,105:MF204,HMULT1,VMULT2|  {registroInvitados.Fecha_Registro} |";
+
+                                db.Insert(registroInvitados);
+                                fireBird.UploadVisits();
+                                fireBird.DownloadGuests();
+                                var inserted = db.Query<Invitados>($"SELECT * FROM INVITADOS WHERE CARGO = '{registroInvitados.Cargo}' ORDER BY Fecha_Registro DESC").FirstOrDefault();
 
 
-                                //await prints.PrintText($"{text}", "MPA52186");
-                                await prints.PrintText($"{text}", "RP4-18145B4DE7");
+                                var st = "^XA" +
+                                       "^FX" +
+                                       "^CF0,55" +
+                                       $"^FO70,30^FDPUERTO SANSOUCI^FS" +
+                                       $"^CF0,45" +
+                                       $"^FO70,100^FD{registroInvitados.Nombres + " " + registroInvitados.Apellidos}^FS" +
+                                       "^FO70,170^FDGAD INTERMEC^FS" +
+                                       $"^FO70,230^FDPISO 10^FS" +
+                                       $"^FO70,290^FD{registroInvitados.Fecha_Registro}^FS" +
+                                       $"^FO70,360^FDFavor Devolver Ticket en la salida^FS^FS" +
+                                       "^FS" +
+                                        "^MMT" +
+                                        "^PW2400" +
+                                        "^LL1200" +
+                                        "^LS5" +
+                                        "^BY2,3,73" +
+                                        "^FO750,20" +
+                                        "^BCR,,Y,N" +
+                                        $"^FD{"ID" + inserted.INVIDATO_ID}" +
+                                        "^FS" +
+                                        "^PQ1,0,1,Y" +
+                                        "^FO10,85^GB650,1,3^FS" +
+                                        "^FO10,150 ^ GB650,1,3 ^ FS" +
+                                        "^XZ"; ;
+
+
+                                await prints.PrintText($"{st}", "RP4-18145B4DE7");
                                 await Navigation.PopToRootAsync();
 
 
@@ -446,57 +436,38 @@ namespace SCVMobil
                                 {
                                     registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper();
                                 }
-                                //text = "^XA" +
-                                //    "^FX" +
-                                //    "^CF0,55" +
-                                //    "^FO70,50^FDGAD^FS" +
-                                //    $"^FO70,120^FDHOLA^FS" +
-                                //    $"^FO70,170^FDVisita a:^FS" +
-                                //    $"^FO260,170^FDHOLA^FS" +
-                                //    $"^FO70,230^FDRECEPCION^FS" +
-                                //    $"^FO70,300^FDHOLA^FS" +
-                                //    $"^FO360,300^FDHOLA^FS" +
-                                //    "XZ";
-
-                                //text = "EZ" +
-                                //  "{AHEAD:20}" +
-                                //  "{PRINT, STOP 300:" +
-                                //  $"@10,15:MF204,HMULT2,VMULT3|{registroInvitados.Nombres + registroInvitados.Apellidos}|" +
-                                //  "@75,15:MF204||" +
-                                //  $"@100,15:MF204|{registroInvitados.Codigo_carnet}|" +
-                                //  $"@100,150:MF185,HMULT2,VMULT4|{registroInvitados.Visitado}|" +
-                                //  $"@125,15:MF204|{registroInvitados.Placa}|" +
-                                //  "@150,15:MF204||" +
-                                //  $"@180,20:UPC-A,WIDE 2, HIGH 8|{registroInvitados.Placa}|" +
-                                //  "@180,230:MF204||" +
-                                //  "@205,280:MF204|Tarjeta:No |" +
-                                //  "@225,50:MF204|0000000000001|" +
-                                //  "@230,210:MF204|07/29/20      Tax:|" +
-                                //  "}";
-                                //     text = "EZ" +
-                                //"{AHEAD:10}" +
-                                //"{PRINT, STOP 800:" +
-                                //"@10,15:MF204,HMULT2,VMULT3|      GAD|" +
-                                //"@90,15:MF185,HMULT2,VMULT3|   Jhon Arian Disla| " +
-                                //"@150,15:MF185,HMULT2,VMULT3|   Visita a: Manuel Perez  |" +
-                                //"@250,150:UPC-A,WIDE 4, HIGH 8|00000000001|" +
-                                //"@290,100:MF185,HMULT1,VMULT2|         00000000001|" +
-                                //"@350,105:MF204,HMULT1,VMULT2|  07/29/20      1:30pm |";
 
                                 var inserted = db.Insert(registroInvitados);
-                                var x = db.ExecuteScalar<Invitados>($"Select INVIDATO_ID from Invitados where Cargo = '{registroInvitados.Cargo}'");
+                                fireBird.UploadVisits();
+                                fireBird.DownloadGuests();
+                                var inserted_ = db.Query<Invitados>($"SELECT * FROM INVITADOS WHERE CARGO = '{registroInvitados.Cargo}' ORDER BY Fecha_Registro DESC").FirstOrDefault();
 
-                                text = "EZ" +
-                                  "{AHEAD:10}" +
-                                  "{PRINT, STOP 800:" +
-                                  "@10,15:MF204,HMULT2,VMULT3|      GAD|" +
-                                  $"@90,15:MF185,HMULT2,VMULT3|   {registroInvitados.Nombres + " " + registroInvitados.Apellidos}| " +
-                                  $"@150,15:MF185,HMULT2,VMULT3|   Visita a: {(this.persona != null ? this.persona.NOMBRES_APELLIDOS : "N/A")}  |" +
-                                  "@250,150:BC128,WIDE 4, HIGH 8|00000000001|" +
-                                  $"@290,100:MF185,HMULT1,VMULT2|         {registroInvitados.Cargo}|" +
-                                  $"@350,105:MF204,HMULT1,VMULT2|  {registroInvitados.Fecha_Registro} |";
-                                //await prints.PrintText($"{text}", "MPA52186");
-                                await prints.PrintText($"{text}", "RP4-18145B4DE7");
+
+                                var st = "^XA" +
+                                       "^FX" +
+                                       "^CF0,55" +
+                                       $"^FO70,30^FDPUERTO SANSOUCI^FS" +
+                                       $"^CF0,45" +
+                                       $"^FO70,100^FD{registroInvitados.Nombres + " " + registroInvitados.Apellidos}^FS" +
+                                       "^FO70,170^FDGAD INTERMEC^FS" +
+                                       $"^FO70,230^FDPISO 10^FS" +
+                                       $"^FO70,290^FD{registroInvitados.Fecha_Registro}^FS" +
+                                       $"^FO70,360^FDFavor Devolver Ticket en la salida^FS^FS" +
+                                       "^FS"+
+                                        "^MMT"+
+                                        "^PW2400"+
+                                        "^LL1200"+
+                                        "^LS5"+
+                                        "^BY2,3,73"+
+                                        "^FO750,20"+
+                                        "^BCR,,Y,N"+
+                                        $"^FD{"ID" + inserted_.INVIDATO_ID}" +
+                                        "^FS"+
+                                        "^PQ1,0,1,Y"+
+                                        "^FO10,85^GB650,1,3^FS"+
+                                        "^FO10,150 ^ GB650,1,3 ^ FS"+
+                                        "^XZ";
+                                await prints.PrintText($"{st}", "RP4-18145B4DE7");
                                 await Navigation.PopToRootAsync();
 
                             }
@@ -554,42 +525,38 @@ namespace SCVMobil
                             registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper();
                         }
 
-                        //await _blueToothService.Print("MPA52186",registroInvitados);
-                        //text = "^XA" +
-                        //            "^FX" +
-                        //            "^CF0,55" +
-                        //            "^FO70,50^FDGAD^FS" +
-                        //            $"^FO70,120^FDHOLA^FS" +
-                        //            $"^FO70,170^FDVisita a:^FS" +
-                        //            $"^FO260,170^FDHOLA^FS" +
-                        //            $"^FO70,230^FDRECEPCION^FS" +
-                        //            $"^FO70,300^FDHSAD^FS" +
-                        //            $"^FO360,300^FDSAD^FS" +
-                        //            "XZ";
-
-                        //text = "EZ" +
-                        //    "{AHEAD:10}" +
-                        //    "{PRINT, STOP 800:" +
-                        //    "@10,15:MF204,HMULT2,VMULT3|      GAD|" +
-                        //    "@90,15:MF185,HMULT2,VMULT3|   Jhon Arian Disla| " +
-                        //    "@150,15:MF185,HMULT2,VMULT3|   Visita a: Manuel Perez  |" +
-                        //    "@250,150:UPC-A,WIDE 4, HIGH 8|00000000001|" +
-                        //    "@290,100:MF185,HMULT1,VMULT2|         00000000001|" +
-                        //    "@350,105:MF204,HMULT1,VMULT2|  07/29/20      1:30pm |";
                         var inserted = db.Insert(registroInvitados);
-                        var x = db.ExecuteScalar<Invitados>($"Select INVIDATO_ID from Invitados where Cargo = '{registroInvitados.Cargo}'");
+                        fireBird.UploadVisits();
+                        fireBird.DownloadGuests();
+                        var inserted__ = db.Query<Invitados>($"SELECT * FROM INVITADOS WHERE CARGO = '{registroInvitados.Cargo}' ORDER BY Fecha_Registro DESC").FirstOrDefault();
 
 
-                        text = "EZ" +
-                          "{AHEAD:10}" +
-                          "{PRINT, STOP 800:" +
-                          "@10,15:MF204,HMULT2,VMULT3|      GAD|" +
-                          $"@90,15:MF185,HMULT2,VMULT3|   {registroInvitados.Nombres + " " + registroInvitados.Apellidos}| " +
-                          $"@150,15:MF185,HMULT2,VMULT3|   Visita a: {(this.persona != null?this.persona.NOMBRES_APELLIDOS:"N/A")}  |" +
-                          "@250,150:BC128,WIDE 4, HIGH 8|00000000001|" +
-                          $"@290,100:MF185,HMULT1,VMULT2|         {registroInvitados.Cargo}|" +
-                          $"@350,105:MF204,HMULT1,VMULT2|  {registroInvitados.Fecha_Registro} |";
-                        await prints.PrintText($"{text}", "RP4-18145B4DE7"); 
+                        var st = "^XA" +
+                                       "^FX" +
+                                       "^CF0,55" +
+                                       $"^FO70,30^FDPUERTO SANSOUCI^FS" +
+                                       $"^CF0,45" +
+                                       $"^FO70,100^FD{registroInvitados.Nombres + " " + registroInvitados.Apellidos}^FS" +
+                                       "^FO70,170^FDGAD INTERMEC^FS" +
+                                       $"^FO70,230^FDPISO 10^FS" +
+                                       $"^FO70,290^FD{registroInvitados.Fecha_Registro}^FS" +
+                                       $"^FO70,360^FDFavor Devolver Ticket en la salida^FS^FS" +
+                                       "^FS" +
+                                        "^MMT" +
+                                        "^PW2400" +
+                                        "^LL1200" +
+                                        "^LS5" +
+                                        "^BY2,3,73" +
+                                        "^FO750,20" +
+                                        "^BCR,,Y,N" +
+                                        $"^FD{"ID" + inserted__.INVIDATO_ID}" +
+                                        "^FS" +
+                                        "^PQ1,0,1,Y" +
+                                        "^FO10,85^GB650,1,3^FS" +
+                                        "^FO10,150 ^ GB650,1,3 ^ FS" +
+                                        "^XZ"; ;
+
+                        await prints.PrintText($"{st}", "RP4-18145B4DE7"); 
                         //await prints.PrintText($"{text}", "MPA52186");
                         await Navigation.PopToRootAsync();
                         //btnImprimir.IsEnabled = false;
@@ -600,14 +567,6 @@ namespace SCVMobil
                     }
                 }
 
-                //var devices = prints.DevicesConnected();
-
-
-                // await prints.PrintText($"{text}", "RP4-18145B4DE7");
-
-                //btnImprimir.IsEnabled = false;
-
-                //await Navigation.PopToRootAsync();
                 this.persona = null;
 
             }

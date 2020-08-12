@@ -1912,8 +1912,6 @@ namespace SCVMobil.Connections
             }
         }
 
-   
-
         //// Extraer Departamento por ID
         public List<VisitasDepto> extraerDeparatamentoId(COMPANIAS cc) //Extraer personas con su departamento//
         {
