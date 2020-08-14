@@ -1107,7 +1107,7 @@ namespace SCVMobil.Connections
                               "100," +
                               "1," +
                               $"{(string.IsNullOrWhiteSpace(registro.Empresa_ID.ToString()) ? "null" : registro.Empresa_ID.ToString())}, " +
-                              $"{(string.IsNullOrWhiteSpace(registro.Placa.ToString()) ? "null" : registro.Placa.ToString())}," +
+                              $"'{(string.IsNullOrWhiteSpace(registro.Placa.ToString()) ? "null" : registro.Placa.ToString())}'," +
                               $"'{registro.Tipo_Visitante}'," +
                               "0," +
                               "0," +

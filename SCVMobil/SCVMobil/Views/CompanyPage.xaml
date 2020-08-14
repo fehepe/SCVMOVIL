@@ -138,7 +138,7 @@
                    FontSize="18"
                     FontAttributes="Bold"
                     x:Name="lblCodigoCarnet"
-                    Text="Codigo Carnet"
+                    Text="Codigo RNTT"
                     VerticalOptions="Center">
             </Label>
             <Frame 
@@ -187,6 +187,37 @@
                     </Entry>
                 </Frame>
             </Frame>
+
+            <Label
+                    x:Name="lbEstado"
+                    Grid.Row="7"
+                    Grid.Column="0" 
+                TextColor="#000000"
+                    FontSize="18"
+                    FontAttributes="Bold"
+                    Text="Estado de Carga"
+                    VerticalOptions="Center">
+            </Label>
+            <Frame 
+                CornerRadius="15" 
+                x:Name="FramaEstadoCarga"
+                BorderColor="#757575" 
+                Padding="5">
+                <Frame 
+                    CornerRadius="10" 
+                    x:Name="FrameEstadoCargaFrame"
+                    BackgroundColor="White" 
+                    Padding="1">
+                    <Picker
+                    x:Name="pK_EstadoDeCarga"
+                    Grid.Row="7"
+                    Grid.Column="1"
+                    Title="Seleccione..."
+                    SelectedIndexChanged="PickerEstadoCarga_SelectedIndexChanged">
+                    </Picker>
+                </Frame>
+            </Frame>
+            
             <Button  
                 Text="Imprimir"
                 BackgroundColor="#F44336" 

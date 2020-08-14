@@ -40,7 +40,12 @@ namespace SCVMobil
         COMPANIAS cc;
         DEPTO_LOCALIDAD depto_localidad;
         PERSONAS persona;
-
+        List<string> EstadoCarga = new List<string>()
+        {
+            "si",
+            "No",
+            "No Aplica"
+        };
 
         private readonly PRINT _blueToothService;
        // private readonly PRINT prints;
@@ -100,7 +105,8 @@ namespace SCVMobil
             stApellidos = apellidos;
             _blueToothService = DependencyService.Get<PRINT>();
             prints = DependencyService.Get<IPrint>();
-           
+            pK_EstadoDeCarga.ItemsSource = EstadoCarga;
+
             //BindDeviceList();
         }
 
@@ -372,7 +378,7 @@ namespace SCVMobil
                                        $"^FO70,30^FDPUERTO SANSOUCI^FS" +
                                        $"^CF0,45" +
                                        $"^FO70,100^FD{registroInvitados.Nombres + " " + registroInvitados.Apellidos}^FS" +
-                                       "^FO70,170^FDGAD INTERMEC^FS" +
+                                       $"^FO70,170^FDALMACEN^FS" +
                                        $"^FO70,230^FDPISO 10^FS" +
                                        $"^FO70,290^FD{registroInvitados.Fecha_Registro}^FS" +
                                        $"^FO70,360^FDFavor Devolver Ticket en la salida^FS^FS" +
@@ -449,7 +455,7 @@ namespace SCVMobil
                                        $"^FO70,30^FDPUERTO SANSOUCI^FS" +
                                        $"^CF0,45" +
                                        $"^FO70,100^FD{registroInvitados.Nombres + " " + registroInvitados.Apellidos}^FS" +
-                                       "^FO70,170^FDGAD INTERMEC^FS" +
+                                       "^FO70,170^FDALMACEN^FS" +
                                        $"^FO70,230^FDPISO 10^FS" +
                                        $"^FO70,290^FD{registroInvitados.Fecha_Registro}^FS" +
                                        $"^FO70,360^FDFavor Devolver Ticket en la salida^FS^FS" +
@@ -537,7 +543,7 @@ namespace SCVMobil
                                        $"^FO70,30^FDPUERTO SANSOUCI^FS" +
                                        $"^CF0,45" +
                                        $"^FO70,100^FD{registroInvitados.Nombres + " " + registroInvitados.Apellidos}^FS" +
-                                       "^FO70,170^FDGAD INTERMEC^FS" +
+                                       "^FO70,170^FDALMACEN^FS" +
                                        $"^FO70,230^FDPISO 10^FS" +
                                        $"^FO70,290^FD{registroInvitados.Fecha_Registro}^FS" +
                                        $"^FO70,360^FDFavor Devolver Ticket en la salida^FS^FS" +
@@ -637,6 +643,10 @@ namespace SCVMobil
         private void entCodigoCarnet_Completed(object sender, EventArgs e)
         {
             entPlaca.Focus();
+        }
+        private void PickerEstadoCarga_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
 
         //------------------------------------------------------------------------------------------------------------------------------

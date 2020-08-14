@@ -387,6 +387,26 @@ namespace SCVMobil
 
             try
             {
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                db.DeleteAll<COMPANIAS>();
+                db.DeleteAll<PERSONAS>();
+                db.DeleteAll<VW_RESERVA_VISITA>();
+                db.DeleteAll<Invitados>();
+                db.DeleteAll<InvitadosReservas>();
+                db.DeleteAll<SalidaOffline>();
+                db.DeleteAll<PLACA>();
+                db.DeleteAll<DEPTO_LOCALIDAD>();
+
+                Preferences.Set("MAX_RESERVA_ID", "0");
+                Preferences.Set("MAX_COMPANIA_ID", "0");
+                Preferences.Set("MAX_PERSONA_ID", "0");
+                Preferences.Set("MAX_INVIDATO_ID", "0");
+                Preferences.Set("PERSONAS_LIST", "");
+                Preferences.Set("COMPANIAS_LIST", "");
+                Preferences.Set("CHUNK_SIZE", "50000");
+                Preferences.Set("MAX_DEPTO_LOCALIDAD", "0");
+                Preferences.Set("DESTINO_SELECTED", 0);
+
                 Preferences.Set("SERVER_IP", eServerIP.Text);
 
                 Preferences.Set("COMMIT_SIZE", eCommitSize.Text);
