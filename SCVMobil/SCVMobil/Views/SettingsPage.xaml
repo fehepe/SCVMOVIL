@@ -4,42 +4,43 @@
              x:Class="SCVMobil.SettingsPage"
              Title="Configuración Avanzada">
     <ContentPage.Content>
-        <AbsoluteLayout 
+        <ScrollView>
+            <AbsoluteLayout 
             Padding="0" 
             HorizontalOptions="CenterAndExpand" 
             VerticalOptions="CenterAndExpand"
             BackgroundColor="White">
-            <ScrollView>
-                <StackLayout 
+                <ScrollView>
+                    <StackLayout 
                 Padding="20"
                 BackgroundColor="White">
-                    <Label                    
+                        <Label                    
                     Text="Servidor"
                     FontSize="30"
                     HorizontalOptions="Center"
                     FontAttributes="Bold"                    
                     TextColor="Black"></Label>
-                    <Grid
+                        <Grid
                         Margin="0,0,0,20">
-                        <Grid.RowDefinitions>
+                            <Grid.RowDefinitions>
 
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
                                 Width="*"></ColumnDefinition>
-                            <ColumnDefinition
+                                <ColumnDefinition
                                 Width="2*"></ColumnDefinition>
 
-                        </Grid.ColumnDefinitions>
+                            </Grid.ColumnDefinitions>
 
-                        <Label
+                            <Label
                             Grid.Row="0"
                             Grid.Column="0"
                             Text="IP: " 
                             FontSize="15" 
                             VerticalTextAlignment="Center"
                             TextColor="Black"/>
-                        <Entry 
+                            <Entry 
                             Grid.Row="0"
                             Grid.Column="1"
                             Text="255.255.255.255" 
@@ -49,27 +50,27 @@
                             MaxLength="15"                       
                             WidthRequest="190"
                             x:Name="eServerIP"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.RowDefinitions>
+                        </Grid>
+                        <Grid>
+                            <Grid.RowDefinitions>
 
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
                                     Width="*"></ColumnDefinition>
-                            <ColumnDefinition
+                                <ColumnDefinition
                                     Width="2*"></ColumnDefinition>
-                            <ColumnDefinition
+                                <ColumnDefinition
                                     Width=".7*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Label 
+                            </Grid.ColumnDefinitions>
+                            <Label 
                             Grid.Row="0"
                             Grid.Column="0"
                             VerticalTextAlignment="Center"
                             Text="Commit Size" 
                             FontSize="15" 
                             TextColor="Black"/>
-                        <Entry 
+                            <Entry 
                             Grid.Row="0"
                             Grid.Column="1"
                             HorizontalTextAlignment="Center"
@@ -80,14 +81,14 @@
                             Keyboard="Keyboard.Numeric"
                             x:Name="eCommitSize"
                             MaxLength="7"/>
-                        <Label 
+                            <Label 
                             Grid.Row="0"
                             Grid.Column="2"
                             VerticalTextAlignment="Center"
                             Text="Chunk Size" 
                             FontSize="15" 
                             TextColor="Black"/>
-                        <Entry 
+                            <Entry 
                             Grid.Row="0"
                             Grid.Column="3"
                             FontSize="15"
@@ -97,8 +98,8 @@
                             Keyboard="Keyboard.Numeric"
                             x:Name="entChunkSize"
                             />
-                    </Grid>
-                    <Button 
+                        </Grid>
+                        <Button 
                         Margin="90,0,90,0"
                         CornerRadius="30"
                         x:Name="pinbutton"
@@ -107,7 +108,7 @@
                         TextColor="White"    
                         FontAttributes="Bold"
                         Clicked="pinbutton_Clicked"/>
-                    <Label
+                        <Label
                         Margin="0,10,0,0"
                         Text="Lector"
                         FontSize="30"
@@ -116,25 +117,25 @@
                         TextColor="Black"></Label>
 
 
-                    <Grid
+                        <Grid
                         Margin="0,0,0,20">
-                        <Grid.RowDefinitions>
+                            <Grid.RowDefinitions>
 
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
                                     Width="*"></ColumnDefinition>
-                            <ColumnDefinition
+                                <ColumnDefinition
                                     Width="*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Label 
+                            </Grid.ColumnDefinitions>
+                            <Label 
                             Grid.Row="0"
                             Grid.Column="0"
                             Text="No." 
                             VerticalTextAlignment="Center"
                             FontSize="15" 
                             TextColor="Black"/>
-                        <Entry 
+                            <Entry 
                             Grid.Row="0"
                             Grid.Column="1"
                             Text="30" 
@@ -144,25 +145,25 @@
                             Keyboard="Keyboard.Numeric"
                             MaxLength="3"
                             x:Name="eLector"/>
-                    </Grid>
+                        </Grid>
 
-                    <StackLayout 
+                        <StackLayout 
                         VerticalOptions="StartAndExpand">
-                        <Grid 
+                            <Grid 
                         >
-                            <Grid.RowDefinitions>
-                                <RowDefinition 
+                                <Grid.RowDefinitions>
+                                    <RowDefinition 
                                 Height="*" />
-                                <RowDefinition 
+                                    <RowDefinition 
                                 Height="*" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition 
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition 
                                 Width="50" />
-                                <ColumnDefinition 
+                                    <ColumnDefinition 
                                 Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Label 
+                                </Grid.ColumnDefinitions>
+                                <Label 
                             Text="Auto Sync" 
                             TextColor="Black" 
                             Grid.Row="0" 
@@ -170,38 +171,38 @@
                             VerticalOptions="Center"
                             IsVisible="False"
                             FontSize="15"/>
-                            <Switch 
+                                <Switch 
                             x:Name="swAutoSync" 
                             HorizontalOptions="CenterAndExpand" 
                             Grid.Row="0" Grid.Column="1"
                             Scale=".8"                            
                             IsVisible="False">
 
-                            </Switch>
+                                </Switch>
 
-                        </Grid>
-                        <Label 
+                            </Grid>
+                            <Label 
                         Margin="0,0,0,0"
                         HorizontalOptions="Center"
                         x:Name="lbVersion"
                         TextColor="Black"                        
                         FontAttributes="Bold"
                         />
-                        
-                        <Label 
+
+                            <Label 
                         Margin="0,0,0,0"
                         HorizontalOptions="Center"
                         x:Name="lblCantidadPadron"
                         TextColor="Black"                        
                         FontAttributes="Bold"
                         />
-                    </StackLayout>
+                        </StackLayout>
 
-                    <StackLayout
+                        <StackLayout
                             HorizontalOptions="CenterAndExpand"                           
                             Orientation="Horizontal">
 
-                        <Button 
+                            <Button 
                                 BorderColor="Accent"
                                 CornerRadius="30"
                                 BackgroundColor="#F44336"
@@ -213,8 +214,8 @@
                                 x:Name="btSync"
                                 Clicked="BtSync_Clicked"
                                />
-                        
-                        <Button
+
+                            <Button
                                 CornerRadius="30"
                                 x:Name="Guardar"
                                 Text="Guardar"
@@ -223,8 +224,8 @@
                                 FontAttributes="Bold"
                                 WidthRequest="140"
                                 Clicked="Guardar_Clicked"/>
-                    </StackLayout>
-                    <Button 
+                        </StackLayout>
+                        <Button 
                         BorderColor="Accent"
                         Margin="75,25,75,0"
                         CornerRadius="27"
@@ -237,55 +238,57 @@
                         Clicked="btnPadron_Clicked"
                         IsVisible="True"/>
 
-                </StackLayout>
-            </ScrollView>
-            
-           
-            <!--Popup Area-->
-            <ContentView 
+                    </StackLayout>
+                </ScrollView>
+
+
+                <!--Popup Area-->
+                <ContentView 
                 x:Name="popupLoadingView" 
                 BackgroundColor="#C0808080" 
                 Padding="10, 0" IsVisible="False" 
                 AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
                 AbsoluteLayout.LayoutFlags="All">
-                <StackLayout 
+                    <StackLayout 
                     VerticalOptions="Center" 
                     HorizontalOptions="Center">
-                    <StackLayout 
+                        <StackLayout 
                         Orientation="Vertical" 
                         HeightRequest="150" 
                         WidthRequest="200" 
                         BackgroundColor="White" 
                         Padding="10">
-                       
-                        <Label 
+
+                            <Label 
                             TextColor="Black" 
                             Text="Cargando Padron" 
                             FontSize="20" 
                             HorizontalOptions="Center"/>
-                        <ActivityIndicator 
+                            <ActivityIndicator 
                             x:Name="aiLoading"  
                             Color="#0000FF" 
                             IsRunning="False" 
                             IsVisible="False" 
                             VerticalOptions="CenterAndExpand"/>
-                        <ProgressBar 
+                            <ProgressBar 
                             x:Name="pbLoading" 
                             IsVisible="True" 
                             ProgressColor="#0000FF" 
                             VerticalOptions="CenterAndExpand" 
                             Progress="0.0"/>
-                        <Label 
+                            <Label 
                             x:Name="lblLoadingText" 
                             TextColor="Black" 
                             HorizontalOptions="Center" 
                             VerticalTextAlignment="Center" 
                             Text="Loading..."/>
+                        </StackLayout>
                     </StackLayout>
-                </StackLayout>
-            </ContentView>
-            
-        </AbsoluteLayout>
+                </ContentView>
+
+            </AbsoluteLayout>
+        </ScrollView>
+      
         
     </ContentPage.Content>
 </ContentPage>

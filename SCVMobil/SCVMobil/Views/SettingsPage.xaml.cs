@@ -484,18 +484,18 @@ namespace SCVMobil
 
         }
 
-        private void btnPadron_Clicked(object sender, EventArgs e)
+        private async void btnPadron_Clicked(object sender, EventArgs e)
         {
-            ActualizarPadron();
+            await ActualizarPadron();
         }
 
-        private async void ActualizarPadron()
+        private async Task ActualizarPadron()
         {
             try
             {
                 Preferences.Set("BUSY", false);
                 
-                FireBirdData fireBirdData = new FireBirdData();
+                var fireBirdData = new FireBirdData();
                 var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                
                 string querry = "SELECT PV.documento AS CEDULA, PV.nombres, PV.apellidos,pv.padron_visitante_id " +
@@ -511,7 +511,7 @@ namespace SCVMobil
                     {
                         foreach (var padron in listPadronVisita)
                         {
-                            var persona = db.Query<PADRON>("SELECT * FROM PADRON WHERE CEDULA = '"+padron.CEDULA+"'");
+                            var persona = db.Query<PADRON>($"SELECT * FROM PADRON WHERE CEDULA = '{padron.CEDULA}'");
                             if (persona.Any())
                             {
                                 continue;

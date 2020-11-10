@@ -120,11 +120,7 @@ namespace SCVMobil.Connections
                         FbConnection fb = new FbConnection(connectionString(tipo));
 
                         fb.Open();
-                        FbCommand command = new FbCommand(
-                            querry,
-                            fb);
-
-
+                        FbCommand command = new FbCommand(querry,fb);
                         FbDataReader dtResult = command.ExecuteReader();
 
                         if (dtResult.HasRows)
