@@ -85,6 +85,167 @@ namespace SCVMobil
 
         private async void BtSync_Clicked(object sender, EventArgs e)
         {
+            await DownloadCards();
+            
+        }
+
+        private async void BtIni_Clicked(object sender, EventArgs e)
+        {
+            try
+            {
+                await Task.Factory.StartNew(() =>
+                {
+                    var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                    //db.Execute("DELETE FROM PADRON");
+                    db.Execute("DELETE FROM COMPANIAS");
+                    db.Execute("DELETE FROM PERSONAS");
+                    db.Execute("DELETE FROM SalidaOffline");
+                    db.Execute("DELETE FROM Invitados");
+                    db.Execute("DELETE FROM InvitadosReservas");
+                    db.Execute("DELETE FROM PLACA");
+                    Preferences.Set("MAX_INVIDATO_ID", "0");
+                    Preferences.Set("MAX_SALIDA_ID", "0");
+                    Preferences.Set("MAX_PERSONA_ID", "0");
+                    Preferences.Set("MAX_RESERVA_ID", "0");
+                    Preferences.Set("MAX_COMPANIA_ID", "0");
+                    Debug.WriteLine("DONE INI");
+                    var options = new NotificationOptions()
+                    {
+                        Title = "Inicialización completa!",
+                        Description = "La base de datos fue inicializada correctamente",
+                        IsClickable = false // Set to true if you want the result Clicked to come back (if the user clicks it)
+                    };
+                    var notification = DependencyService.Get<IToastNotificator>();
+                    var result = notification.Notify(options);
+                    db.Close();
+                    db.Dispose();
+                });
+            }
+            catch(Exception ea)
+            {
+                Debug.WriteLine("Excepcion encontrada en el evento BtIni_Clicked: " + ea.Message);
+                Analytics.TrackEvent("Error al inicializar  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+            }
+        }     
+
+        private async void Guardar_Clicked(object sender, EventArgs e) //Boton para guardar configuracion//
+        {
+
+            try
+            {
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                db.DeleteAll<COMPANIAS>();
+                db.DeleteAll<PERSONAS>();
+                db.DeleteAll<VW_RESERVA_VISITA>();
+                db.DeleteAll<Invitados>();
+                db.DeleteAll<InvitadosReservas>();
+                db.DeleteAll<SalidaOffline>();
+                db.DeleteAll<PLACA>();
+                db.DeleteAll<DEPTO_LOCALIDAD>();
+
+                Preferences.Set("MAX_RESERVA_ID", "0");
+                Preferences.Set("MAX_COMPANIA_ID", "0");
+                Preferences.Set("MAX_PERSONA_ID", "0");
+                Preferences.Set("MAX_INVIDATO_ID", "0");
+                Preferences.Set("PERSONAS_LIST", "");
+                Preferences.Set("COMPANIAS_LIST", "");
+                Preferences.Set("CHUNK_SIZE", "50000");
+                Preferences.Set("MAX_DEPTO_LOCALIDAD", "0");
+                Preferences.Set("DESTINO_SELECTED", 0);
+
+                Preferences.Set("SERVER_IP", eServerIP.Text);
+
+                Preferences.Set("COMMIT_SIZE", eCommitSize.Text);
+                var x = Preferences.Get("COMMIT_SIZE", "1000000");
+                Preferences.Set("AUTO_SYNC", swAutoSync.ToString());
+                Preferences.Set("LECTOR", eLector.Text);
+                Preferences.Set("CHUNK_SIZE", entChunkSize.Text);
+                if (eLector.Text == "338")
+                {
+                    Preferences.Set("DEV", "True");
+                }
+                else
+                {
+                    Preferences.Set("DEV", "False");
+                }
+                await DisplayAlert("", "Datos guardados exitosamente", "continuar");
+                await Navigation.PopToRootAsync();
+                //await PopupNavigation.PushAsync(new PopUpGuardarConfig()); //PopUp para guardar la configuracion//
+            }
+            catch (Exception ea)
+            {
+                Debug.WriteLine("Error en el metodo guardar: " + ea.Message);
+               
+                Analytics.TrackEvent("Error al guardar configuracion:  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+            }            
+
+        }
+        
+
+        private async void pinbutton_Clicked(object sender, EventArgs e)
+        {
+            await PingCommand();
+        }
+
+        private async void btnPadron_Clicked(object sender, EventArgs e)
+        {
+            await ActualizarPadron();
+        }
+
+        private async Task ActualizarPadron()
+        {
+
+            try
+            {
+                Preferences.Set("BUSY", false);
+
+                var fireBirdData = new FireBirdData();
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+
+                string querry = "SELECT PV.documento AS CEDULA, PV.nombres, PV.apellidos,pv.padron_visitante_id " +
+                                "FROM padron_visitantes PV " +
+                                "WHERE CHAR_LENGTH(PV.documento) = 11 AND pv.padron_visitante_id > " + Preferences.Get("MAX_PERSONA_PADRON_ID", "0") +
+                                " ORDER BY pv.padron_visitante_id desc ";
+
+
+                var listPadronVisita = fireBirdData.DownloadPadron(querry, true);
+                if (listPadronVisita.Any())
+                {
+                    if (listPadronVisita.Count > 0)
+                    {
+                        foreach (var padron in listPadronVisita)
+                        {
+                            var persona = db.Query<PADRON>($"SELECT * FROM PADRON WHERE CEDULA = '{padron.CEDULA}'");
+                            if (persona.Any())
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                db.Insert(padron);
+                            }
+                        }
+                        //db.InsertAll(listPadronVisita);
+                        Preferences.Set("MAX_PERSONA_PADRON_ID", listPadronVisita.First().ID_PADRON.ToString());
+                    }
+                }
+                OnAppearing();
+
+            }
+            catch (Exception ea)
+            {
+                await DisplayAlert("Error", ea.Message, "OK");
+                Debug.WriteLine("Error en el metodo ActualizarPadron " + ea.Message);
+                Analytics.TrackEvent("Exception al hacer ActualizarPadron:  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+            }
+            finally
+            {
+                Preferences.Set("BUSY", true);
+            }
+        }
+    
+        private async Task DownloadCards()
+        {
             string Password = "cr52401";
             string TryPassword = await DisplayPromptAsync("verificacion", "Ingrese la contraseña maestra para continuar", "Aceptar", "Cancelar", "Contraseña", 11, null);
             if (Password == TryPassword)
@@ -93,7 +254,7 @@ namespace SCVMobil
                 Debug.WriteLine("Timer Stopped");
                 App.syncTimer.Stop();
                 App.syncTimer.Enabled = false;
-                        var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
                 Preferences.Set("IS_SYNC", "true");
                 if (Connectivity.NetworkAccess == NetworkAccess.Internet)
                 {
@@ -142,9 +303,7 @@ namespace SCVMobil
                                 FbConnection fb = new FbConnection(connectionString);
 
                                 fb.Open();
-                                FbCommand command = new FbCommand(
-                                    querry,
-                                    fb);
+                                FbCommand command = new FbCommand(querry, fb);
 
 
                                 FbDataReader reader = command.ExecuteReader();
@@ -211,7 +370,7 @@ namespace SCVMobil
 
                                 await Task.Factory.StartNew(() =>
                                 {
-                                    listPadron.AddRange(fireBird.DownloadPadron(querry1,false));
+                                    listPadron.AddRange(fireBird.DownloadPadron(querry1, false));
 
                                     //var listPadronTemp = JsonConvert.DeserializeObject<List<PADRON>>(contenidoTBL);
                                     //listPadron = listPadron.Concat(listPadronTemp).ToList();
@@ -224,11 +383,11 @@ namespace SCVMobil
                                                 lblLoadingText.Text = "Commited " + commitedRegistros.ToString() + "/" + maxRegistro.ToString() + " CEDULAS";
                                             });
                                             Debug.WriteLine("Se van a insertar: " + listPadron.Count.ToString() + " En la BBDD Local");
-                                        //await Task.Factory.StartNew(() =>
-                                        //{
-                                        db.InsertAll(listPadron);
-                                        //});
-                                        commitedRegistros = commitedRegistros + listPadron.Count;
+                                            //await Task.Factory.StartNew(() =>
+                                            //{
+                                            db.InsertAll(listPadron);
+                                            //});
+                                            commitedRegistros = commitedRegistros + listPadron.Count;
                                             //Preferences.Set("TOTAL_CEDULAS_DESCARGADAS", commitedRegistros.ToString());
                                             Device.BeginInvokeOnMainThread(() =>
                                             {
@@ -342,101 +501,8 @@ namespace SCVMobil
             }
 
         }
-
-        private async void BtIni_Clicked(object sender, EventArgs e)
-        {
-            try
-            {
-                await Task.Factory.StartNew(() =>
-                {
-                    var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-                    //db.Execute("DELETE FROM PADRON");
-                    db.Execute("DELETE FROM COMPANIAS");
-                    db.Execute("DELETE FROM PERSONAS");
-                    db.Execute("DELETE FROM SalidaOffline");
-                    db.Execute("DELETE FROM Invitados");
-                    db.Execute("DELETE FROM InvitadosReservas");
-                    db.Execute("DELETE FROM PLACA");
-                    Preferences.Set("MAX_INVIDATO_ID", "0");
-                    Preferences.Set("MAX_SALIDA_ID", "0");
-                    Preferences.Set("MAX_PERSONA_ID", "0");
-                    Preferences.Set("MAX_RESERVA_ID", "0");
-                    Preferences.Set("MAX_COMPANIA_ID", "0");
-                    Debug.WriteLine("DONE INI");
-                    var options = new NotificationOptions()
-                    {
-                        Title = "Inicialización completa!",
-                        Description = "La base de datos fue inicializada correctamente",
-                        IsClickable = false // Set to true if you want the result Clicked to come back (if the user clicks it)
-                    };
-                    var notification = DependencyService.Get<IToastNotificator>();
-                    var result = notification.Notify(options);
-                    db.Close();
-                    db.Dispose();
-                });
-            }
-            catch(Exception ea)
-            {
-                Debug.WriteLine("Excepcion encontrada en el evento BtIni_Clicked: " + ea.Message);
-                Analytics.TrackEvent("Error al inicializar  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
-            }
-        }     
-
-        private async void Guardar_Clicked(object sender, EventArgs e) //Boton para guardar configuracion//
-        {
-
-            try
-            {
-                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-                db.DeleteAll<COMPANIAS>();
-                db.DeleteAll<PERSONAS>();
-                db.DeleteAll<VW_RESERVA_VISITA>();
-                db.DeleteAll<Invitados>();
-                db.DeleteAll<InvitadosReservas>();
-                db.DeleteAll<SalidaOffline>();
-                db.DeleteAll<PLACA>();
-                db.DeleteAll<DEPTO_LOCALIDAD>();
-
-                Preferences.Set("MAX_RESERVA_ID", "0");
-                Preferences.Set("MAX_COMPANIA_ID", "0");
-                Preferences.Set("MAX_PERSONA_ID", "0");
-                Preferences.Set("MAX_INVIDATO_ID", "0");
-                Preferences.Set("PERSONAS_LIST", "");
-                Preferences.Set("COMPANIAS_LIST", "");
-                Preferences.Set("CHUNK_SIZE", "50000");
-                Preferences.Set("MAX_DEPTO_LOCALIDAD", "0");
-                Preferences.Set("DESTINO_SELECTED", 0);
-
-                Preferences.Set("SERVER_IP", eServerIP.Text);
-
-                Preferences.Set("COMMIT_SIZE", eCommitSize.Text);
-                var x = Preferences.Get("COMMIT_SIZE", "1000000");
-                Preferences.Set("AUTO_SYNC", swAutoSync.ToString());
-                Preferences.Set("LECTOR", eLector.Text);
-                Preferences.Set("CHUNK_SIZE", entChunkSize.Text);
-                if (eLector.Text == "338")
-                {
-                    Preferences.Set("DEV", "True");
-                }
-                else
-                {
-                    Preferences.Set("DEV", "False");
-                }
-                await DisplayAlert("", "Datos guardados exitosamente", "continuar");
-                await Navigation.PopToRootAsync();
-                //await PopupNavigation.PushAsync(new PopUpGuardarConfig()); //PopUp para guardar la configuracion//
-            }
-            catch (Exception ea)
-            {
-                Debug.WriteLine("Error en el metodo guardar: " + ea.Message);
-               
-                Analytics.TrackEvent("Error al guardar configuracion:  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
-            }            
-
-        }
-        
-
-        private async void pinbutton_Clicked(object sender, EventArgs e)
+    
+        private async Task PingCommand()
         {
             try
             {
@@ -456,9 +522,9 @@ namespace SCVMobil
                         fb.Close();
                         Preferences.Set("SERVER_IP", eServerIP.Text);
 
-                        await DisplayAlert("Conectado","Se ha conectado","ok");
+                        await DisplayAlert("Conectado", "Se ha conectado", "ok");
                         //await PopupNavigation.PushAsync(new PopUpPing()); //popup conexion con exito//
-                        Debug.WriteLine("Ping exitoso a la ip: "+ eServerIP.Text);
+                        Debug.WriteLine("Ping exitoso a la ip: " + eServerIP.Text);
                     }
                     catch (Exception ea)
                     {
@@ -469,8 +535,8 @@ namespace SCVMobil
                 }
                 else
                 {
-                    Preferences.Set("SYNC_VSU",false);
-                   
+                    Preferences.Set("SYNC_VSU", false);
+
                     await DisplayAlert("Error", "No se pudo establecer conexion", "ok");
                     //await PopupNavigation.PushAsync(new PopUpPingIncorrecto());//popup conexion erronea//
                 }
@@ -481,63 +547,8 @@ namespace SCVMobil
                 Debug.WriteLine("Error en el metodo pingbtn " + ea.Message);
                 Analytics.TrackEvent("Exception al hacer ping:  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
-
-        }
-
-        private async void btnPadron_Clicked(object sender, EventArgs e)
-        {
-            await ActualizarPadron();
-        }
-
-        private async Task ActualizarPadron()
-        {
-            try
-            {
-                Preferences.Set("BUSY", false);
-                
-                var fireBirdData = new FireBirdData();
-                var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
-               
-                string querry = "SELECT PV.documento AS CEDULA, PV.nombres, PV.apellidos,pv.padron_visitante_id " +
-                                "FROM padron_visitantes PV " +
-                                "WHERE CHAR_LENGTH(PV.documento) = 11 AND pv.padron_visitante_id > " + Preferences.Get("MAX_PERSONA_PADRON_ID", "0") +
-                                " ORDER BY pv.padron_visitante_id desc ";
-               
-               
-                var listPadronVisita = fireBirdData.DownloadPadron(querry, true);
-                if (listPadronVisita.Any())
-                {
-                    if (listPadronVisita.Count > 0)
-                    {
-                        foreach (var padron in listPadronVisita)
-                        {
-                            var persona = db.Query<PADRON>($"SELECT * FROM PADRON WHERE CEDULA = '{padron.CEDULA}'");
-                            if (persona.Any())
-                            {
-                                continue;
-                            }
-                            else
-                            {
-                                db.Insert(padron);
-                            }
-                        }
-                        //db.InsertAll(listPadronVisita);
-                        Preferences.Set("MAX_PERSONA_PADRON_ID", listPadronVisita.First().ID_PADRON.ToString());
-                    }
-                }
-                OnAppearing();
-
-            }
-            catch (Exception ea)
-            {
-                await DisplayAlert("Error",ea.Message,"OK");
-                Debug.WriteLine("Error en el metodo ActualizarPadron " + ea.Message);
-                Analytics.TrackEvent("Exception al hacer ActualizarPadron:  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
-            }
-            finally
-            {
-                Preferences.Set("BUSY", true);
-            }
         }
     }
+
+
 }

@@ -62,20 +62,33 @@ namespace SCVMobil
             
             try
             {
-                
+                //var connToDb = new FireBirdData();
+                //var queryTo = "SELECT first 1 NOMBRES FROM PADRON_VISITANTES ";
+                //var result = connToDb.ExecuteScalar(queryTo);
 
-                if (Preferences.Get("SYNC_VSU", false))
-                {                  
+                if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+                {
                     imgNoSync.IsVisible = false;
                     imgSync.IsVisible = true;
-                      
                 }
                 else
                 {
                     imgNoSync.IsVisible = true;
                     imgSync.IsVisible = false;
-
                 }
+
+                //if (Preferences.Get("SYNC_VSU", false))
+                //{                  
+                //    imgNoSync.IsVisible = false;
+                //    imgSync.IsVisible = true;
+                      
+                //}
+                //else
+                //{
+                //    imgNoSync.IsVisible = true;
+                //    imgSync.IsVisible = false;
+
+                //}
             }
             catch (Exception e)
             {
