@@ -17,11 +17,12 @@ namespace SCVMobil.Views
             InitializeComponent();
         }
 
-        private void Savebtn_Clicked(object sender, EventArgs e)
+        private async void Savebtn_Clicked(object sender, EventArgs e)
         {
             Preferences.Set("texto1", fisrttext.Text);
             Preferences.Set("texto2", secontext.Text);
             Preferences.Set("texto3", thirdtext.Text);
+            await Navigation.PopAsync();
         }
     }
 }
