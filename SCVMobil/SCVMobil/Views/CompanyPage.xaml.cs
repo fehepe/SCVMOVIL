@@ -98,6 +98,9 @@ namespace SCVMobil
         public CompanyPage(String cedula, String nombre, String apellidos)//Constructor
         {
             InitializeComponent();
+            lbl1.Text = Preferences.Get("texto1", "");
+            lbl2.Text = Preferences.Get("texto2", "");
+            lbl3.Text = Preferences.Get("texto3", "");
             entCedula.Text = cedula;
             entNombre.Text = nombre + " " + apellidos;
             scan = new Escaner(entryScan);
@@ -721,6 +724,46 @@ namespace SCVMobil
             {
                 Debug.WriteLine("Excepcion en el metodo AsignarDepartamentos: "+ex.Message);
             } 
+        }
+
+        private void Campos_Clicked(object sender, EventArgs e)
+        {
+            if (fcombo1.IsVisible == true && fcombo2.IsVisible == true && fcombo3.IsVisible == true)
+            {
+                Campos.Text = "Activar";
+                lbl1.IsVisible = false;
+                lbl2.IsVisible = false;
+                lbl3.IsVisible = false;
+                fcombo1.IsVisible = false;
+                fcombo2.IsVisible = false;
+                fcombo3.IsVisible = false;
+            }
+            else
+            {
+                Campos.Text = "Desactivar";
+                lbl1.IsVisible = true;
+                lbl2.IsVisible = true;
+                lbl3.IsVisible = true;
+                fcombo1.IsVisible = true;
+                fcombo2.IsVisible = true;
+                fcombo3.IsVisible = true;
+            }
+           
+        }
+       
+        private void combo3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void combo2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void combo1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
 
         private void AsignarDestinos(List<PERSONAS>lista)

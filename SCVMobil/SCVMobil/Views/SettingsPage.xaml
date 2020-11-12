@@ -238,6 +238,15 @@
                         Clicked="btnPadron_Clicked"
                         IsVisible="True"/>
 
+                        <Button Text="Editar campos" 
+                                x:Name="Editcam" 
+                                Clicked="Editcam_Clicked"  
+                                BorderColor="Accent" 
+                                TextColor="#ffffff"
+                                FontAttributes="Bold"  
+                                BackgroundColor="#F44336"
+                                CornerRadius="27"/>
+
                     </StackLayout>
                 </ScrollView>
 

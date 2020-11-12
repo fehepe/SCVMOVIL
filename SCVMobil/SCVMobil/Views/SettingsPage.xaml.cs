@@ -21,6 +21,7 @@ using System.Net.NetworkInformation;
 using SCVMobil.Models;
 using SCVMobil.Connections;
 using Microsoft.AppCenter.Analytics;
+using SCVMobil.Views;
 
 namespace SCVMobil
 {
@@ -547,6 +548,11 @@ namespace SCVMobil
                 Debug.WriteLine("Error en el metodo pingbtn " + ea.Message);
                 Analytics.TrackEvent("Exception al hacer ping:  " + ea.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
             }
+        }
+
+        private async void Editcam_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new EditTextViews());
         }
     }
 

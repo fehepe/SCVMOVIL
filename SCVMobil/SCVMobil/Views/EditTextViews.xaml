@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="SCVMobil.Views.EditTextViews">
+    <ContentPage.Content>
+        <StackLayout Padding="15">
+            <Label Text="Combo 1"
+                VerticalOptions="StartAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+            <Entry x:Name="fisrttext" Placeholder="Escribe algo"/>
+
+            <Label Text="Combo 2"
+                VerticalOptions="StartAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+            <Entry x:Name="secontext" Placeholder="Escribe algo"/>
+
+            <Label Text="Combo 3"
+                VerticalOptions="StartAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+            <Entry x:Name="thirdtext" Placeholder="Escribe algo"/>
+            <Button Text="Guardar" x:Name="Savebtn" Clicked="Savebtn_Clicked"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

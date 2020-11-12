@@ -8,14 +8,14 @@
              x:Class="SCVMobil.CompanyPage"
               BackgroundColor="#FFFFFF">
 
-    <!--<ContentPage.ToolbarItems>
+    <ContentPage.ToolbarItems>
         <ToolbarItem 
-            x:Name="grupo"
-            Text="Es un Grupo" 
-            Order="Primary" 
-            Clicked="Grupo_Clicked">
+            x:Name="Campos"
+            Text="Activar" 
+            Order="Primary"
+            Clicked="Campos_Clicked">
         </ToolbarItem>
-    </ContentPage.ToolbarItems>-->
+    </ContentPage.ToolbarItems>
     
     <ScrollView>
         <StackLayout Padding="20"
@@ -217,7 +217,121 @@
                     </Picker>
                 </Frame>
             </Frame>
+            <Label x:Name="lbl1"    Grid.Row="8"
+                    Grid.Column="0" 
+                TextColor="#000000"
+                    FontSize="18"
+                    FontAttributes="Bold"/>
+            <Frame CornerRadius="15" 
+                x:Name="fcombo1"
+                BorderColor="#757575" 
+                IsVisible="false"
+                Padding="5">
+                <Frame CornerRadius="10"                 
+                    BackgroundColor="White" 
+                    Padding="1">
+                    <Entry x:Name="combo1" Grid.Row="8" />                    
+                </Frame>
+            </Frame>
+
+            <Label x:Name="lbl2"    Grid.Row="9"
+                    Grid.Column="0" 
+                TextColor="#000000"
+                    FontSize="18"
+                    FontAttributes="Bold"/>
+           
+            <Frame CornerRadius="15" 
+                x:Name="fcombo2"
+                BorderColor="#757575" 
+                IsVisible="false"
+                Padding="5">
+                <Frame CornerRadius="10"                   
+                    BackgroundColor="White" 
+                    Padding="1">
+                   <Entry x:Name="combo2" Grid.Row="9"/>                    
+                </Frame>
+            </Frame>
             
+            <Label x:Name="lbl3"    Grid.Row="10"
+                    Grid.Column="0" 
+                TextColor="#000000"
+                    FontSize="18"
+                    FontAttributes="Bold"/>
+            
+            <Frame CornerRadius="15" 
+                x:Name="fcombo3"
+                BorderColor="#757575" 
+                IsVisible="false"
+                Padding="5">
+                <Frame CornerRadius="10"                   
+                    BackgroundColor="White" 
+                    Padding="1">
+                    <Entry x:Name="combo3" Grid.Row="10"/>
+                </Frame>               
+            </Frame>
+            <!--<Frame 
+                CornerRadius="15" 
+                x:Name="fcombo1"
+                BorderColor="#757575" 
+                IsVisible="false"
+                Padding="5">
+                <Frame 
+                    CornerRadius="10" 
+                  
+                    BackgroundColor="White" 
+                    Padding="1">
+                    <Picker
+                    x:Name="combo1"
+                    Grid.Row="8"
+                    Grid.Column="1"
+                    Title="Seleccione..."
+                    SelectedIndexChanged="combo1_SelectedIndexChanged">
+                    </Picker>
+                </Frame>
+            </Frame>
+
+            <Frame 
+                CornerRadius="15" 
+                x:Name="fcombo2"
+                IsVisible="false"
+                BorderColor="#757575" 
+                Padding="5">
+                <Frame 
+                    CornerRadius="10" 
+            
+                    BackgroundColor="White" 
+                    Padding="1">
+                    <Picker
+                    x:Name="combo2"
+                    Grid.Row="9"
+                    Grid.Column="1"
+                    Title="Seleccione..."
+                    SelectedIndexChanged="combo2_SelectedIndexChanged">
+                    </Picker>
+                </Frame>
+            </Frame>
+            
+            <Frame 
+                CornerRadius="15" 
+                x:Name="fcombo3"
+                IsVisible="false"
+                BorderColor="#757575" 
+                Padding="5">
+                <Frame 
+                    CornerRadius="10" 
+                    
+                    BackgroundColor="White" 
+                    Padding="1">
+                    <Picker
+                    x:Name="combo3"
+                    Grid.Row="10"
+                    Grid.Column="1"
+                    Title="Seleccione..."
+                    SelectedIndexChanged="combo3_SelectedIndexChanged">
+                    </Picker>
+                </Frame>
+            </Frame>-->
+
             <Button  
                 Text="Imprimir"
                 BackgroundColor="#F44336" 
