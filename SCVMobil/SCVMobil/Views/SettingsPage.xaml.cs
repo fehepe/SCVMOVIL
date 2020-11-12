@@ -55,7 +55,7 @@ namespace SCVMobil
             lbVersion.Text = "Ver: " + Preferences.Get("VERSION", "3.0");
             var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
-            string totalCed = db.ExecuteScalar<string>("select count(*) from padron");
+            string totalCed = db.ExecuteScalar<string>("select count(CEDULA) from padron");
             db.Dispose();
             lblCantidadPadron.Text = $"Cantidad de cedulas guardadas: "+ totalCed;
             swAutoSync.IsToggled = Preferences.Get("AUTO_SYNC", "False") == "True";

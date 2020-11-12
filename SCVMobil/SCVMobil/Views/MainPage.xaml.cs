@@ -14,6 +14,7 @@ using SCVMobil.Models;
 using Rg.Plugins.Popup.Services;
 using SCVMobil.Connections;
 using SCVMobil.Views;
+using System.Threading.Tasks;
 
 namespace SCVMobil
 {
@@ -57,14 +58,11 @@ namespace SCVMobil
 
         //Refrescar la pagina
         //---------------------------------------------------------------------------------------
-        public void refreshPage()
+        public async Task refreshPage()
         {
             
             try
-            {
-                //var connToDb = new FireBirdData();
-                //var queryTo = "SELECT first 1 NOMBRES FROM PADRON_VISITANTES ";
-                //var result = connToDb.ExecuteScalar(queryTo);
+            {                
 
                 if (Connectivity.NetworkAccess == NetworkAccess.Internet)
                 {
