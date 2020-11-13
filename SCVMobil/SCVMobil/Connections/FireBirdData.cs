@@ -916,6 +916,8 @@ namespace SCVMobil.Connections
         //// 
         public List<DEPTO_LOCALIDAD> executeDepto_Localidad(string query)
         {
+            //query = "select l.id_depto_localidad, l.id_departamento, d.nombre, l.id_localidad, p.nombre from companias p"
+            //        + " inner join DEPTO_LOCALIDAD l on(p.compania_id = l.id_localidad) inner join companias d on (l.id_departamento = d.compania_id)";
             try
             {
                 List<DEPTO_LOCALIDAD> lista = new List<DEPTO_LOCALIDAD>();
@@ -923,9 +925,7 @@ namespace SCVMobil.Connections
                 FbConnection fb = new FbConnection(connectionString(true));
 
                 fb.Open();
-                FbCommand command = new FbCommand(
-                    query,
-                    fb);
+                FbCommand command = new FbCommand(query,fb);
 
                 var dtResult = command.ExecuteReader();
 
@@ -1695,7 +1695,7 @@ namespace SCVMobil.Connections
         }
 
         //// Cargar Personas(Destinos)
-        public void DownloadPeople_Destination()
+        public async Task DownloadPeople_Destination()
         {
             SQLiteConnection db = null;
             try

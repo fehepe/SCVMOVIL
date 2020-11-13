@@ -602,7 +602,7 @@ namespace SCVMobil
                 var selected = pickerDestino.SelectedItem as DEPTO_LOCALIDAD;
                 this.depto_localidad = selected;
                 Preferences.Set("DESTINO_SELECTED", selected.ID_DEPARTAMENTO);
-                //pickerVisitaA.ItemsSource = Preferences.Get("PERSONAS_LIST", "").Split(',').ToList<string>();
+                //pickerVisitaA.ItemsSource = Preferences.Get("PERSONAS_LIST", "").Split(',').ToList<string>();//
                 var Request = db.Query<PERSONAS>($"SELECT * FROM PERSONAS WHERE DEPARTAMENTO_ID = {selected.ID_DEPARTAMENTO}");
 
                 if (!Request.Any())

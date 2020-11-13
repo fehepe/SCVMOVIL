@@ -21,7 +21,14 @@
                 VerticalOptions="StartAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
             <Entry x:Name="thirdtext" Placeholder="Escribe algo"/>
-            <Button Text="Guardar" x:Name="Savebtn" Clicked="Savebtn_Clicked"/>
+            <Button Text="Guardar" 
+                    x:Name="Savebtn"
+                    Clicked="Savebtn_Clicked"  
+                    BorderColor="Accent" 
+                    TextColor="#ffffff"
+                    FontAttributes="Bold"  
+                    BackgroundColor="#F44336"
+                    CornerRadius="20"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
