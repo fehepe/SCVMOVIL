@@ -301,6 +301,7 @@ namespace SCVMobil.Connections
                         }
                         if (dtResult[6] != System.DBNull.Value)
                         {
+                            //invitado.Fecha_Registro = Convert.ToDateTime(dtResult[6]);
                             invitado.Fecha_Registro = Convert.ToDateTime(dtResult[6]);
                         }
                         if (dtResult[7] != System.DBNull.Value)
@@ -562,6 +563,7 @@ namespace SCVMobil.Connections
                         if (dtResult[6] != System.DBNull.Value)
                         {
                             invitado.Fecha_Registro = Convert.ToDateTime(dtResult[6]);
+                            //invitado.Fecha_Registro = Convert.ToDateTime(dtResult[6]);
                         }
                         if (dtResult[7] != System.DBNull.Value)
                         {
@@ -916,8 +918,8 @@ namespace SCVMobil.Connections
         //// 
         public List<DEPTO_LOCALIDAD> executeDepto_Localidad(string query)
         {
-            //query = "select l.id_depto_localidad, l.id_departamento, d.nombre, l.id_localidad, p.nombre from companias p"
-            //        + " inner join DEPTO_LOCALIDAD l on(p.compania_id = l.id_localidad) inner join companias d on (l.id_departamento = d.compania_id)";
+            query = "select l.id_depto_localidad, l.id_departamento, d.nombre, l.id_localidad, p.nombre from companias p"
+                   + " inner join DEPTO_LOCALIDAD l on(p.compania_id = l.id_localidad) inner join companias d on (l.id_departamento = d.compania_id)";
             try
             {
                 List<DEPTO_LOCALIDAD> lista = new List<DEPTO_LOCALIDAD>();
@@ -971,7 +973,7 @@ namespace SCVMobil.Connections
             }
             catch (Exception ea)
             {
-                Debug.WriteLine("Error en el metodo ExecuteDEPTO_LOCALIDAD, provocado por: " + ea.Message);
+                Debug.WriteLine("Error en el metodo Execute DEPTO_LOCALIDAD, provocado por: " + ea.Message);
                 Preferences.Set("SYNC_VSU", false);
                 return null;
             }
@@ -1091,13 +1093,16 @@ namespace SCVMobil.Connections
                 {
                     foreach (Invitados registro in visitasASubir)
                     {
+                        DateTime time = DateTime.Now;
+                        string now = registro.Fecha_Registro.ToString("MM/dd/yyyy HH:mm:ss");
 
                         #region Query Invitado
                         string queryInv = "SELECT IN_INVIDATO_ID as anyCount FROM INSERTAR_VISITAS(" +
                               $"{registro.Compania_ID.ToString()}, " +
-                              $"'{registro.Nombres}', " +
-                              $"'{ registro.Apellidos}', " +
-                              $"'{registro.Fecha_Registro.ToString()}', " +
+                              $"'{registro.Nombres}'," +
+                              $"'{registro.Apellidos}'," +
+                              //$"'{registro.Fecha_Registro.ToString("MM/dd/yyyy HH:mm:ss")}'," +
+                              $"'{now}'," +
                               $"'{registro.Cargo}'," +
                               "0," +
                               "100," +
@@ -1125,8 +1130,9 @@ namespace SCVMobil.Connections
                               "0," +
                               $" {(string.IsNullOrWhiteSpace(registro.Visitado.ToString()) ? "null" : registro.Visitado.ToString())}" +
                               $", {registro.Lector.ToString()}" +
-                              $", {(string.IsNullOrWhiteSpace(registro.Fecha_Salida.ToString()) ? "null" : registro.Fecha_Salida.ToString())}, " +
-                              $" '{(string.IsNullOrWhiteSpace(registro.Codigo_carnet.ToString()) ? "null" : registro.Codigo_carnet.ToString())}')";
+                              $", {(string.IsNullOrWhiteSpace(registro.Fecha_Salida.ToString()) ? "null" : registro.Fecha_Salida.ToString())})";
+                              //+
+                              //$" '{(string.IsNullOrWhiteSpace(registro.Codigo_carnet.ToString()) ? "null" : registro.Codigo_carnet.ToString())}')"; //LINE COMMENTED BY ME//
                         #endregion
 
                         var dtResult = ExecuteScalar(queryInv);
@@ -1596,7 +1602,7 @@ namespace SCVMobil.Connections
                                             { "Code", "App.xaml.cs Line: 516" },
                                             { "Lector", Preferences.Get("LECTOR", "N/A")}
                                         };
-                        Debug.WriteLine("Excepcion insertando DEPTO_LOCALIDAD: " + ex.ToString());
+                        Debug.WriteLine("Excepcion insertando DEPTO_LOCALIDAD: " + ex.Message);
                         Crashes.TrackError(ex, properties);
                     }
 
@@ -1906,6 +1912,7 @@ namespace SCVMobil.Connections
                 Debug.WriteLine("Error en la fecha de base de datos " + e.Message);
                 return null;
             }
+
         }
 
         //// Extraer Departamento por ID

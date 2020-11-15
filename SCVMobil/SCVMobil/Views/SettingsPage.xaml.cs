@@ -76,7 +76,7 @@ namespace SCVMobil
         {
             if(Preferences.Get("SERVER_IP", "N/A") == "N/A")
             {
-                Preferences.Set("SERVER_IP", "192.168.1.103");//
+                Preferences.Set("SERVER_IP", "10.0.0.244");//
             }
         }
 

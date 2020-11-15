@@ -7,7 +7,8 @@ namespace SCVMobil.Models
 {
     public class DEPTO_LOCALIDAD
     {
-        [PrimaryKey]
+        [PrimaryKey, AutoIncrement]
+        public int IDKey { get; set; }
         public int ID_DEPTO_LOCALIDAD { get; set; }
         public int ID_DEPARTAMENTO { get; set; }
         public string DEPTO_NOMBRE { get; set; }

@@ -334,6 +334,10 @@ namespace SCVMobil
                                 {
                                     visitaA = null;
                                 }
+                                var fdate = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss");
+
+                                //fdate.ToString("MM/dd/yyyy HH:mm:ss");
+
                                 registroInvitados.Compania_ID = Preferences.Get("DESTINO_SELECTED",0);
                                 registroInvitados.Nombres = stNombre;
                                 registroInvitados.Apellidos = stApellidos;
@@ -364,10 +368,10 @@ namespace SCVMobil
                                 registroInvitados.salidaSubida = null;
                                 registroInvitados.Visitado = visitaA;
                                 registroInvitados.Lector = int.Parse(Preferences.Get("LECTOR", "1"));
-                                if (!string.IsNullOrWhiteSpace(entCodigoCarnet.Text))
-                                {
-                                    registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper(); 
-                                }
+                                //if (!string.IsNullOrWhiteSpace(entCodigoCarnet.Text)) //CODIGO CARNET COMENTADO//
+                                //{
+                                //    registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper(); 
+                                //}
 
                                 db.Insert(registroInvitados);
                                 fireBird.UploadVisits();
@@ -401,7 +405,7 @@ namespace SCVMobil
                                         "^XZ"; ;
 
 
-                                await prints.PrintText($"{st}", "RP4-18145B4DE7");
+                                //await prints.PrintText($"{st}", "RP4-18145B4DE7");
                                 await Navigation.PopToRootAsync();
 
 
@@ -409,6 +413,9 @@ namespace SCVMobil
                             else
                             {
 
+                                var fdate = new DateTime();
+
+                                fdate.ToString("MM/dd/yyyy HH:mm:ss");
 
                                 registroInvitados.Compania_ID = Preferences.Get("DESTINO_SELECTED", 0);
                                 registroInvitados.Nombres = stNombre;
@@ -441,10 +448,10 @@ namespace SCVMobil
                                 registroInvitados.salidaSubida = null;
                                 registroInvitados.Visitado = null;
                                 registroInvitados.Lector = int.Parse(Preferences.Get("LECTOR", "1"));
-                                if (!string.IsNullOrWhiteSpace(entCodigoCarnet.Text))
-                                {
-                                    registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper();
-                                }
+                                //if (!string.IsNullOrWhiteSpace(entCodigoCarnet.Text)) //CODIGO CARNET COMENTADO//
+                                //{
+                                //    registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper();
+                                //}
 
                                 var inserted = db.Insert(registroInvitados);
                                 fireBird.UploadVisits();
@@ -476,7 +483,7 @@ namespace SCVMobil
                                         "^FO10,85^GB650,1,3^FS"+
                                         "^FO10,150 ^ GB650,1,3 ^ FS"+
                                         "^XZ";
-                                await prints.PrintText($"{st}", "RP4-18145B4DE7");
+                               // await prints.PrintText($"{st}", "RP4-18145B4DE7");
                                 await Navigation.PopToRootAsync();
 
                             }
@@ -498,11 +505,14 @@ namespace SCVMobil
                     if (pickerDestino.SelectedItem != null)
                     {
 
+                        var fdate = new DateTime();
+                        
+                        fdate.ToString("MM/dd/yyyy HH:mm:ss");
                         //Vamos a buscar la persona seleccionada
                         registroInvitados.Compania_ID = Preferences.Get("DESTINO_SELECTED",0);
                         registroInvitados.Nombres = stNombre;
                         registroInvitados.Apellidos = stApellidos;
-                        registroInvitados.Fecha_Registro = DateTime.Now;
+                        registroInvitados.Fecha_Registro = DateTime.Now; //FORMAT DATE//
                         registroInvitados.Cargo = entCedula.Text;
                         registroInvitados.Tiene_Activo = 0;
                         registroInvitados.Estatus_ID = 100;
@@ -529,12 +539,14 @@ namespace SCVMobil
                         registroInvitados.salidaSubida = null;
                         registroInvitados.Visitado = null;
                         registroInvitados.Lector = int.Parse(Preferences.Get("LECTOR", "1"));
-                        if (!string.IsNullOrWhiteSpace(entCodigoCarnet.Text))
-                        {
-                            registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper();
-                        }
+                        registroInvitados.Fecha_Salida = null;
+                        //if (!string.IsNullOrWhiteSpace(entCodigoCarnet.Text))  //CODIGO CARNET COMENTADO//
+                        //{
+                        //    registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper();
+                        //}
 
-                        var inserted = db.Insert(registroInvitados);
+                        //var inserted = db.Insert(registroInvitados); COMMENTED BY ME.//
+                        db.Insert(registroInvitados);
                         fireBird.UploadVisits();
                         fireBird.DownloadGuests();
                         var inserted__ = db.Query<Invitados>($"SELECT * FROM INVITADOS WHERE CARGO = '{registroInvitados.Cargo}' ORDER BY Fecha_Registro DESC").FirstOrDefault();
@@ -565,10 +577,10 @@ namespace SCVMobil
                                         "^FO10,150 ^ GB650,1,3 ^ FS" +
                                         "^XZ"; ;
 
-                        await prints.PrintText($"{st}", "RP4-18145B4DE7"); 
-                        //await prints.PrintText($"{text}", "MPA52186");
+                        //await prints.PrintText($"{st}", "RP4-18145B4DE7"); 
+                
                         await Navigation.PopToRootAsync();
-                        //btnImprimir.IsEnabled = false;
+                       
                     }
                     else
                     {
