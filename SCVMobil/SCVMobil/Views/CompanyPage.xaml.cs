@@ -103,7 +103,8 @@ namespace SCVMobil
         //-----------------------------------------------------------------------------------------------       
         public CompanyPage(String cedula, String nombre, String apellidos)//Constructor
         {
-            InitializeComponent();                  
+            InitializeComponent();
+            GetCombos();
             //lbl1.IsVisible = false;
             //lbl2.IsVisible = false;
             //lbl3.IsVisible = false;
@@ -149,39 +150,18 @@ namespace SCVMobil
 
         public void GetCombos()
         {
-          
-
-            //var textc1 = Preferences.Get("combo1", "");
-            //var textc2 = Preferences.Get("combo2", "");
-            //var textc3 = Preferences.Get("combo3", "");
-
-            //Comboone.Add(textc1);
-            //Comboone.Add(textc2);
-            //Comboone.Add(textc3);
 
 
-            //var textc4 = Preferences.Get("ccombo1", "");
-            //var textc5 = Preferences.Get("ccombo2", "");
-            //var textc6 = Preferences.Get("ccombo3", "");
+            var db = new SQLiteConnection(Preferences.Get("DB_PATH", ""));
 
-            //Comboscn.Add(textc4);
-            //Comboscn.Add(textc5);
-            //Comboscn.Add(textc6);
-
-            //var textc7 = Preferences.Get("combofirst", "");
-            //var textc8 = Preferences.Get("combosecond", "");
-            //var textc9 = Preferences.Get("combothird", "");
-
-
-            //Combothr.Add(textc7);
-            //Combothr.Add(textc8);
-            //Combothr.Add(textc9);
-
-            //cmbbox1.ItemsSource = Comboone;
-            //cmbbox2.ItemsSource = Comboscn;
-            //cmbbox3.ItemsSource = Combothr;
+            cmbbox1.ItemsSource = db.Query<Options>("SELECT * FROM OPTIONS WHERE COMBO = 'COMBO ENTRADA 1'");
+            //cmbbox1.ItemDisplayBinding. = Options.OptionDesc;
+            cmbbox2.ItemsSource = db.Query<Options>("SELECT * FROM OPTIONS WHERE COMBO = 'COMBO ENTRADA 2'");
+            //cmbbox2.ItemDisplayBinding = Options.OptionDesc;
+            cmbbox3.ItemsSource = db.Query<Options>("SELECT * FROM OPTIONS WHERE COMBO = 'COMBO ENTRADA 3'");
+            //cmbbox3.ItemDisplayBinding = Options.OptionDesc;
         }
-        
+
 
         //public void BindDeviceList()
         //{

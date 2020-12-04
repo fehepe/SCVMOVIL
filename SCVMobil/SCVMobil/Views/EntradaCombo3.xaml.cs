@@ -18,6 +18,7 @@ namespace SCVMobil.Views
         public EntradaCombo3()
         {
             InitializeComponent();
+            GetOptions();
         }
 
         public void GetOptions()

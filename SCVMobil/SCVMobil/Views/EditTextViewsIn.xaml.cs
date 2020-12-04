@@ -23,7 +23,7 @@ namespace SCVMobil.Views
             tog3.IsToggled = Preferences.Get("texto3entrada", true);
             tog4.IsToggled = Preferences.Get("texto4entrada", true);
             tog5.IsToggled = Preferences.Get("texto5entrada", true);
-            tog6.IsToggled = Preferences.Get("texto6entrada", true);
+            //tog6.IsToggled = Preferences.Get("texto6entrada", true);
 
 
             var pp = Preferences.Get("title1", "");
@@ -76,15 +76,15 @@ namespace SCVMobil.Views
                 txt5.Text = pp5;
             }
 
-            var pp6 = Preferences.Get("title6", "");
-            if (string.IsNullOrEmpty(pp6))
-            {
-                txt6.Text = "Texto Entrada 6";
-            }
-            else
-            {
-                txt6.Text = pp6;
-            }
+            //var pp6 = Preferences.Get("title6", "");
+            //if (string.IsNullOrEmpty(pp6))
+            //{
+            //    txt6.Text = "Texto Entrada 6";
+            //}
+            //else
+            //{
+            //    txt6.Text = pp6;
+            //}
 
             //txt1.Text = Preferences.Get("title1", "");
             //txt2.Text = Preferences.Get("title2", "");
@@ -173,22 +173,22 @@ namespace SCVMobil.Views
                 }
             };
             txt5.GestureRecognizers.Add(tile5);
-            var tile6 = new TapGestureRecognizer();
-            tile6.Tapped += async (s, e) =>
-            {
-                var typeoption = await DisplayPromptAsync(title: "Escriba una opcion", message: "", accept: "ok", cancel: "cancelar");
-                if (string.IsNullOrEmpty(typeoption))
-                {
-                    await DisplayAlert("", "No puede dejar campos vacios", "ok");
-                }
-                else
-                {
-                    Preferences.Set("title6", typeoption);
-                    var p = Preferences.Get("titl6", "");
-                    txt6.Text = p;
-                }
-            };
-            txt6.GestureRecognizers.Add(tile6);
+            //var tile6 = new TapGestureRecognizer();
+            //tile6.Tapped += async (s, e) =>
+            //{
+            //    var typeoption = await DisplayPromptAsync(title: "Escriba una opcion", message: "", accept: "ok", cancel: "cancelar");
+            //    if (string.IsNullOrEmpty(typeoption))
+            //    {
+            //        await DisplayAlert("", "No puede dejar campos vacios", "ok");
+            //    }
+            //    else
+            //    {
+            //        Preferences.Set("title6", typeoption);
+            //        var p = Preferences.Get("titl6", "");
+            //        txt6.Text = p;
+            //    }
+            //};
+            //txt6.GestureRecognizers.Add(tile6);
         }
 
         private async void cm1_Clicked(object sender, EventArgs e)
@@ -231,9 +231,9 @@ namespace SCVMobil.Views
             Preferences.Set("texto5entrada", e.Value);
         }
 
-        private void tog6_Toggled(object sender, ToggledEventArgs e)
-        {
-            Preferences.Set("texto6entrada", e.Value);
-        }
+        //private void tog6_Toggled(object sender, ToggledEventArgs e)
+        //{
+        //    Preferences.Set("texto6entrada", e.Value);
+        //}
     }
 }

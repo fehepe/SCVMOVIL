@@ -110,7 +110,7 @@
 
                 </StackLayout>
 
-                <StackLayout
+                <!--<StackLayout
                     HorizontalOptions="Center"
                     Orientation="Horizontal"
                     Spacing="150"
@@ -123,7 +123,7 @@
                         VerticalOptions="Center" />
                     <Switch x:Name="tog6" Toggled="tog6_Toggled" />
 
-                </StackLayout>
+                </StackLayout>-->
             </StackLayout>
         </ScrollView>
 
