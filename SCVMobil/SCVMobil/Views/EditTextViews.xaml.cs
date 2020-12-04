@@ -36,7 +36,7 @@ namespace SCVMobil.Views
             if (string.IsNullOrEmpty(pp))
             {
                 txt1.Text = "Texto Salida 1";
-                Preferences.Set("title1salida", txt1.Text);
+                Preferences.Set("title1salida", "Texto Salida 1");
             }
             else
             {
@@ -47,7 +47,7 @@ namespace SCVMobil.Views
             if (string.IsNullOrEmpty(pp2))
             {
                 txt2.Text = "Texto Salida 2";
-                Preferences.Set("title2salida", txt2.Text);
+                Preferences.Set("title2salida", "Texto Salida 2");
             }
             else
             {

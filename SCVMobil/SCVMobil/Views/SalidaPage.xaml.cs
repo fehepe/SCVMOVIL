@@ -130,18 +130,18 @@ namespace SCVMobil
             }
             else
             {
-                lbl4.IsVisible = false;
+                //lbl4.IsVisible = false;
 
             }
 
             if (p2 == true)
             {
-                lbl4.Text = Preferences.Get("title2salida", "");
+                lbl5.Text = Preferences.Get("title2salida", "");
                 //lbl4.IsVisible = true;
             }
             else
             {
-                lbl4.IsVisible = false;
+                lbl5.IsVisible = false;
             }
 
             if (p3 == true)
@@ -151,7 +151,7 @@ namespace SCVMobil
             }
             else
             {
-                lbl4.IsVisible = false;
+                //lbl4.IsVisible = false;
 
             }
 
