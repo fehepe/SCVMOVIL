@@ -918,8 +918,8 @@ namespace SCVMobil.Connections
         //// 
         public List<DEPTO_LOCALIDAD> executeDepto_Localidad(string query)
         {
-            query = "select l.id_depto_localidad, l.id_departamento, d.nombre, l.id_localidad, p.nombre from companias p"
-                   + " inner join DEPTO_LOCALIDAD l on(p.compania_id = l.id_localidad) inner join companias d on (l.id_departamento = d.compania_id)";
+            //query = "select l.id_depto_localidad, l.id_departamento, d.nombre, l.id_localidad, p.nombre from companias p"
+            //       + " inner join DEPTO_LOCALIDAD l on(p.compania_id = l.id_localidad) inner join companias d on (l.id_departamento = d.compania_id)";
             try
             {
                 List<DEPTO_LOCALIDAD> lista = new List<DEPTO_LOCALIDAD>();
@@ -1011,11 +1011,15 @@ namespace SCVMobil.Connections
                         }
                         if (dtResult[1] != System.DBNull.Value)
                         {
-                            person.NOMBRES_APELLIDOS = dtResult[1].ToString();
+                            person.DOCUMENTO = dtResult[1].ToString();
                         }
                         if (dtResult[2] != System.DBNull.Value)
                         {
-                            person.DEPARTAMENTO_ID = Convert.ToInt32(dtResult[2]);
+                            person.NOMBRES_APELLIDOS = dtResult[2].ToString();
+                        }
+                        if (dtResult[3] != System.DBNull.Value)
+                        {
+                            person.DEPARTAMENTO_ID = Convert.ToInt32(dtResult[3]);
                         }
                         #endregion
                         PeopleList.Add(person);
@@ -1091,7 +1095,7 @@ namespace SCVMobil.Connections
                 // Iterar la lista de visitasASubir
                 if (visitasASubir.Any())
                 {
-                    foreach (Invitados registro in visitasASubir)
+                    foreach (var registro in visitasASubir)
                     {
                         DateTime time = DateTime.Now;
                         string now = registro.Fecha_Registro.ToString("MM/dd/yyyy HH:mm:ss");
@@ -1108,7 +1112,7 @@ namespace SCVMobil.Connections
                               "100," +
                               "1," +
                               $"{(string.IsNullOrWhiteSpace(registro.Empresa_ID.ToString()) ? "null" : registro.Empresa_ID.ToString())}, " +
-                              $"'{(string.IsNullOrWhiteSpace(registro.Placa.ToString()) ? "null" : registro.Placa.ToString())}'," +
+                              $"'{(string.IsNullOrWhiteSpace(registro.Placa) ? "null" : registro.Placa)}'," +
                               $"'{registro.Tipo_Visitante}'," +
                               "0," +
                               "0," +
@@ -1172,6 +1176,7 @@ namespace SCVMobil.Connections
             {
                 Debug.WriteLine("Excepcion en el metodo UploadVisit, error: " + ea.Message);
                 Analytics.TrackEvent("Error de SQL en el escaner: " + Preferences.Get("LECTOR", "N/A") + " Error: " + ea.Message);
+                //await App.Current.MainPage.DisplayAlert("", ea.Message, "ok");
             }
             finally
             {
@@ -1365,7 +1370,9 @@ namespace SCVMobil.Connections
                
                 foreach (Invitados registro in salidasASubir)
                 {
-                    var querrySal = $"SELECT * FROM SP_DAR_SALIDA({registro.INVIDATO_ID.ToString()}, '{registro.Fecha_Salida.ToString()}', {Preferences.Get("LECTOR", "1")})";
+                    var querrySal = $"SELECT * FROM SP_DAR_SALIDA('{registro.Comentario}', '{registro.SALIDA1}', '{registro.SALIDA2}', '{registro.SALIDA3}','{registro.SALIDA4}'" +
+                        $",{registro.INVIDATO_ID.ToString()}, '{registro.Fecha_Salida.ToString()}', {Preferences.Get("LECTOR", "1")})";
+                   // var querrySal = $"SELECT * FROM SPSALIDA({registro.INVIDATO_ID.ToString()}, '{registro.Fecha_Salida.ToString()}', {Preferences.Get("LECTOR", "1")}, {registro.Comentario})";
 
                     var content = ExecuteScalar(querrySal); 
                     Debug.WriteLine("Waiting for: " + querrySal);
@@ -1373,7 +1380,7 @@ namespace SCVMobil.Connections
                     if (!string.IsNullOrEmpty(content))
                     {
                         registro.salidaSubida = true;
-                        Debug.WriteLine("Salida subida: ID" + registro.INVIDATO_ID.ToString() + " " + registro.Fecha_Salida.ToString());
+                        Debug.WriteLine("Salida subida: ID" + registro.INVIDATO_ID.ToString() + " " + registro.Fecha_Salida.ToString() + " " + registro.Comentario);
                     }
                     else
                     {
@@ -1709,7 +1716,7 @@ namespace SCVMobil.Connections
 
                 var stlRegistros2 = new List<string>();
                 var stRegisros2 = "";
-                string queryPersonas = "SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + " PERSONA_ID, NOMBRES_APELLIDOS, DEPARTAMENTO_ID " +
+                string queryPersonas = "SELECT FIRST " + Preferences.Get("CHUNK_SIZE", "10000") + "PERSONA_ID, DOCUMENTO, NOMBRES_APELLIDOS, DEPARTAMENTO_ID " +
                                        "FROM PERSONAS " +
                                        "where TIPO=1 AND PERSONA_ID > " + Preferences.Get("MAX_PERSONA_ID", "0") + 
                                        " ORDER BY PERSONA_ID desc";
@@ -1782,6 +1789,14 @@ namespace SCVMobil.Connections
             try
             {
 
+                //string queryDownInv = $"SELECT FIRST {Preferences.Get("CHUNK_SIZE", "10000")} I1.INVIDATO_ID, 1 AS SUBIDA, IIF(I1.FECHA_SALIDA IS NULL, 0, 1) AS SALIDASUBIDA, I1.COMPANIA_ID" +
+                //            ", I1.NOMBRES, I1.APELLIDOS, I1.FECHA_REGISTRO, I1.FECHA_SALIDA, I1.TIPO, I1.CARGO, I1.TIENE_ACTIVO, I1.ESTATUS_ID, I1.MODULO" +
+                //            ", I1.EMPRESA_ID, I1.PLACA, I1.TIPO_VISITANTE, I1.ES_GRUPO, I1.GRUPO_ID, I1.PUERTA_ENTRADA, I1.ACTUALIZADA_LA_SALIDA" +
+                //            ", COALESCE(I1.HORAS_CADUCIDAD,0) AS HORAS_CADUCIDAD, I1.PERSONAS, I1.IN_OUT, I1.ORIGEN_ENTRADA, I1.ORIGEN_SALIDA, I1.COMENTARIO, COALESCE(I1.ORIGEN_IO,0) AS ORIGEN_IO, I1.ACTUALIZADO" +
+                //            ", I1.CPOST, I1.TEXTO1_ENTRADA, I1.TEXTO2_ENTRADA, I1.TEXTO3_ENTRADA, I1.SECUENCIA_DIA, I1.NO_APLICA_INDUCCION, I1.VISITADO" +
+                //            ", COALESCE(I1.LECTOR, 0) AS LECTOR, I1.CODIGO_CARNET, I1.fecha_verificacion, iif(I1.fecha_verificacion is null, null, 1) as VERIFICACIONSUBIDA FROM INVITADOS I1" +
+                //            $" WHERE  ACTUALIZADO = 0 " +
+                //            $" ORDER BY I1.INVIDATO_ID DESC";
                 string queryDownInv = $"SELECT FIRST {Preferences.Get("CHUNK_SIZE", "10000")} I1.INVIDATO_ID, 1 AS SUBIDA, IIF(I1.FECHA_SALIDA IS NULL, 0, 1) AS SALIDASUBIDA, I1.COMPANIA_ID" +
                             ", I1.NOMBRES, I1.APELLIDOS, I1.FECHA_REGISTRO, I1.FECHA_SALIDA, I1.TIPO, I1.CARGO, I1.TIENE_ACTIVO, I1.ESTATUS_ID, I1.MODULO" +
                             ", I1.EMPRESA_ID, I1.PLACA, I1.TIPO_VISITANTE, I1.ES_GRUPO, I1.GRUPO_ID, I1.PUERTA_ENTRADA, I1.ACTUALIZADA_LA_SALIDA" +
@@ -1790,6 +1805,7 @@ namespace SCVMobil.Connections
                             ", COALESCE(I1.LECTOR, 0) AS LECTOR, I1.CODIGO_CARNET, I1.fecha_verificacion, iif(I1.fecha_verificacion is null, null, 1) as VERIFICACIONSUBIDA FROM INVITADOS I1" +
                             $" WHERE  ACTUALIZADO = 0 " +
                             $" ORDER BY I1.INVIDATO_ID DESC";
+
 
 
                 ExecuteGuest(queryDownInv);

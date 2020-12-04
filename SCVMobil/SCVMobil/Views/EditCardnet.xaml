@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="SCVMobil.Views.EditCardnet">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Padding="15">
+                <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="20" TextColor="Black" Text="Texto para Textboxes"/>
+                <Label Text="Empresa"
+                VerticalOptions="StartAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+                <Entry x:Name="fisrttext" Placeholder="Escribe algo"/>
+
+                <Label Text="Departamento"
+                VerticalOptions="StartAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+                <Entry x:Name="secontext" Placeholder="Escribe algo"/>
+
+                <Label Text="Piso"
+                VerticalOptions="StartAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+                <Entry x:Name="thirdtext" Placeholder="Escribe algo"/>
+                <Button Text="Guardar" 
+                    x:Name="Savebtn"
+                    Clicked="Savebtn_Clicked"                    
+                    BorderColor="Accent" 
+                    TextColor="#ffffff"
+                    FontAttributes="Bold"  
+                    BackgroundColor="#F44336"
+                    CornerRadius="20"/>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

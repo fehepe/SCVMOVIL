@@ -12,85 +12,87 @@ using Xamarin.Forms.Xaml;
 namespace SCVMobil.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class EditTextViews : ContentPage
+    public partial class EditTextViewsIn : ContentPage
     {
-        public Options options = new Options();
-        public EditTextViews()
+        public OptionsIn options = new OptionsIn();
+        public EditTextViewsIn()
         {
             InitializeComponent();
-            tog1.IsToggled = Preferences.Get("texto1", true);
-            tog2.IsToggled = Preferences.Get("texto2", true);
-            tog3.IsToggled = Preferences.Get("texto3", true);
-            tog4.IsToggled = Preferences.Get("texto4", true);
-            tog5.IsToggled = Preferences.Get("texto5", true);
-            tog6.IsToggled = Preferences.Get("texto6", true);
+            tog1.IsToggled = Preferences.Get("texto1entrada", true);
+            tog2.IsToggled = Preferences.Get("texto2entrada", true);
+            tog3.IsToggled = Preferences.Get("texto3entrada", true);
+            tog4.IsToggled = Preferences.Get("texto4entrada", true);
+            tog5.IsToggled = Preferences.Get("texto5entrada", true);
+            tog6.IsToggled = Preferences.Get("texto6entrada", true);
 
-            //txt1.Text = Preferences.Get("title1salida", "");
-            //txt2.Text = Preferences.Get("title1salida", "");
-            //txt3.Text = Preferences.Get("title3salida", "");
-            //txt4.Text = Preferences.Get("title4salida", "");
-            //txt5.Text = Preferences.Get("title5salida", "");
-            //txt6.Text = Preferences.Get("title6salida", "");
 
-            var pp = Preferences.Get("title1salida", "");
+            var pp = Preferences.Get("title1", "");
             if (string.IsNullOrEmpty(pp))
             {
-                txt1.Text = "Texto Salida 1";
+                txt1.Text = "Texto Entrada 1";
             }
             else
             {
                 txt1.Text = pp;
             }
 
-            var pp2 = Preferences.Get("title2salida", "");
+            var pp2 = Preferences.Get("title2", "");
             if (string.IsNullOrEmpty(pp2))
             {
-                txt2.Text = "Texto Salida 2";
+                txt2.Text = "Texto Entrada 2";
             }
             else
             {
                 txt2.Text = pp2;
             }
 
-            var pp3 = Preferences.Get("title3salida", "");
+            var pp3 = Preferences.Get("title3", "");
             if (string.IsNullOrEmpty(pp3))
             {
-                txt3.Text = "Texto Salida 3";
+                txt3.Text = "Texto Entrada 3";
             }
             else
             {
                 txt3.Text = pp3;
             }
 
-            var pp4 = Preferences.Get("title4salida", "");
+            var pp4 = Preferences.Get("title4", "");
             if (string.IsNullOrEmpty(pp4))
             {
-                txt4.Text = "Texto Salida 4";
+                txt4.Text = "Texto Entrada 4";
             }
             else
             {
                 txt4.Text = pp4;
             }
 
-            var pp5 = Preferences.Get("title5salida", "");
+            var pp5 = Preferences.Get("title5", "");
             if (string.IsNullOrEmpty(pp5))
             {
-                txt5.Text = "Texto Salida 5";
+                txt5.Text = "Texto Entrada 5";
             }
             else
             {
                 txt5.Text = pp5;
             }
 
-            var pp6 = Preferences.Get("title6salida", "");
+            var pp6 = Preferences.Get("title6", "");
             if (string.IsNullOrEmpty(pp6))
             {
-                txt6.Text = "Texto Salida 6";
+                txt6.Text = "Texto Entrada 6";
             }
             else
             {
                 txt6.Text = pp6;
             }
+
+            //txt1.Text = Preferences.Get("title1", "");
+            //txt2.Text = Preferences.Get("title2", "");
+            //txt3.Text = Preferences.Get("title3", "");
+            //txt4.Text = Preferences.Get("title4", "");
+            //txt5.Text = Preferences.Get("title5", "");
+            //txt6.Text = Preferences.Get("title6", "");
+
             var tile = new TapGestureRecognizer();
             tile.Tapped += async (s, e) =>
             {
@@ -101,8 +103,8 @@ namespace SCVMobil.Views
                 }
                 else
                 {
-                    Preferences.Set("title1salida", typeoption);
-                    var p = Preferences.Get("title1salida", "");
+                    Preferences.Set("title1", typeoption);
+                    var p = Preferences.Get("title1", "");
                     txt1.Text = p;
                 }
             };
@@ -117,8 +119,8 @@ namespace SCVMobil.Views
                 }
                 else
                 {
-                    Preferences.Set("title2salida", typeoption);
-                    var p = Preferences.Get("title2salida", "");
+                    Preferences.Set("title2", typeoption);
+                    var p = Preferences.Get("title2", "");
                     txt2.Text = p;
                 }
             };
@@ -133,14 +135,14 @@ namespace SCVMobil.Views
                 }
                 else
                 {
-                    Preferences.Set("title3salida", typeoption);
-                    var p = Preferences.Get("title3salida", "");
+                    Preferences.Set("title3", typeoption);
+                    var p = Preferences.Get("title3", "");
                     txt3.Text = p;
                 }
             };
             txt3.GestureRecognizers.Add(tile3);
             var tile4 = new TapGestureRecognizer();
-            tile4.Tapped += async (s, e) =>
+            tile3.Tapped += async (s, e) =>
             {
                 var typeoption = await DisplayPromptAsync(title: "Escriba una opcion", message: "", accept: "ok", cancel: "cancelar");
                 if (string.IsNullOrEmpty(typeoption))
@@ -149,8 +151,8 @@ namespace SCVMobil.Views
                 }
                 else
                 {
-                    Preferences.Set("title4salida", typeoption);
-                    var p = Preferences.Get("title4salida", "");
+                    Preferences.Set("title4", typeoption);
+                    var p = Preferences.Get("title4", "");
                     txt4.Text = p;
                 }
             };
@@ -165,8 +167,8 @@ namespace SCVMobil.Views
                 }
                 else
                 {
-                    Preferences.Set("title5salida", typeoption);
-                    var p = Preferences.Get("title5salida", "");
+                    Preferences.Set("title5", typeoption);
+                    var p = Preferences.Get("title5", "");
                     txt5.Text = p;
                 }
             };
@@ -181,8 +183,8 @@ namespace SCVMobil.Views
                 }
                 else
                 {
-                    Preferences.Set("title6salida", typeoption);
-                    var p = Preferences.Get("titl6salida", "");
+                    Preferences.Set("title6", typeoption);
+                    var p = Preferences.Get("titl6", "");
                     txt6.Text = p;
                 }
             };
@@ -191,47 +193,47 @@ namespace SCVMobil.Views
 
         private async void cm1_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new SalidaCombo1());
+            await Navigation.PushAsync(new EntradaCombo1());
         }
 
         private async void cm2_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new SalidaCombo2());
+            await Navigation.PushAsync(new EntradaCombo2());
         }
 
         private async void cm3_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new SalidaCombo3());
+            await Navigation.PushAsync(new EntradaCombo3());
         }
 
         private void tog1_Toggled(object sender, ToggledEventArgs e)
         {
-            Preferences.Set("texto1", e.Value);
+            Preferences.Set("texto1entrada", e.Value);
         }
 
         private void tog2_Toggled(object sender, ToggledEventArgs e)
         {
-            Preferences.Set("texto2", e.Value);
+            Preferences.Set("texto2entrada", e.Value);
         }
 
         private void tog3_Toggled(object sender, ToggledEventArgs e)
         {
-            Preferences.Set("texto3", e.Value);
+            Preferences.Set("texto3entrada", e.Value);
         }
 
         private void tog4_Toggled(object sender, ToggledEventArgs e)
         {
-            Preferences.Set("texto4", e.Value);
+            Preferences.Set("texto4entrada", e.Value);
         }
 
         private void tog5_Toggled(object sender, ToggledEventArgs e)
         {
-            Preferences.Set("texto5", e.Value);
+            Preferences.Set("texto5entrada", e.Value);
         }
 
         private void tog6_Toggled(object sender, ToggledEventArgs e)
         {
-            Preferences.Set("texto6", e.Value);
+            Preferences.Set("texto6entrada", e.Value);
         }
     }
 }

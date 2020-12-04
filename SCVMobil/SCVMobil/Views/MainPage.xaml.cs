@@ -24,6 +24,7 @@ namespace SCVMobil
         Escaner scanner;
         
         
+        
         //---------------------------------------------------------------------------
 
         public MainPage()//Constructor
@@ -40,6 +41,10 @@ namespace SCVMobil
           
             InitializeComponent();
             scanner = new Escaner(cedulaScanned);
+           //var list =  new SQLiteConnection(Preferences.Get("DB_PATH", ""));
+           //var search = list.Query<Invitados>("DELETE FROM OPTIONS").ToList();
+            
+
             
             DeviceDisplay.KeepScreenOn = false;
 
@@ -292,15 +297,29 @@ namespace SCVMobil
                                     {
                                         //Ejecutamos el query.
                                         var registro = db.Query<PADRON>(querry);
-
-                                        entCedula.Text = registro.First().CEDULA;
-                                        entNombres.Text = registro.First().NOMBRES;
-                                        entApellidos.Text = registro.First().APELLIDO1 + " " + registro.First().APELLIDO2;
-                                        await Navigation.PushAsync(new CompanyPage(entCedula.Text, entNombres.Text, entApellidos.Text));
+                                        if (registro.Count > 0)
+                                        {
+                                            entCedula.Text = registro.First().CEDULA;
+                                            entNombres.Text = registro.First().NOMBRES;
+                                            entApellidos.Text = registro.First().APELLIDO1 + " " + registro.First().APELLIDO2;
+                                            await Navigation.PushAsync(new CompanyPage(entCedula.Text, entNombres.Text, entApellidos.Text));
+                                        }
+                                        else
+                                        {
+                                            entApellidos.Text = string.Empty;
+                                            entNombres.Text = string.Empty;
+                                            entCedula.Text = inString;
+                                            await PopupNavigation.PushAsync(new PopUpCedulaNoexiste());  //Invocacion del PopUp para mostrar mesaje de error// 
+                                            await Navigation.PushAsync(new RegistroPage(entCedula.Text, true));
+                                            Debug.WriteLine("Entrada");
+                                        }                                    
 
                                     }
                                     catch (Exception ey)
                                     {
+
+                                        Debug.WriteLine($"Error: {ey.Message}");
+                                        await DisplayAlert("", ey.Message, "ok");
                                         entApellidos.Text = string.Empty;
                                         entNombres.Text = string.Empty;
                                         entCedula.Text = inString;
@@ -310,9 +329,9 @@ namespace SCVMobil
                                         { "Lector", Preferences.Get("LECTOR", "0")}
                                     };
                                         Crashes.TrackError(ey, properties);
-                                        await PopupNavigation.PushAsync(new PopUpCedulaNoexiste());  //Invocacion del PopUp para mostrar mesaje de error// 
-                                        await Navigation.PushAsync(new RegistroPage(entCedula.Text, true));
-                                        Debug.WriteLine("Entrada");
+                                        //await PopupNavigation.PushAsync(new PopUpCedulaNoexiste());  //Invocacion del PopUp para mostrar mesaje de error// 
+                                        //await Navigation.PushAsync(new RegistroPage(entCedula.Text, true));
+                                        //Debug.WriteLine("Entrada");
                                         Analytics.TrackEvent("Error al buscar cedula en el padron" + ey.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
 
                                         try

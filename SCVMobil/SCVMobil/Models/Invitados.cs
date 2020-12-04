@@ -14,7 +14,7 @@ namespace SCVMobil
         public bool? salidaSubida { get; set; }
         public bool? verificacionSubida { get; set; }
         public int? SALIDA_ID { get; set; }
-        public int Compania_ID { get; set; }
+        public int? Compania_ID { get; set; }
         public string Nombres { get; set; }
         public string Apellidos { get; set; }
         public int? Puerta_Registro { get; set; }
@@ -48,9 +48,15 @@ namespace SCVMobil
         public string Secuencia_Dia { get; set; }
         public string No_Aplica_Induccion { get; set; }
         public int? Visitado { get; set; }
-        public int Lector { get; set; }
+        public int? Lector { get; set; }
         public string Codigo_carnet { get; set; }
         public string CODIGO_BARRA { get; set; }
+        public string SALIDA1 { get; set; }
+        public string SALIDA2 { get; set; }
+        public string SALIDA3 { get; set; }
+        public string SALIDA4 { get; set; }
+        public string SALIDA5 { get; set; }
+        
 
         public Invitados()
         {

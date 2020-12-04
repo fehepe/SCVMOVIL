@@ -554,6 +554,16 @@ namespace SCVMobil
         {
             await Navigation.PushAsync(new EditTextViews());
         }
+
+        private async void Editticket_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new EditCardnet());
+        }
+
+        private async void Editcament_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new EditTextViewsIn());
+        }
     }
 
 

@@ -1,39 +1,223 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-            
-             mc:Ignorable="d"
-             x:Class="SCVMobil.SalidaPage"
-             BackgroundColor="#FFFFFF"
-             Title="Salida">
-    
+<ContentPage
+    x:Class="SCVMobil.SalidaPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Salida"
+    BackgroundColor="#FFFFFF"
+    mc:Ignorable="d">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            x:Name="Commentbtn"
+            Clicked="Commentbtn_Clicked"
+            Text="+" />
+        <ToolbarItem
+            x:Name="desc"
+            Clicked="desc_Clicked"
+            Text="---" />
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <StackLayout
-            Padding="50">
-            
-            <Image Source="exit"/>
-            
-            <Label Text="Esta persona aun no ha salido."
-                   VerticalOptions="CenterAndExpand" 
-                   TextColor="Black"
-                   HorizontalOptions="CenterAndExpand"
-                   FontSize="20"
-                   FontAttributes="Bold"/>
+        <ScrollView>
+            <StackLayout Padding="50">
 
-            <Button 
-                x:Name="btnSalida" 
-                Text="Dar Salida"           
-                BackgroundColor="#F44336" 
-                VerticalOptions="Center"
-                CornerRadius="20" 
-                FontAttributes="Bold"
-                HeightRequest="50"
-                Clicked="BtnSalida_Clicked"
-                TextColor="White">
-            </Button>
-           
-        </StackLayout>
+                <Image Source="exit" />
+
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="20"
+                    HorizontalOptions="CenterAndExpand"
+                    Text="Esta persona aun no ha salido."
+                    TextColor="Black"
+                    VerticalOptions="CenterAndExpand" />
+
+
+                <Label
+                    x:Name="lbl4"
+                    Grid.Row="10"
+                    Grid.Column="0"
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    Text="Combo 1"
+                    TextColor="#000000" />
+
+
+                <Frame
+                    x:Name="frame1"
+                    Padding="5"
+                    BorderColor="#757575"
+                    CornerRadius="15"
+                    IsVisible="false">
+                    <Frame
+                        Padding="1"
+                        BackgroundColor="White"
+                        CornerRadius="10">
+                        <Picker
+                            x:Name="cmbbox1"
+                            Title="Seleccione..."
+                            Grid.Row="8"
+                            Grid.Column="1"
+                            ItemDisplayBinding="{Binding OptionDesc}"
+                            SelectedIndexChanged="cmbbox1_SelectedIndexChanged" />
+                    </Frame>
+                </Frame>
+
+
+
+                <Label
+                    x:Name="lbl5"
+                    Grid.Row="10"
+                    Grid.Column="0"
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    Text="Combo 2"
+                    TextColor="#000000" />
+
+                <Frame
+                    x:Name="frame2"
+                    Padding="5"
+                    BorderColor="#757575"
+                    CornerRadius="15"
+                    IsVisible="false">
+                    <Frame
+                        Padding="1"
+                        BackgroundColor="White"
+                        CornerRadius="10">
+                        <Picker
+                            x:Name="cmbbox2"
+                            Title="Seleccione..."
+                            Grid.Row="9"
+                            Grid.Column="1"
+                            ItemDisplayBinding="{Binding OptionDesc}"
+                            SelectedIndexChanged="cmbbox2_SelectedIndexChanged" />
+                    </Frame>
+                </Frame>
+
+
+
+                <Label
+                    x:Name="lbl6"
+                    Grid.Row="10"
+                    Grid.Column="0"
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    Text="Combo 3"
+                    TextColor="#000000" />
+
+                <Frame
+                    x:Name="frame3"
+                    Padding="5"
+                    BorderColor="#757575"
+                    CornerRadius="15"
+                    IsVisible="false">
+                    <Frame
+                        Padding="1"
+                        BackgroundColor="White"
+                        CornerRadius="10">
+                        <Picker
+                            x:Name="cmbbox3"
+                            Title="Seleccione..."
+                            Grid.Row="10"
+                            Grid.Column="1"
+                            ItemDisplayBinding="{Binding OptionDesc}"
+                            SelectedIndexChanged="cmbbox3_SelectedIndexChanged" />
+                    </Frame>
+                </Frame>
+
+                <Label
+                    x:Name="lblcm"
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    Text="Comentarios personalizados"
+                    TextColor="Black" />
+
+
+                <Label
+                    x:Name="lbl7"
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    Text="Comentario salida 1"
+                    TextColor="Black" />
+
+                <Frame
+                    x:Name="frame4"
+                    Padding="5"
+                    BorderColor="#757575"
+                    CornerRadius="15"
+                    IsVisible="false">
+                    <Frame
+                        Padding="1"
+                        BackgroundColor="White"
+                        CornerRadius="10">
+                        <Entry x:Name="comentariotxt" Placeholder="Escribe aqui" />
+                    </Frame>
+                </Frame>
+
+
+                <Label
+                    x:Name="lbl8"
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    Text="Comentario salida 2"
+                    TextColor="Black" />
+
+                <Frame
+                    x:Name="frame5"
+                    Padding="5"
+                    BorderColor="#757575"
+                    CornerRadius="15"
+                    IsVisible="false">
+                    <Frame
+                        Padding="1"
+                        BackgroundColor="White"
+                        CornerRadius="10">
+                        <Entry x:Name="comentariotxt2" Placeholder="Escribe aqui" />
+                    </Frame>
+                </Frame>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <Frame
+                    x:Name="frame6"
+                    Padding="5"
+                    BorderColor="#757575"
+                    CornerRadius="15"
+                    IsVisible="false">
+                    <Frame
+                        Padding="1"
+                        BackgroundColor="White"
+                        CornerRadius="10">
+                        <Entry x:Name="comentariotxt3" Placeholder="Escribe aqui" />
+                    </Frame>
+                </Frame>
+
+                <Button
+                    x:Name="btnSalida"
+                    BackgroundColor="#F44336"
+                    Clicked="BtnSalida_Clicked"
+                    CornerRadius="20"
+                    FontAttributes="Bold"
+                    HeightRequest="50"
+                    Text="Dar Salida"
+                    TextColor="White"
+                    VerticalOptions="Center" />
+
+            </StackLayout>
+        </ScrollView>
+
     </ContentPage.Content>
 </ContentPage>

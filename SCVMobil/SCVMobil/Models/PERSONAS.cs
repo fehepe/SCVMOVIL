@@ -11,6 +11,7 @@ namespace SCVMobil.Models
         public int PERSONA_ID { get; set; }
         public string NOMBRES_APELLIDOS { get; set; }
         public int DEPARTAMENTO_ID { get; set; }
+        public string DOCUMENTO { get; set; }
 
 
         public PERSONAS()//Constructor en blanco necesario para hacer querrys

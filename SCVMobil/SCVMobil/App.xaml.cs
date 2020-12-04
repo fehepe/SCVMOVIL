@@ -175,7 +175,7 @@ namespace SCVMobil
             
 
             bool isSet = Preferences.Get("IS_SET", false);
-            MainPage = new NavigationPage(new MainPage());
+            MainPage = new NavigationPage(new SalidaPage());
             //if (isSet == false)
             //{
             //    MainPage = new NavigationPage(new LicensePage());
@@ -214,7 +214,9 @@ namespace SCVMobil
                 //Conectar con la base de datos
                 var db = new SQLiteConnection(dbPath);
 
-               
+                db.CreateTable<OptionsIn>();
+
+                db.CreateTable<Options>();
                 db.CreateTable<PADRON>();
                 db.CreateTable<COMPANIAS>();
                 db.CreateTable<COMPANIASLOC>();

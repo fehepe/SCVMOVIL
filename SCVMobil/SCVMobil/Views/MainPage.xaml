@@ -61,7 +61,7 @@
                 x:Name="entCedula"
                 IsEnabled="True"
                 Completed="EntCedula_Completed"
-                Keyboard="Keyboard.Numeric" MaxLength="11"/>
+                Keyboard="Default" MaxLength="11"/>
             </Frame>
             
         </Frame>

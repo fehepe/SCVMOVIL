@@ -31,7 +31,7 @@ namespace SCVMobil
 
         //----------------------------------------------------------------------------------------------
         //Variables
-        private HttpClient _client = new HttpClient();
+        //private HttpClient _client = new HttpClient();
         public FireBirdData fireBird = new FireBirdData(); //NEW//
         //private string Url = "";
         //private Dictionary<string, BarcodeReader> mBarcodeReaders;
@@ -40,6 +40,7 @@ namespace SCVMobil
         COMPANIAS cc;
         DEPTO_LOCALIDAD depto_localidad;
         PERSONAS persona;
+        public List<PERSONAS> PeopleList { get; set; } = new List<PERSONAS>();
         List<string> EstadoCarga = new List<string>()
         {
             "si",
@@ -47,6 +48,11 @@ namespace SCVMobil
             "No Aplica"
         };
 
+        List<string> Comboone = new List<string>();
+        List<string> Comboscn = new List<string>();
+        List<string> Combothr = new List<string>();
+
+        
         private readonly PRINT _blueToothService;
        // private readonly PRINT prints;
         private readonly IPrint prints;
@@ -97,10 +103,38 @@ namespace SCVMobil
         //-----------------------------------------------------------------------------------------------       
         public CompanyPage(String cedula, String nombre, String apellidos)//Constructor
         {
-            InitializeComponent();
+            InitializeComponent();                  
+            //lbl1.IsVisible = false;
+            //lbl2.IsVisible = false;
+            //lbl3.IsVisible = false;
+            //lbl4.IsVisible = false;
+            //lbl5.IsVisible = false;
+            //lbl6.IsVisible = false;
             lbl1.Text = Preferences.Get("texto1", "");
             lbl2.Text = Preferences.Get("texto2", "");
             lbl3.Text = Preferences.Get("texto3", "");
+            //fcombo1.IsVisible = false;
+            //fcombo2.IsVisible = false;
+            //fcombo3.IsVisible = false;
+
+            if (Preferences.Get("VISITA_A_SELECTED", true))
+            {
+                FrameVisitaA.IsVisible = true;
+                FrameVisitaA2.IsVisible = true;
+                pickerVisitaA.IsVisible = true;
+                lblvisitaA.IsVisible = true;
+            }
+            else
+            {
+                FrameVisitaA.IsVisible = false;
+                FrameVisitaA2.IsVisible = false;
+                pickerVisitaA.IsVisible = false;
+                lblvisitaA.IsVisible = false;
+            }
+           
+           
+            
+
             entCedula.Text = cedula;
             entNombre.Text = nombre + " " + apellidos;
             scan = new Escaner(entryScan);
@@ -108,10 +142,46 @@ namespace SCVMobil
             stApellidos = apellidos;
             _blueToothService = DependencyService.Get<PRINT>();
             prints = DependencyService.Get<IPrint>();
-            pK_EstadoDeCarga.ItemsSource = EstadoCarga;
+           
 
             //BindDeviceList();
         }
+
+        public void GetCombos()
+        {
+          
+
+            var textc1 = Preferences.Get("combo1", "");
+            var textc2 = Preferences.Get("combo2", "");
+            var textc3 = Preferences.Get("combo3", "");
+
+            Comboone.Add(textc1);
+            Comboone.Add(textc2);
+            Comboone.Add(textc3);
+
+
+            var textc4 = Preferences.Get("ccombo1", "");
+            var textc5 = Preferences.Get("ccombo2", "");
+            var textc6 = Preferences.Get("ccombo3", "");
+
+            Comboscn.Add(textc4);
+            Comboscn.Add(textc5);
+            Comboscn.Add(textc6);
+
+            var textc7 = Preferences.Get("combofirst", "");
+            var textc8 = Preferences.Get("combosecond", "");
+            var textc9 = Preferences.Get("combothird", "");
+
+
+            Combothr.Add(textc7);
+            Combothr.Add(textc8);
+            Combothr.Add(textc9);
+
+            cmbbox1.ItemsSource = Comboone;
+            cmbbox2.ItemsSource = Comboscn;
+            cmbbox3.ItemsSource = Combothr;
+        }
+        
 
         //public void BindDeviceList()
         //{
@@ -127,7 +197,32 @@ namespace SCVMobil
             base.OnAppearing();
             //
             scan.GetScanner(true);
+            lbl1.IsVisible = false;
+            lbl2.IsVisible = false;
+            lbl3.IsVisible = false;
+            lbl4.IsVisible = false;
+            lbl5.IsVisible = false;
+            lbl6.IsVisible = false;
+            
 
+            if (Preferences.Get("RTT", true))
+            {
+                lblCodigoCarnet.IsVisible = true;
+                CodeRTT.IsVisible = true;
+            }
+            else
+            {
+                lblCodigoCarnet.IsVisible = false;
+                CodeRTT.IsVisible = false;
+            }
+
+            lbl1.Text = Preferences.Get("texto1", "");
+            lbl2.Text = Preferences.Get("texto2", "");
+            lbl3.Text = Preferences.Get("texto3", "");
+            fcombo1.IsVisible = false;
+            fcombo2.IsVisible = false;
+            fcombo3.IsVisible = false;
+            GetCombos();
             if (Preferences.Get("PLACA_SELECTED", true))
             {
                 FramaPlaca.IsVisible = true;
@@ -147,22 +242,23 @@ namespace SCVMobil
 
             AsignarDepartamentos();
 
-            if (pickerDestino.ItemsSource.Count > 0 && Preferences.Get("VISITA_A_SELECTED", true))
-            {
-                FrameVisitaA.IsVisible = true;
-                FrameVisitaA2.IsVisible = true;
-                lblvisitaA.IsVisible = true;
-                pickerVisitaA.IsVisible = true;
-            }
-            else
-            {
-                Preferences.Set("VISITA_A_SELECTED", false);
-                FrameVisitaA.IsVisible = false;
-                FrameVisitaA2.IsVisible = false;
-                pickerVisitaA.IsVisible = false;
-                pickerVisitaA.ItemsSource = new List<string>();
-                lblvisitaA.IsVisible = false;
-            }
+            //if (pickerDestino.ItemsSource.Count > 0 && Preferences.Get("VISITA_A_SELECTED", true))
+            //if (pickerDestino.ItemsSource.Count > 0 ) //THIS COMMENTED
+            //{
+            //    FrameVisitaA.IsVisible = true;
+            //    FrameVisitaA2.IsVisible = true;
+            //    //lblvisitaA.IsVisible = true;
+            //    //pickerVisitaA.IsVisible = true;
+            //}
+            //else
+            //{
+            //    Preferences.Set("VISITA_A_SELECTED", false);
+            //    FrameVisitaA.IsVisible = false;
+            //    FrameVisitaA2.IsVisible = false;
+            //    pickerVisitaA.IsVisible = false;
+            //    pickerVisitaA.ItemsSource = new List<string>();
+            //    lblvisitaA.IsVisible = false;
+            //}
             var x = Preferences.Get("COMPANIAS_LIST", "");
             //pickerDestino.ItemsSource = Preferences.Get("COMPANIAS_LIST", "").Split(',').ToList<string>();
             try
@@ -368,25 +464,31 @@ namespace SCVMobil
                                 registroInvitados.salidaSubida = null;
                                 registroInvitados.Visitado = visitaA;
                                 registroInvitados.Lector = int.Parse(Preferences.Get("LECTOR", "1"));
-                                //if (!string.IsNullOrWhiteSpace(entCodigoCarnet.Text)) //CODIGO CARNET COMENTADO//
-                                //{
-                                //    registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper(); 
-                                //}
+                                if (!string.IsNullOrWhiteSpace(entCodigoCarnet.Text)) //CODIGO CARNET COMENTADO//
+                                {
+                                    registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper();
+                                }
 
                                 db.Insert(registroInvitados);
                                 fireBird.UploadVisits();
                                 fireBird.DownloadGuests();
                                 var inserted = db.Query<Invitados>($"SELECT * FROM INVITADOS WHERE CARGO = '{registroInvitados.Cargo}' ORDER BY Fecha_Registro DESC").FirstOrDefault();
 
+                                var empresa = Preferences.Get("Empresa", "").ToUpper();
+                                //var textempresa = empresa.ToUpper();
+                                var depar = Preferences.Get("Departamento", "").ToUpper();
+                                //var departamento = depar.ToUpper();
+                                var piso = Preferences.Get("Piso", "").ToUpper();
+                                //piso = piso.ToUpper();
 
                                 var st = "^XA" +
                                        "^FX" +
                                        "^CF0,55" +
-                                       $"^FO70,30^FDPUERTO SANSOUCI^FS" +
+                                       $"^FO70,30^FD{empresa}^FS" +
                                        $"^CF0,45" +
                                        $"^FO70,100^FD{registroInvitados.Nombres + " " + registroInvitados.Apellidos}^FS" +
-                                       $"^FO70,170^FDALMACEN^FS" +
-                                       $"^FO70,230^FDPISO 10^FS" +
+                                       $"^FO70,170^FD{depar}^FS" +
+                                       $"^FO70,230^FD{piso}^FS" +
                                        $"^FO70,290^FD{registroInvitados.Fecha_Registro}^FS" +
                                        $"^FO70,360^FDFavor Devolver Ticket en la salida^FS^FS" +
                                        "^FS" +
@@ -404,9 +506,26 @@ namespace SCVMobil
                                         "^FO10,150 ^ GB650,1,3 ^ FS" +
                                         "^XZ"; ;
 
+                                var searchemp = db.Query<PERSONAS>($"SELECT DOCUMENTO FROM PERSONAS WHERE DOCUMENTO = '{entCedula.Text}'");
+                                if (searchemp.Count > 0)
+                                {
+                                    await DisplayAlert("", "Este es un empleado, por lo cual no se imprimira ticket", "ok");
+                                    await Navigation.PopToRootAsync();
+                                }
+                                else
+                                {
+                                    //await prints.PrintText($"{st}", "RP4-18145B4DE7");
+                                    await prints.PrintText($"{st}", "Printer - RP4");
+                                    await Navigation.PopToRootAsync();
+                                }
+                                //var concatname = registroInvitados.Nombres + " " + registroInvitados.Apellidos;
+                                //if (PeopleList.First().NOMBRES_APELLIDOS == $"{registroInvitados.Nombres + " " + registroInvitados.Apellidos}")
+                                //{
+                                //    await DisplayAlert("",$"{concatname} es un empleado","Ok");
+                                //    //await prints.PrintText($"{st}", "RP4-18145B4DE7");
 
-                                //await prints.PrintText($"{st}", "RP4-18145B4DE7");
-                                await Navigation.PopToRootAsync();
+                                //}
+                                //await Navigation.PopToRootAsync();
 
 
                             }
@@ -448,25 +567,31 @@ namespace SCVMobil
                                 registroInvitados.salidaSubida = null;
                                 registroInvitados.Visitado = null;
                                 registroInvitados.Lector = int.Parse(Preferences.Get("LECTOR", "1"));
-                                //if (!string.IsNullOrWhiteSpace(entCodigoCarnet.Text)) //CODIGO CARNET COMENTADO//
-                                //{
-                                //    registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper();
-                                //}
+                                if (!string.IsNullOrWhiteSpace(entCodigoCarnet.Text)) //CODIGO CARNET COMENTADO//
+                                {
+                                    registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper();
+                                }
 
                                 var inserted = db.Insert(registroInvitados);
                                 fireBird.UploadVisits();
                                 fireBird.DownloadGuests();
                                 var inserted_ = db.Query<Invitados>($"SELECT * FROM INVITADOS WHERE CARGO = '{registroInvitados.Cargo}' ORDER BY Fecha_Registro DESC").FirstOrDefault();
 
+                                var empresa = Preferences.Get("Empresa", "").ToUpper();
+                                //var textempresa = empresa.ToUpper();
+                                var depar = Preferences.Get("Departamento", "").ToUpper();
+                                //var departamento = depar.ToUpper();
+                                var piso = Preferences.Get("Piso", "").ToUpper();
+                                //piso = piso.ToUpper();
 
                                 var st = "^XA" +
                                        "^FX" +
                                        "^CF0,55" +
-                                       $"^FO70,30^FDPUERTO SANSOUCI^FS" +
+                                       $"^FO70,30^FD{empresa}^FS" +
                                        $"^CF0,45" +
                                        $"^FO70,100^FD{registroInvitados.Nombres + " " + registroInvitados.Apellidos}^FS" +
-                                       "^FO70,170^FDALMACEN^FS" +
-                                       $"^FO70,230^FDPISO 10^FS" +
+                                       $"^FO70,170^FD{depar}^FS" +
+                                       $"^FO70,230^FD{piso}^FS" +
                                        $"^FO70,290^FD{registroInvitados.Fecha_Registro}^FS" +
                                        $"^FO70,360^FDFavor Devolver Ticket en la salida^FS^FS" +
                                        "^FS"+
@@ -483,8 +608,19 @@ namespace SCVMobil
                                         "^FO10,85^GB650,1,3^FS"+
                                         "^FO10,150 ^ GB650,1,3 ^ FS"+
                                         "^XZ";
-                               // await prints.PrintText($"{st}", "RP4-18145B4DE7");
-                                await Navigation.PopToRootAsync();
+
+                                var searchemp = db.Query<PERSONAS>($"SELECT DOCUMENTO FROM PERSONAS WHERE DOCUMENTO = '{entCedula.Text}'");
+                                if (searchemp.Count > 0)
+                                {
+                                    await DisplayAlert("", "Este es un empleado, por lo cual no se imprimira ticket", "ok");
+                                    await Navigation.PopToRootAsync();
+                                }
+                                else
+                                {
+                                    //await prints.PrintText($"{st}", "RP4-18145B4DE7");
+                                    await prints.PrintText($"{st}", "Printer - RP4");
+                                    await Navigation.PopToRootAsync();
+                                }
 
                             }
                         }
@@ -492,6 +628,7 @@ namespace SCVMobil
                         {
                             Debug.WriteLine("Error en BtnImprimir: "+ex.Message);
                             Analytics.TrackEvent("Error al buscar compañias seleccionadas: " + ex.Message + "\n Escaner: " + Preferences.Get("LECTOR", "N/A"));
+                            await DisplayAlert("", ex.Message, "ok");
                             //throw;
                         }
                     }
@@ -518,7 +655,10 @@ namespace SCVMobil
                         registroInvitados.Estatus_ID = 100;
                         registroInvitados.Modulo = 1;
                         registroInvitados.Empresa_ID = null;
-                        registroInvitados.Placa = entPlaca.Text;
+                        if (string.IsNullOrEmpty(entPlaca.Text))
+                        {
+                           registroInvitados.Placa = null;
+                        }
                         registroInvitados.Tipo_Visitante = "VISITANTE";
                         registroInvitados.Es_Grupo = 0;
                         registroInvitados.Grupo_ID = 0;
@@ -540,10 +680,10 @@ namespace SCVMobil
                         registroInvitados.Visitado = null;
                         registroInvitados.Lector = int.Parse(Preferences.Get("LECTOR", "1"));
                         registroInvitados.Fecha_Salida = null;
-                        //if (!string.IsNullOrWhiteSpace(entCodigoCarnet.Text))  //CODIGO CARNET COMENTADO//
-                        //{
-                        //    registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper();
-                        //}
+                        if (!string.IsNullOrWhiteSpace(entCodigoCarnet.Text))  //CODIGO CARNET COMENTADO//
+                        {
+                            registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper();
+                        }
 
                         //var inserted = db.Insert(registroInvitados); COMMENTED BY ME.//
                         db.Insert(registroInvitados);
@@ -551,15 +691,21 @@ namespace SCVMobil
                         fireBird.DownloadGuests();
                         var inserted__ = db.Query<Invitados>($"SELECT * FROM INVITADOS WHERE CARGO = '{registroInvitados.Cargo}' ORDER BY Fecha_Registro DESC").FirstOrDefault();
 
+                        var empresa = Preferences.Get("Empresa", "").ToUpper();
+                        //var textempresa = empresa.ToUpper();
+                        var depar = Preferences.Get("Departamento", "").ToUpper();
+                        //var departamento = depar.ToUpper();
+                        var piso = Preferences.Get("Piso", "").ToUpper();
+                        //piso = piso.ToUpper();
 
                         var st = "^XA" +
                                        "^FX" +
                                        "^CF0,55" +
-                                       $"^FO70,30^FDPUERTO SANSOUCI^FS" +
+                                       $"^FO70,30^FD{empresa}^FS" +
                                        $"^CF0,45" +
                                        $"^FO70,100^FD{registroInvitados.Nombres + " " + registroInvitados.Apellidos}^FS" +
-                                       "^FO70,170^FDALMACEN^FS" +
-                                       $"^FO70,230^FDPISO 10^FS" +
+                                       $"^FO70,170^FD{depar}^FS" +
+                                       $"^FO70,230^FD{piso}^FS" +
                                        $"^FO70,290^FD{registroInvitados.Fecha_Registro}^FS" +
                                        $"^FO70,360^FDFavor Devolver Ticket en la salida^FS^FS" +
                                        "^FS" +
@@ -576,10 +722,20 @@ namespace SCVMobil
                                         "^FO10,85^GB650,1,3^FS" +
                                         "^FO10,150 ^ GB650,1,3 ^ FS" +
                                         "^XZ"; ;
+                        var searchemp = db.Query<PERSONAS>($"SELECT DOCUMENTO FROM PERSONAS WHERE DOCUMENTO = '{entCedula.Text}'");
+                        if (searchemp.Count > 0)
+                        {
+                            await DisplayAlert("", "Este es un empleado, por lo cual no se imprimira ticket", "ok");
+                            await Navigation.PopToRootAsync();
+                        }
+                        else
+                        {
+                            await prints.PrintText($"{st}", "Printer - RP4");
+                            await Navigation.PopToRootAsync();
+                        }
 
-                        //await prints.PrintText($"{st}", "RP4-18145B4DE7"); 
-                
-                        await Navigation.PopToRootAsync();
+
+                       
                        
                     }
                     else
@@ -616,6 +772,7 @@ namespace SCVMobil
                 Preferences.Set("DESTINO_SELECTED", selected.ID_DEPARTAMENTO);
                 //pickerVisitaA.ItemsSource = Preferences.Get("PERSONAS_LIST", "").Split(',').ToList<string>();//
                 var Request = db.Query<PERSONAS>($"SELECT * FROM PERSONAS WHERE DEPARTAMENTO_ID = {selected.ID_DEPARTAMENTO}");
+                PeopleList = Request;
 
                 if (!Request.Any())
                 {
@@ -627,10 +784,10 @@ namespace SCVMobil
                 }
                 else
                 {
-                    FrameVisitaA.IsVisible = true;
-                    FrameVisitaA2.IsVisible = true;
-                    pickerVisitaA.IsVisible = true;
-                    lblvisitaA.IsVisible = true;
+                    //FrameVisitaA.IsVisible = true;
+                    //FrameVisitaA2.IsVisible = true;
+                    //pickerVisitaA.IsVisible = true;
+                    //lblvisitaA.IsVisible = true;
                     AsignarDestinos(Request);
                 }
             }
@@ -738,29 +895,121 @@ namespace SCVMobil
             } 
         }
 
-        private void Campos_Clicked(object sender, EventArgs e)
+        private async void Campos_Clicked(object sender, EventArgs e)
         {
-            if (fcombo1.IsVisible == true && fcombo2.IsVisible == true && fcombo3.IsVisible == true)
+            if (string.IsNullOrEmpty(lbl1.Text) && string.IsNullOrEmpty(lbl2.Text) && string.IsNullOrEmpty(lbl3.Text))
             {
-                Campos.Text = "Activar";
-                lbl1.IsVisible = false;
-                lbl2.IsVisible = false;
-                lbl3.IsVisible = false;
-                fcombo1.IsVisible = false;
-                fcombo2.IsVisible = false;
-                fcombo3.IsVisible = false;
+                await DisplayAlert("Info", "Para ver los campos debe de llenarlos en configuracion", "OK");
+
             }
             else
             {
-                Campos.Text = "Desactivar";
-                lbl1.IsVisible = true;
-                lbl2.IsVisible = true;
-                lbl3.IsVisible = true;
-                fcombo1.IsVisible = true;
-                fcombo2.IsVisible = true;
-                fcombo3.IsVisible = true;
+                if (!string.IsNullOrEmpty(lbl1.Text))
+                {
+                    lbl1.IsVisible = true;
+                    fcombo1.IsVisible = true;
+                    //Campos.Text = "Desactivar";
+                }
+
+                if (!string.IsNullOrEmpty(lbl2.Text))
+                {
+                    lbl2.IsVisible = true;
+                    fcombo2.IsVisible = true;
+                    //Campos.Text = "Desactivar";
+                }
+
+                if (!string.IsNullOrEmpty(lbl3.Text))
+                {
+                    lbl3.IsVisible = true;
+                    fcombo3.IsVisible = true;
+                    //Campos.Text = "Desactivar";
+                }
+                var list1 = Comboone.Where(elem => elem != "" && elem != null).ToList();
+                if (list1.Count > 0)
+                {
+                    lbl4.IsVisible = true;
+                    frame1.IsVisible = true;
+                   // Campos.Text = "Desactivar";
+                }
+                var list2 = Comboscn.Where(elem => elem != "" && elem != null).ToList();
+                if (list2.Count > 0)
+                {
+                    lbl5.IsVisible = true;
+                    frame2.IsVisible = true;
+                    //Campos.Text = "Desactivar";
+                }
+                var list3 = Combothr.Where(elem => elem != "" && elem != null).ToList();
+                if (list3.Count > 0)
+                {
+                    lbl6.IsVisible = true;
+                    frame3.IsVisible = true;
+                    //Campos.Text = "Desactivar";
+                }
+                Desc.IsEnabled = true;
+                Campos.IsEnabled = false;
             }
-           
+
+            
+
+
+            //if (fcombo1.IsVisible == true)
+            //{
+            //    Campos.Text = "Activar";
+            //    lbl1.IsVisible = false;
+            //    lbl2.IsVisible = false;
+            //    lbl3.IsVisible = false;
+            //    fcombo1.IsVisible = false;
+            //    fcombo2.IsVisible = false;
+            //    fcombo3.IsVisible = false;
+            //    lbl4.IsVisible = false;
+            //    lbl5.IsVisible = false;
+            //    lbl6.IsVisible = false;
+            //    frame1.IsVisible = false;
+            //    frame2.IsVisible = false;
+            //    frame3.IsVisible = false;
+
+
+            //}
+            //else
+            //{
+            //    Campos.Text = "Desactivar";
+            //    lbl1.IsVisible = true;
+            //    lbl2.IsVisible = true;
+            //    lbl3.IsVisible = true;
+            //    fcombo1.IsVisible = true;
+            //    fcombo2.IsVisible = true;
+            //    fcombo3.IsVisible = true;
+            //    lbl4.IsVisible = true;
+            //    lbl5.IsVisible = true;
+            //    lbl6.IsVisible = true;
+            //    frame1.IsVisible = true;
+            //    frame2.IsVisible = true;
+            //    frame3.IsVisible = true;
+
+
+            //} //THIS CODE ARE RIGHT//
+
+            //if (lbl4.IsVisible == true && lbl5.IsVisible == true && lbl6.IsVisible == true)
+            //{
+            //    Campos.Text = "Activar";
+            //    lbl4.IsVisible = false;
+            //    lbl5.IsVisible = false;
+            //    lbl6.IsVisible = false;
+            //    frame1.IsVisible = false;
+            //    frame2.IsVisible = false;
+            //    frame3.IsVisible = false;
+            //}
+            //else
+            //{
+            //    Campos.Text = "Desactivar";
+            //    lbl4.IsVisible = true;
+            //    lbl5.IsVisible = true;
+            //    lbl6.IsVisible = true;
+            //    frame1.IsVisible = true;
+            //    frame2.IsVisible = true;
+            //    frame3.IsVisible = true;                  
+            //}
+            //}
         }
        
         private void combo3_SelectedIndexChanged(object sender, EventArgs e)
@@ -776,6 +1025,25 @@ namespace SCVMobil
         private void combo1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void Desc_Clicked(object sender, EventArgs e)
+        {
+            //Campos.Text = "Activar";
+            lbl1.IsVisible = false;
+            lbl2.IsVisible = false;
+            lbl3.IsVisible = false;
+            fcombo1.IsVisible = false;
+            fcombo2.IsVisible = false;
+            fcombo3.IsVisible = false;
+            lbl4.IsVisible = false;
+            lbl5.IsVisible = false;
+            lbl6.IsVisible = false;
+            frame1.IsVisible = false;
+            frame2.IsVisible = false;
+            frame3.IsVisible = false;
+            Desc.IsEnabled = false;
+            Campos.IsEnabled = true;
         }
 
         private void AsignarDestinos(List<PERSONAS>lista)

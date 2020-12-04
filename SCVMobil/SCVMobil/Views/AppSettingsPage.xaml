@@ -6,19 +6,19 @@
              BackgroundColor="#FFFFFF"             
              NavigationPage.HasBackButton="True">
     <ContentPage.Content>
-      
-        <StackLayout Padding="40">
-            <StackLayout
+        <ScrollView>
+            <StackLayout Padding="40">
+                <StackLayout
                 VerticalOptions="CenterAndExpand"
                 Margin="0,0,0,0">
-                <Grid
+                    <Grid
                     RowSpacing="50"
                     Margin="0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label
                         Grid.Row="0"
                         Grid.Column="0"
                         FontSize="25"                     
@@ -26,15 +26,15 @@
                         Text="Placa"
                         VerticalOptions="Center"
                         TextColor="Black">
-                    </Label>
-                    <Switch
+                        </Label>
+                        <Switch
                         Grid.Row="0"
                         Grid.Column="1" 
                         x:Name="placa"
                         Toggled="Placa_Toggled"
                         OnColor="#F44336"
                         ThumbColor="#757575"/>
-                    <Label                        
+                        <Label                        
                         Grid.Row="1"
                         Grid.Column="0" 
                         FontSize="25"
@@ -42,14 +42,14 @@
                         TextColor="Black"
                         Text="Visita a"
                         VerticalOptions="Center"/>
-                    <Switch
+                        <Switch
                         Grid.Row="1"
                         Grid.Column="1"
                         x:Name="visitaA"
                         Toggled="VisitaA_Toggled"
                          OnColor="#F44336"
                         ThumbColor="#757575"/>
-                    <Label
+                        <Label
                         Grid.Row="2"
                         Grid.Column="0"
                          TextColor="Black"
@@ -57,14 +57,14 @@
                         FontAttributes="Bold"
                         Text="Puerta"
                         VerticalOptions="Center"/>
-                    <Picker                        
+                        <Picker                        
                         x:Name="entPuerta"
                         Grid.Row="2"
                         Grid.Column="1"
                         ItemDisplayBinding="{Binding NOMBRE}"
                         SelectedIndexChanged="entPuerta_SelectedIndexChanged"                        
                         />
-                    <Label
+                        <Label
                         Grid.Row="3"
                         Grid.Column="0"
                         FontSize="20"
@@ -72,7 +72,7 @@
                         FontAttributes="Bold"
                         Text="Modo Verificacion"
                         VerticalOptions="Center"/>
-                    <Switch
+                        <Switch
                         Grid.Row="3"
                         Grid.Column="1"
                         Toggled="verificacion_Toggled"
@@ -80,7 +80,23 @@
                         OnColor="#F44336"
                         ThumbColor="#757575"
                         />
-                    <Label
+                        <Label
+                        Grid.Row="5"
+                        Grid.Column="0"
+                        FontSize="20"
+                            x:Name="rttlabel"
+                        TextColor="Black"
+                        FontAttributes="Bold"
+                        Text="Texto entrada 1"
+                        VerticalOptions="Center"/>
+                        <Switch
+                        Grid.Row="5"
+                        Grid.Column="1"
+                        Toggled="rtt_Toggled"
+                        x:Name="rtt"
+                        OnColor="#F44336"
+                        ThumbColor="#757575"></Switch>
+                        <Label
                         Grid.Row="4"
                         Grid.Column="0"
                         FontSize="20"
@@ -89,33 +105,33 @@
                         x:Name="lblTiempo"
                         Text="Tiempo de verificacion"
                         VerticalOptions="Center"/>
-                    <Picker x:Name="TiempoVerif"                           
+                        <Picker x:Name="TiempoVerif"                           
                         Grid.Row="4"
                         Grid.Column="1"                        
                         SelectedIndexChanged="TiempoVerif_SelectedIndexChanged">
-                        <Picker.Items>
-                            <x:String>1</x:String>
-                            <x:String>2</x:String>
-                            <x:String>3</x:String>
-                            <x:String>4</x:String>
-                            <x:String>5</x:String>
-                        </Picker.Items>
+                            <Picker.Items>
+                                <x:String>1</x:String>
+                                <x:String>2</x:String>
+                                <x:String>3</x:String>
+                                <x:String>4</x:String>
+                                <x:String>5</x:String>
+                            </Picker.Items>
 
-                    </Picker>
-                
-                    
-                </Grid>
-            </StackLayout>
-            <StackLayout
-                VerticalOptions="EndAndExpand">
-                
-               
+                        </Picker>
+
+
+                    </Grid>
+                </StackLayout>
                 <StackLayout
+                VerticalOptions="EndAndExpand">
+
+
+                    <StackLayout
                     HorizontalOptions="CenterAndExpand"
                         Margin="0,0,0,-20"
                         Orientation="Horizontal"
                     >
-                    <Button 
+                        <Button 
                         BorderColor="White"
                         x:Name="btConfigAvan" 
                         Text="Config. Avanzada" 
@@ -126,7 +142,7 @@
                         CornerRadius="27"                       
                         WidthRequest="140"
                         Margin="0,0,0,0"/>
-                    <Button 
+                        <Button 
                         BorderColor="White"                    
                         x:Name="btnClearDB" 
                         Text="Limpiar DB" 
@@ -136,9 +152,11 @@
                         TextColor="White"
                         FontAttributes="Bold"
                         WidthRequest="140"/>
+                    </StackLayout>
+
                 </StackLayout>
-                
             </StackLayout>
-        </StackLayout>
+        </ScrollView>
+      
     </ContentPage.Content>
 </ContentPage>

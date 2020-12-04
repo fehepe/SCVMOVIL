@@ -11,10 +11,19 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem 
             x:Name="Campos"
-            Text="Activar" 
-            Order="Primary"
+            
+            Text="+"
+           
             Clicked="Campos_Clicked">
         </ToolbarItem>
+
+        <ToolbarItem 
+            x:Name="Desc"
+            Text="---"            
+            
+            Clicked="Desc_Clicked">
+        </ToolbarItem>
+
     </ContentPage.ToolbarItems>
     
     <ScrollView>
@@ -144,6 +153,7 @@
             <Frame 
                 CornerRadius="15" 
                 BorderColor="#757575" 
+                x:Name="CodeRTT"
                 Padding="5">
                 <Frame 
                     CornerRadius="10" 
@@ -187,36 +197,7 @@
                     </Entry>
                 </Frame>
             </Frame>
-
-            <Label
-                    x:Name="lbEstado"
-                    Grid.Row="7"
-                    Grid.Column="0" 
-                TextColor="#000000"
-                    FontSize="18"
-                    FontAttributes="Bold"
-                    Text="Estado de Carga"
-                    VerticalOptions="Center">
-            </Label>
-            <Frame 
-                CornerRadius="15" 
-                x:Name="FramaEstadoCarga"
-                BorderColor="#757575" 
-                Padding="5">
-                <Frame 
-                    CornerRadius="10" 
-                    x:Name="FrameEstadoCargaFrame"
-                    BackgroundColor="White" 
-                    Padding="1">
-                    <Picker
-                    x:Name="pK_EstadoDeCarga"
-                    Grid.Row="7"
-                    Grid.Column="1"
-                    Title="Seleccione..."
-                    SelectedIndexChanged="PickerEstadoCarga_SelectedIndexChanged">
-                    </Picker>
-                </Frame>
-            </Frame>
+            
             <Label x:Name="lbl1"    Grid.Row="8"
                     Grid.Column="0" 
                 TextColor="#000000"
@@ -269,9 +250,18 @@
                     <Entry x:Name="combo3" Grid.Row="10"/>
                 </Frame>               
             </Frame>
-            <!--<Frame 
+
+
+            <Label x:Name="lbl4"    Grid.Row="10"
+                    Grid.Column="0" 
+                   Text="Combo 1"
+                TextColor="#000000"
+                    FontSize="18"
+                    FontAttributes="Bold"/>
+            
+            <Frame 
                 CornerRadius="15" 
-                x:Name="fcombo1"
+                x:Name="frame1"
                 BorderColor="#757575" 
                 IsVisible="false"
                 Padding="5">
@@ -281,7 +271,7 @@
                     BackgroundColor="White" 
                     Padding="1">
                     <Picker
-                    x:Name="combo1"
+                    x:Name="cmbbox1"
                     Grid.Row="8"
                     Grid.Column="1"
                     Title="Seleccione..."
@@ -290,9 +280,16 @@
                 </Frame>
             </Frame>
 
+            <Label x:Name="lbl5"    Grid.Row="10"
+                    Grid.Column="0" 
+                   Text="Combo 2"
+                TextColor="#000000"
+                    FontSize="18"
+                    FontAttributes="Bold"/>
+            
             <Frame 
                 CornerRadius="15" 
-                x:Name="fcombo2"
+                x:Name="frame2"
                 IsVisible="false"
                 BorderColor="#757575" 
                 Padding="5">
@@ -302,7 +299,7 @@
                     BackgroundColor="White" 
                     Padding="1">
                     <Picker
-                    x:Name="combo2"
+                    x:Name="cmbbox2"
                     Grid.Row="9"
                     Grid.Column="1"
                     Title="Seleccione..."
@@ -310,10 +307,17 @@
                     </Picker>
                 </Frame>
             </Frame>
-            
+
+            <Label x:Name="lbl6"    Grid.Row="10"
+                    Grid.Column="0" 
+                   Text="Combo 3"
+                TextColor="#000000"
+                    FontSize="18"
+                    FontAttributes="Bold"/>
+
             <Frame 
                 CornerRadius="15" 
-                x:Name="fcombo3"
+                x:Name="frame3"
                 IsVisible="false"
                 BorderColor="#757575" 
                 Padding="5">
@@ -323,14 +327,14 @@
                     BackgroundColor="White" 
                     Padding="1">
                     <Picker
-                    x:Name="combo3"
+                    x:Name="cmbbox3"
                     Grid.Row="10"
                     Grid.Column="1"
                     Title="Seleccione..."
                     SelectedIndexChanged="combo3_SelectedIndexChanged">
                     </Picker>
                 </Frame>
-            </Frame>-->
+            </Frame>
 
             <Button  
                 Text="Imprimir"

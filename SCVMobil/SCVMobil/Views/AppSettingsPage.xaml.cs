@@ -22,7 +22,32 @@ namespace SCVMobil
         public AppSettingsPage()
         {
             InitializeComponent();
-            
+            var pp = Preferences.Get("rttcode", "");
+            if (string.IsNullOrEmpty(pp))
+            {
+                rttlabel.Text = "Texto Entrada 2";
+            }
+            else
+            {
+                rttlabel.Text = pp;
+            }
+            var tile = new TapGestureRecognizer();
+            tile.Tapped += async (s, e) =>
+            {
+                var typeoption = await DisplayPromptAsync(title: "Escriba una opcion", message: "", accept: "ok", cancel: "cancelar");
+                if (string.IsNullOrEmpty(typeoption))
+                {
+                    await DisplayAlert("", "No puede dejar campos vacios", "ok");
+                }
+                else
+                {
+                    Preferences.Set("rttcode", typeoption);
+                    var p = Preferences.Get("rttcode", "");
+                    rttlabel.Text = p;
+                }
+            };
+            rttlabel.GestureRecognizers.Add(tile);
+
         }
         
 
@@ -36,7 +61,7 @@ namespace SCVMobil
             setdefaults();
             Localidad_VSU();
             visitaA.IsToggled = Preferences.Get("VISITA_A_SELECTED", true);
-            
+            rtt.IsToggled = Preferences.Get("RTT", true);
             placa.IsToggled= Preferences.Get("PLACA_SELECTED", true);
             TiempoVerif.SelectedItem = Preferences.Get("TIEMPOS", "1");
         }
@@ -227,6 +252,11 @@ namespace SCVMobil
         {
              Preferences.Set("TIEMPOS", TiempoVerif.SelectedItem.ToString());                        
 
+        }
+
+        private void rtt_Toggled(object sender, ToggledEventArgs e)
+        {
+             Preferences.Set("RTT", e.Value);
         }
     }
 }

@@ -1,12 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="SCVMobil.Views.EditTextViews"
+    x:Class="SCVMobil.Views.EditTextViewsIn"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="Campos de salida"
+    Title="Campos de entrada"
     mc:Ignorable="d">
+
 
     <ContentPage.Content>
         <ScrollView>
@@ -20,7 +21,7 @@
                     <Label
                         x:Name="txt1"
                         FontSize="18"
-                        Text="Texto salida 1"
+                        Text="Texto entrada 1"
                         TextColor="Black"
                         VerticalOptions="Center" />
                     <Switch x:Name="tog1" Toggled="tog1_Toggled" />
@@ -42,7 +43,7 @@
                     <Label
                         x:Name="txt2"
                         FontSize="18"
-                        Text="Texto salida 2"
+                        Text="Texto entrada 2"
                         TextColor="Black"
                         VerticalOptions="Center" />
                     <Switch x:Name="tog2" Toggled="tog2_Toggled" />
@@ -64,7 +65,7 @@
                     <Label
                         x:Name="txt3"
                         FontSize="18"
-                        Text="Texto salida 3"
+                        Text="Texto entrada 3"
                         TextColor="Black"
                         VerticalOptions="Center" />
                     <Switch x:Name="tog3" Toggled="tog3_Toggled" />
@@ -87,7 +88,7 @@
                     <Label
                         x:Name="txt4"
                         FontSize="18"
-                        Text="Comentario salida"
+                        Text="Comentario entrada"
                         TextColor="Black"
                         VerticalOptions="Center" />
                     <Switch x:Name="tog4" Toggled="tog4_Toggled" />
@@ -102,7 +103,7 @@
                     <Label
                         x:Name="txt5"
                         FontSize="18"
-                        Text="Comentario salida 2"
+                        Text="Comentario entrada 2"
                         TextColor="Black"
                         VerticalOptions="Center" />
                     <Switch x:Name="tog5" Toggled="tog5_Toggled" />
@@ -117,7 +118,7 @@
                     <Label
                         x:Name="txt6"
                         FontSize="18"
-                        Text="Comentario salida 3"
+                        Text="Comentario entrada 3"
                         TextColor="Black"
                         VerticalOptions="Center" />
                     <Switch x:Name="tog6" Toggled="tog6_Toggled" />
