@@ -126,12 +126,7 @@
                     </Frame>
                 </Frame>
 
-                <Label
-                    x:Name="lblcm"
-                    FontAttributes="Bold"
-                    FontSize="18"
-                    Text="Comentarios personalizados"
-                    TextColor="Black" />
+
 
 
                 <Label
@@ -191,7 +186,7 @@
 
 
 
-                <Frame
+                <!--<Frame
                     x:Name="frame6"
                     Padding="5"
                     BorderColor="#757575"
@@ -203,7 +198,7 @@
                         CornerRadius="10">
                         <Entry x:Name="comentariotxt3" Placeholder="Escribe aqui" />
                     </Frame>
-                </Frame>
+                </Frame>-->
 
                 <Button
                     x:Name="btnSalida"

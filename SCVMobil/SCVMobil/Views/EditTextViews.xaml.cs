@@ -36,6 +36,7 @@ namespace SCVMobil.Views
             if (string.IsNullOrEmpty(pp))
             {
                 txt1.Text = "Texto Salida 1";
+                Preferences.Set("title1salida", txt1.Text);
             }
             else
             {
@@ -46,6 +47,7 @@ namespace SCVMobil.Views
             if (string.IsNullOrEmpty(pp2))
             {
                 txt2.Text = "Texto Salida 2";
+                Preferences.Set("title2salida", txt2.Text);
             }
             else
             {
@@ -56,6 +58,7 @@ namespace SCVMobil.Views
             if (string.IsNullOrEmpty(pp3))
             {
                 txt3.Text = "Texto Salida 3";
+                Preferences.Set("title3salida", txt3.Text);
             }
             else
             {
@@ -66,6 +69,7 @@ namespace SCVMobil.Views
             if (string.IsNullOrEmpty(pp4))
             {
                 txt4.Text = "Texto Salida 4";
+                Preferences.Set("title4salida", txt4.Text);
             }
             else
             {
@@ -76,6 +80,7 @@ namespace SCVMobil.Views
             if (string.IsNullOrEmpty(pp5))
             {
                 txt5.Text = "Texto Salida 5";
+                Preferences.Set("title5salida", txt5.Text);
             }
             else
             {
@@ -86,6 +91,7 @@ namespace SCVMobil.Views
             if (string.IsNullOrEmpty(pp6))
             {
                 txt6.Text = "Texto Salida 6";
+                Preferences.Set("title6salida", txt6.Text);
             }
             else
             {
