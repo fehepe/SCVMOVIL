@@ -175,7 +175,7 @@ namespace SCVMobil
             
 
             bool isSet = Preferences.Get("IS_SET", false);
-            MainPage = new NavigationPage(new SalidaPage());
+            MainPage = new NavigationPage(new MainPage());
             //if (isSet == false)
             //{
             //    MainPage = new NavigationPage(new LicensePage());
