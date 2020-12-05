@@ -111,8 +111,72 @@ namespace SCVMobil
             //lbl4.IsVisible = false;
             //lbl5.IsVisible = false;
             //lbl6.IsVisible = false;
-            //lbl1.Text = Preferences.Get("texto1", "");
-            //lbl2.Text = Preferences.Get("texto2", "");
+            //lbl1.Text = Preferences.Get("title1", "");
+            //lbl2.Text = Preferences.Get("title2", "");
+            //lbl3.Text = Preferences.Get("title3", "");
+            //lbl4.Text = Preferences.Get("title4", "");
+            //lbl5.Text = Preferences.Get("title5", "");
+
+            var p1 = Preferences.Get("texto1entrada", true);
+            var p2 = Preferences.Get("texto2entrada", true);
+            var p3 = Preferences.Get("texto3entrada", true);
+            var p4 = Preferences.Get("texto4entrada", true);
+            var p5 = Preferences.Get("texto5entrada", true);
+            //var p6 = Preferences.Get("texto6entrada", true);
+
+            if (p1 == true)
+            {
+                lbl1.Text = Preferences.Get("title1salida", "");
+                //lbl4.IsVisible = true;
+            }
+            else
+            {
+                //lbl4.IsVisible = false;
+
+            }
+
+            if (p2 == true)
+            {
+                lbl2.Text = Preferences.Get("title2salida", "");
+                //lbl5.IsVisible = true;
+            }
+            else
+            {
+                //lbl5.IsVisible = false;
+            }
+
+            if (p3 == true)
+            {
+                lbl3.Text = Preferences.Get("title3salida", "");
+                //lbl6.IsVisible = true;
+            }
+            else
+            {
+                //lbl6.IsVisible = false;
+
+            }
+
+            if (p4 == true)
+            {
+                lbl4.Text = Preferences.Get("title4salida", "");
+                //lbl7.IsVisible = true;
+            }
+            else
+            {
+                //lbl7.IsVisible = false;
+
+            }
+
+            if (p5 == true)
+            {
+                lbl5.Text = Preferences.Get("title5salida", "");
+                //lbl8.IsVisible = true;
+            }
+            else
+            {
+                //lbl8.IsVisible = false;
+
+            }
             //lbl3.Text = Preferences.Get("texto3", "");
             //fcombo1.IsVisible = false;
             //fcombo2.IsVisible = false;
@@ -199,9 +263,12 @@ namespace SCVMobil
             //lbl1.Text = Preferences.Get("texto1", "");
             //lbl2.Text = Preferences.Get("texto2", "");
             //lbl3.Text = Preferences.Get("texto3", "");
-            fcombo1.IsVisible = false;
-            fcombo2.IsVisible = false;
-            fcombo3.IsVisible = false;
+            entry1.IsVisible = false;
+            entry2.IsVisible = false;
+            entry3.IsVisible = false;
+            frame1combo.IsVisible = false;
+            frame2combo.IsVisible = false;
+            frame3combo.IsVisible = false;
             GetCombos();
             if (Preferences.Get("PLACA_SELECTED", true))
             {
@@ -444,10 +511,10 @@ namespace SCVMobil
                                 registroInvitados.salidaSubida = null;
                                 registroInvitados.Visitado = visitaA;
                                 registroInvitados.Lector = int.Parse(Preferences.Get("LECTOR", "1"));
-                                if (!string.IsNullOrWhiteSpace(entCodigoCarnet.Text)) //CODIGO CARNET COMENTADO//
-                                {
-                                    registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper();
-                                }
+                                //if (!string.IsNullOrWhiteSpace(entCodigoCarnet.Text)) //CODIGO CARNET COMENTADO//
+                                //{
+                                //    registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper();
+                                //}
 
                                 db.Insert(registroInvitados);
                                 fireBird.UploadVisits();
@@ -547,10 +614,10 @@ namespace SCVMobil
                                 registroInvitados.salidaSubida = null;
                                 registroInvitados.Visitado = null;
                                 registroInvitados.Lector = int.Parse(Preferences.Get("LECTOR", "1"));
-                                if (!string.IsNullOrWhiteSpace(entCodigoCarnet.Text)) //CODIGO CARNET COMENTADO//
-                                {
-                                    registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper();
-                                }
+                                //if (!string.IsNullOrWhiteSpace(entCodigoCarnet.Text)) //CODIGO CARNET COMENTADO//
+                                //{
+                                //    registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper();
+                                //}
 
                                 var inserted = db.Insert(registroInvitados);
                                 fireBird.UploadVisits();
@@ -660,10 +727,10 @@ namespace SCVMobil
                         registroInvitados.Visitado = null;
                         registroInvitados.Lector = int.Parse(Preferences.Get("LECTOR", "1"));
                         registroInvitados.Fecha_Salida = null;
-                        if (!string.IsNullOrWhiteSpace(entCodigoCarnet.Text))  //CODIGO CARNET COMENTADO//
-                        {
-                            registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper();
-                        }
+                        //if (!string.IsNullOrWhiteSpace(entCodigoCarnet.Text))  //CODIGO CARNET COMENTADO//
+                        //{
+                        //    registroInvitados.Codigo_carnet = entCodigoCarnet.Text.ToUpper();
+                        //}
 
                         //var inserted = db.Insert(registroInvitados); COMMENTED BY ME.//
                         db.Insert(registroInvitados);
@@ -792,10 +859,10 @@ namespace SCVMobil
             }
         }
 
-        private void entCodigoCarnet_Completed(object sender, EventArgs e)
-        {
-            entPlaca.Focus();
-        }
+        //private void entCodigoCarnet_Completed(object sender, EventArgs e)
+        //{
+        //    entPlaca.Focus();
+        //}
         private void PickerEstadoCarga_SelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -877,59 +944,107 @@ namespace SCVMobil
 
         private async void Campos_Clicked(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(lbl1.Text) && string.IsNullOrEmpty(lbl2.Text) && string.IsNullOrEmpty(lbl3.Text))
+            //if (string.IsNullOrEmpty(lbl1.Text) && string.IsNullOrEmpty(lbl2.Text) && string.IsNullOrEmpty(lbl3.Text))
+            //{
+            //    await DisplayAlert("Info", "Para ver los campos debe de llenarlos en configuracion", "OK");
+
+            //}
+            //else
+            //{
+            //    if (!string.IsNullOrEmpty(lbl1.Text))
+            //    {
+            //        lbl1.IsVisible = true;
+            //        fcombo1.IsVisible = true;
+            //        //Campos.Text = "Desactivar";
+            //    }
+
+            //    if (!string.IsNullOrEmpty(lbl2.Text))
+            //    {
+            //        lbl2.IsVisible = true;
+            //        fcombo2.IsVisible = true;
+            //        //Campos.Text = "Desactivar";
+            //    }
+
+            //    if (!string.IsNullOrEmpty(lbl3.Text))
+            //    {
+            //        lbl3.IsVisible = true;
+            //        fcombo3.IsVisible = true;
+            //        //Campos.Text = "Desactivar";
+            //    }
+            //    var list1 = Comboone.Where(elem => elem != "" && elem != null).ToList();
+            //    if (list1.Count > 0)
+            //    {
+            //        lbl4.IsVisible = true;
+            //        frame1.IsVisible = true;
+            //       // Campos.Text = "Desactivar";
+            //    }
+            //    var list2 = Comboscn.Where(elem => elem != "" && elem != null).ToList();
+            //    if (list2.Count > 0)
+            //    {
+            //        lbl5.IsVisible = true;
+            //        frame1.IsVisible = true;
+            //        //Campos.Text = "Desactivar";
+            //    }
+            //    var list3 = Combothr.Where(elem => elem != "" && elem != null).ToList();
+            //    if (list3.Count > 0)
+            //    {
+            //        lbl6.IsVisible = true;
+            //        frame3.IsVisible = true;
+            //        //Campos.Text = "Desactivar";
+            //    }
+            //    Desc.IsEnabled = true;
+            //    Campos.IsEnabled = false;
+            //}
+
+            var p1 = Preferences.Get("texto1entrada", true);
+            var p2 = Preferences.Get("texto2entrada", true);
+            var p3 = Preferences.Get("texto3entrada", true);
+            var p4 = Preferences.Get("texto4entrada", true);
+            var p5 = Preferences.Get("texto5entrada", true);
+            var p6 = Preferences.Get("texto6entrada", true);
+
+
+
+
+            if (cmbbox1.ItemsSource.Count > 0 && p4 == true)
             {
-                await DisplayAlert("Info", "Para ver los campos debe de llenarlos en configuracion", "OK");
-
+                lbl4.IsVisible = true;
+                frame1combo.IsVisible = true;
+                //lbl4.Text = Preferences.Get("title1salida", "");
+                // Campos.Text = "Desactivar";
             }
-            else
+            //var list2 = Comboscn.Where(elem => elem != "" && elem != null).ToList();
+            if (cmbbox2.ItemsSource.Count > 0 && p5 == true)
             {
-                if (!string.IsNullOrEmpty(lbl1.Text))
-                {
-                    lbl1.IsVisible = true;
-                    fcombo1.IsVisible = true;
-                    //Campos.Text = "Desactivar";
-                }
-
-                if (!string.IsNullOrEmpty(lbl2.Text))
-                {
-                    lbl2.IsVisible = true;
-                    fcombo2.IsVisible = true;
-                    //Campos.Text = "Desactivar";
-                }
-
-                if (!string.IsNullOrEmpty(lbl3.Text))
-                {
-                    lbl3.IsVisible = true;
-                    fcombo3.IsVisible = true;
-                    //Campos.Text = "Desactivar";
-                }
-                var list1 = Comboone.Where(elem => elem != "" && elem != null).ToList();
-                if (list1.Count > 0)
-                {
-                    lbl4.IsVisible = true;
-                    frame1.IsVisible = true;
-                   // Campos.Text = "Desactivar";
-                }
-                var list2 = Comboscn.Where(elem => elem != "" && elem != null).ToList();
-                if (list2.Count > 0)
-                {
-                    lbl5.IsVisible = true;
-                    frame2.IsVisible = true;
-                    //Campos.Text = "Desactivar";
-                }
-                var list3 = Combothr.Where(elem => elem != "" && elem != null).ToList();
-                if (list3.Count > 0)
-                {
-                    lbl6.IsVisible = true;
-                    frame3.IsVisible = true;
-                    //Campos.Text = "Desactivar";
-                }
-                Desc.IsEnabled = true;
-                Campos.IsEnabled = false;
+                lbl5.IsVisible = true;
+                frame2combo.IsVisible = true;
+                //lbl5.Text = Preferences.Get("title2salida", "");
+                //Campos.Text = "Desactivar";
+            }
+            //var list3 = Combothr.Where(elem => elem != "" && elem != null).ToList();
+            if (cmbbox3.ItemsSource.Count > 0 && p3 == true)
+            {
+                lbl6.IsVisible = true;
+                frame3combo.IsVisible = true;
+                // lbl6.Text = Preferences.Get("title3salida", "");
+                //Campos.Text = "Desactivar";
             }
 
-            
+            if (!string.IsNullOrEmpty(lbl1.Text) && p1 == true)
+            {
+                lbl1.IsVisible = true;
+                entry1.IsVisible = true;
+                //lbl4.Text = Preferences.Get("title4salida", "");
+            }
+
+            if (!string.IsNullOrEmpty(lbl2.Text) && p2 == true)
+            {
+                lbl2.IsVisible = true;
+                entry2.IsVisible = true;
+                //lbl4.Text = Preferences.Get("title5salida", "");
+            }
+
+
 
 
             //if (fcombo1.IsVisible == true)
@@ -1010,20 +1125,48 @@ namespace SCVMobil
         private void Desc_Clicked(object sender, EventArgs e)
         {
             //Campos.Text = "Activar";
-            lbl1.IsVisible = false;
-            lbl2.IsVisible = false;
-            lbl3.IsVisible = false;
-            fcombo1.IsVisible = false;
-            fcombo2.IsVisible = false;
-            fcombo3.IsVisible = false;
-            lbl4.IsVisible = false;
-            lbl5.IsVisible = false;
-            lbl6.IsVisible = false;
-            frame1.IsVisible = false;
-            frame2.IsVisible = false;
-            frame3.IsVisible = false;
-            Desc.IsEnabled = false;
+           
             Campos.IsEnabled = true;
+
+            if (lbl1.IsVisible == true)
+            {
+                lbl1.IsVisible = false;
+                entry1.IsVisible = false;
+            }
+
+            if (lbl2.IsVisible == true)
+            {
+                lbl2.IsVisible = false;
+                entry2.IsVisible = false;
+            }
+            if (lbl3.IsVisible == true)
+            {
+                lbl3.IsVisible = false;
+                entry3.IsVisible = false;
+            }
+            if (cmbbox1.ItemsSource.Count > 0)
+            {
+                lbl4.IsVisible = false;
+                frame1combo.IsVisible = false;
+                // chx1.IsVisible = false;
+                // Campos.Text = "Desactivar";
+            }
+            // var list2 = Comboscn.Where(elem => elem != "" && elem != null).ToList();
+            if (cmbbox2.ItemsSource.Count > 0)
+            {
+                lbl5.IsVisible = false;
+                frame2combo.IsVisible = false;
+                //  chx2.IsVisible = false;
+                //Campos.Text = "Desactivar";
+            }
+            // var list3 = Combothr.Where(elem => elem != "" && elem != null).ToList();
+            if (cmbbox3.ItemsSource.Count > 0)
+            {
+                lbl6.IsVisible = false;
+                frame3combo.IsVisible = false;
+
+                //Campos.Text = "Desactivar";
+            }
         }
 
         private void AsignarDestinos(List<PERSONAS>lista)

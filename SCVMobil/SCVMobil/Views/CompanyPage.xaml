@@ -1,353 +1,353 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d"
-             Title="DESTINO"
-             x:Class="SCVMobil.CompanyPage"
-              BackgroundColor="#FFFFFF">
+<ContentPage
+    x:Class="SCVMobil.CompanyPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="DESTINO"
+    BackgroundColor="#FFFFFF"
+    mc:Ignorable="d">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem 
+        <ToolbarItem
             x:Name="Campos"
-            
-            Text="+"
-           
-            Clicked="Campos_Clicked">
-        </ToolbarItem>
+            Clicked="Campos_Clicked"
+            Text="+" />
 
-        <ToolbarItem 
+        <ToolbarItem
             x:Name="Desc"
-            Text="---"            
-            
-            Clicked="Desc_Clicked">
-        </ToolbarItem>
+            Clicked="Desc_Clicked"
+            Text="---" />
 
     </ContentPage.ToolbarItems>
-    
+
     <ScrollView>
-        <StackLayout Padding="20"
-                     VerticalOptions="Center">
+        <StackLayout Padding="20" VerticalOptions="Center">
             <Label
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    FontSize="18"
-                    FontAttributes="Bold"
-                    Text="Nombre(s)"
-                    VerticalOptions="Center"
-                    TextColor="#000000">
-                </Label>
-            <Frame 
-                CornerRadius="15" 
-                BorderColor="#757575" 
-                Padding="5">
-                <Frame 
-                    CornerRadius="10" 
-                    BackgroundColor="White" 
-                    Padding="1">
-                    <Entry
-                    x:Name="entNombre"
-                    Grid.Row="1"
-                    Grid.Column="1" 
-                    Keyboard="Email"
-                    IsReadOnly="True"/>
-                </Frame>
-            </Frame>
-            <Label
-                    Grid.Row="2"
-                    Grid.Column="0" 
-                    TextColor="#000000"
-                
-                   FontSize="18"
-                    FontAttributes="Bold"
-                    Text="Identificación"
-                    VerticalOptions="Center"
-                
-                 >
-                </Label>
-            <Frame 
-                CornerRadius="15" 
-                BorderColor="#757575" 
-                Padding="5">
-                <Frame 
-                    CornerRadius="10" 
-                    BackgroundColor="White" 
-                    Padding="1">
-                    <Entry
-                    x:Name="entCedula"
-                    Grid.Row="2"
-                    Grid.Column="1" 
-                    IsReadOnly="True"
-                    Completed="EntCedula_Completed">
-                </Entry>
-                </Frame>
-            </Frame>
-            <Label
-                    Grid.Row="3"
-                    Grid.Column="0" 
-                    FontSize="18"
-                    FontAttributes="Bold"
-                    Text="Destino"
-                    TextColor="#000000"
-                    VerticalOptions="Center">
-                </Label>
-            <Frame 
-                CornerRadius="15" 
-                BorderColor="#757575" 
-                Padding="5">
-                <Frame 
-                    CornerRadius="10" 
-                    BackgroundColor="White" 
-                    Padding="1">
-                    <Picker
-                    x:Name="pickerDestino"
-                    Grid.Row="3"
-                    ItemDisplayBinding="{Binding DEPTO_NOMBRE}"    
-                    Grid.Column="1" 
-                    Title="Seleccione..."
-                    SelectedIndexChanged="PickerDestino_SelectedIndexChanged"/>
-                </Frame>
-            </Frame>
-            <Label
-                    Grid.Row="4"
-                    Grid.Column="0" 
-                TextColor="#000000"
-                   FontSize="18"
-                    FontAttributes="Bold"
-                    x:Name="lblvisitaA"
-                    Text="Visita a"
-                    VerticalOptions="Center">
-                </Label>
-            <Frame 
-                CornerRadius="15" 
-                x:Name="FrameVisitaA"
-                BorderColor="#757575" 
-                Padding="5">
-                <Frame 
-                    CornerRadius="10" 
-                    x:Name="FrameVisitaA2"
-                    BackgroundColor="White" 
-                    Padding="1">
-                    <Picker
-                    x:Name="pickerVisitaA"
-                    Grid.Row="4"
-                    Grid.Column="1"          
-                    ItemDisplayBinding="{Binding NOMBRES_APELLIDOS}"
-                    Title="Seleccione..."
-                    SelectedIndexChanged="PickerVisitaA_SelectedIndexChanged">
-                    </Picker>
-                </Frame>
-            </Frame>
-
-            <Label
-                    Grid.Row="5"
-                    Grid.Column="0" 
-                TextColor="#000000"
-                   FontSize="18"
-                    FontAttributes="Bold"
-                    x:Name="lblCodigoCarnet"
-                    Text="Codigo RNTT"
-                    VerticalOptions="Center">
-            </Label>
-            <Frame 
-                CornerRadius="15" 
-                BorderColor="#757575" 
-                x:Name="CodeRTT"
-                Padding="5">
-                <Frame 
-                    CornerRadius="10" 
-                    BackgroundColor="White" 
-                    Padding="1">
-                    <Entry
-                    x:Name="entCodigoCarnet"
-                    Grid.Row="5"
-                    Grid.Column="1" 
-                    MaxLength="11"
-                    Completed="entCodigoCarnet_Completed">
-                    </Entry>
-                </Frame>
-            </Frame>
-            
-            <Label
-                    x:Name="lbPlaca"
-                    Grid.Row="6"
-                    Grid.Column="0" 
-                TextColor="#000000"
-                    FontSize="18"
-                    FontAttributes="Bold"
-                    Text="Placa"
-                    VerticalOptions="Center">
-                </Label>
-            <Frame 
-                CornerRadius="15" 
-                x:Name="FramaPlaca"
-                BorderColor="#757575" 
-                Padding="5">
-                <Frame 
-                    CornerRadius="10" 
-                    x:Name="FramePlaca2"
-                    BackgroundColor="White" 
-                    Padding="1">
-                    <Entry
-                    x:Name="entPlaca"
-                    Grid.Row="6"
-                    Grid.Column="1"
-                    Completed="EntPlaca_Completed">
-                    </Entry>
-                </Frame>
-            </Frame>
-            
-            <Label x:Name="lbl1"    Grid.Row="8"
-                    Grid.Column="0" 
-                TextColor="#000000"
-                    FontSize="18"
-                    FontAttributes="Bold"/>
-            <Frame CornerRadius="15" 
-                x:Name="fcombo1"
-                BorderColor="#757575" 
-                IsVisible="false"
-                Padding="5">
-                <Frame CornerRadius="10"                 
-                    BackgroundColor="White" 
-                    Padding="1">
-                    <Entry x:Name="combo1" Grid.Row="8" />                    
-                </Frame>
-            </Frame>
-
-            <Label x:Name="lbl2"    Grid.Row="9"
-                    Grid.Column="0" 
-                TextColor="#000000"
-                    FontSize="18"
-                    FontAttributes="Bold"/>
-           
-            <Frame CornerRadius="15" 
-                x:Name="fcombo2"
-                BorderColor="#757575" 
-                IsVisible="false"
-                Padding="5">
-                <Frame CornerRadius="10"                   
-                    BackgroundColor="White" 
-                    Padding="1">
-                   <Entry x:Name="combo2" Grid.Row="9"/>                    
-                </Frame>
-            </Frame>
-            
-            <Label x:Name="lbl3"    Grid.Row="10"
-                    Grid.Column="0" 
-                TextColor="#000000"
-                    FontSize="18"
-                    FontAttributes="Bold"/>
-            
-            <Frame CornerRadius="15" 
-                x:Name="fcombo3"
-                BorderColor="#757575" 
-                IsVisible="false"
-                Padding="5">
-                <Frame CornerRadius="10"                   
-                    BackgroundColor="White" 
-                    Padding="1">
-                    <Entry x:Name="combo3" Grid.Row="10"/>
-                </Frame>               
-            </Frame>
-
-
-            <Label x:Name="lbl4"    Grid.Row="10"
-                    Grid.Column="0" 
-                   Text="Combo 1"
-                TextColor="#000000"
-                    FontSize="18"
-                    FontAttributes="Bold"/>
-            
-            <Frame 
-                CornerRadius="15" 
-                x:Name="frame1"
-                BorderColor="#757575" 
-                IsVisible="false"
-                Padding="5">
-                <Frame 
-                    CornerRadius="10" 
-                  
-                    BackgroundColor="White" 
-                    Padding="1">
-                    <Picker
-                    x:Name="cmbbox1"
-                    Grid.Row="8"
-                    Grid.Column="1"
-                    Title="Seleccione..."
-                    SelectedIndexChanged="combo1_SelectedIndexChanged">
-                    </Picker>
-                </Frame>
-            </Frame>
-
-            <Label x:Name="lbl5"    Grid.Row="10"
-                    Grid.Column="0" 
-                   Text="Combo 2"
-                TextColor="#000000"
-                    FontSize="18"
-                    FontAttributes="Bold"/>
-            
-            <Frame 
-                CornerRadius="15" 
-                x:Name="frame2"
-                IsVisible="false"
-                BorderColor="#757575" 
-                Padding="5">
-                <Frame 
-                    CornerRadius="10" 
-            
-                    BackgroundColor="White" 
-                    Padding="1">
-                    <Picker
-                    x:Name="cmbbox2"
-                    Grid.Row="9"
-                    Grid.Column="1"
-                    Title="Seleccione..."
-                    SelectedIndexChanged="combo2_SelectedIndexChanged">
-                    </Picker>
-                </Frame>
-            </Frame>
-
-            <Label x:Name="lbl6"    Grid.Row="10"
-                    Grid.Column="0" 
-                   Text="Combo 3"
-                TextColor="#000000"
-                    FontSize="18"
-                    FontAttributes="Bold"/>
-
-            <Frame 
-                CornerRadius="15" 
-                x:Name="frame3"
-                IsVisible="false"
-                BorderColor="#757575" 
-                Padding="5">
-                <Frame 
-                    CornerRadius="10" 
-                    
-                    BackgroundColor="White" 
-                    Padding="1">
-                    <Picker
-                    x:Name="cmbbox3"
-                    Grid.Row="10"
-                    Grid.Column="1"
-                    Title="Seleccione..."
-                    SelectedIndexChanged="combo3_SelectedIndexChanged">
-                    </Picker>
-                </Frame>
-            </Frame>
-
-            <Button  
-                Text="Imprimir"
-                BackgroundColor="#F44336" 
-                HorizontalOptions="Center"
-                Clicked="BtnImprimir_Clicked"
-                x:Name="btnImprimir"
-                HeightRequest="40"
-                CornerRadius="20"
-                WidthRequest="190"
-                FontSize="15"
+                Grid.Row="1"
+                Grid.Column="0"
                 FontAttributes="Bold"
-                TextColor="White"/>
+                FontSize="18"
+                Text="Nombre(s)"
+                TextColor="#000000"
+                VerticalOptions="Center" />
+            <Frame
+                Padding="5"
+                BorderColor="#757575"
+                CornerRadius="15">
+                <Frame
+                    Padding="1"
+                    BackgroundColor="White"
+                    CornerRadius="10">
+                    <Entry
+                        x:Name="entNombre"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        IsReadOnly="True"
+                        Keyboard="Email" />
+                </Frame>
+            </Frame>
+            <Label
+                Grid.Row="2"
+                Grid.Column="0"
+                FontAttributes="Bold"
+                FontSize="18"
+                Text="Identificación"
+                TextColor="#000000"
+                VerticalOptions="Center" />
+            <Frame
+                Padding="5"
+                BorderColor="#757575"
+                CornerRadius="15">
+                <Frame
+                    Padding="1"
+                    BackgroundColor="White"
+                    CornerRadius="10">
+                    <Entry
+                        x:Name="entCedula"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Completed="EntCedula_Completed"
+                        IsReadOnly="True" />
+                </Frame>
+            </Frame>
+            <Label
+                Grid.Row="3"
+                Grid.Column="0"
+                FontAttributes="Bold"
+                FontSize="18"
+                Text="Destino"
+                TextColor="#000000"
+                VerticalOptions="Center" />
+            <Frame
+                Padding="5"
+                BorderColor="#757575"
+                CornerRadius="15">
+                <Frame
+                    Padding="1"
+                    BackgroundColor="White"
+                    CornerRadius="10">
+                    <Picker
+                        x:Name="pickerDestino"
+                        Title="Seleccione..."
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        ItemDisplayBinding="{Binding DEPTO_NOMBRE}"
+                        SelectedIndexChanged="PickerDestino_SelectedIndexChanged" />
+                </Frame>
+            </Frame>
+            <Label
+                x:Name="lblvisitaA"
+                Grid.Row="4"
+                Grid.Column="0"
+                FontAttributes="Bold"
+                FontSize="18"
+                Text="Visita a"
+                TextColor="#000000"
+                VerticalOptions="Center" />
+            <Frame
+                x:Name="FrameVisitaA"
+                Padding="5"
+                BorderColor="#757575"
+                CornerRadius="15">
+                <Frame
+                    x:Name="FrameVisitaA2"
+                    Padding="1"
+                    BackgroundColor="White"
+                    CornerRadius="10">
+                    <Picker
+                        x:Name="pickerVisitaA"
+                        Title="Seleccione..."
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        ItemDisplayBinding="{Binding NOMBRES_APELLIDOS}"
+                        SelectedIndexChanged="PickerVisitaA_SelectedIndexChanged" />
+                </Frame>
+            </Frame>
+
+            <!--<Label
+                x:Name="lblCodigoCarnet"
+                Grid.Row="5"
+                Grid.Column="0"
+                FontAttributes="Bold"
+                FontSize="18"
+                Text="Codigo RNTT"
+                TextColor="#000000"
+                VerticalOptions="Center" />
+            <Frame
+                x:Name="CodeRTT"
+                Padding="5"
+                BorderColor="#757575"
+                CornerRadius="15">
+                <Frame
+                    Padding="1"
+                    BackgroundColor="White"
+                    CornerRadius="10">
+                    <Entry
+                        x:Name="entCodigoCarnet"
+                        Grid.Row="5"
+                        Grid.Column="1"
+                        Completed="entCodigoCarnet_Completed"
+                        MaxLength="11" />
+                </Frame>
+            </Frame>-->
+
+            <Label
+                x:Name="lbPlaca"
+                Grid.Row="6"
+                Grid.Column="0"
+                FontAttributes="Bold"
+                FontSize="18"
+                Text="Placa"
+                TextColor="#000000"
+                VerticalOptions="Center" />
+            <Frame
+                x:Name="FramaPlaca"
+                Padding="5"
+                BorderColor="#757575"
+                CornerRadius="15">
+                <Frame
+                    x:Name="FramePlaca2"
+                    Padding="1"
+                    BackgroundColor="White"
+                    CornerRadius="10">
+                    <Entry
+                        x:Name="entPlaca"
+                        Grid.Row="6"
+                        Grid.Column="1"
+                        Completed="EntPlaca_Completed" />
+                </Frame>
+            </Frame>
+
+
+            <!--  Campos editables  -->
+
+            <Label
+                x:Name="lbl1"
+                Grid.Row="8"
+                Grid.Column="0"
+                FontAttributes="Bold"
+                FontSize="18"
+                TextColor="#000000" />
+            <Frame
+                x:Name="entry1"
+                Padding="5"
+                BorderColor="#757575"
+                CornerRadius="15"
+                IsVisible="false">
+                <Frame
+                    Padding="1"
+                    BackgroundColor="White"
+                    CornerRadius="10">
+                    <Entry x:Name="combo1" Grid.Row="8" />
+                </Frame>
+            </Frame>
+
+            <Label
+                x:Name="lbl2"
+                Grid.Row="9"
+                Grid.Column="0"
+                FontAttributes="Bold"
+                FontSize="18"
+                TextColor="#000000" />
+
+            <Frame
+                x:Name="entry2"
+                Padding="5"
+                BorderColor="#757575"
+                CornerRadius="15"
+                IsVisible="false">
+                <Frame
+                    Padding="1"
+                    BackgroundColor="White"
+                    CornerRadius="10">
+                    <Entry x:Name="combo2" Grid.Row="9" />
+                </Frame>
+            </Frame>
+
+            <Label
+                x:Name="lbl3"
+                Grid.Row="10"
+                Grid.Column="0"
+                FontAttributes="Bold"
+                FontSize="18"
+                TextColor="#000000" />
+
+            <Frame
+                x:Name="entry3"
+                Padding="5"
+                BorderColor="#757575"
+                CornerRadius="15"
+                IsVisible="false">
+                <Frame
+                    Padding="1"
+                    BackgroundColor="White"
+                    CornerRadius="10">
+                    <Entry x:Name="combo3" Grid.Row="10" />
+                </Frame>
+            </Frame>
+
+
+            <Label
+                x:Name="lbl4"
+                Grid.Row="10"
+                Grid.Column="0"
+                FontAttributes="Bold"
+                FontSize="18"
+                Text="Combo 1"
+                TextColor="#000000" />
+
+            <Frame
+                x:Name="frame1combo"
+                Padding="5"
+                BorderColor="#757575"
+                CornerRadius="15"
+                IsVisible="false">
+                <Frame
+                    Padding="1"
+                    BackgroundColor="White"
+                    CornerRadius="10">
+                    <Picker
+                        x:Name="cmbbox1"
+                        Title="Seleccione..."
+                        Grid.Row="8"
+                        Grid.Column="1"
+                        ItemDisplayBinding="{Binding OptionDesc}"
+                        SelectedIndexChanged="combo1_SelectedIndexChanged" />
+                </Frame>
+            </Frame>
+
+            <Label
+                x:Name="lbl5"
+                Grid.Row="10"
+                Grid.Column="0"
+                FontAttributes="Bold"
+                FontSize="18"
+                Text="Combo 2"
+                TextColor="#000000" />
+
+            <Frame
+                x:Name="frame2combo"
+                Padding="5"
+                BorderColor="#757575"
+                CornerRadius="15"
+                IsVisible="false">
+                <Frame
+                    Padding="1"
+                    BackgroundColor="White"
+                    CornerRadius="10">
+                    <Picker
+                        x:Name="cmbbox2"
+                        Title="Seleccione..."
+                        Grid.Row="9"
+                        Grid.Column="1"
+                        ItemDisplayBinding="{Binding OptionDesc}"
+                        SelectedIndexChanged="combo2_SelectedIndexChanged" />
+                </Frame>
+            </Frame>
+
+            <Label
+                x:Name="lbl6"
+                Grid.Row="10"
+                Grid.Column="0"
+                FontAttributes="Bold"
+                FontSize="18"
+                Text="Combo 3"
+                TextColor="#000000" />
+
+            <Frame
+                x:Name="frame3combo"
+                Padding="5"
+                BorderColor="#757575"
+                CornerRadius="15"
+                IsVisible="false">
+                <Frame
+                    Padding="1"
+                    BackgroundColor="White"
+                    CornerRadius="10">
+                    <Picker
+                        x:Name="cmbbox3"
+                        Title="Seleccione..."
+                        Grid.Row="10"
+                        Grid.Column="1"
+                        ItemDisplayBinding="{Binding OptionDesc}"
+                        SelectedIndexChanged="combo3_SelectedIndexChanged" />
+                </Frame>
+            </Frame>
+
+            <Button
+                x:Name="btnImprimir"
+                BackgroundColor="#F44336"
+                Clicked="BtnImprimir_Clicked"
+                CornerRadius="20"
+                FontAttributes="Bold"
+                FontSize="15"
+                HeightRequest="40"
+                HorizontalOptions="Center"
+                Text="Imprimir"
+                TextColor="White"
+                WidthRequest="190" />
         </StackLayout>
     </ScrollView>
 </ContentPage>
